@@ -1,0 +1,115 @@
+04-30-17_6:57:00 PM :: ############### Application Start ###############
+04-30-17_6:57:00 PM :: Found Log Directory at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Logs
+04-30-17_6:57:00 PM :: Found Config Directory at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config
+
+04-30-17_6:57:00 PM :: Found Paths.json at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\Paths.json
+04-30-17_6:57:00 PM :: Found ServerConfig.xml at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+04-30-17_6:57:00 PM :: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+04-30-17_6:58:11 PM :: Added GameServer from config: Game[] ServName[.Nebraska Dank Dankness Dankforever] Pass[] IP[192.168.1.91] Port[32000] Mod[True] ExtHst[home.wobigtech.net]
+04-30-17_6:58:25 PM :: Finished reading config
+04-30-17_6:58:33 PM :: Running Assembly is Debug: True
+
+04-30-17_6:58:33 PM :: Made Debug Resources Visible
+04-30-17_6:58:33 PM :: Set Grid grdStatus to Hidden on launch
+04-30-17_6:58:33 PM :: Set Grid grdSettings to Hidden on launch
+04-30-17_6:58:33 PM :: Set Grid grdServers to Hidden on launch
+04-30-17_6:58:33 PM :: Set Grid grdBotInfo to Hidden on launch
+
+04-30-17_6:58:37 PM :: Revealed Grid grdStatus
+04-30-17_6:58:37 PM :: Hid Grid grdSettings
+04-30-17_6:58:37 PM :: Hid Grid grdServers
+04-30-17_6:58:37 PM :: Hid Grid grdBotInfo
+04-30-17_6:58:37 PM :: Slid Main Menu out of view
+04-30-17_6:58:41 PM :: Hid Grid grdStatus
+
+04-30-17_6:58:41 PM :: Hid Grid grdSettings
+04-30-17_6:58:41 PM :: Revealed Grid grdServers
+04-30-17_6:58:41 PM :: Hid Grid grdBotInfo
+04-30-17_6:58:41 PM :: Slid Main Menu out of view
+04-30-17_6:58:46 PM :: Revealed Grid grdStatus
+04-30-17_6:58:46 PM :: Hid Grid grdSettings
+
+04-30-17_6:58:46 PM :: Hid Grid grdServers
+04-30-17_6:58:46 PM :: Hid Grid grdBotInfo
+04-30-17_6:58:46 PM :: Slid Main Menu out of view
+04-30-17_6:58:47 PM :: Hid Grid grdStatus
+04-30-17_6:58:47 PM :: Hid Grid grdSettings
+04-30-17_6:58:47 PM :: Revealed Grid grdServers
+
+04-30-17_6:58:47 PM :: Hid Grid grdBotInfo
+04-30-17_6:58:47 PM :: Slid Main Menu out of view
+04-30-17_6:58:49 PM :: Revealed Grid grdStatus
+04-30-17_6:58:49 PM :: Hid Grid grdSettings
+04-30-17_6:58:49 PM :: Hid Grid grdServers
+04-30-17_6:58:49 PM :: Hid Grid grdBotInfo
+
+04-30-17_6:58:49 PM :: Slid Main Menu out of view
+04-30-17_6:58:53 PM :: STATUS: Starting login updater
+04-30-17_6:58:54 PM :: STATUS: Updated Name and Playing Value
+04-30-17_6:59:09 PM :: STATUS: User: Prodigy Savant ◥◤ Command: ;test
+04-30-17_6:59:09 PM :: COMMAND: User: Prodigy Savant ◥◤ Command: ;test
+
+04-30-17_6:59:22 PM :: STATUS: User: Prodigy Savant ◥◤ Command: ;test
+04-30-17_6:59:22 PM :: COMMAND: User: Prodigy Savant ◥◤ Command: ;test
+04-30-17_7:00:13 PM :: STATUS: User: Prodigy Savant ◥◤ Command: ;help
+04-30-17_7:00:13 PM :: COMMAND: User: Prodigy Savant ◥◤ Command: ;help
+
+04-30-17_7:00:47 PM :: STATUS: User: Prodigy Savant ◥◤ Command: ;uknown
+04-30-17_7:00:47 PM :: COMMAND: User: Prodigy Savant ◥◤ Command: ;uknown
+04-30-17_7:00:47 PM :: STATUS: Unknown command.
+04-30-17_7:01:47 PM :: STATUS: User: Prodigy Savant ◥◤ Command: ;f something something dark side
+
+04-30-17_7:01:47 PM :: COMMAND: User: Prodigy Savant ◥◤ Command: ;f something something dark side
+04-30-17_7:03:15 PM :: Disconnected Client
+04-30-17_7:03:15 PM :: Logged out
+04-30-17_7:03:43 PM :: ############### Application Stop ###############
+
+
+04-30-17_7:25:45 PM :: ########################## Application Start ##########################
+
+04-30-17_7:25:45 PM :: Found Log Directory at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Logs
+
+04-30-17_7:25:45 PM :: Found Config Directory at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config
+04-30-17_7:25:45 PM :: Found Paths.json at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\Paths.json
+
+04-30-17_7:25:45 PM :: Found ServerConfig.xml at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+04-30-17_7:25:46 PM :: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+04-30-17_7:25:46 PM :: Added missing game Attribute to Server Node
+04-30-17_7:25:46 PM :: Added GameServer from config: Game[] ServName[.Nebraska Dank Dankness Dankforever]
+04-30-17_7:25:46 PM :: Finished reading config
+04-30-17_7:25:46 PM :: Running Assembly is Debug: True
+
+04-30-17_7:25:46 PM :: Made Debug Resources Visible
+04-30-17_7:25:46 PM :: Set Grid grdStatus to Hidden on launch
+04-30-17_7:25:46 PM :: Set Grid grdSettings to Hidden on launch
+04-30-17_7:25:46 PM :: Set Grid grdServers to Hidden on launch
+04-30-17_7:25:46 PM :: Set Grid grdBotInfo to Hidden on launch
+
+04-30-17_7:25:49 PM :: Revealed Grid grdStatus
+04-30-17_7:25:49 PM :: Hid Grid grdSettings
+04-30-17_7:25:49 PM :: Hid Grid grdServers
+04-30-17_7:25:49 PM :: Hid Grid grdBotInfo
+04-30-17_7:25:49 PM :: Slid Main Menu out of view
+04-30-17_7:25:50 PM :: STATUS: Starting login updater
+
+04-30-17_7:25:51 PM :: STATUS: Updated Name and Playing Value
+04-30-17_7:26:01 PM :: STATUS: User: Prodigy Savant ◥◤ Command: ;f Windows 10 Game Mode
+04-30-17_7:26:01 PM :: COMMAND: User: Prodigy Savant ◥◤ Command: ;f Windows 10 Game Mode
+04-30-17_7:29:58 PM :: Disconnected Client
+
+04-30-17_7:29:58 PM :: Logged out
+04-30-17_7:30:01 PM :: 
+########################## Application Stop ##########################
+
+

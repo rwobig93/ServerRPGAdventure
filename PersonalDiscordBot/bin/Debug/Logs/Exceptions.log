@@ -1,0 +1,628 @@
+TimeStamp: 05-02-17_5:21:53 PM
+Exception Type: ArgumentException
+Caller: MessageHandler at 1111
+Message: Message content is too long, length must be less or equal to 2000.
+Parameter name: Content
+HR: -2147024809
+StackTrace:
+   at Discord.API.DiscordRestApiClient.<CreateMessageAsync>d__75.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Discord.Rest.ChannelHelper.<SendMessageAsync>d__9.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__65.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\MainWindow.xaml.cs:line 1074
+
+
+TimeStamp: 05-02-17_5:21:53 PM
+Exception Type: ArgumentException
+Caller: MessageHandler at 1111
+Message: Message content is too long, length must be less or equal to 2000.
+Parameter name: Content
+HR: -2147024809
+StackTrace:
+   at Discord.API.DiscordRestApiClient.<CreateMessageAsync>d__75.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Discord.Rest.ChannelHelper.<SendMessageAsync>d__9.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__65.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\MainWindow.xaml.cs:line 1074
+
+
+TimeStamp: 05-02-17_5:21:53 PM
+Exception Type: ArgumentException
+Caller: MessageHandler at 1111
+Message: Message content is too long, length must be less or equal to 2000.
+Parameter name: Content
+HR: -2147024809
+StackTrace:
+   at Discord.API.DiscordRestApiClient.<CreateMessageAsync>d__75.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Discord.Rest.ChannelHelper.<SendMessageAsync>d__9.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__65.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\MainWindow.xaml.cs:line 1074
+
+
+TimeStamp: 05-02-17_5:21:53 PM
+Exception Type: ArgumentException
+Caller: MessageHandler at 1111
+Message: Message content is too long, length must be less or equal to 2000.
+Parameter name: Content
+HR: -2147024809
+StackTrace:
+   at Discord.API.DiscordRestApiClient.<CreateMessageAsync>d__75.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Discord.Rest.ChannelHelper.<SendMessageAsync>d__9.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__65.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\MainWindow.xaml.cs:line 1074
+
+
+TimeStamp: 05-02-17_5:21:53 PM
+Exception Type: ArgumentException
+Caller: MessageHandler at 1111
+Message: Message content is too long, length must be less or equal to 2000.
+Parameter name: Content
+HR: -2147024809
+StackTrace:
+   at Discord.API.DiscordRestApiClient.<CreateMessageAsync>d__75.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Discord.Rest.ChannelHelper.<SendMessageAsync>d__9.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__65.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\MainWindow.xaml.cs:line 1074
+
+
+TimeStamp: 05-02-17_5:21:53 PM
+Exception Type: ArgumentException
+Caller: MessageHandler at 1111
+Message: Message content is too long, length must be less or equal to 2000.
+Parameter name: Content
+HR: -2147024809
+StackTrace:
+   at Discord.API.DiscordRestApiClient.<CreateMessageAsync>d__75.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Discord.Rest.ChannelHelper.<SendMessageAsync>d__9.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__65.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\MainWindow.xaml.cs:line 1074
+
+
+TimeStamp: 05-02-17_5:21:53 PM
+Exception Type: ArgumentException
+Caller: MessageHandler at 1111
+Message: Message content is too long, length must be less or equal to 2000.
+Parameter name: Content
+HR: -2147024809
+StackTrace:
+   at Discord.API.DiscordRestApiClient.<CreateMessageAsync>d__75.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Discord.Rest.ChannelHelper.<SendMessageAsync>d__9.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__65.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\MainWindow.xaml.cs:line 1074
+
+
+TimeStamp: 05-02-17_5:21:53 PM
+Exception Type: ArgumentException
+Caller: MessageHandler at 1111
+Message: Message content is too long, length must be less or equal to 2000.
+Parameter name: Content
+HR: -2147024809
+StackTrace:
+   at Discord.API.DiscordRestApiClient.<CreateMessageAsync>d__75.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Discord.Rest.ChannelHelper.<SendMessageAsync>d__9.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__65.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\MainWindow.xaml.cs:line 1074
+
+
+TimeStamp: 05-02-17_5:21:53 PM
+Exception Type: ArgumentException
+Caller: MessageHandler at 1111
+Message: Message content is too long, length must be less or equal to 2000.
+Parameter name: Content
+HR: -2147024809
+StackTrace:
+   at Discord.API.DiscordRestApiClient.<CreateMessageAsync>d__75.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Discord.Rest.ChannelHelper.<SendMessageAsync>d__9.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__65.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\MainWindow.xaml.cs:line 1074
+
+
+TimeStamp: 6:04 PM
+Exception Type: SocketException
+Caller: Reboot at 211
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 447
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__6.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 390
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__2.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 205
+
+
+TimeStamp: 6:16 PM
+Exception Type: SocketException
+Caller: Reboot at 211
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 447
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__6.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 390
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__2.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 205
+
+
+TimeStamp: 6:19 PM
+Exception Type: SocketException
+Caller: Reboot at 212
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 448
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__6.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 391
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__2.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 206
+
+
+TimeStamp: 6:19 PM
+Exception Type: SocketException
+Caller: Reboot at 212
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 448
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__6.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 391
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__2.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 206
+
+
+TimeStamp: 6:22 PM
+Exception Type: SocketException
+Caller: Reboot at 212
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 448
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__6.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 391
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__2.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 206
+
+
+TimeStamp: 6:33 PM
+Exception Type: ArgumentException
+Caller: Reboot at 216
+Message: Content
+Parameter name: Argument cannot be blank.
+HR: -2147024809
+StackTrace:
+   at Discord.Preconditions.NotNullOrEmpty(String obj, String name, String msg)
+   at Discord.API.DiscordRestApiClient.<CreateMessageAsync>d__75.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Discord.Rest.ChannelHelper.<SendMessageAsync>d__9.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Discord.WebSocket.SocketTextChannel.<Discord-IMessageChannel-SendMessageAsync>d__45.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__2.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 202
+
+
+TimeStamp: 6:51 PM
+Exception Type: SocketException
+Caller: Reboot at 217
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 456
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__6.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 396
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__2.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 211
+
+
+TimeStamp: 7:13 PM
+Exception Type: InvalidCastException
+Caller: Reboot at 218
+Message: Unable to cast object of type 'System.Collections.Immutable.ImmutableArray`1[Discord.WebSocket.SocketMessage]' to type 'Discord.IMessage'.
+HR: -2147467262
+StackTrace:
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__2.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 89
+
+
+TimeStamp: 7:25 PM
+Exception Type: ArgumentOutOfRangeException
+Caller: Reboot at 218
+Message: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+HR: -2146233086
+StackTrace:
+   at System.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
+   at System.Collections.Generic.List`1.get_Item(Int32 index)
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__2.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 111
+
+
+TimeStamp: 7:28 PM
+Exception Type: SocketException
+Caller: Reboot at 218
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 457
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__6.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 397
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__2.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 158
+
+
+TimeStamp: 7:29 PM
+Exception Type: SocketException
+Caller: Reboot at 218
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 457
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__6.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 397
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__2.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 158
+
+
+TimeStamp: 7:29 PM
+Exception Type: SocketException
+Caller: Reboot at 218
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 457
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__6.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 397
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__2.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 158
+
+
+TimeStamp: 7:32 PM
+Exception Type: SocketException
+Caller: Reboot at 218
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 457
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__6.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 397
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__2.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 158
+
+
+TimeStamp: 7:33 PM
+Exception Type: SocketException
+Caller: Reboot at 218
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 457
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__6.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 397
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__2.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 158
+
+
+TimeStamp: 7:38 PM
+Exception Type: SocketException
+Caller: Reboot at 210
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 449
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__6.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 389
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__2.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 154
+
+
+TimeStamp: 7:38 PM
+Exception Type: SocketException
+Caller: Reboot at 210
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 449
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__6.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 389
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__2.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 154
+
+
+TimeStamp: 7:48 PM
+Exception Type: SocketException
+Caller: Reboot at 207
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 446
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__5.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 386
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__1.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 152
+
+
+TimeStamp: 7:51 PM
+Exception Type: SocketException
+Caller: Reboot at 208
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 447
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__5.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 387
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__1.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 153
+
+
+TimeStamp: 7:54 PM
+Exception Type: SocketException
+Caller: Reboot at 208
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 447
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__5.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 387
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__1.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 153
+
+
+TimeStamp: 7:56 PM
+Exception Type: SocketException
+Caller: Reboot at 208
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 447
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__5.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 387
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__1.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 153
+
+
+TimeStamp: 7:58 PM
+Exception Type: SocketException
+Caller: Reboot at 208
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 447
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__5.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 387
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__1.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 153
+
+
+TimeStamp: 8:00 PM
+Exception Type: SocketException
+Caller: Reboot at 208
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 447
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__5.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 387
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__1.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 153
+
+
+TimeStamp: 8:01 PM
+Exception Type: SocketException
+Caller: Reboot at 208
+Message: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+HR: -2147467259
+StackTrace:
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.Socket.Receive(Byte[] buffer)
+   at QueryMaster.ServerSocket.ReceiveData() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\ServerSocket.cs:line 47
+   at QueryMaster.UdpQuery.GetResponse(Byte[] msg, EngineType type) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\UdpQuery.cs:line 30
+   at QueryMaster.Server.GetInfo() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\Server.cs:line 70
+   at PersonalDiscordBot.Classes.ServerModule.GetServerInfo(IPEndPoint endpoint, ReadOnlyCollection`1& players) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 447
+   at PersonalDiscordBot.Classes.ServerModule.<CheckOnServer>d__5.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 387
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   at PersonalDiscordBot.Classes.ServerModule.<Reboot>d__1.MoveNext() in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\Classes\ServerModule.cs:line 153
+
+
+TimeStamp: 05-03-17_8:31:12 PM
+Exception Type: FormatException
+Caller: ReadConfig at 583
+Message: Input string was not in a correct format.
+HR: -2146233033
+StackTrace:
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+   at System.Convert.ToInt32(String value)
+   at PersonalDiscordBot.MainWindow.ReadConfig(ConfigType confType) in C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\MainWindow.xaml.cs:line 557
+
+

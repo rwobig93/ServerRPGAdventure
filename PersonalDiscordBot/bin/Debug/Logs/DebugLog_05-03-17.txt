@@ -1,0 +1,120 @@
+05-03-17_8:31:12 PM :: 
+########################## Application Start ##########################
+
+05-03-17_8:31:12 PM :: Found Log Directory at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Logs
+
+05-03-17_8:31:12 PM :: Found Config Directory at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config
+05-03-17_8:31:12 PM :: Found Paths.json at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\Paths.json
+
+05-03-17_8:31:12 PM :: Found ServerConfig.xml at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-03-17_8:31:12 PM :: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-03-17_8:31:12 PM :: Added missing queryport attribute to XMLNode Server
+05-03-17_8:31:12 PM :: EXCEPTION: ReadConfig at 583
+05-03-17_8:31:12 PM :: STATUS: An Exception Occured: ReadConfig at 583
+Msg: Input string was not in a correct format.
+05-03-17_8:31:12 PM :: Finished reading config
+
+05-03-17_8:31:12 PM :: Set Grid grdStatus to Hidden on launch
+05-03-17_8:31:12 PM :: Set Grid grdSettings to Hidden on launch
+05-03-17_8:31:12 PM :: Set Grid grdServers to Hidden on launch
+05-03-17_8:31:12 PM :: Set Grid grdBotInfo to Hidden on launch
+
+05-03-17_8:31:14 PM :: Revealed Grid grdStatus
+05-03-17_8:31:14 PM :: Hid Grid grdSettings
+05-03-17_8:31:14 PM :: Hid Grid grdServers
+05-03-17_8:31:14 PM :: Hid Grid grdBotInfo
+05-03-17_8:31:14 PM :: Slid Main Menu out of view
+05-03-17_8:31:18 PM :: Hid Grid grdStatus
+
+05-03-17_8:31:18 PM :: Hid Grid grdSettings
+05-03-17_8:31:18 PM :: Revealed Grid grdServers
+05-03-17_8:31:18 PM :: Hid Grid grdBotInfo
+05-03-17_8:31:18 PM :: Slid Main Menu out of view
+05-03-17_8:31:34 PM :: STATUS: The game server adfsadfs was successfully added, if you want this change to stick please save!
+
+05-03-17_8:31:34 PM :: Successfully added server adfsadfs || Type NewServer
+05-03-17_8:31:37 PM :: Saved current game server list to ServerConfig.xml
+05-03-17_8:31:37 PM :: STATUS: Successfully saved current Game Server list
+05-03-17_8:31:39 PM :: Revealed Grid grdStatus
+
+05-03-17_8:31:39 PM :: Hid Grid grdSettings
+05-03-17_8:31:39 PM :: Hid Grid grdServers
+05-03-17_8:31:39 PM :: Hid Grid grdBotInfo
+05-03-17_8:31:39 PM :: Slid Main Menu out of view
+05-03-17_8:31:41 PM :: Hid Grid grdStatus
+05-03-17_8:31:41 PM :: Hid Grid grdSettings
+
+05-03-17_8:31:41 PM :: Revealed Grid grdServers
+05-03-17_8:31:41 PM :: Hid Grid grdBotInfo
+05-03-17_8:31:41 PM :: Slid Main Menu out of view
+05-03-17_8:31:42 PM :: Added GameServer from config: Game[adfdaf] ServName[adfsadfs]
+05-03-17_8:31:46 PM :: 
+########################## Application Stop ##########################
+
+
+
+05-03-17_8:35:46 PM :: 
+########################## Application Start ##########################
+
+05-03-17_8:35:46 PM :: Found Log Directory at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Logs
+
+05-03-17_8:35:46 PM :: Found Config Directory at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config
+05-03-17_8:35:46 PM :: Found Paths.json at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\Paths.json
+
+05-03-17_8:35:46 PM :: Found ServerConfig.xml at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-03-17_8:35:46 PM :: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-03-17_8:40:14 PM :: 
+########################## Application Start ##########################
+
+05-03-17_8:40:14 PM :: Found Log Directory at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Logs
+
+05-03-17_8:40:14 PM :: Found Config Directory at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config
+05-03-17_8:40:14 PM :: Found Paths.json at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\Paths.json
+
+05-03-17_8:40:14 PM :: Found ServerConfig.xml at: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-03-17_8:40:14 PM :: C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\Rick\Documents\Visual Studio 2015\Projects\PersonalDiscordBot\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-03-17_8:40:14 PM :: Added GameServer from config: Game[7 Days To Die] ServName[.Nebraska Dank Dankness Dankforever]
+05-03-17_8:40:14 PM :: Added GameServer from config: Game[Ark] ServName[Nebraska Bush People]
+05-03-17_8:40:14 PM :: Added GameServer from config: Game[Rust] ServName[Nebraska Dank Zone]
+
+05-03-17_8:40:14 PM :: Added GameServer from config: Game[Starbound] ServName[Nebraska Dank Zone]
+05-03-17_8:40:14 PM :: Added GameServer from config: Game[The Forest] ServName[~The Dank Forest of Dankness]
+05-03-17_8:40:14 PM :: Added GameServer from config: Game[Ark] ServName[Nebraska Dank Zone]
+
+05-03-17_8:40:14 PM :: Finished reading config
+05-03-17_8:40:14 PM :: Set Grid grdStatus to Hidden on launch
+05-03-17_8:40:14 PM :: Set Grid grdSettings to Hidden on launch
+05-03-17_8:40:14 PM :: Set Grid grdServers to Hidden on launch
+05-03-17_8:40:14 PM :: Set Grid grdBotInfo to Hidden on launch
+
+05-03-17_8:40:16 PM :: Revealed Grid grdStatus
+05-03-17_8:40:16 PM :: Hid Grid grdSettings
+05-03-17_8:40:16 PM :: Hid Grid grdServers
+05-03-17_8:40:16 PM :: Hid Grid grdBotInfo
+05-03-17_8:40:16 PM :: Slid Main Menu out of view
+05-03-17_8:40:18 PM :: Hid Grid grdStatus
+
+05-03-17_8:40:18 PM :: Hid Grid grdSettings
+05-03-17_8:40:18 PM :: Revealed Grid grdServers
+05-03-17_8:40:18 PM :: Hid Grid grdBotInfo
+05-03-17_8:40:18 PM :: Slid Main Menu out of view
+05-03-17_8:40:55 PM :: 
+########################## Application Stop ##########################
+
+
+
