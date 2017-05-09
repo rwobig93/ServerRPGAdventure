@@ -59,6 +59,8 @@ namespace PersonalDiscordBot
         private bool _activeSession = false;
         public static ObservableCollection<GameServer> ServerList = new ObservableCollection<GameServer>();
         public ObservableCollection<GameServer> CurrentServerList
+        public bool RickIsATool = true;
+
         {
             get { return ServerList; }
         }
