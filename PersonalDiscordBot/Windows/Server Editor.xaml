@@ -1,0 +1,44 @@
+﻿<Window x:Class="PersonalDiscordBot.Windows.Server_Editor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PersonalDiscordBot.Windows"
+        mc:Ignorable="d"
+        Title="Server_Editor" Height="485" Width="889" WindowStyle="None" AllowsTransparency="True" Background="#FF202020" MouseDown="Window_MouseDown">
+    <Grid x:Name="grdMain" Background="#FF202020">
+        <TextBlock x:Name="lblServGame" HorizontalAlignment="Left" Margin="10,45,0,0" TextWrapping="Wrap" Text="Game Name:" VerticalAlignment="Top" Foreground="#FF0FB3C3" FontSize="22"/>
+        <TextBox x:Name="txtServGameValue" Margin="144,49,0,0" Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="29" VerticalAlignment="Top" FontSize="18" HorizontalAlignment="Left" Width="735" TabIndex="1"/>
+        <TextBlock x:Name="lblServName" HorizontalAlignment="Left" Margin="10,79,0,0" TextWrapping="Wrap" Text="Server Name:" VerticalAlignment="Top" Foreground="#FF0FB3C3" FontSize="22"/>
+        <TextBox x:Name="txtServNameValue" Margin="144,83,0,0" Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="29" VerticalAlignment="Top" FontSize="18" HorizontalAlignment="Left" Width="735" TabIndex="2"/>
+        <TextBlock x:Name="lblServPass" HorizontalAlignment="Left" Margin="10,113,0,0" TextWrapping="Wrap" Text="*Password:" VerticalAlignment="Top" Foreground="#FF0FB3C3" FontSize="22" Width="107"/>
+        <TextBox x:Name="txtServPassValue" Margin="122,117,0,0" Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="29" VerticalAlignment="Top" FontSize="18" HorizontalAlignment="Left" Width="757" TabIndex="3"/>
+        <TextBlock x:Name="lblServIP" HorizontalAlignment="Left" Margin="10,147,0,0" TextWrapping="Wrap" Text="IP Address:" VerticalAlignment="Top" Foreground="#FF0FB3C3" FontSize="22"/>
+        <TextBox x:Name="txtServIPValue" Margin="122,151,0,0" Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="29" VerticalAlignment="Top" FontSize="18" HorizontalAlignment="Left" Width="152" TabIndex="4"/>
+        <TextBlock x:Name="lblServPort" HorizontalAlignment="Left" Margin="287,148,0,0" TextWrapping="Wrap" Text="Game Port #:" VerticalAlignment="Top" Foreground="#FF0FB3C3" FontSize="22"/>
+        <TextBox x:Name="txtServPortValue" Margin="418,150,0,0" Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="29" VerticalAlignment="Top" FontSize="18" HorizontalAlignment="Left" Width="74" TabIndex="5"/>
+        <TextBlock x:Name="lblServModded" HorizontalAlignment="Left" Margin="716,150,0,0" TextWrapping="Wrap" Text="Modded:" VerticalAlignment="Top" Foreground="#FF0FB3C3" FontSize="22"/>
+        <ComboBox x:Name="comboServModded" IsEditable="True" HorizontalAlignment="Left" Text="false" Margin="809,151,0,0" VerticalAlignment="Top" Width="70" Height="29" FontSize="18" MinHeight="0" MinWidth="0" Foreground="#FF0FB3C3" TabIndex="7">
+            <ComboBoxItem Content="true" FontSize="18" />
+            <ComboBoxItem Content="false" FontSize="18" />
+        </ComboBox>
+        <Button x:Name="btnServSave" Click="btnServSave_Click" Content="Apply" Padding="0" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="88" Height="32" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="20" Margin="0,0,103,94" TabIndex="13"/>
+        <Button x:Name="btnServCancel" Click="btnServCancel_Click" Content="Cancel" Padding="0" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="88" Height="32" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="20" Margin="0,0,10,94" TabIndex="14"/>
+        <TextBlock x:Name="lblServNotice" Margin="10,0,10,10" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="#FF474D4D" Height="116" Panel.ZIndex="-1"><Run Text="* = Optional feature/field, features turned off if nothing is entered in the field, if the server doesn't have a password leave blank"/><LineBreak/><Run Text="*The password field is meant for the password to join the server, not the admin password"/><LineBreak/><Run Text="*Query Port # is used to gather server and player information including up status, leaving blank results in basic info"/><LineBreak/><Run Text="*Server Exe is the full file path to the EXE that is run when the game server starts (the exe called by a batch file or clicked directly)"/><LineBreak/><Run Text="*Batch/Exe to Start Server is the full file path to start the game server"/><LineBreak/><Run Text="*Process is the process name of the running game server"/><LineBreak/><Run Text="*Server Log Location is the directory the game server logs reside, add if you want this feature"/></TextBlock>
+        <TextBlock x:Name="lbServExePath" HorizontalAlignment="Left" Margin="10,216,0,0" TextWrapping="Wrap" Text="*Server Exe Path:" VerticalAlignment="Top" Foreground="#FF0FB3C3" FontSize="22"/>
+        <TextBox x:Name="txtServExePath" Margin="177,219,0,0" Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="29" VerticalAlignment="Top" FontSize="18" HorizontalAlignment="Left" Width="702" TabIndex="9"/>
+        <TextBlock x:Name="lblServLogLocation" HorizontalAlignment="Left" Margin="10,322,0,0" TextWrapping="Wrap" Text="*Server Log Location:" VerticalAlignment="Top" Foreground="#FF0FB3C3" FontSize="22"/>
+        <TextBox x:Name="txtServLogLocationValue" Margin="220,322,0,0" TextWrapping="NoWrap" Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="29" VerticalAlignment="Top" FontSize="18" HorizontalAlignment="Left" Width="659" TabIndex="12"/>
+        <TextBlock x:Name="lbServProcess" HorizontalAlignment="Left" Margin="10,288,0,0" TextWrapping="Wrap" Text="*Process Name:" VerticalAlignment="Top" Foreground="#FF0FB3C3" FontSize="22"/>
+        <TextBox x:Name="txtServProcessValue" Margin="166,288,0,0" Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="29" VerticalAlignment="Top" FontSize="18" HorizontalAlignment="Left" Width="713" TabIndex="11"/>
+        <Rectangle Fill="#FF191919" Height="39" VerticalAlignment="Top"/>
+        <Button x:Name="btnClose" Click="btnClose_Click" Content="X" Padding="0" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Top" Width="32" Height="32" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="20" TabIndex="14"/>
+        <TextBlock x:Name="lblServGame_Copy" TextWrapping="Wrap" Text="Server Editor" VerticalAlignment="Top" Foreground="#FF474D4D" FontSize="22" Width="126" Height="39" HorizontalAlignment="Center"/>
+        <TextBlock x:Name="lblExtHostname" HorizontalAlignment="Left" Margin="10,181,0,0" TextWrapping="Wrap" Text="*External HostName/IP Address:" VerticalAlignment="Top" Foreground="#FF0FB3C3" FontSize="22"/>
+        <TextBox x:Name="txtExtHostnameValue" Margin="326,185,0,0" Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="29" VerticalAlignment="Top" FontSize="18" HorizontalAlignment="Left" Width="553" TabIndex="8"/>
+        <TextBlock x:Name="lbServStartPath" HorizontalAlignment="Left" Margin="10,250,0,0" TextWrapping="Wrap" Text="*Batch/Exe to Start Server:" VerticalAlignment="Top" Foreground="#FF0FB3C3" FontSize="22"/>
+        <TextBox x:Name="txtServStartPathValue" Margin="268,253,0,0" Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="29" VerticalAlignment="Top" FontSize="18" HorizontalAlignment="Left" Width="611" TabIndex="10"/>
+        <TextBlock x:Name="lblQueryPort" HorizontalAlignment="Left" Margin="495,148,0,0" TextWrapping="Wrap" Text="*Query Port #:" VerticalAlignment="Top" Foreground="#FF0FB3C3" FontSize="22"/>
+        <TextBox x:Name="txtQueryPortValue" Margin="637,150,0,0" Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="29" VerticalAlignment="Top" FontSize="18" HorizontalAlignment="Left" Width="74" TabIndex="6"/>
+    </Grid>
+</Window>
