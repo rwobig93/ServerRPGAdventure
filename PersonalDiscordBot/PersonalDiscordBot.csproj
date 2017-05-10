@@ -176,6 +176,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\GameServer.cs" />
     <Compile Include="Classes\Leet.cs" />
+    <Compile Include="Classes\RPG.cs" />
     <Compile Include="Classes\ServerModule.cs" />
     <Compile Include="Classes\Snoop.cs" />
     <Compile Include="Classes\Toolbox.cs" />
