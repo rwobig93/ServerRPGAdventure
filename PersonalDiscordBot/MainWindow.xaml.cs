@@ -20,7 +20,6 @@ using System.Windows.Threading;
 using System.Threading;
 using System.IO;
 using Newtonsoft.Json;
-using ArkData;
 using System.Windows.Media.Animation;
 using PersonalDiscordBot.Classes;
 using PersonalDiscordBot.Settings;

@@ -44,11 +44,32 @@ namespace PersonalDiscordBot.Classes
 
     public static class Management
     {
+        public static List<Character> CharacterList = new List<Character>();
 
+        public static Character CreateNewCharacter(ulong ownerId, CharacterClass chosenClass)
+        {
+            Random rng = new Random();
+            Character newChar = new Character();
+            switch (chosenClass)
+            {
+                case CharacterClass.Dragoon:
+                    break;
+                case CharacterClass.Mage:
+                    break;
+                case CharacterClass.Necromancer:
+                    break;
+                case CharacterClass.Rogue:
+                    break;
+                case CharacterClass.Warrior:
+                    break;
+            }
+            return newChar;
+        }
     }
 
     public class Character
     {
+        ulong OwnerID { get; set; }
         string Name { get; set; }
         CharacterClass Class { get; set; }
         Weapon Weapon { get; set; }

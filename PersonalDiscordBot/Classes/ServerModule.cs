@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ArkData;
 using QueryMaster;
 using Discord.Commands;
 using System.Threading.Tasks;
@@ -327,8 +326,7 @@ namespace PersonalDiscordBot.Classes
             try
             {
                 List<GameServer> serversFound = new List<GameServer>();
-                var logCount = 0;
-                var isInt = int.TryParse(count, out logCount);
+                var isInt = int.TryParse(count, out int logCount);
                 if (!isInt)
                 {
                     await Context.Channel.SendMessageAsync(string.Format("{0} isn't a valid number, please try again", count));
@@ -465,8 +463,7 @@ namespace PersonalDiscordBot.Classes
                     cacheGame = game;
                     string response = string.Format("_{0}{1} Server Status:{0}", Environment.NewLine, game.Game);
                     IPEndPoint endpoint = CreateIPEndPoint(string.Format("{0}:{1}", game.IPAddress, game.QueryPort));
-                    ReadOnlyCollection<QueryMaster.Player> playerList = null;
-                    QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out playerList);
+                    QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out ReadOnlyCollection<Player> playerList);
                     response = string.Format("{0}Server Name: {1}{4}Map: {5}{4}Requires Password: {2}{4}Ping: {3}{4}", response, servInfo.Name, servInfo.IsPrivate, servInfo.Ping, Environment.NewLine, servInfo.Map);
                     Ping png = new Ping();
                     PingReply rep = png.Send(game.IPAddress);
@@ -521,8 +518,7 @@ namespace PersonalDiscordBot.Classes
                     cacheGame = game;
                     string responseStatus = string.Format("_{0}{1} Server Status:{0}", Environment.NewLine, game.Game);
                     IPEndPoint endpoint = CreateIPEndPoint(string.Format("{0}:{1}", game.IPAddress, game.QueryPort));
-                    ReadOnlyCollection<QueryMaster.Player> playerList = null;
-                    QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out playerList);
+                    QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out ReadOnlyCollection<Player> playerList);
                     responseStatus = string.Format("{0}Server Name: {1}{4}Map: {5}{4}Requires Password: {2}{4}Ping: {3}{4}", responseStatus, servInfo.Name, servInfo.IsPrivate, servInfo.Ping, Environment.NewLine, servInfo.Map);
                     Ping png = new Ping();
                     PingReply rep = png.Send(game.IPAddress);
@@ -596,8 +592,7 @@ namespace PersonalDiscordBot.Classes
                     gameCache = game;
                     string response = string.Format("_{0}Players found on {1}:{0}", Environment.NewLine, game.ServerName);
                     IPEndPoint endpoint = CreateIPEndPoint(string.Format("{0}:{1}", game.IPAddress, game.QueryPort));
-                    ReadOnlyCollection<QueryMaster.Player> playerList = null;
-                    QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out playerList);
+                    QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out ReadOnlyCollection<Player> playerList);
                     if (playerList.Count == 0) response = string.Format("No players are currently on {0}", game.ServerName);
                     else
                         foreach (var player in playerList)
@@ -650,8 +645,7 @@ namespace PersonalDiscordBot.Classes
                     gameCache = game;
                     string responsePlayers = string.Format("_{0}Players found on {1}:{0}", Environment.NewLine, game.ServerName);
                     IPEndPoint endpoint = CreateIPEndPoint(string.Format("{0}:{1}", game.IPAddress, game.QueryPort));
-                    ReadOnlyCollection<QueryMaster.Player> playerList = null;
-                    QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out playerList);
+                    QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out ReadOnlyCollection<Player> playerList);
                     if (playerList.Count == 0) responsePlayers = string.Format("No players are currently on {0}", game.ServerName);
                     else
                         foreach (var player in playerList)
@@ -691,8 +685,7 @@ namespace PersonalDiscordBot.Classes
             {
                 TimeSpan totalTime = TimeSpan.FromMinutes(15);
                 IPEndPoint endpoint = CreateIPEndPoint(string.Format("{0}:{1}", game.IPAddress, game.QueryPort));
-                ReadOnlyCollection<QueryMaster.Player> playerList = null;
-                QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out playerList);
+                QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out ReadOnlyCollection<Player> playerList);
                 while (servInfo == null)
                 {
                     await Task.Delay(TimeSpan.FromSeconds(30));
@@ -718,13 +711,11 @@ namespace PersonalDiscordBot.Classes
         {
             string[] ep = endPoint.Split(':');
             if (ep.Length != 2) throw new FormatException("Invalid endpoint format");
-            IPAddress ip;
-            if (!IPAddress.TryParse(ep[0], out ip))
+            if (!IPAddress.TryParse(ep[0], out IPAddress ip))
             {
                 throw new FormatException("Invalid ip-adress");
             }
-            int port;
-            if (!int.TryParse(ep[1], NumberStyles.None, NumberFormatInfo.CurrentInfo, out port))
+            if (!int.TryParse(ep[1], NumberStyles.None, NumberFormatInfo.CurrentInfo, out int port))
             {
                 throw new FormatException("Invalid port");
             }
@@ -775,7 +766,7 @@ namespace PersonalDiscordBot.Classes
         }
 
         public static void uDebugAddLog(string _log)
-        {
+        { 
             string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
             string _timeNow = DateTime.Now.ToLocalTime().ToLongTimeString();
             MainWindow._debugLog.AppendLine(string.Format("{0}_{1} :: {2}", _dateNow, _timeNow, _log));
