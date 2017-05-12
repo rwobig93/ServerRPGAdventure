@@ -38,7 +38,15 @@ namespace PersonalDiscordBot.Classes
             Restorative,
             Buff,
             Damaging,
-            Currency
+            Currency,
+            Repair
+        }
+
+        public enum ArmorType
+        {
+            Light,
+            Medium,
+            Heavy
         }
     }
 
@@ -77,6 +85,7 @@ namespace PersonalDiscordBot.Classes
         int Lvl { get; set; }
         int Exp { get; set; }
         int HP { get; set; }
+        int Mana { get; set; }
         int Str { get; set; }
         int Def { get; set; }
         int Dex { get; set; }
@@ -127,8 +136,24 @@ namespace PersonalDiscordBot.Classes
     {
         string Name { get; set; }
         ItemType Type { get; set; }
-        int Lvl { get; set; }
+        int Lvl { get; set; } //used to calculate amount of Repair
         int Worth { get; set; }
+        int Physical { get; set; }
+        int Magic { get; set; }
+        int Fire { get; set; }
+        int Lightning { get; set; }
+        int Ice { get; set; }
+        int Wind { get; set; }
+    }
+
+    public class Armor : IBackPackItem
+    {
+        string Name { get; set; }
+        ArmorType Type { get; set; }
+        int Lvl { get; set; }
+        int Durability { get; set; }
+        int Worth { get; set; }
+        int Speed { get; set; }
         int Physical { get; set; }
         int Magic { get; set; }
         int Fire { get; set; }
