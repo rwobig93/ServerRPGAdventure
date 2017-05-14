@@ -930,9 +930,8 @@ namespace PersonalDiscordBot.Classes
         {
             if (Directory.GetCurrentDirectory().ToLower().Contains("debug"))
             {
-                var msg = await Context.Channel.SendMessageAsync(string.Format("Your Message ID: {0}", Context.Message.Id));
-                var msg2 = await Context.Channel.SendMessageAsync(string.Format("My Message ID: {0}", msg.Id));
-                await Context.Channel.SendMessageAsync(string.Format("My 2nd Message ID: {0}", msg2.Id));
+                
+                
             }
         }
     }
