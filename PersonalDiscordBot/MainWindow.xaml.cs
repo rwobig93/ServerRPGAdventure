@@ -897,7 +897,7 @@ namespace PersonalDiscordBot
                     };
                     Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { grdNotification.BeginAnimation(Grid.MarginProperty, _animate2); });
                     uDebugAddLog("Slid Notification back out of view");
-                }
+                }   
                 catch (Exception ex)
                 {
                     FullExceptionLog(ex);
