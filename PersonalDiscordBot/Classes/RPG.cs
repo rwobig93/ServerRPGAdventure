@@ -71,15 +71,26 @@ namespace PersonalDiscordBot.Classes
             Legendary
         };
 
-        public static OwnerProfile testProfiler = new OwnerProfile()
+        public static OwnerProfile testiculeesProfile = new OwnerProfile()
         {
-            CurrentCharacter = testCharacter
+            CurrentCharacter = testiculeesCharacter,
+            CharacterList = new List<Character>() { testiculeesCharacter },
+            Currency = 696969,
+            BossesBeat = 101,
+            OwnerID = 12345678910111213
         };
 
-        public static Character testCharacter = new Character()
+        public static Character testiculeesCharacter = new Character()
         {
+            Name = "Testiculees teh Great",
             Class = CharacterClass.Warrior,
-            Lvl = 3
+            Lvl = 1,
+            OwnerID = testiculeesProfile.OwnerID,
+            Armor = Armors.knightArmor,
+            MaxHP = 12000000,
+            CurrentHP = 12000000,
+            Weapon = Weapons.warriorFists,
+            Exp = 0
         };
     }
 
@@ -408,7 +419,7 @@ namespace PersonalDiscordBot.Classes
                     break;
                 case LootType.Weapon:
                     RarityType rarityType = ChooseRarity();
-                    WeaponType weaponType = ChooseWeaponType();
+                    WeaponType weaponType = ChooseWeaponType(testiculeesCharacter);
                     //int level = UserLevel;
                     //Weapon.WeaponRandomGen(rarityType, weaponType, level);
                     break;
