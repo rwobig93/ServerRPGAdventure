@@ -21,6 +21,7 @@ namespace PersonalDiscordBot.Classes
             Necromancer,
             Dragoon
         }
+
         public enum WeaponType
         {
             Sword,
@@ -32,9 +33,10 @@ namespace PersonalDiscordBot.Classes
             Spear,
             DragonSpear,
             TwinSwords,
-            Starter,
-            Other
+            Other,
+            Starter
         }
+
         public enum SpellType
         {
             Attack,
@@ -42,6 +44,7 @@ namespace PersonalDiscordBot.Classes
             Restorative,
             Starter
         }
+
         public enum ItemType
         {
             Restorative,
@@ -50,16 +53,39 @@ namespace PersonalDiscordBot.Classes
             Currency,
             Repair
         }
+
         public enum ArmorType
         {
             Light,
             Medium,
             Heavy
         }
+
+        public enum RarityType
+        {
+            Vendor,  //Vendor is for selling items i.e. Gray
+            Common,
+            Uncommon,
+            Rare,
+            Epic,
+            Legendary
+        };
+
+        public static OwnerProfile testProfiler = new OwnerProfile()
+        {
+            CurrentCharacter = testCharacter
+        };
+
+        public static Character testCharacter = new Character()
+        {
+            Class = CharacterClass.Warrior,
+            Lvl = 3
+        };
     }
 
     public static class Management
     {
+
         public static Character CreateNewCharacter(ulong ownerId, CharacterClass chosenClass)
         {
             Character newChar = new Character();
@@ -205,6 +231,7 @@ namespace PersonalDiscordBot.Classes
     {
         public ulong OwnerID { get; set; }
         public List<Character> CharacterList = new List<Character>();
+        public Character CurrentCharacter { get; set; }
         public int Currency { get; set; } = 100;
         public int FightsTotal { get; set; } = 0;
         public int FightsWon { get; set; } = 0;
@@ -215,6 +242,7 @@ namespace PersonalDiscordBot.Classes
         public int BossesBeat { get; set; } = 0;
         public int TotalPebbles { get; set; } = 0;
     }
+
     public class Character
     {
         public ulong OwnerID { get; set; }
@@ -237,6 +265,7 @@ namespace PersonalDiscordBot.Classes
         public int Spd { get; set; }
         public int Lck { get; set; }
     }
+
     public class Enemy
     {
         public string Name { get; set; }
@@ -254,10 +283,12 @@ namespace PersonalDiscordBot.Classes
         public int Spd { get; set; }
         public int Lck { get; set; }
     }
+
     public class Boss : Enemy
     {
         public LootDrop Loot { get; set; }
     }
+
     public class BackPack
     {
         public string Name { get; set; }
@@ -267,11 +298,13 @@ namespace PersonalDiscordBot.Classes
         public List<IBackPackItem> Stored = new List<IBackPackItem>();
         public List<Spell> Spells = new List<Spell>();
     }
+
     public class Weapon : IBackPackItem
     {
         public string Name { get; set; }
         public string Desc { get; set; } = "A weapon like any other";
         public WeaponType Type { get; set; }
+        public RarityType Rarity { get; set; }
         public int Lvl { get; set; } = 0;
         public int MaxDurability { get; set; } = 0;
         public int CurrentDurability { get; set; } = 0;
@@ -284,6 +317,7 @@ namespace PersonalDiscordBot.Classes
         public int IceDamage { get; set; } = 0;
         public int WindDamage { get; set; } = 0;
     }
+
     public class Spell
     {
         public string Name { get; set; }
@@ -299,6 +333,7 @@ namespace PersonalDiscordBot.Classes
         public int IceDamage { get; set; } = 0;
         public int WindDamage { get; set; } = 0;
     }
+
     public class Item : IBackPackItem
     {
         public string Name { get; set; }
@@ -314,6 +349,7 @@ namespace PersonalDiscordBot.Classes
         public int Ice { get; set; } = 0;
         public int Wind { get; set; } = 0;
     }
+
     public class Armor : IBackPackItem
     {
         public string Name { get; set; }
@@ -331,6 +367,7 @@ namespace PersonalDiscordBot.Classes
         public int Ice { get; set; } = 0;
         public int Wind { get; set; } = 0;
     }
+
     public class LootDrop
     {
         /// <summary>
@@ -359,7 +396,7 @@ namespace PersonalDiscordBot.Classes
         public static IBackPackItem PickLoot()
         {
             IBackPackItem chosenLoot = null;
-            LootType chosenType = ChooseType();
+            LootType chosenType = LootType.Weapon;  //ChooseType();
             switch (chosenType)
             {
                 case LootType.Item:
@@ -370,6 +407,10 @@ namespace PersonalDiscordBot.Classes
                 case LootType.Armor:
                     break;
                 case LootType.Weapon:
+                    RarityType rarityType = ChooseRarity();
+                    WeaponType weaponType = ChooseWeaponType();
+                    //int level = UserLevel;
+                    //Weapon.WeaponRandomGen(rarityType, weaponType, level);
                     break;
                 case LootType.Spell:
                     break;
@@ -379,6 +420,32 @@ namespace PersonalDiscordBot.Classes
             return chosenLoot;
         }
 
+        public static RarityType ChooseRarity()
+        {
+
+            RarityType itemRarity = 0;  // start at first one
+            int randomValue = rng.Next(MaxProbability);
+            while (_rarityProbabilities[(int)itemRarity] <= randomValue)
+            {
+                itemRarity++;
+            }
+
+            return itemRarity;
+        }
+
+        public static WeaponType ChooseWeaponType(Character character)
+        {
+            WeaponType weaponType = 0;
+            int randomValue = rng.Next(MaxProbability);
+            int[] weaponProbabilities = _weaponProbabilities(character.Class);
+            while (weaponProbabilities[(int)weaponType] <= randomValue)
+            {
+                weaponType++;
+            }
+
+            return weaponType;
+        }
+
         /// <summary>
         /// The loot types.
         /// </summary>
@@ -386,23 +453,64 @@ namespace PersonalDiscordBot.Classes
         {
             Item, Armor, Weapon, Spell, Backpack, Nothing
         };
-
+        
         /// <summary>
         /// Cumulative probabilities - each entry corresponds to the member of LootType in the corresponding position.
         /// </summary>
         protected static int[] _lootProbabilites = new int[]
         {
-            600, 100, 100, 50, 20,  // Chances: Item(60%), Armor(10%), Weapon(10%), Spell(5%), Backpack(2%), Nothing(13%)
+            600, 700, 800, 850, 870,  // Chances: Item(60%), Armor(10%), Weapon(10%), Spell(5%), Backpack(2%), Nothing(13%)
             MaxProbability
         };
+
+        /// <summary>
+        /// Cumulative probabilities - each entry corresponds to the member of RarityType in the corresponding position.
+        /// </summary>
+        protected static int[] _rarityProbabilities = new int[]
+        {
+            150, 490, 730, 880, 980, MaxProbability // Chances: Vendor 150(15%), Common 340(34%), Uncommon 250(25%), Rare 150(15%), Epic 100(10%), Legendary 10(1%)
+        };
+
+        public static int[] _weaponProbabilities(CharacterClass charClass)
+        {
+            int[] weaponArray = new int[] { };
+            switch (charClass)
+            {
+                case CharacterClass.Warrior:
+                    weaponArray = new int[] { 250, 450, 650, 795, 890, 900, 920, 940, 960, 999, MaxProbability}; // Sword, Dagger, Greatsword, Katana, Staff, FocusStone, Spear, DragonSpear, TwinSwords, Other, Starter
+                    break;
+                case CharacterClass.Dragoon:
+                    weaponArray = new int[] { 100, 200, 250, 300, 350, 400, 600, 800, 990, 999, MaxProbability}; // Sword, Dagger, Greatsword, Katana, Staff, FocusStone, Spear, DragonSpear, TwinSwords, Other, Starter
+                    break;
+            }
+
+            return weaponArray;
+        }
     }
 
     public static class Weapons
     {
-        public static List<Weapon> weaponList = new List<Weapon>()
+        public static List<Weapon> WeaponList = new List<Weapon>()
         {
             
         };
+
+        public static Weapon WeaponRandomGen(RarityType rarity, WeaponType type, int level)
+        {
+            Weapon weap = new Weapon();
+            weap.Name = "SomeBody Once Told Me";
+            weap.Desc = "The World is Gonna Rule Me";
+            weap.Type = type;
+            weap.Rarity = rarity;
+            weap.Lvl = level;
+            weap.MaxDurability = 10 * level;
+            weap.CurrentDurability = weap.MaxDurability;
+            weap.Worth = 1000 * level + rng.Next(2, 5);
+            weap.Speed = (100 * (level + rng.Next(2, 5)));
+            weap.PhysicalDamage = 17 * level + rng.Next(2, 5);
+            return weap;
+        }
+
         public static Weapon warriorFists = new Weapon { Name = "Warrior Fists", Type = WeaponType.Starter, PhysicalDamage = 5, Desc = "The mighty fist, great for fisting.... I mean beating the shit out of everyone that gets in your way" };
         public static Weapon rogueDaggers = new Weapon { Name = "Rogues' Daggers", Speed = 110, PhysicalDamage = 3, Type = WeaponType.Starter, Desc = "A pair of old daggers that are rusted; Like really bad, why are you using these again?" };
         public static Weapon dragonSpear = new Weapon { Name = "Novice Dragon Hunter Spear", Speed = 80, Type = WeaponType.Starter, PhysicalDamage = 6, FireDamage = 1, LightningDamage = 1, IceDamage = 1, WindDamage = 1, Desc = "Nothing is more bad ass then a Dragon Hunter, thats why you are here, doesn't matter that there aren't any dragons around... Remember: Bad. Ass." };
@@ -412,11 +520,6 @@ namespace PersonalDiscordBot.Classes
 
     public static class Spells
     {
-        public static List<Spell> spellList = new List<Spell>()
-        {
-            arcaneArmor,
-            dragonRage
-        };
         public static Spell magesEnergy = new Spell { Name = "Mages' Energy", MagicDamage = 5, ManaCost = 0, Lvl = 0, Type = SpellType.Starter, Desc = "The spell that started them all, some might call it the 'Hello World' spell, it gets the job done and your grueling training means you can infinitely it.... cool!" };
         public static Spell boneSpike = new Spell { Name = "Necromancer Bone Spike", ManaCost = 0, PhysicalDamage = 3, WindDamage = 1, MagicDamage = 2, Type = SpellType.Starter, Desc = "A giant spike comes out of the ground with a 70% chance of hitting the genitals, what's more to like?" };
         public static Spell arcaneArmor = new Spell { Name = "Novice Arcane Armor", Type = SpellType.Defense, PhysicalDamage = 3, ManaCost = 2, MagicDamage = 5, Lvl = 1, Desc = "Thin hovering layers of pure arcane defense here to protect you, I think the warranty expired last week. Be Careful" };
@@ -425,14 +528,6 @@ namespace PersonalDiscordBot.Classes
 
     public static class Armors
     {
-        public static List<Armor> armorList = new List<Armor>()
-        {
-            knightArmor,
-            mageRobe,
-            theiveGarb,
-            undeadArmor,
-            dragonArmor
-        };
         public static Armor knightArmor = new Armor { Name = "Novice Knight Armor", Type = ArmorType.Heavy, Lvl = 1, Speed = 50, Worth = 100, MaxDurability = 20, CurrentDurability = 20, Physical = 100, Desc = "Some beatup old armor you found in the old shed out back, next to the bones of an old dog... what was it's name again?" };
         public static Armor mageRobe = new Armor { Name = "Novice Mages' Robe", Type = ArmorType.Light, CurrentDurability = 10, MaxDurability = 10, Speed = 150, Worth = 100, Magic = 100, Lvl = 1, Physical = 10, Desc = "These might be 'Robes' if you believe hard enough, go on, believe... I can wait" };
         public static Armor theiveGarb = new Armor { Name = "Novice Theives Garb", Type = ArmorType.Light, CurrentDurability = 15, Lvl = 1, MaxDurability = 15, Speed = 130, Worth = 100, Physical = 70, Magic = 30, Desc = "What better way to rock your first gear then to steal it, even if it was from old miss bitchface who is a blind amputee" };
@@ -442,13 +537,6 @@ namespace PersonalDiscordBot.Classes
 
     public static class Items
     {
-        public static List<Item> itemList = new List<Item>()
-        {
-            smallHealthPotion,
-            smallHealthPotionPack,
-            smallManaPotion,
-            smallManaPotionPack
-        };
         public static Item smallHealthPotion = new Item { Name = "Small Health Potion", Type = ItemType.Restorative, Lvl = 1, Worth = 2, Desc = "The good ol' health potion, now with 5 shots of caffeine and no MSG!" };
         public static Item smallHealthPotionPack = new Item { Name = "Small Health Potion Pack", Type = ItemType.Restorative, Lvl = 1, Worth = 2, Count = 5, Desc = "5 health potions!? Is it christmas already? Get those f**kin socks away from me!" };
         public static Item smallManaPotion = new Item { Name = "Small Mana Potion", Type = ItemType.Restorative, Lvl = 1, Worth = 5, Desc = "A brew that fills your body with Magic energy, the health information sticker wore off long ago, don't worry about what is inside." };

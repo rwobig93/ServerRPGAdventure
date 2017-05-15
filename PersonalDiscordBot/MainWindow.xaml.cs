@@ -86,6 +86,7 @@ namespace PersonalDiscordBot
         private void winMain_Loaded(object sender, RoutedEventArgs e)
         {
             HideGrids();
+            uStatusUpdate(LootDrop.PickLoot().ToString());
         }
 
         private void winMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
