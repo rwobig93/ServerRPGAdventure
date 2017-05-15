@@ -1,0 +1,530 @@
+05-15-17_11:02:26 AM :: 
+########################## Application Start ##########################
+
+05-15-17_11:02:26 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_11:02:26 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_11:02:26 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_11:02:26 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_11:02:27 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-15-17_11:02:27 AM :: Finished reading config
+05-15-17_11:02:28 AM :: Set Grid grdStatus to Hidden on launch
+05-15-17_11:02:28 AM :: Set Grid grdSettings to Hidden on launch
+05-15-17_11:02:28 AM :: Set Grid grdServers to Hidden on launch
+05-15-17_11:02:28 AM :: Set Grid grdBotInfo to Hidden on launch
+
+05-15-17_11:02:33 AM :: Token wasn't found in sGeneral.Settings, prompting for token and sending notification
+05-15-17_11:02:36 AM :: Saved new token: MzEzNjk0ODc3MTM5MzM3MjE3.C_tWog.sxzBA7zcIW5qexcoOhX6plkEl2w
+05-15-17_11:02:36 AM :: Slid grdToken back out of view
+
+05-15-17_11:02:41 AM :: Saved new token: MzEzNjk0ODc3MTM5MzM3MjE3.C_tWog.sxzBA7zcIW5qexcoOhX6plkEl2w
+05-15-17_11:02:41 AM :: Slid grdToken back out of view
+05-15-17_11:02:51 AM :: Saved new token: MzEzNjk0ODc3MTM5MzM3MjE3.C_tWog.sxzBA7zcIW5qexcoOhX6plkEl2w
+
+05-15-17_11:02:51 AM :: Slid grdToken back out of view
+05-15-17_11:02:52 AM :: Saved new token: MzEzNjk0ODc3MTM5MzM3MjE3.C_tWog.sxzBA7zcIW5qexcoOhX6plkEl2w
+05-15-17_11:02:52 AM :: Slid grdToken back out of view
+05-15-17_11:02:52 AM :: Saved new token: MzEzNjk0ODc3MTM5MzM3MjE3.C_tWog.sxzBA7zcIW5qexcoOhX6plkEl2w
+
+05-15-17_11:02:52 AM :: Slid grdToken back out of view
+05-15-17_11:02:52 AM :: Saved new token: MzEzNjk0ODc3MTM5MzM3MjE3.C_tWog.sxzBA7zcIW5qexcoOhX6plkEl2w
+05-15-17_11:02:52 AM :: Slid grdToken back out of view
+05-15-17_11:02:52 AM :: Saved new token: MzEzNjk0ODc3MTM5MzM3MjE3.C_tWog.sxzBA7zcIW5qexcoOhX6plkEl2w
+
+05-15-17_11:02:52 AM :: Slid grdToken back out of view
+05-15-17_11:02:52 AM :: Saved new token: MzEzNjk0ODc3MTM5MzM3MjE3.C_tWog.sxzBA7zcIW5qexcoOhX6plkEl2w
+05-15-17_11:02:52 AM :: Slid grdToken back out of view
+05-15-17_11:02:52 AM :: Saved new token: MzEzNjk0ODc3MTM5MzM3MjE3.C_tWog.sxzBA7zcIW5qexcoOhX6plkEl2w
+
+05-15-17_11:02:52 AM :: Slid grdToken back out of view
+05-15-17_11:02:53 AM :: Saved new token: MzEzNjk0ODc3MTM5MzM3MjE3.C_tWog.sxzBA7zcIW5qexcoOhX6plkEl2w
+05-15-17_11:02:53 AM :: Slid grdToken back out of view
+05-15-17_11:02:53 AM :: Saved new token: MzEzNjk0ODc3MTM5MzM3MjE3.C_tWog.sxzBA7zcIW5qexcoOhX6plkEl2w
+
+05-15-17_11:02:53 AM :: Slid grdToken back out of view
+05-15-17_11:02:57 AM :: Slid grdToken out of view
+05-15-17_11:03:03 AM :: Cleared token from sGeneral.Settings and the txtTokenValue textbox
+05-15-17_11:03:03 AM :: Notification Method Called
+
+05-15-17_11:04:20 AM :: 
+########################## Application Start ##########################
+
+05-15-17_11:04:20 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_11:04:20 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_11:04:20 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_11:04:20 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_11:04:20 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-15-17_11:04:20 AM :: Finished reading config
+05-15-17_11:04:21 AM :: Set Grid grdStatus to Hidden on launch
+05-15-17_11:04:21 AM :: Set Grid grdSettings to Hidden on launch
+05-15-17_11:04:21 AM :: Set Grid grdServers to Hidden on launch
+05-15-17_11:04:21 AM :: Set Grid grdBotInfo to Hidden on launch
+
+05-15-17_11:04:24 AM :: STATUS: Starting login updater
+05-15-17_11:04:25 AM :: EXCEPTION: Start at 963
+05-15-17_11:04:25 AM :: STATUS: An Exception Occured: Start at 963
+Msg: The WebSocket protocol is not supported on this platform.
+05-15-17_11:04:34 AM :: STATUS: Starting login updater
+
+05-15-17_11:04:34 AM :: EXCEPTION: Start at 963
+05-15-17_11:04:34 AM :: STATUS: An Exception Occured: Start at 963
+Msg: The WebSocket protocol is not supported on this platform.
+05-15-17_11:04:43 AM :: Disconnected Client
+05-15-17_11:04:43 AM :: Logged out
+
+05-15-17_11:04:45 AM :: 
+########################## Application Stop ##########################
+
+
+05-15-17_11:04:48 AM :: 
+########################## Application Start ##########################
+
+05-15-17_11:04:48 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_11:04:48 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_11:04:48 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_11:04:48 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_11:04:48 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-15-17_11:04:48 AM :: Finished reading config
+05-15-17_11:04:50 AM :: Set Grid grdStatus to Hidden on launch
+05-15-17_11:04:50 AM :: Set Grid grdSettings to Hidden on launch
+05-15-17_11:04:50 AM :: Set Grid grdServers to Hidden on launch
+05-15-17_11:04:50 AM :: Set Grid grdBotInfo to Hidden on launch
+
+05-15-17_11:04:52 AM :: STATUS: Starting login updater
+05-15-17_11:04:53 AM :: EXCEPTION: Start at 963
+05-15-17_11:04:53 AM :: STATUS: An Exception Occured: Start at 963
+Msg: The WebSocket protocol is not supported on this platform.
+05-15-17_11:04:56 AM :: Revealed Grid grdStatus
+
+05-15-17_11:10:41 AM :: 
+########################## Application Start ##########################
+
+05-15-17_11:10:41 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_11:10:41 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_11:10:41 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_11:10:41 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_11:10:41 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-15-17_11:10:41 AM :: Finished reading config
+05-15-17_11:10:42 AM :: Set Grid grdStatus to Hidden on launch
+05-15-17_11:10:42 AM :: Set Grid grdSettings to Hidden on launch
+05-15-17_11:10:42 AM :: Set Grid grdServers to Hidden on launch
+05-15-17_11:10:42 AM :: Set Grid grdBotInfo to Hidden on launch
+
+05-15-17_11:10:42 AM :: STATUS: Vendor:164
+Common:211
+Uncommon:0
+Rare:0
+Epic:0
+Legendary:626
+
+05-15-17_11:10:47 AM :: Revealed Grid grdStatus
+05-15-17_11:10:47 AM :: Hid Grid grdSettings
+05-15-17_11:10:47 AM :: Hid Grid grdServers
+05-15-17_11:10:47 AM :: Hid Grid grdBotInfo
+
+05-15-17_11:10:47 AM :: Slid Main Menu out of view
+05-15-17_11:11:08 AM :: 
+########################## Application Stop ##########################
+
+
+05-15-17_11:12:36 AM :: 
+########################## Application Start ##########################
+
+05-15-17_11:12:36 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_11:12:36 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_11:12:36 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_11:12:36 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_11:12:36 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-15-17_11:12:36 AM :: Finished reading config
+05-15-17_11:12:38 AM :: Set Grid grdStatus to Hidden on launch
+05-15-17_11:12:38 AM :: Set Grid grdSettings to Hidden on launch
+05-15-17_11:12:38 AM :: Set Grid grdServers to Hidden on launch
+05-15-17_11:12:38 AM :: Set Grid grdBotInfo to Hidden on launch
+
+05-15-17_11:12:40 AM :: Revealed Grid grdStatus
+05-15-17_11:12:40 AM :: Hid Grid grdSettings
+05-15-17_11:12:40 AM :: Hid Grid grdServers
+05-15-17_11:12:40 AM :: Hid Grid grdBotInfo
+05-15-17_11:12:40 AM :: Slid Main Menu out of view
+05-15-17_11:12:52 AM :: 
+########################## Application Stop ##########################
+
+
+
+05-15-17_11:13:32 AM :: 
+########################## Application Start ##########################
+
+05-15-17_11:13:32 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_11:13:32 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_11:13:32 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_11:13:32 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_11:13:33 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-15-17_11:13:33 AM :: Finished reading config
+05-15-17_11:13:33 AM :: Set Grid grdStatus to Hidden on launch
+05-15-17_11:13:33 AM :: Set Grid grdSettings to Hidden on launch
+05-15-17_11:13:33 AM :: Set Grid grdServers to Hidden on launch
+05-15-17_11:13:33 AM :: Set Grid grdBotInfo to Hidden on launch
+
+05-15-17_11:13:33 AM :: STATUS: Vendor:144
+Common:181
+Uncommon:0
+Rare:0
+Epic:0
+Legendary:676
+
+05-15-17_11:13:36 AM :: Revealed Grid grdStatus
+05-15-17_11:13:36 AM :: Hid Grid grdSettings
+05-15-17_11:13:36 AM :: Hid Grid grdServers
+05-15-17_11:13:36 AM :: Hid Grid grdBotInfo
+
+05-15-17_11:13:36 AM :: Slid Main Menu out of view
+05-15-17_11:14:31 AM :: 
+########################## Application Stop ##########################
+
+
+05-15-17_11:15:51 AM :: 
+########################## Application Start ##########################
+
+05-15-17_11:15:51 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_11:15:51 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_11:15:51 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_11:15:51 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_11:15:52 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-15-17_11:15:52 AM :: Finished reading config
+05-15-17_11:15:53 AM :: Set Grid grdStatus to Hidden on launch
+05-15-17_11:15:53 AM :: Set Grid grdSettings to Hidden on launch
+05-15-17_11:15:53 AM :: Set Grid grdServers to Hidden on launch
+05-15-17_11:15:53 AM :: Set Grid grdBotInfo to Hidden on launch
+
+05-15-17_11:20:16 AM :: 
+########################## Application Start ##########################
+
+05-15-17_11:20:16 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_11:20:16 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_11:20:16 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_11:20:16 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_11:20:17 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-15-17_11:20:17 AM :: Finished reading config
+05-15-17_11:20:18 AM :: Set Grid grdStatus to Hidden on launch
+05-15-17_11:20:18 AM :: Set Grid grdSettings to Hidden on launch
+05-15-17_11:20:18 AM :: Set Grid grdServers to Hidden on launch
+05-15-17_11:20:18 AM :: Set Grid grdBotInfo to Hidden on launch
+
+05-15-17_11:21:08 AM :: 
+########################## Application Start ##########################
+
+05-15-17_11:21:08 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_11:21:08 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_11:21:08 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_11:21:08 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_11:21:08 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-15-17_11:21:08 AM :: Finished reading config
+05-15-17_11:21:09 AM :: Set Grid grdStatus to Hidden on launch
+05-15-17_11:21:09 AM :: Set Grid grdSettings to Hidden on launch
+05-15-17_11:21:09 AM :: Set Grid grdServers to Hidden on launch
+05-15-17_11:21:09 AM :: Set Grid grdBotInfo to Hidden on launch
+
+05-15-17_11:22:58 AM :: 
+########################## Application Start ##########################
+
+05-15-17_11:22:58 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_11:22:58 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_11:22:58 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_11:22:58 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_11:22:58 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-15-17_11:22:58 AM :: Finished reading config
+05-15-17_11:22:59 AM :: Set Grid grdStatus to Hidden on launch
+05-15-17_11:22:59 AM :: Set Grid grdSettings to Hidden on launch
+05-15-17_11:22:59 AM :: Set Grid grdServers to Hidden on launch
+05-15-17_11:22:59 AM :: Set Grid grdBotInfo to Hidden on launch
+
+05-15-17_11:22:59 AM :: STATUS: 
+Vendor:145
+Common:327
+Uncommon:241
+Rare:154
+Epic:113
+Legendary:21
+
+05-15-17_11:23:01 AM :: Revealed Grid grdStatus
+05-15-17_11:23:01 AM :: Hid Grid grdSettings
+05-15-17_11:23:01 AM :: Hid Grid grdServers
+05-15-17_11:23:01 AM :: Hid Grid grdBotInfo
+
+05-15-17_11:23:01 AM :: Slid Main Menu out of view
+05-15-17_11:23:21 AM :: 
+########################## Application Stop ##########################
+
+
+05-15-17_11:40:28 AM :: 
+########################## Application Start ##########################
+
+05-15-17_11:40:28 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_11:40:28 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_11:40:28 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_11:40:28 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_11:40:29 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-15-17_11:40:29 AM :: Finished reading config
+05-15-17_11:40:30 AM :: Set Grid grdStatus to Hidden on launch
+05-15-17_11:40:30 AM :: Set Grid grdSettings to Hidden on launch
+05-15-17_11:40:30 AM :: Set Grid grdServers to Hidden on launch
+05-15-17_11:40:30 AM :: Set Grid grdBotInfo to Hidden on launch
+
+05-15-17_11:40:30 AM :: STATUS: 
+Vendor:166
+Common:332
+Uncommon:251
+Rare:126
+Epic:108
+Legendary:18
+
+05-15-17_11:40:32 AM :: Revealed Grid grdStatus
+05-15-17_11:40:32 AM :: Hid Grid grdSettings
+05-15-17_11:40:32 AM :: Hid Grid grdServers
+05-15-17_11:40:32 AM :: Hid Grid grdBotInfo
+
+05-15-17_11:46:40 AM :: 
+########################## Application Start ##########################
+
+05-15-17_11:46:40 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_11:46:40 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_11:46:40 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_11:46:40 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_11:46:41 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-15-17_11:46:41 AM :: Finished reading config
+05-15-17_11:46:42 AM :: Set Grid grdStatus to Hidden on launch
+05-15-17_11:46:42 AM :: Set Grid grdSettings to Hidden on launch
+05-15-17_11:46:42 AM :: Set Grid grdServers to Hidden on launch
+05-15-17_11:46:42 AM :: Set Grid grdBotInfo to Hidden on launch
+
+05-15-17_11:46:42 AM :: STATUS: 
+Vendor:160
+Common:328
+Uncommon:239
+Rare:162
+Epic:94
+Legendary:18
+
+05-15-17_11:46:44 AM :: Revealed Grid grdStatus
+05-15-17_11:46:44 AM :: Hid Grid grdSettings
+05-15-17_11:46:44 AM :: Hid Grid grdServers
+05-15-17_11:46:44 AM :: Hid Grid grdBotInfo
+
+05-15-17_11:46:44 AM :: Slid Main Menu out of view
+05-15-17_11:47:00 AM :: 
+########################## Application Stop ##########################
+
+
+05-15-17_11:47:03 AM :: 
+########################## Application Start ##########################
+
+05-15-17_11:47:03 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_11:47:03 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_11:47:03 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_11:47:03 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_11:47:03 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-15-17_11:47:03 AM :: Finished reading config
+05-15-17_11:47:04 AM :: Set Grid grdStatus to Hidden on launch
+05-15-17_11:47:04 AM :: Set Grid grdSettings to Hidden on launch
+05-15-17_11:47:04 AM :: Set Grid grdServers to Hidden on launch
+05-15-17_11:47:04 AM :: Set Grid grdBotInfo to Hidden on launch
+
+05-15-17_11:47:04 AM :: STATUS: 
+Vendor:149
+Common:343
+Uncommon:251
+Rare:135
+Epic:102
+Legendary:21
+
+05-15-17_11:47:09 AM :: Revealed Grid grdStatus
+05-15-17_11:47:09 AM :: Hid Grid grdSettings
+05-15-17_11:47:09 AM :: Hid Grid grdServers
+05-15-17_11:47:09 AM :: Hid Grid grdBotInfo
+
+05-15-17_11:47:09 AM :: Slid Main Menu out of view
+05-15-17_11:47:18 AM :: 
+########################## Application Stop ##########################
+
+
+05-15-17_12:31:13 PM :: 
+########################## Application Start ##########################
+
+05-15-17_12:31:13 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_12:31:13 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_12:31:13 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_12:31:13 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_12:31:15 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-15-17_12:31:15 PM :: Finished reading config
+05-15-17_12:31:15 PM :: Set Grid grdStatus to Hidden on launch
+05-15-17_12:31:15 PM :: Set Grid grdSettings to Hidden on launch
+05-15-17_12:31:15 PM :: Set Grid grdServers to Hidden on launch
+05-15-17_12:31:15 PM :: Set Grid grdBotInfo to Hidden on launch
+
+05-15-17_12:31:21 PM :: Revealed Grid grdStatus
+05-15-17_12:31:21 PM :: Hid Grid grdSettings
+05-15-17_12:31:21 PM :: Hid Grid grdServers
+05-15-17_12:31:21 PM :: Hid Grid grdBotInfo
+05-15-17_12:31:21 PM :: Slid Main Menu out of view
+05-15-17_12:31:23 PM :: Hid Grid grdStatus
+
+05-15-17_12:31:23 PM :: Slid Main Menu into view
+05-15-17_12:31:27 PM :: Revealed Grid grdStatus
+05-15-17_12:31:27 PM :: Hid Grid grdSettings
+05-15-17_12:31:27 PM :: Hid Grid grdServers
+05-15-17_12:31:27 PM :: Hid Grid grdBotInfo
+05-15-17_12:31:27 PM :: Slid Main Menu out of view
+
+05-15-17_12:31:29 PM :: 
+########################## Application Stop ##########################
+
+
+05-15-17_12:37:09 PM :: 
+########################## Application Start ##########################
+
+05-15-17_12:37:09 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_12:37:09 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_12:37:09 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_12:37:09 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_12:37:09 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-15-17_12:37:09 PM :: Finished reading config
+05-15-17_12:37:11 PM :: Set Grid grdStatus to Hidden on launch
+05-15-17_12:37:11 PM :: Set Grid grdSettings to Hidden on launch
+05-15-17_12:37:11 PM :: Set Grid grdServers to Hidden on launch
+05-15-17_12:37:11 PM :: Set Grid grdBotInfo to Hidden on launch
+
+05-15-17_12:37:13 PM :: Revealed Grid grdStatus
+05-15-17_12:37:13 PM :: Hid Grid grdSettings
+05-15-17_12:37:13 PM :: Hid Grid grdServers
+05-15-17_12:37:13 PM :: Hid Grid grdBotInfo
+05-15-17_12:37:13 PM :: Slid Main Menu out of view
+05-15-17_12:37:16 PM :: 
+########################## Application Stop ##########################
+
+
+
+05-15-17_12:37:30 PM :: 
+########################## Application Start ##########################
+
+05-15-17_12:37:30 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_12:37:30 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_12:37:30 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_12:37:30 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_12:37:30 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+
+05-15-17_12:37:30 PM :: Finished reading config
+05-15-17_12:37:31 PM :: Set Grid grdStatus to Hidden on launch
+05-15-17_12:37:31 PM :: Set Grid grdSettings to Hidden on launch
+05-15-17_12:37:31 PM :: Set Grid grdServers to Hidden on launch
+05-15-17_12:37:31 PM :: Set Grid grdBotInfo to Hidden on launch
+

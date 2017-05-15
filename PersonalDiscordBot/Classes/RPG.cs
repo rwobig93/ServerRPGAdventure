@@ -33,8 +33,8 @@ namespace PersonalDiscordBot.Classes
             Spear,
             DragonSpear,
             TwinSwords,
-            Starter,
-            Other
+            Other,
+            Starter
         }
 
         public enum SpellType
@@ -60,6 +60,27 @@ namespace PersonalDiscordBot.Classes
             Medium,
             Heavy
         }
+
+        public enum RarityType
+        {
+            Vendor,  //Vendor is for selling items i.e. Gray
+            Common,
+            Uncommon,
+            Rare,
+            Epic,
+            Legendary
+        };
+
+        public static OwnerProfile testProfiler = new OwnerProfile()
+        {
+            CurrentCharacter = testCharacter
+        };
+
+        public static Character testCharacter = new Character()
+        {
+            Class = CharacterClass.Warrior,
+            Lvl = 3
+        };
     }
 
     public static class Management
@@ -210,6 +231,7 @@ namespace PersonalDiscordBot.Classes
     {
         public ulong OwnerID { get; set; }
         public List<Character> CharacterList = new List<Character>();
+        public Character CurrentCharacter { get; set; }
         public int Currency { get; set; } = 100;
         public int FightsTotal { get; set; } = 0;
         public int FightsWon { get; set; } = 0;
@@ -282,6 +304,7 @@ namespace PersonalDiscordBot.Classes
         public string Name { get; set; }
         public string Desc { get; set; } = "A weapon like any other";
         public WeaponType Type { get; set; }
+        public RarityType Rarity { get; set; }
         public int Lvl { get; set; } = 0;
         public int MaxDurability { get; set; } = 0;
         public int CurrentDurability { get; set; } = 0;
@@ -373,7 +396,7 @@ namespace PersonalDiscordBot.Classes
         public static IBackPackItem PickLoot()
         {
             IBackPackItem chosenLoot = null;
-            LootType chosenType = ChooseType();
+            LootType chosenType = LootType.Weapon;  //ChooseType();
             switch (chosenType)
             {
                 case LootType.Item:
@@ -384,6 +407,10 @@ namespace PersonalDiscordBot.Classes
                 case LootType.Armor:
                     break;
                 case LootType.Weapon:
+                    RarityType rarityType = ChooseRarity();
+                    WeaponType weaponType = ChooseWeaponType();
+                    //int level = UserLevel;
+                    //Weapon.WeaponRandomGen(rarityType, weaponType, level);
                     break;
                 case LootType.Spell:
                     break;
@@ -393,6 +420,32 @@ namespace PersonalDiscordBot.Classes
             return chosenLoot;
         }
 
+        public static RarityType ChooseRarity()
+        {
+
+            RarityType itemRarity = 0;  // start at first one
+            int randomValue = rng.Next(MaxProbability);
+            while (_rarityProbabilities[(int)itemRarity] <= randomValue)
+            {
+                itemRarity++;
+            }
+
+            return itemRarity;
+        }
+
+        public static WeaponType ChooseWeaponType(Character character)
+        {
+            WeaponType weaponType = 0;
+            int randomValue = rng.Next(MaxProbability);
+            int[] weaponProbabilities = _weaponProbabilities(character.Class);
+            while (weaponProbabilities[(int)weaponType] <= randomValue)
+            {
+                weaponType++;
+            }
+
+            return weaponType;
+        }
+
         /// <summary>
         /// The loot types.
         /// </summary>
@@ -400,15 +453,39 @@ namespace PersonalDiscordBot.Classes
         {
             Item, Armor, Weapon, Spell, Backpack, Nothing
         };
-
+        
         /// <summary>
         /// Cumulative probabilities - each entry corresponds to the member of LootType in the corresponding position.
         /// </summary>
         protected static int[] _lootProbabilites = new int[]
         {
-            600, 100, 100, 50, 20,  // Chances: Item(60%), Armor(10%), Weapon(10%), Spell(5%), Backpack(2%), Nothing(13%)
+            600, 700, 800, 850, 870,  // Chances: Item(60%), Armor(10%), Weapon(10%), Spell(5%), Backpack(2%), Nothing(13%)
             MaxProbability
         };
+
+        /// <summary>
+        /// Cumulative probabilities - each entry corresponds to the member of RarityType in the corresponding position.
+        /// </summary>
+        protected static int[] _rarityProbabilities = new int[]
+        {
+            150, 490, 730, 880, 980, MaxProbability // Chances: Vendor 150(15%), Common 340(34%), Uncommon 250(25%), Rare 150(15%), Epic 100(10%), Legendary 10(1%)
+        };
+
+        public static int[] _weaponProbabilities(CharacterClass charClass)
+        {
+            int[] weaponArray = new int[] { };
+            switch (charClass)
+            {
+                case CharacterClass.Warrior:
+                    weaponArray = new int[] { 250, 450, 650, 795, 890, 900, 920, 940, 960, 999, MaxProbability}; // Sword, Dagger, Greatsword, Katana, Staff, FocusStone, Spear, DragonSpear, TwinSwords, Other, Starter
+                    break;
+                case CharacterClass.Dragoon:
+                    weaponArray = new int[] { 100, 200, 250, 300, 350, 400, 600, 800, 990, 999, MaxProbability}; // Sword, Dagger, Greatsword, Katana, Staff, FocusStone, Spear, DragonSpear, TwinSwords, Other, Starter
+                    break;
+            }
+
+            return weaponArray;
+        }
     }
 
     public static class Weapons
@@ -417,6 +494,23 @@ namespace PersonalDiscordBot.Classes
         {
             
         };
+
+        public static Weapon WeaponRandomGen(RarityType rarity, WeaponType type, int level)
+        {
+            Weapon weap = new Weapon();
+            weap.Name = "SomeBody Once Told Me";
+            weap.Desc = "The World is Gonna Rule Me";
+            weap.Type = type;
+            weap.Rarity = rarity;
+            weap.Lvl = level;
+            weap.MaxDurability = 10 * level;
+            weap.CurrentDurability = weap.MaxDurability;
+            weap.Worth = 1000 * level + rng.Next(2, 5);
+            weap.Speed = (100 * (level + rng.Next(2, 5)));
+            weap.PhysicalDamage = 17 * level + rng.Next(2, 5);
+            return weap;
+        }
+
         public static Weapon warriorFists = new Weapon { Name = "Warrior Fists", Type = WeaponType.Starter, PhysicalDamage = 5, Desc = "The mighty fist, great for fisting.... I mean beating the shit out of everyone that gets in your way" };
         public static Weapon rogueDaggers = new Weapon { Name = "Rogues' Daggers", Speed = 110, PhysicalDamage = 3, Type = WeaponType.Starter, Desc = "A pair of old daggers that are rusted; Like really bad, why are you using these again?" };
         public static Weapon dragonSpear = new Weapon { Name = "Novice Dragon Hunter Spear", Speed = 80, Type = WeaponType.Starter, PhysicalDamage = 6, FireDamage = 1, LightningDamage = 1, IceDamage = 1, WindDamage = 1, Desc = "Nothing is more bad ass then a Dragon Hunter, thats why you are here, doesn't matter that there aren't any dragons around... Remember: Bad. Ass." };

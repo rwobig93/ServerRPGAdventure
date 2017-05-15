@@ -928,11 +928,7 @@ namespace PersonalDiscordBot.Classes
         [Command(""), Summary("Testicules Engage")]
         public async Task Testacules()
         {
-            if (Directory.GetCurrentDirectory().ToLower().Contains("debug"))
-            {
-                
-                
-            }
+
         }
     }
 
