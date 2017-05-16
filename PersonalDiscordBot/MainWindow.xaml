@@ -87,7 +87,7 @@
         <Grid x:Name="grdNotification" Margin="0,42,-734,0" Background="#FF191919" HorizontalAlignment="Right" Width="734" Height="55" VerticalAlignment="Top" Panel.ZIndex="100">
             <TextBlock x:Name="lblNotificationValue" Margin="10,0" TextWrapping="Wrap" FontSize="16" Foreground="#FF0FB3C3" TextAlignment="Center"/>
         </Grid>
-        <Button x:Name="btnTest" Click="btnTest_Click" Content="Test" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="88" Height="32" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="20" Margin="578,0,0,0" Visibility="Hidden"/>
+        <Button x:Name="btnTest" Click="btnTest_Click" Content="Test" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="88" Height="32" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="20" Margin="578,0,0,0" Visibility="Visible"/>
 
     </Grid>
 </Window>

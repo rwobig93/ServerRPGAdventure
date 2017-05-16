@@ -1,0 +1,2850 @@
+05-16-17_6:35:01 AM :: 
+########################## Application Start ##########################
+
+05-16-17_6:35:01 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-16-17_6:35:01 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+05-16-17_6:35:01 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-16-17_6:35:01 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-16-17_6:35:01 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+05-16-17_6:35:01 AM :: Finished reading config
+05-16-17_6:35:01 AM :: Set Grid grdStatus to Hidden on launch
+05-16-17_6:35:01 AM :: Set Grid grdSettings to Hidden on launch
+05-16-17_6:35:01 AM :: Set Grid grdServers to Hidden on launch
+05-16-17_6:35:01 AM :: Set Grid grdBotInfo to Hidden on launch
+05-16-17_6:35:05 AM :: STATUS: Starting login updater
+05-16-17_6:35:05 AM :: EXCEPTION: Start at 988
+05-16-17_6:35:05 AM :: STATUS: An Exception Occured: Start at 988
+Msg: The WebSocket protocol is not supported on this platform.
+05-16-17_6:35:15 AM :: 
+########################## Application Stop ##########################
+
+
+05-16-17_6:35:19 AM :: 
+########################## Application Start ##########################
+
+05-16-17_6:35:19 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-16-17_6:35:19 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+05-16-17_6:35:19 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-16-17_6:35:19 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-16-17_6:35:20 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+05-16-17_6:35:20 AM :: Finished reading config
+05-16-17_6:35:20 AM :: Set Grid grdStatus to Hidden on launch
+05-16-17_6:35:20 AM :: Set Grid grdSettings to Hidden on launch
+05-16-17_6:35:20 AM :: Set Grid grdServers to Hidden on launch
+05-16-17_6:35:20 AM :: Set Grid grdBotInfo to Hidden on launch
+05-16-17_6:35:24 AM :: STATUS: Starting login updater
+05-16-17_6:35:24 AM :: Revealed Grid grdStatus
+05-16-17_6:35:24 AM :: Hid Grid grdSettings
+05-16-17_6:35:24 AM :: Hid Grid grdServers
+05-16-17_6:35:24 AM :: Hid Grid grdBotInfo
+05-16-17_6:35:24 AM :: Slid Main Menu out of view
+05-16-17_6:35:24 AM :: New Notification: Status window was slid 1, 4sec(s)
+05-16-17_6:35:24 AM :: Notification wasn't playing, starting notification play cycles
+05-16-17_6:35:24 AM :: EXCEPTION: Start at 988
+05-16-17_6:35:24 AM :: STATUS: An Exception Occured: Start at 988
+Msg: The WebSocket protocol is not supported on this platform.
+05-16-17_6:35:28 AM :: Removed notification: Status window was slid 1
+05-16-17_6:35:28 AM :: Notifications left: 0
+05-16-17_6:35:28 AM :: Finished playing all notifications
+05-16-17_6:35:35 AM :: Hid Grid grdStatus
+05-16-17_6:35:35 AM :: Slid Main Menu into view
+05-16-17_6:35:35 AM :: New Notification: Status window was slid 2, 4sec(s)
+05-16-17_6:35:35 AM :: Notification wasn't playing, starting notification play cycles
+05-16-17_6:35:38 AM :: Revealed Grid grdStatus
+05-16-17_6:35:38 AM :: Hid Grid grdSettings
+05-16-17_6:35:38 AM :: Hid Grid grdServers
+05-16-17_6:35:38 AM :: Hid Grid grdBotInfo
+05-16-17_6:35:38 AM :: Slid Main Menu out of view
+05-16-17_6:35:38 AM :: New Notification: Status window was slid 3, 4sec(s)
+05-16-17_6:35:38 AM :: Notification is currently playing, returning
+05-16-17_6:35:39 AM :: Removed notification: Status window was slid 2
+05-16-17_6:35:39 AM :: Notifications left: 1
+05-16-17_6:35:43 AM :: Removed notification: Status window was slid 3
+05-16-17_6:35:43 AM :: Notifications left: 0
+05-16-17_6:35:43 AM :: Finished playing all notifications
+05-16-17_6:35:45 AM :: Hid Grid grdStatus
+05-16-17_6:35:45 AM :: Slid Main Menu into view
+05-16-17_6:35:45 AM :: New Notification: Status window was slid 4, 4sec(s)
+05-16-17_6:35:45 AM :: Notification wasn't playing, starting notification play cycles
+05-16-17_6:35:46 AM :: Revealed Grid grdStatus
+05-16-17_6:35:46 AM :: Hid Grid grdSettings
+05-16-17_6:35:46 AM :: Hid Grid grdServers
+05-16-17_6:35:46 AM :: Hid Grid grdBotInfo
+05-16-17_6:35:46 AM :: Slid Main Menu out of view
+05-16-17_6:35:46 AM :: New Notification: Status window was slid 5, 4sec(s)
+05-16-17_6:35:46 AM :: Notification is currently playing, returning
+05-16-17_6:35:47 AM :: Hid Grid grdStatus
+05-16-17_6:35:47 AM :: Slid Main Menu into view
+05-16-17_6:35:47 AM :: New Notification: Status window was slid 6, 4sec(s)
+05-16-17_6:35:47 AM :: Notification is currently playing, returning
+05-16-17_6:35:48 AM :: Revealed Grid grdStatus
+05-16-17_6:35:48 AM :: Hid Grid grdSettings
+05-16-17_6:35:48 AM :: Hid Grid grdServers
+05-16-17_6:35:48 AM :: Hid Grid grdBotInfo
+05-16-17_6:35:48 AM :: Slid Main Menu out of view
+05-16-17_6:35:48 AM :: New Notification: Status window was slid 7, 4sec(s)
+05-16-17_6:35:48 AM :: Notification is currently playing, returning
+05-16-17_6:35:49 AM :: Removed notification: Status window was slid 4
+05-16-17_6:35:49 AM :: Notifications left: 3
+05-16-17_6:35:53 AM :: Removed notification: Status window was slid 5
+05-16-17_6:35:53 AM :: Notifications left: 2
+05-16-17_6:35:57 AM :: Removed notification: Status window was slid 6
+05-16-17_6:35:57 AM :: Notifications left: 1
+05-16-17_6:36:01 AM :: Removed notification: Status window was slid 7
+05-16-17_6:36:01 AM :: Notifications left: 0
+05-16-17_6:36:01 AM :: Finished playing all notifications
+
+05-16-17_6:36:28 AM :: 
+########################## Application Stop ##########################
+
+
+05-16-17_12:55:53 PM :: 
+########################## Application Start ##########################
+
+05-16-17_12:55:53 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-16-17_12:55:53 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+05-16-17_12:55:53 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-16-17_12:55:53 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-16-17_12:55:54 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+05-16-17_12:55:54 PM :: Finished reading config
+05-16-17_12:55:54 PM :: Set Grid grdStatus to Hidden on launch
+05-16-17_12:55:54 PM :: Set Grid grdSettings to Hidden on launch
+05-16-17_12:55:54 PM :: Set Grid grdServers to Hidden on launch
+05-16-17_12:55:54 PM :: Set Grid grdBotInfo to Hidden on launch
+05-16-17_12:55:54 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 39
+Physical Damage: 7
+05-16-17_12:56:01 PM :: Revealed Grid grdStatus
+05-16-17_12:56:01 PM :: Hid Grid grdSettings
+05-16-17_12:56:01 PM :: Hid Grid grdServers
+05-16-17_12:56:01 PM :: Hid Grid grdBotInfo
+05-16-17_12:56:01 PM :: Slid Main Menu out of view
+05-16-17_12:57:47 PM :: 
+########################## Application Stop ##########################
+
+
+05-16-17_1:05:29 PM :: 
+########################## Application Start ##########################
+
+05-16-17_1:05:29 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-16-17_1:05:29 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+05-16-17_1:05:29 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-16-17_1:05:29 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-16-17_1:05:29 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+05-16-17_1:05:29 PM :: Finished reading config
+05-16-17_1:05:30 PM :: Set Grid grdStatus to Hidden on launch
+05-16-17_1:05:30 PM :: Set Grid grdSettings to Hidden on launch
+05-16-17_1:05:30 PM :: Set Grid grdServers to Hidden on launch
+05-16-17_1:05:30 PM :: Set Grid grdBotInfo to Hidden on launch
+05-16-17_1:05:36 PM :: 
+########################## Application Stop ##########################
+
+
+05-16-17_1:06:14 PM :: 
+########################## Application Start ##########################
+
+05-16-17_1:06:14 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-16-17_1:06:14 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+05-16-17_1:06:14 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-16-17_1:06:14 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-16-17_1:06:15 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+05-16-17_1:06:15 PM :: Finished reading config
+05-16-17_1:06:15 PM :: Set Grid grdStatus to Hidden on launch
+05-16-17_1:06:15 PM :: Set Grid grdSettings to Hidden on launch
+05-16-17_1:06:15 PM :: Set Grid grdServers to Hidden on launch
+05-16-17_1:06:15 PM :: Set Grid grdBotInfo to Hidden on launch
+05-16-17_1:06:17 PM :: Revealed Grid grdStatus
+05-16-17_1:06:17 PM :: Hid Grid grdSettings
+05-16-17_1:06:17 PM :: Hid Grid grdServers
+05-16-17_1:06:17 PM :: Hid Grid grdBotInfo
+05-16-17_1:06:17 PM :: Slid Main Menu out of view
+05-16-17_1:06:18 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 42
+Speed: 23
+Physical Damage: 19
+05-16-17_1:06:26 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 110
+Speed: 48
+Physical Damage: 31
+05-16-17_1:06:33 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 42
+Speed: 32
+Physical Damage: 19
+05-16-17_1:06:35 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 42
+Speed: 22
+Physical Damage: 13
+05-16-17_1:06:35 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 42
+Speed: 48
+Physical Damage: 19
+05-16-17_1:06:36 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 12
+Speed: 24
+Physical Damage: 4
+05-16-17_1:07:44 PM :: 
+########################## Application Stop ##########################
+
+
+05-16-17_1:09:59 PM :: 
+########################## Application Start ##########################
+
+05-16-17_1:09:59 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-16-17_1:09:59 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+05-16-17_1:09:59 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-16-17_1:09:59 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-16-17_1:09:59 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+05-16-17_1:09:59 PM :: Finished reading config
+05-16-17_1:10:00 PM :: Set Grid grdStatus to Hidden on launch
+05-16-17_1:10:00 PM :: Set Grid grdSettings to Hidden on launch
+05-16-17_1:10:00 PM :: Set Grid grdServers to Hidden on launch
+05-16-17_1:10:00 PM :: Set Grid grdBotInfo to Hidden on launch
+05-16-17_1:10:01 PM :: Revealed Grid grdStatus
+05-16-17_1:10:01 PM :: Hid Grid grdSettings
+05-16-17_1:10:01 PM :: Hid Grid grdServers
+05-16-17_1:10:01 PM :: Hid Grid grdBotInfo
+05-16-17_1:10:01 PM :: Slid Main Menu out of view
+05-16-17_1:10:02 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 44
+Speed: 30
+Physical Damage: 13
+05-16-17_1:10:04 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 111
+Speed: 40
+Physical Damage: 31
+05-16-17_1:10:05 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 240
+Speed: 29
+Physical Damage: 46
+05-16-17_1:10:08 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 47
+Speed: 37
+Physical Damage: 7
+05-16-17_1:10:15 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 26
+Physical Damage: 7
+05-16-17_1:10:18 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 44
+Speed: 45
+Physical Damage: 19
+05-16-17_1:10:19 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 111
+Speed: 36
+Physical Damage: 21
+05-16-17_1:10:20 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 23
+Speed: 44
+Physical Damage: 4
+05-16-17_1:10:36 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 44
+Speed: 46
+Physical Damage: 19
+05-16-17_1:11:30 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 45
+Speed: 39
+Physical Damage: 13
+05-16-17_1:11:36 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 21
+Speed: 39
+Physical Damage: 4
+05-16-17_1:11:37 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 112
+Speed: 47
+Physical Damage: 21
+05-16-17_1:12:55 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 26
+Speed: 49
+Physical Damage: 2
+05-16-17_1:13:19 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 19
+Speed: 28
+Physical Damage: 4
+05-16-17_1:13:22 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 17
+Speed: 38
+Physical Damage: 7
+
+05-16-17_1:13:23 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Other
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 17
+Speed: 41
+Physical Damage: 7
+05-16-17_1:13:23 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 19
+Speed: 30
+Physical Damage: 4
+05-16-17_1:13:24 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 242
+Speed: 39
+Physical Damage: 16
+05-16-17_1:13:26 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 46
+Speed: 33
+Physical Damage: 7
+05-16-17_1:13:26 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 240
+Speed: 23
+Physical Damage: 31
+05-16-17_1:13:27 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: DragonSpear
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 17
+Speed: 39
+Physical Damage: 7
+05-16-17_1:13:28 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 17
+Speed: 41
+Physical Damage: 7
+05-16-17_1:13:28 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 20
+Speed: 34
+Physical Damage: 4
+05-16-17_1:13:28 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 19
+Speed: 30
+Physical Damage: 4
+05-16-17_1:13:29 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 45
+Speed: 48
+Physical Damage: 13
+05-16-17_1:13:29 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 22
+Speed: 41
+Physical Damage: 2
+05-16-17_1:13:29 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 240
+Speed: 34
+Physical Damage: 46
+05-16-17_1:13:29 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 43
+Speed: 24
+Physical Damage: 19
+05-16-17_1:13:30 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 21
+Physical Damage: 7
+05-16-17_1:13:30 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 26
+Physical Damage: 7
+05-16-17_1:13:30 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 22
+Speed: 42
+Physical Damage: 4
+05-16-17_1:13:30 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 17
+Speed: 41
+Physical Damage: 7
+05-16-17_1:13:30 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 35
+Physical Damage: 10
+05-16-17_1:13:31 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 44
+Speed: 35
+Physical Damage: 13
+05-16-17_1:13:31 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 18
+Speed: 42
+Physical Damage: 7
+05-16-17_1:13:31 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 23
+Speed: 47
+Physical Damage: 4
+05-16-17_1:13:31 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 45
+Speed: 46
+Physical Damage: 13
+
+05-16-17_1:13:31 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: TwinSwords
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 17
+Speed: 45
+Physical Damage: 3
+05-16-17_1:13:32 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 241
+Speed: 24
+Physical Damage: 16
+05-16-17_1:13:32 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 17
+Speed: 47
+Physical Damage: 3
+05-16-17_1:13:32 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Other
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 39
+Physical Damage: 3
+05-16-17_1:13:32 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 43
+Speed: 24
+Physical Damage: 19
+05-16-17_1:13:32 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 43
+Speed: 24
+Physical Damage: 19
+05-16-17_1:13:33 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 31
+Physical Damage: 10
+05-16-17_1:13:33 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 241
+Speed: 31
+Physical Damage: 31
+05-16-17_1:13:33 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 46
+Speed: 30
+Physical Damage: 7
+05-16-17_1:13:33 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 24
+Speed: 48
+Physical Damage: 4
+05-16-17_1:13:34 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 17
+Speed: 36
+Physical Damage: 7
+05-16-17_1:13:34 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 46
+Speed: 33
+Physical Damage: 7
+05-16-17_1:13:34 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 18
+Speed: 43
+Physical Damage: 7
+05-16-17_1:13:34 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: FocusStone
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 44
+Speed: 46
+Physical Damage: 19
+05-16-17_1:13:35 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 112
+Speed: 30
+Physical Damage: 11
+05-16-17_1:13:35 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 240
+Speed: 31
+Physical Damage: 46
+05-16-17_1:13:35 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 21
+Physical Damage: 10
+05-16-17_1:13:36 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 43
+Speed: 22
+Physical Damage: 19
+05-16-17_1:13:36 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 21
+Speed: 39
+Physical Damage: 4
+05-16-17_1:13:36 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 113
+Speed: 36
+Physical Damage: 11
+05-16-17_1:13:37 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 17
+Speed: 36
+Physical Damage: 7
+05-16-17_1:13:37 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Spear
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 43
+Speed: 21
+Physical Damage: 13
+
+05-16-17_1:13:37 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 16
+Speed: 34
+Physical Damage: 7
+05-16-17_1:13:37 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 43
+Speed: 32
+Physical Damage: 19
+05-16-17_1:13:37 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 113
+Speed: 33
+Physical Damage: 11
+05-16-17_1:13:37 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 12
+Speed: 41
+Physical Damage: 4
+05-16-17_1:13:38 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Other
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 24
+Physical Damage: 10
+05-16-17_1:13:38 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 18
+Speed: 48
+Physical Damage: 7
+05-16-17_1:13:38 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 23
+Physical Damage: 10
+05-16-17_1:13:38 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: DragonSpear
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 241
+Speed: 23
+Physical Damage: 16
+05-16-17_1:13:38 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 20
+Speed: 34
+Physical Damage: 4
+05-16-17_1:13:39 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 240
+Speed: 28
+Physical Damage: 46
+05-16-17_1:13:39 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 20
+Speed: 34
+Physical Damage: 4
+05-16-17_1:13:39 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 9
+Speed: 22
+Physical Damage: 3
+05-16-17_1:13:39 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 21
+Physical Damage: 7
+05-16-17_1:13:39 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 111
+Speed: 31
+Physical Damage: 31
+05-16-17_1:13:39 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 44
+Speed: 28
+Physical Damage: 13
+05-16-17_1:13:40 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 44
+Speed: 48
+Physical Damage: 19
+05-16-17_1:13:40 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 110
+Speed: 22
+Physical Damage: 31
+05-16-17_1:13:40 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 49
+Physical Damage: 4
+05-16-17_1:13:40 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 111
+Speed: 33
+Physical Damage: 21
+05-16-17_1:13:40 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: FocusStone
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 17
+Speed: 30
+Physical Damage: 2
+05-16-17_1:13:40 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 20
+Speed: 36
+Physical Damage: 2
+05-16-17_1:13:41 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 242
+Speed: 35
+Physical Damage: 16
+
+05-16-17_1:13:41 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 10
+Speed: 33
+Physical Damage: 4
+05-16-17_1:13:41 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Spear
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 25
+Physical Damage: 10
+05-16-17_1:13:41 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 110
+Speed: 29
+Physical Damage: 31
+05-16-17_1:15:30 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 37
+Physical Damage: 10
+05-16-17_1:15:30 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 112
+Speed: 48
+Physical Damage: 21
+05-16-17_1:15:30 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 111
+Speed: 47
+Physical Damage: 31
+05-16-17_1:15:31 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 112
+Speed: 27
+Physical Damage: 11
+05-16-17_1:15:31 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 241
+Speed: 21
+Physical Damage: 16
+05-16-17_1:15:31 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 45
+Speed: 43
+Physical Damage: 13
+05-16-17_1:15:31 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 16
+Speed: 44
+Physical Damage: 10
+05-16-17_1:15:31 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 18
+Speed: 42
+Physical Damage: 7
+05-16-17_1:15:32 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 44
+Speed: 46
+Physical Damage: 19
+05-16-17_1:15:32 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 240
+Speed: 37
+Physical Damage: 46
+05-16-17_1:15:32 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 18
+Speed: 27
+Physical Damage: 4
+05-16-17_1:15:32 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 43
+Speed: 22
+Physical Damage: 19
+05-16-17_1:15:32 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 49
+Speed: 50
+Physical Damage: 7
+05-16-17_1:15:32 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Other
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 19
+Speed: 30
+Physical Damage: 4
+05-16-17_1:15:33 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 45
+Speed: 39
+Physical Damage: 13
+05-16-17_1:15:33 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 18
+Speed: 25
+Physical Damage: 4
+05-16-17_1:15:33 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 10
+Speed: 25
+Physical Damage: 3
+05-16-17_1:15:33 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 18
+Speed: 27
+Physical Damage: 4
+05-16-17_1:15:33 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 17
+Speed: 46
+Physical Damage: 3
+
+05-16-17_1:15:34 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 112
+Speed: 47
+Physical Damage: 21
+05-16-17_1:15:34 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 25
+Physical Damage: 2
+05-16-17_1:15:34 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 43
+Speed: 22
+Physical Damage: 13
+05-16-17_1:15:34 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 9
+Speed: 31
+Physical Damage: 4
+05-16-17_1:15:34 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: DragonSpear
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 39
+Physical Damage: 3
+05-16-17_1:15:35 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: DragonSpear
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 240
+Speed: 24
+Physical Damage: 31
+05-16-17_1:15:35 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 47
+Speed: 39
+Physical Damage: 7
+05-16-17_1:15:35 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 111
+Speed: 23
+Physical Damage: 21
+05-16-17_1:15:35 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 10
+Speed: 32
+Physical Damage: 4
+05-16-17_1:15:35 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 37
+Physical Damage: 3
+05-16-17_1:15:36 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: TwinSwords
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 241
+Speed: 44
+Physical Damage: 31
+05-16-17_1:15:36 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 28
+Physical Damage: 10
+05-16-17_1:15:36 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 13
+Speed: 22
+Physical Damage: 2
+05-16-17_1:15:36 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 44
+Speed: 38
+Physical Damage: 19
+05-16-17_1:15:44 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 18
+Speed: 48
+Physical Damage: 7
+05-16-17_1:15:44 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 31
+Physical Damage: 10
+05-16-17_1:15:44 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 20
+Speed: 35
+Physical Damage: 4
+05-16-17_1:15:45 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 22
+Speed: 42
+Physical Damage: 4
+05-16-17_1:15:45 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 32
+Physical Damage: 10
+05-16-17_1:15:45 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 13
+Speed: 22
+Physical Damage: 2
+05-16-17_1:15:46 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Spear
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 27
+Physical Damage: 7
+05-16-17_1:15:46 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 111
+Speed: 45
+Physical Damage: 31
+
+05-16-17_1:15:46 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 17
+Speed: 36
+Physical Damage: 7
+05-16-17_1:15:46 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 19
+Speed: 29
+Physical Damage: 4
+05-16-17_1:15:47 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 43
+Speed: 22
+Physical Damage: 13
+05-16-17_1:15:47 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: DragonSpear
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 10
+Speed: 34
+Physical Damage: 4
+05-16-17_1:15:47 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 45
+Speed: 44
+Physical Damage: 13
+05-16-17_1:15:47 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 12
+Speed: 43
+Physical Damage: 4
+05-16-17_1:15:47 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 24
+Speed: 49
+Physical Damage: 4
+05-16-17_1:15:47 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 45
+Speed: 50
+Physical Damage: 13
+05-16-17_1:15:48 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 110
+Speed: 24
+Physical Damage: 31
+05-16-17_1:15:48 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 114
+Speed: 44
+Physical Damage: 11
+05-16-17_1:15:48 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 113
+Speed: 33
+Physical Damage: 11
+05-16-17_1:15:48 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 43
+Speed: 22
+Physical Damage: 13
+05-16-17_1:15:48 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 16
+Speed: 46
+Physical Damage: 10
+05-16-17_1:15:49 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 39
+Physical Damage: 3
+05-16-17_1:15:49 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 111
+Speed: 24
+Physical Damage: 21
+05-16-17_1:15:49 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 36
+Physical Damage: 10
+05-16-17_1:15:49 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 23
+Speed: 42
+Physical Damage: 2
+05-16-17_1:15:49 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 112
+Speed: 44
+Physical Damage: 21
+05-16-17_1:15:50 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 36
+Physical Damage: 10
+05-16-17_1:15:50 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 30
+Physical Damage: 10
+05-16-17_1:15:50 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 114
+Speed: 45
+Physical Damage: 11
+05-16-17_1:15:50 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 36
+Physical Damage: 3
+
+05-16-17_1:15:50 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 24
+Speed: 49
+Physical Damage: 4
+05-16-17_1:15:50 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Legendary
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 462
+Speed: 21
+Physical Damage: 64
+05-16-17_1:15:51 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 114
+Speed: 49
+Physical Damage: 11
+05-16-17_1:15:51 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 111
+Speed: 41
+Physical Damage: 31
+05-16-17_1:16:06 PM :: 
+########################## Application Stop ##########################
+
+
+05-16-17_1:49:15 PM :: 
+########################## Application Start ##########################
+
+05-16-17_1:49:15 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-16-17_1:49:15 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+05-16-17_1:49:15 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-16-17_1:49:15 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-16-17_1:49:16 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+05-16-17_1:49:16 PM :: Finished reading config
+05-16-17_1:49:17 PM :: Set Grid grdStatus to Hidden on launch
+05-16-17_1:49:17 PM :: Set Grid grdSettings to Hidden on launch
+05-16-17_1:49:17 PM :: Set Grid grdServers to Hidden on launch
+05-16-17_1:49:17 PM :: Set Grid grdBotInfo to Hidden on launch
+05-16-17_1:49:18 PM :: Revealed Grid grdStatus
+05-16-17_1:49:18 PM :: Hid Grid grdSettings
+05-16-17_1:49:18 PM :: Hid Grid grdServers
+05-16-17_1:49:18 PM :: Hid Grid grdBotInfo
+05-16-17_1:49:18 PM :: Slid Main Menu out of view
+05-16-17_1:49:21 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 18
+Speed: 25
+Physical Damage: 4
+05-16-17_1:49:30 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 36
+Physical Damage: 10
+05-16-17_1:49:31 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 17
+Speed: 35
+Physical Damage: 7
+05-16-17_1:49:32 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 18
+Speed: 24
+Physical Damage: 4
+05-16-17_1:49:33 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 113
+Speed: 43
+Physical Damage: 11
+05-16-17_1:50:26 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 36
+Physical Damage: 10
+05-16-17_1:50:27 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 16
+Speed: 43
+Physical Damage: 3
+05-16-17_1:50:27 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 21
+Speed: 37
+Physical Damage: 4
+05-16-17_1:50:28 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 45
+Speed: 22
+Physical Damage: 7
+05-16-17_1:50:28 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: FocusStone
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 112
+Speed: 24
+Physical Damage: 11
+05-16-17_1:50:28 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 111
+Speed: 39
+Physical Damage: 21
+05-16-17_1:50:28 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 24
+Physical Damage: 10
+05-16-17_1:50:28 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 114
+Speed: 48
+Physical Damage: 11
+05-16-17_1:50:29 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 16
+Speed: 44
+Physical Damage: 10
+05-16-17_1:50:29 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 26
+Physical Damage: 10
+
+05-16-17_1:50:29 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 44
+Speed: 28
+Physical Damage: 13
+05-16-17_1:50:29 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 24
+Speed: 50
+Physical Damage: 4
+05-16-17_1:50:29 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 110
+Speed: 27
+Physical Damage: 31
+05-16-17_1:50:29 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 43
+Speed: 30
+Physical Damage: 19
+05-16-17_1:50:30 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 242
+Speed: 36
+Physical Damage: 16
+05-16-17_1:50:30 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 38
+Physical Damage: 10
+05-16-17_1:50:30 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 41
+Physical Damage: 3
+05-16-17_1:50:30 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 22
+Physical Damage: 7
+05-16-17_1:50:30 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 45
+Speed: 45
+Physical Damage: 13
+05-16-17_1:50:30 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 25
+Physical Damage: 2
+05-16-17_1:50:30 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: DragonSpear
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 110
+Speed: 26
+Physical Damage: 31
+05-16-17_1:50:31 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: TwinSwords
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 21
+Speed: 36
+Physical Damage: 4
+05-16-17_1:50:31 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 114
+Speed: 47
+Physical Damage: 11
+05-16-17_1:50:31 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 111
+Speed: 33
+Physical Damage: 31
+05-16-17_1:50:31 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 43
+Speed: 27
+Physical Damage: 19
+05-16-17_1:50:31 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 45
+Speed: 43
+Physical Damage: 13
+05-16-17_1:50:32 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 111
+Speed: 28
+Physical Damage: 21
+05-16-17_1:50:32 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 44
+Speed: 45
+Physical Damage: 19
+05-16-17_1:50:32 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 38
+Physical Damage: 3
+05-16-17_1:50:32 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 46
+Speed: 30
+Physical Damage: 7
+05-16-17_1:50:32 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 111
+Speed: 37
+Physical Damage: 21
+05-16-17_1:50:33 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 16
+Speed: 44
+Physical Damage: 10
+
+05-16-17_1:50:33 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 240
+Speed: 24
+Physical Damage: 46
+05-16-17_1:50:33 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 17
+Speed: 31
+Physical Damage: 2
+05-16-17_1:50:33 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 25
+Physical Damage: 10
+05-16-17_1:50:33 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 46
+Speed: 33
+Physical Damage: 7
+05-16-17_1:50:33 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 12
+Speed: 21
+Physical Damage: 2
+05-16-17_1:50:34 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Spear
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 26
+Physical Damage: 10
+05-16-17_1:50:34 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 12
+Speed: 21
+Physical Damage: 2
+05-16-17_1:50:34 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 8
+Speed: 26
+Physical Damage: 4
+05-16-17_1:50:34 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 111
+Speed: 35
+Physical Damage: 21
+05-16-17_1:50:34 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 44
+Speed: 42
+Physical Damage: 19
+05-16-17_1:50:34 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 9
+Speed: 29
+Physical Damage: 4
+05-16-17_1:50:35 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 15
+Speed: 36
+Physical Damage: 10
+05-16-17_1:50:35 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 21
+Speed: 37
+Physical Damage: 4
+05-16-17_1:50:35 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Vendor
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 11
+Speed: 36
+Physical Damage: 4
+05-16-17_1:50:35 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 240
+Speed: 37
+Physical Damage: 46
+05-16-17_1:50:35 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 17
+Speed: 23
+Physical Damage: 4
+05-16-17_1:50:35 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 24
+Speed: 48
+Physical Damage: 4
+05-16-17_1:50:36 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 44
+Speed: 39
+Physical Damage: 19
+05-16-17_1:50:36 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 25
+Physical Damage: 10
+05-16-17_1:50:36 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 44
+Speed: 34
+Physical Damage: 13
+05-16-17_1:50:36 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 45
+Speed: 43
+Physical Damage: 13
+05-16-17_1:50:36 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Other
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 45
+Speed: 43
+Physical Damage: 13
+
+05-16-17_1:50:37 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Epic
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 241
+Speed: 39
+Physical Damage: 31
+05-16-17_1:50:37 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 43
+Speed: 34
+Physical Damage: 19
+05-16-17_1:50:37 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 20
+Speed: 35
+Physical Damage: 4
+05-16-17_1:50:37 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 43
+Speed: 21
+Physical Damage: 13
+05-16-17_1:50:37 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Katana
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 111
+Speed: 42
+Physical Damage: 31
+05-16-17_1:50:37 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 16
+Speed: 31
+Physical Damage: 7
+05-16-17_1:50:38 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: TwinSwords
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 43
+Speed: 35
+Physical Damage: 19
+05-16-17_1:50:38 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 44
+Speed: 34
+Physical Damage: 13
+05-16-17_1:50:38 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Uncommon
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 46
+Speed: 29
+Physical Damage: 7
+05-16-17_1:50:38 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 29
+Physical Damage: 10
+05-16-17_1:50:38 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 111
+Speed: 35
+Physical Damage: 21
+05-16-17_1:50:39 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 114
+Speed: 50
+Physical Damage: 11
+05-16-17_1:50:39 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Dagger
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 16
+Speed: 46
+Physical Damage: 10
+05-16-17_1:50:39 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 17
+Speed: 21
+Physical Damage: 4
+05-16-17_1:50:39 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Other
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 17
+Speed: 41
+Physical Damage: 7
+05-16-17_1:50:39 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Greatsword
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 14
+Speed: 27
+Physical Damage: 10
+05-16-17_1:50:40 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Sword
+Rarity: Rare
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 113
+Speed: 37
+Physical Damage: 11
+05-16-17_1:50:40 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Staff
+Rarity: Legendary
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 462
+Speed: 25
+Physical Damage: 43
+05-16-17_1:50:40 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Other
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 16
+Speed: 48
+Physical Damage: 10
+05-16-17_1:50:40 PM :: STATUS: 
+Name: SomeBody Once Told Me
+Description: The World is Gonna Rule Me
+Type: Other
+Rarity: Common
+Level: 1
+Max Durability: 10
+Current Durability: 10
+Worth: 18
+Speed: 48
+Physical Damage: 7
+05-16-17_1:51:29 PM :: 
+########################## Application Stop ##########################
+
+

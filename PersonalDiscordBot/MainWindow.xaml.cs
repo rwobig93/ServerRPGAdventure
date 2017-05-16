@@ -74,6 +74,7 @@ namespace PersonalDiscordBot
             ExistingServer
         }
 
+        public string line = Environment.NewLine;
         #endregion
 
         #region Form Handling
@@ -1078,7 +1079,8 @@ namespace PersonalDiscordBot
 
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
-
+            var pickedLoot = (Weapon)LootDrop.PickLoot(RPG.testiculeesCharacter);
+            uStatusUpdate($"{line}Name: {pickedLoot.Name}{line}Description: {pickedLoot.Desc}{line}Type: {pickedLoot.Type.ToString()}{line}Rarity: {pickedLoot.Rarity}{line}Level: {pickedLoot.Lvl}{line}Max Durability: {pickedLoot.MaxDurability}{line}Current Durability: {pickedLoot.CurrentDurability}{line}Worth: {pickedLoot.Worth}{line}Speed: {pickedLoot.Speed}{line}Physical Damage: {pickedLoot.PhysicalDamage}");
         } 
 
         #endregion

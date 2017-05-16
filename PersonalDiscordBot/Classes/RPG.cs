@@ -381,6 +381,7 @@ namespace PersonalDiscordBot.Classes
 
     public class LootDrop
     {
+       
         /// <summary>
         /// The range of the probability values (dividing a value in _lootProbabilites by this would give a probability in the range 0..1).
         /// </summary>
@@ -404,7 +405,7 @@ namespace PersonalDiscordBot.Classes
         /// Return a random loot item
         /// </summary>
         /// <returns></returns>
-        public static IBackPackItem PickLoot()
+        public static IBackPackItem PickLoot(Character character)
         {
             IBackPackItem chosenLoot = null;
             LootType chosenType = LootType.Weapon;  //ChooseType();
@@ -419,9 +420,9 @@ namespace PersonalDiscordBot.Classes
                     break;
                 case LootType.Weapon:
                     RarityType rarityType = ChooseRarity();
-                    WeaponType weaponType = ChooseWeaponType(testiculeesCharacter);
-                    //int level = UserLevel;
-                    //Weapon.WeaponRandomGen(rarityType, weaponType, level);
+                    WeaponType weaponType = ChooseWeaponType(character);
+                    int level = character.Lvl;
+                    chosenLoot = Weapons.WeaponRandomGen(rarityType, weaponType, level);
                     break;
                 case LootType.Spell:
                     break;
@@ -479,7 +480,7 @@ namespace PersonalDiscordBot.Classes
         /// </summary>
         protected static int[] _rarityProbabilities = new int[]
         {
-            150, 490, 730, 880, 980, MaxProbability // Chances: Vendor 150(15%), Common 340(34%), Uncommon 250(25%), Rare 150(15%), Epic 100(10%), Legendary 10(1%)
+            150, 490, 730, 880, 980, MaxProbability // Chances: Vendor 150(15%), Common 340(34%), Uncommon 250(25%), Rare 150(15%), Epic 100(10%), Legendary 20(2%)
         };
 
         public static int[] _weaponProbabilities(CharacterClass charClass)
@@ -508,6 +509,31 @@ namespace PersonalDiscordBot.Classes
 
         public static Weapon WeaponRandomGen(RarityType rarity, WeaponType type, int level)
         {
+            int rarityValue = 0;
+            switch (rarity)
+            {
+                case (RarityType.Vendor):
+                    rarityValue = 1;
+                    break;
+
+                case (RarityType.Common):
+                    rarityValue = 3;
+                    break;
+                case (RarityType.Uncommon):
+                    rarityValue = 6;
+                    break;
+                case (RarityType.Rare):
+                    rarityValue = 10;
+                    break;
+                case (RarityType.Epic):
+                    rarityValue = 15;
+                    break;
+
+                case (RarityType.Legendary):
+                    rarityValue = 21;
+                    break;
+            }
+
             Weapon weap = new Weapon()
             {
                 Name = "SomeBody Once Told Me",
@@ -518,9 +544,9 @@ namespace PersonalDiscordBot.Classes
                 MaxDurability = 10 * level
             };
             weap.CurrentDurability = weap.MaxDurability;
-            weap.Worth = 1000 * level + rng.Next(2, 5);
-            weap.Speed = (100 * (level + rng.Next(2, 5)));
-            weap.PhysicalDamage = 17 * level + rng.Next(2, 5);
+            weap.Speed = (level + rng.Next(20, 50));
+            weap.PhysicalDamage = (level + rng.Next(1, 4) * rarityValue);
+            weap.Worth = ((level + rarityValue) * rarityValue + (weap.Speed / weap.PhysicalDamage));
             return weap;
         }
 
