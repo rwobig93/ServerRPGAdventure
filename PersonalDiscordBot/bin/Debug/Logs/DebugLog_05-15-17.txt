@@ -528,3 +528,395 @@ Legendary:21
 05-15-17_12:37:31 PM :: Set Grid grdServers to Hidden on launch
 05-15-17_12:37:31 PM :: Set Grid grdBotInfo to Hidden on launch
 
+05-15-17_3:56:25 PM :: 
+########################## Application Start ##########################
+
+05-15-17_3:56:25 PM :: Found Log Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_3:56:25 PM :: Found Config Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_3:56:25 PM :: Found Paths.json at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_3:56:25 PM :: Found ServerConfig.xml at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_3:58:11 PM :: 
+########################## Application Start ##########################
+
+05-15-17_3:58:11 PM :: Found Log Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_3:58:11 PM :: Found Config Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_3:58:11 PM :: Found Paths.json at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_3:58:11 PM :: Found ServerConfig.xml at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_3:58:38 PM :: 
+########################## Application Start ##########################
+
+05-15-17_3:58:38 PM :: Found Log Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_3:58:38 PM :: Found Config Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_3:58:38 PM :: Found Paths.json at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_3:58:38 PM :: Found ServerConfig.xml at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_3:59:15 PM :: 
+########################## Application Start ##########################
+
+05-15-17_3:59:32 PM :: Found Log Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_3:59:37 PM :: Found Config Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_3:59:46 PM :: Found Paths.json at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_3:59:52 PM :: Found ServerConfig.xml at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_4:07:48 PM :: 
+########################## Application Start ##########################
+
+05-15-17_4:07:48 PM :: Found Log Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_4:07:48 PM :: Found Config Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+
+05-15-17_4:07:48 PM :: Found Paths.json at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_4:07:48 PM :: Found ServerConfig.xml at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+
+05-15-17_4:20:30 PM :: 
+########################## Application Start ##########################
+
+05-15-17_4:20:30 PM :: Found Log Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_4:20:30 PM :: Found Config Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+05-15-17_4:20:30 PM :: Found Paths.json at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_4:20:30 PM :: Found ServerConfig.xml at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-15-17_4:20:37 PM :: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+05-15-17_4:21:07 PM :: Finished reading config
+05-15-17_4:21:13 PM :: Set Grid grdStatus to Hidden on launch
+05-15-17_4:21:13 PM :: Set Grid grdSettings to Hidden on launch
+05-15-17_4:21:13 PM :: Set Grid grdServers to Hidden on launch
+05-15-17_4:21:13 PM :: Set Grid grdBotInfo to Hidden on launch
+05-15-17_4:21:25 PM :: Token wasn't found in sGeneral.Settings, prompting for token and sending notification
+05-15-17_4:21:27 PM :: Saved new token: MzEzNjk0ODc3MTM5MzM3MjE3.C_ummQ.S3r-odLUuMk4VIfb5ZMckQTWIOc
+05-15-17_4:21:27 PM :: Slid grdToken back out of view
+05-15-17_4:21:32 PM :: STATUS: Starting login updater
+05-15-17_4:21:33 PM :: Saved new token: MzEzNjk0ODc3MTM5MzM3MjE3.C_ummQ.S3r-odLUuMk4VIfb5ZMckQTWIOc
+05-15-17_4:21:33 PM :: Slid grdToken back out of view
+05-15-17_4:21:33 PM :: STATUS: Updated Name and Playing Value
+05-15-17_4:21:40 PM :: Revealed Grid grdStatus
+05-15-17_4:21:40 PM :: Hid Grid grdSettings
+05-15-17_4:21:40 PM :: Hid Grid grdServers
+05-15-17_4:21:40 PM :: Hid Grid grdBotInfo
+05-15-17_4:21:40 PM :: Slid Main Menu out of view
+05-15-17_4:21:51 PM :: STATUS: User: Prodigy Savant ◥◤ Command: ;help
+05-15-17_4:21:51 PM :: COMMAND: User: Prodigy Savant ◥◤ Command: ;help
+05-15-17_4:22:05 PM :: Slid grdToken out of view
+05-15-17_4:22:42 PM :: 
+########################## Application Stop ##########################
+
+
+05-15-17_4:47:47 PM :: 
+########################## Application Start ##########################
+
+05-15-17_4:47:47 PM :: Found Log Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_4:47:47 PM :: Found Config Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+05-15-17_4:47:47 PM :: Found Paths.json at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_4:47:47 PM :: Found ServerConfig.xml at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-15-17_4:47:47 PM :: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+05-15-17_4:47:47 PM :: Finished reading config
+05-15-17_4:47:47 PM :: Set Grid grdStatus to Hidden on launch
+05-15-17_4:47:47 PM :: Set Grid grdSettings to Hidden on launch
+05-15-17_4:47:47 PM :: Set Grid grdServers to Hidden on launch
+05-15-17_4:47:47 PM :: Set Grid grdBotInfo to Hidden on launch
+05-15-17_4:47:48 PM :: Revealed Grid grdStatus
+05-15-17_4:47:48 PM :: Hid Grid grdSettings
+05-15-17_4:47:48 PM :: Hid Grid grdServers
+05-15-17_4:47:48 PM :: Hid Grid grdBotInfo
+05-15-17_4:47:48 PM :: Slid Main Menu out of view
+05-15-17_4:47:53 PM :: 
+########################## Application Stop ##########################
+
+
+05-15-17_4:48:59 PM :: 
+########################## Application Start ##########################
+
+05-15-17_4:48:59 PM :: Found Log Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_4:48:59 PM :: Found Config Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+05-15-17_4:48:59 PM :: Found Paths.json at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_4:48:59 PM :: Found ServerConfig.xml at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-15-17_4:48:59 PM :: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+05-15-17_4:48:59 PM :: Finished reading config
+05-15-17_4:48:59 PM :: Set Grid grdStatus to Hidden on launch
+05-15-17_4:48:59 PM :: Set Grid grdSettings to Hidden on launch
+05-15-17_4:48:59 PM :: Set Grid grdServers to Hidden on launch
+05-15-17_4:48:59 PM :: Set Grid grdBotInfo to Hidden on launch
+05-15-17_4:49:01 PM :: Revealed Grid grdStatus
+05-15-17_4:49:01 PM :: Hid Grid grdSettings
+05-15-17_4:49:01 PM :: Hid Grid grdServers
+05-15-17_4:49:01 PM :: Hid Grid grdBotInfo
+05-15-17_4:49:01 PM :: Slid Main Menu out of view
+05-15-17_4:49:01 PM :: Notification Method Called
+05-15-17_4:49:01 PM :: Notification Message: Status window was slid
+05-15-17_4:49:01 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_4:49:03 PM :: Hid Grid grdStatus
+05-15-17_4:49:03 PM :: Slid Main Menu into view
+05-15-17_4:49:03 PM :: Notification Method Called
+05-15-17_4:49:03 PM :: Notification Message: Status window was slid
+05-15-17_4:49:03 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_4:49:04 PM :: Revealed Grid grdStatus
+05-15-17_4:49:04 PM :: Hid Grid grdSettings
+05-15-17_4:49:04 PM :: Hid Grid grdServers
+05-15-17_4:49:04 PM :: Hid Grid grdBotInfo
+05-15-17_4:49:04 PM :: Slid Main Menu out of view
+05-15-17_4:49:04 PM :: Notification Method Called
+05-15-17_4:49:04 PM :: Notification Message: Status window was slid
+05-15-17_4:49:04 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_4:49:05 PM :: Slid Notification back out of view
+05-15-17_4:49:06 PM :: Hid Grid grdStatus
+05-15-17_4:49:06 PM :: Slid Main Menu into view
+05-15-17_4:49:06 PM :: Notification Method Called
+05-15-17_4:49:06 PM :: Notification Message: Status window was slid
+05-15-17_4:49:06 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_4:49:07 PM :: Slid Notification back out of view
+05-15-17_4:49:08 PM :: Slid Notification back out of view
+05-15-17_4:49:10 PM :: Slid Notification back out of view
+05-15-17_4:49:16 PM :: 
+########################## Application Stop ##########################
+
+
+05-15-17_5:14:38 PM :: 
+########################## Application Start ##########################
+
+05-15-17_5:14:38 PM :: Found Log Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_5:14:38 PM :: Found Config Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+05-15-17_5:14:38 PM :: Found Paths.json at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_5:14:38 PM :: Found ServerConfig.xml at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-15-17_5:14:38 PM :: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+05-15-17_5:14:38 PM :: Finished reading config
+05-15-17_5:14:38 PM :: Set Grid grdStatus to Hidden on launch
+05-15-17_5:14:38 PM :: Set Grid grdSettings to Hidden on launch
+05-15-17_5:14:38 PM :: Set Grid grdServers to Hidden on launch
+05-15-17_5:14:38 PM :: Set Grid grdBotInfo to Hidden on launch
+05-15-17_5:14:40 PM :: Revealed Grid grdStatus
+05-15-17_5:14:40 PM :: Hid Grid grdSettings
+05-15-17_5:14:40 PM :: Hid Grid grdServers
+05-15-17_5:14:40 PM :: Hid Grid grdBotInfo
+05-15-17_5:14:40 PM :: Slid Main Menu out of view
+05-15-17_5:14:40 PM :: Notification Method Called
+05-15-17_5:14:40 PM :: EXCEPTION: btnOpenStatus_Click at 182
+05-15-17_5:14:40 PM :: Notification Message: Status window was slid
+05-15-17_5:14:40 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:14:40 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:14:40 PM :: STATUS: An Exception Occured: btnOpenStatus_Click at 182
+Msg: This BackgroundWorker is currently busy and cannot run multiple tasks concurrently.
+05-15-17_5:14:44 PM :: Notification Method Called
+05-15-17_5:14:44 PM :: Notification Message: Status window was slid
+05-15-17_5:14:44 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:14:44 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:14:48 PM :: Finished Notification: Message-Status window was slid Time-4
+05-15-17_5:14:48 PM :: Slid Notification back out of view
+05-15-17_5:14:48 PM :: Finished Notification: Message-Status window was slid Time-4
+05-15-17_5:14:48 PM :: Slid Notification back out of view
+05-15-17_5:14:53 PM :: 
+########################## Application Stop ##########################
+
+
+05-15-17_5:18:57 PM :: 
+########################## Application Start ##########################
+
+05-15-17_5:18:57 PM :: Found Log Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_5:18:57 PM :: Found Config Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+05-15-17_5:18:57 PM :: Found Paths.json at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_5:18:57 PM :: Found ServerConfig.xml at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-15-17_5:18:57 PM :: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+05-15-17_5:18:57 PM :: Finished reading config
+05-15-17_5:18:58 PM :: Set Grid grdStatus to Hidden on launch
+05-15-17_5:18:58 PM :: Set Grid grdSettings to Hidden on launch
+05-15-17_5:18:58 PM :: Set Grid grdServers to Hidden on launch
+05-15-17_5:18:58 PM :: Set Grid grdBotInfo to Hidden on launch
+05-15-17_5:18:59 PM :: Revealed Grid grdStatus
+05-15-17_5:18:59 PM :: Hid Grid grdSettings
+05-15-17_5:18:59 PM :: Hid Grid grdServers
+05-15-17_5:18:59 PM :: Hid Grid grdBotInfo
+05-15-17_5:18:59 PM :: Slid Main Menu out of view
+05-15-17_5:18:59 PM :: Notification Method Called
+05-15-17_5:18:59 PM :: EXCEPTION: btnOpenStatus_Click at 182
+05-15-17_5:18:59 PM :: Notification Message: Status window was slid
+05-15-17_5:18:59 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:18:59 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:18:59 PM :: STATUS: An Exception Occured: btnOpenStatus_Click at 182
+Msg: This BackgroundWorker is currently busy and cannot run multiple tasks concurrently.
+05-15-17_5:19:03 PM :: Notification Method Called
+05-15-17_5:19:03 PM :: Notification Message: Status window was slid
+05-15-17_5:19:03 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:19:03 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:19:07 PM :: Finished Notification: Message-Status window was slid Time-4
+05-15-17_5:19:07 PM :: Slid Notification back out of view
+05-15-17_5:19:07 PM :: Finished Notification: Message-Status window was slid Time-4
+05-15-17_5:19:07 PM :: Slid Notification back out of view
+05-15-17_5:19:10 PM :: Hid Grid grdStatus
+05-15-17_5:19:10 PM :: Slid Main Menu into view
+05-15-17_5:19:10 PM :: Notification Method Called
+05-15-17_5:19:10 PM :: EXCEPTION: btnOpenStatus_Click at 182
+05-15-17_5:19:10 PM :: Notification Message: Status window was slid
+05-15-17_5:19:10 PM :: STATUS: An Exception Occured: btnOpenStatus_Click at 182
+Msg: This BackgroundWorker is currently busy and cannot run multiple tasks concurrently.
+05-15-17_5:19:10 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:19:10 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:19:14 PM :: Finished Notification: Message-Status window was slid Time-4
+05-15-17_5:19:14 PM :: Slid Notification back out of view
+05-15-17_5:19:14 PM :: Finished Notification: Message-Status window was slid Time-4
+05-15-17_5:19:14 PM :: Slid Notification back out of view
+05-15-17_5:19:16 PM :: Revealed Grid grdStatus
+05-15-17_5:19:16 PM :: Hid Grid grdSettings
+05-15-17_5:19:16 PM :: Hid Grid grdServers
+05-15-17_5:19:16 PM :: Hid Grid grdBotInfo
+05-15-17_5:19:16 PM :: Slid Main Menu out of view
+05-15-17_5:19:16 PM :: Notification Method Called
+05-15-17_5:19:16 PM :: EXCEPTION: btnOpenStatus_Click at 182
+05-15-17_5:19:16 PM :: Notification Message: Status window was slid
+05-15-17_5:19:16 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:19:16 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:19:16 PM :: STATUS: An Exception Occured: btnOpenStatus_Click at 182
+Msg: This BackgroundWorker is currently busy and cannot run multiple tasks concurrently.
+05-15-17_5:19:20 PM :: Finished Notification: Message-Status window was slid Time-4
+05-15-17_5:19:20 PM :: Slid Notification back out of view
+05-15-17_5:19:20 PM :: Finished Notification: Message-Status window was slid Time-4
+05-15-17_5:19:20 PM :: Slid Notification back out of view
+05-15-17_5:19:27 PM :: 
+########################## Application Stop ##########################
+
+
+05-15-17_5:20:02 PM :: 
+########################## Application Start ##########################
+
+05-15-17_5:20:02 PM :: Found Log Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_5:20:02 PM :: Found Config Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+05-15-17_5:20:02 PM :: Found Paths.json at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_5:20:02 PM :: Found ServerConfig.xml at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-15-17_5:20:02 PM :: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+05-15-17_5:20:02 PM :: Finished reading config
+05-15-17_5:20:02 PM :: Set Grid grdStatus to Hidden on launch
+05-15-17_5:20:02 PM :: Set Grid grdSettings to Hidden on launch
+05-15-17_5:20:02 PM :: Set Grid grdServers to Hidden on launch
+05-15-17_5:20:02 PM :: Set Grid grdBotInfo to Hidden on launch
+05-15-17_5:20:04 PM :: Revealed Grid grdStatus
+05-15-17_5:20:04 PM :: Hid Grid grdSettings
+05-15-17_5:20:04 PM :: Hid Grid grdServers
+05-15-17_5:20:04 PM :: Hid Grid grdBotInfo
+05-15-17_5:20:04 PM :: Slid Main Menu out of view
+05-15-17_5:20:04 PM :: Notification Method Called
+05-15-17_5:20:04 PM :: Notification Method Called
+05-15-17_5:20:04 PM :: Notification Method Called
+05-15-17_5:20:04 PM :: Notification Method Called
+05-15-17_5:20:04 PM :: Notification Method Called
+05-15-17_5:20:04 PM :: Notification Method Called
+05-15-17_5:20:04 PM :: Notification Method Called
+05-15-17_5:20:04 PM :: Notification Method Called
+05-15-17_5:20:04 PM :: Notification Method Called
+05-15-17_5:20:04 PM :: Notification Method Called
+05-15-17_5:20:04 PM :: Notification Method Called
+05-15-17_5:20:04 PM :: Notification Method Called
+05-15-17_5:20:04 PM :: Notification Method Called
+05-15-17_5:20:04 PM :: Notification Method Called
+05-15-17_5:20:04 PM :: Notification Method Called
+05-15-17_5:20:04 PM :: Notification Method Called
+05-15-17_5:20:05 PM :: Notification Method Called
+05-15-17_5:20:15 PM :: Notification Method Called
+05-15-17_5:20:17 PM :: Notification Method Called
+05-15-17_5:20:19 PM :: Notification Method Called
+05-15-17_5:20:20 PM :: Notification Method Called
+05-15-17_5:20:22 PM :: Notification Method Called
+05-15-17_5:20:23 PM :: Notification Method Called
+05-15-17_5:20:26 PM :: Notification Method Called
+05-15-17_5:20:27 PM :: Notification Method Called
+05-15-17_5:20:31 PM :: Notification Method Called
+05-15-17_5:20:33 PM :: Notification Method Called
+05-15-17_5:20:35 PM :: Notification Method Called
+05-15-17_5:20:37 PM :: Notification Method Called
+05-15-17_5:20:43 PM :: EXCEPTION: btnOpenStatus_Click at 182
+05-15-17_5:20:43 PM :: Notification Message: Status window was slid
+05-15-17_5:20:43 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:20:43 PM :: Notification Message: Status window was slid
+05-15-17_5:20:43 PM :: Notification Message: Status window was slid
+05-15-17_5:20:43 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:20:43 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:20:43 PM :: Notification Message: Status window was slid
+05-15-17_5:20:43 PM :: Notification Message: Status window was slid
+05-15-17_5:20:43 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:20:43 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:20:43 PM :: Notification Message: Status window was slid
+05-15-17_5:20:43 PM :: Notification Message: Status window was slid
+05-15-17_5:20:43 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:20:43 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:20:43 PM :: Notification Message: Status window was slid
+05-15-17_5:20:43 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:20:43 PM :: Notification Message: Status window was slid
+05-15-17_5:20:43 PM :: Notification Message: Status window was slid
+05-15-17_5:20:43 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:20:43 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+05-15-17_5:20:43 PM :: Notification Message: Status window was slid
+05-15-17_5:20:43 PM :: Notification Message: Status window was slid
+05-15-17_5:20:43 PM :: Slid Notification into view, now waiting 4 seconds to slide back out
+
+05-15-17_9:21:07 PM :: 
+########################## Application Start ##########################
+
+05-15-17_9:21:07 PM :: Found Log Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-15-17_9:21:07 PM :: Found Config Directory at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+05-15-17_9:21:07 PM :: Found Paths.json at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-15-17_9:21:07 PM :: Found ServerConfig.xml at: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-15-17_9:21:07 PM :: C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+05-15-17_9:21:07 PM :: Finished reading config
+05-15-17_9:21:07 PM :: Set Grid grdStatus to Hidden on launch
+05-15-17_9:21:07 PM :: Set Grid grdSettings to Hidden on launch
+05-15-17_9:21:07 PM :: Set Grid grdServers to Hidden on launch
+05-15-17_9:21:07 PM :: Set Grid grdBotInfo to Hidden on launch
+05-15-17_9:21:09 PM :: Revealed Grid grdStatus
+05-15-17_9:21:09 PM :: Hid Grid grdSettings
+05-15-17_9:21:09 PM :: Hid Grid grdServers
+05-15-17_9:21:09 PM :: Hid Grid grdBotInfo
+05-15-17_9:21:09 PM :: Slid Main Menu out of view
+05-15-17_9:21:09 PM :: New Notification: Status window was slid, 4sec(s)
+05-15-17_9:21:09 PM :: Notification wasn't playing, starting notification play cycles
+05-15-17_9:21:11 PM :: Hid Grid grdStatus
+05-15-17_9:21:11 PM :: Slid Main Menu into view
+05-15-17_9:21:11 PM :: New Notification: Status window was slid, 4sec(s)
+05-15-17_9:21:11 PM :: Notification is currently playing, returning
+05-15-17_9:21:12 PM :: Revealed Grid grdStatus
+05-15-17_9:21:12 PM :: Hid Grid grdSettings
+05-15-17_9:21:12 PM :: Hid Grid grdServers
+05-15-17_9:21:12 PM :: Hid Grid grdBotInfo
+05-15-17_9:21:12 PM :: Slid Main Menu out of view
+05-15-17_9:21:12 PM :: New Notification: Status window was slid, 4sec(s)
+05-15-17_9:21:12 PM :: Notification is currently playing, returning
+05-15-17_9:21:13 PM :: Hid Grid grdStatus
+05-15-17_9:21:13 PM :: Slid Main Menu into view
+05-15-17_9:21:13 PM :: New Notification: Status window was slid, 4sec(s)
+05-15-17_9:21:13 PM :: Notification is currently playing, returning
+05-15-17_9:21:13 PM :: Removed notification: Status window was slid
+05-15-17_9:21:13 PM :: Notifications left: 3
+05-15-17_9:21:17 PM :: Removed notification: Status window was slid
+05-15-17_9:21:17 PM :: Notifications left: 2
+05-15-17_9:21:17 PM :: 
+########################## Application Stop ##########################
+
+

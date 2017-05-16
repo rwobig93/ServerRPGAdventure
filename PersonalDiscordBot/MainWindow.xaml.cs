@@ -56,6 +56,7 @@ namespace PersonalDiscordBot
         public static StringBuilder _debugLog = new StringBuilder();
         public static Classes.Paths _paths = new Classes.Paths();
         private bool _activeSession = false;
+        private bool notificationPlaying = false;
         public static ObservableCollection<GameServer> ServerList = new ObservableCollection<GameServer>();
         public ObservableCollection<GameServer> CurrentServerList
         {
@@ -86,7 +87,6 @@ namespace PersonalDiscordBot
         private void winMain_Loaded(object sender, RoutedEventArgs e)
         {
             HideGrids();
-            uStatusUpdate(LootDrop.PickLoot().ToString());
         }
 
         private void winMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -113,8 +113,10 @@ namespace PersonalDiscordBot
                 if (string.IsNullOrEmpty(sGeneral.Default.Token))
                 {
                     uDebugAddLog("Token wasn't found in sGeneral.Settings, prompting for token and sending notification");
-                    SlideHorizontal(0, 0, grdToken);
-                    //tShowNotification("A previous token wasn't found, please enter a bot token, save, then try again.", 7);
+                    Thickness to = new Thickness(-734, 42, 0, 0);
+                    Thickness from = new Thickness(0, 42, 0, 0);
+                    SlideGrid(from, to, grdToken);
+                    ShowNotification("A previous token wasn't found, please enter a bot token, save, then try again.", 4);
                     return;
                 }
                 await Start();
@@ -188,8 +190,11 @@ namespace PersonalDiscordBot
                 sGeneral.Default.Token = txtTokenValue.Text;
                 sGeneral.Default.Save();
                 uDebugAddLog(string.Format("Saved new token: {0}", txtTokenValue.Text));
-                SlideHorizontal(-grdToken.Width, grdToken.Width, grdToken);
+                Thickness from = new Thickness(-734, 42, 0, 0);
+                Thickness to = new Thickness(0, 42, 0, 0);
+                SlideGrid(from, to, grdToken);
                 uDebugAddLog("Slid grdToken back out of view");
+                ShowNotification($"Successfully saved new token!", 3);
             }
             catch (Exception ex)
             {
@@ -205,7 +210,7 @@ namespace PersonalDiscordBot
                 sGeneral.Default.Save();
                 txtTokenValue.Text = string.Empty;
                 uDebugAddLog("Cleared token from sGeneral.Settings and the txtTokenValue textbox");
-                tShowNotification("Cleared token data", 3);
+                ShowNotification("Cleared token data", 3);
             }
             catch (Exception ex)
             {
@@ -217,7 +222,9 @@ namespace PersonalDiscordBot
         {
             try
             {
-                SlideHorizontal(-grdToken.Width, grdToken.Width, grdToken);
+                Thickness from = new Thickness(-734, 42, 0, 0);
+                Thickness to = new Thickness(0, 42, 0, 0);
+                SlideGrid(from, to, grdToken);
                 uDebugAddLog("Slid grdToken out of view");
             }
             catch (Exception ex)
@@ -449,7 +456,7 @@ namespace PersonalDiscordBot
                 string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
                 string _timeNow = DateTime.Now.ToLocalTime().ToLongTimeString();
                 _debugLog.AppendLine(string.Format("{0}_{1} :: {2}", _dateNow, _timeNow, _log));
-                if (_debugLog.Length >= 250)
+                if (_debugLog.Length >= 5000)
                     DumpDebugLog();
             }
             catch (Exception ex)
@@ -535,9 +542,18 @@ namespace PersonalDiscordBot
                     case ConfigType.Paths:
                         using (StreamReader _sr = File.OpenText(_paths.PathsConfig))
                         {
+                            Paths pathsCopy = _paths;
                             string _origPath = _paths.PathsConfig;
                             string _json = _sr.ReadToEnd();
                             _paths = JsonConvert.DeserializeObject<List<Paths>>(_json)[0];
+                            if (!Directory.Exists(_paths.ConfigLocation))
+                                _paths.ConfigLocation = pathsCopy.ConfigLocation;
+                            if (!Directory.Exists(_paths.LogLocation))
+                                _paths.LogLocation = pathsCopy.LogLocation;
+                            if (!File.Exists(_paths.PathsConfig))
+                                _paths.PathsConfig = pathsCopy.PathsConfig;
+                            if (!File.Exists(_paths.ServerConfig))
+                                _paths.ServerConfig = pathsCopy.ServerConfig;
                             uDebugAddLog(string.Format("{0} Deserialized:{1} LogLocation[{2}]{1} ConfigLocation[{3}]{1} PathsConfig[{4}]{1} ServerConfig[{5}]", _origPath, Environment.NewLine, _paths.LogLocation, _paths.ConfigLocation, _paths.PathsConfig, _paths.ServerConfig));
                         }
                         break;
@@ -712,13 +728,13 @@ namespace PersonalDiscordBot
                     _sw.WriteLine(exString);
         }
 
-        private void SlideHorizontal(double _left, double _right, Grid _grd)
+        private void SlideGrid(Thickness from, Thickness to, Grid _grd)
         {
             try
             {
                 ThicknessAnimation _animate = new ThicknessAnimation();
-                _animate.From = new Thickness(_grd.Margin.Left, _grd.Margin.Top, _grd.Margin.Right, _grd.Margin.Bottom);
-                _animate.To = new Thickness(_left, _grd.Margin.Top, _right, _grd.Margin.Bottom);
+                _animate.From = from;
+                _animate.To = to;
                 _animate.AccelerationRatio = .9;
                 _animate.Duration = new Duration(TimeSpan.FromSeconds(.3));
                 _grd.BeginAnimation(Grid.MarginProperty, _animate);
@@ -851,60 +867,68 @@ namespace PersonalDiscordBot
 
         #region Threaded Methods
 
-        private void tShowNotification(string _notification, int _howLong)
+        private void ShowNotification(string notification, int showTime)
         {
-            Thread _showNotification = new Thread(() =>
+            try
             {
-                try
+                System.ComponentModel.BackgroundWorker worker = new System.ComponentModel.BackgroundWorker()
                 {
-                    double _currLeft = 0.0;
-                    double _currRight = 0.0;
-                    double _currTop = 0.0;
-                    double _currBottom = 0.0;
-                    uDebugAddLog("Notification Method Called");
-                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate
-                    {
-                        try
-                        {
-                            _currLeft = grdNotification.Margin.Left;
-                            _currRight = grdNotification.Margin.Right;
-                            _currTop = grdNotification.Margin.Top;
-                            _currBottom = grdNotification.Margin.Bottom;
-                            lblNotificationValue.Text = _notification;
-                        }
-                        catch (Exception ex)
-                        {
-                            FullExceptionLog(ex);
-                        }
-                    });
-                    uDebugAddLog(string.Format("Notification Dimensions L[{0}] R[{1}] T[{2}] B[{3}] - Time: {4}", _currLeft, _currRight, _currTop, _currBottom, _howLong));
-                    uDebugAddLog(string.Format("Notification Message: {0}", _notification));
-                    ThicknessAnimation _animate = new ThicknessAnimation
-                    {
-                        From = new Thickness(_currLeft, _currTop, _currRight, _currBottom),
-                        To = new Thickness(0, _currTop, 0, _currBottom),
-                        AccelerationRatio = .9,
-                        Duration = new Duration(TimeSpan.FromSeconds(.3))
-                    };
-                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { grdNotification.BeginAnimation(Grid.MarginProperty, _animate); });
-                    uDebugAddLog(string.Format("Slid Notification into view, now waiting {0} seconds to slide back out", _howLong));
-                    Thread.Sleep(TimeSpan.FromSeconds(_howLong));
-                    ThicknessAnimation _animate2 = new ThicknessAnimation
-                    {
-                        From = new Thickness(0, _currTop, 0, _currBottom),
-                        To = new Thickness(_currLeft, _currTop, _currRight, _currBottom),
-                        AccelerationRatio = .9,
-                        Duration = new Duration(TimeSpan.FromSeconds(.3))
-                    };
-                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { grdNotification.BeginAnimation(Grid.MarginProperty, _animate2); });
-                    uDebugAddLog("Slid Notification back out of view");
-                }   
-                catch (Exception ex)
+                    WorkerReportsProgress = true
+                };
+                worker.ProgressChanged += (sender, e) => 
                 {
-                    FullExceptionLog(ex);
-                }
-            });
-            _showNotification.Start();
+                    ThicknessAnimation slideOut = new ThicknessAnimation() { AccelerationRatio = .9, Duration = new Duration(TimeSpan.FromSeconds(.3)), To = new Thickness(0, 42, 0, 0) };
+                    ThicknessAnimation slideIn = new ThicknessAnimation() { AccelerationRatio = .9, Duration = new Duration(TimeSpan.FromSeconds(.3)), To = new Thickness(0, 42, -734, 0) };
+                    switch (e.ProgressPercentage)
+                    {
+                        case 1:
+                            grdNotification.BeginAnimation(Grid.MarginProperty, slideOut);
+                            break;
+                        case 2:
+                            grdNotification.BeginAnimation(Grid.MarginProperty, slideIn);
+                            break;
+                        default:
+                            uDebugAddLog("Something happened and the incorrect notification state was used, accepted states: 1 or 2");
+                            break;
+                    }
+                };
+                worker.DoWork += (sender, e) =>
+                {
+                    try
+                    {
+                        Notification newNote = new Notification() { Message = notification, ShowTime = showTime };
+                        uDebugAddLog($"New Notification: {newNote.Message}, {newNote.ShowTime}sec(s)");
+                        Notification.notifications.Add(newNote);
+                        if (notificationPlaying) { uDebugAddLog("Notification is currently playing, returning"); return; }
+                        notificationPlaying = true;
+                        uDebugAddLog("Notification wasn't playing, starting notification play cycles");
+                        while (Notification.notifications.Count != 0)
+                        {
+                            foreach (var notif in Notification.notifications.ToList())
+                            {
+                                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { try { lblNotificationValue.Text = notif.Message; } catch (Exception ex) { FullExceptionLog(ex); } });
+                                worker.ReportProgress(1);
+                                Thread.Sleep(TimeSpan.FromSeconds(notif.ShowTime));
+                                worker.ReportProgress(2);
+                                Notification.notifications.Remove(notif);
+                                uDebugAddLog($"Removed notification: {notif.Message}");
+                                uDebugAddLog($"Notifications left: {Notification.notifications.Count}");
+                            }
+                        }
+                        notificationPlaying = false;
+                        uDebugAddLog("Finished playing all notifications");
+                    }
+                    catch (Exception ex)
+                    {
+                        FullExceptionLog(ex);
+                    }
+                };
+                worker.RunWorkerAsync();
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
         }
 
         private void tUpdateConnectionStatus()
@@ -1058,5 +1082,13 @@ namespace PersonalDiscordBot
         } 
 
         #endregion
+    }
+
+    public class Notification
+    {
+        public static List<Notification> notifications = new List<Notification>();
+
+        public string Message { get; set; }
+        public int ShowTime { get; set; }
     }
 }

@@ -508,13 +508,15 @@ namespace PersonalDiscordBot.Classes
 
         public static Weapon WeaponRandomGen(RarityType rarity, WeaponType type, int level)
         {
-            Weapon weap = new Weapon();
-            weap.Name = "SomeBody Once Told Me";
-            weap.Desc = "The World is Gonna Rule Me";
-            weap.Type = type;
-            weap.Rarity = rarity;
-            weap.Lvl = level;
-            weap.MaxDurability = 10 * level;
+            Weapon weap = new Weapon()
+            {
+                Name = "SomeBody Once Told Me",
+                Desc = "The World is Gonna Rule Me",
+                Type = type,
+                Rarity = rarity,
+                Lvl = level,
+                MaxDurability = 10 * level
+            };
             weap.CurrentDurability = weap.MaxDurability;
             weap.Worth = 1000 * level + rng.Next(2, 5);
             weap.Speed = (100 * (level + rng.Next(2, 5)));

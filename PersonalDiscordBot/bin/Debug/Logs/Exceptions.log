@@ -130,3 +130,86 @@ StackTrace:
    at PersonalDiscordBot.MainWindow.<Start>d__57.MoveNext() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 959
 
 
+TimeStamp: 05-15-17_5:14:40 PM
+Exception Type: InvalidOperationException
+Caller: btnOpenStatus_Click at 182
+Message: This BackgroundWorker is currently busy and cannot run multiple tasks concurrently.
+HR: -2146233079
+StackTrace:
+   at System.ComponentModel.BackgroundWorker.RunWorkerAsync(Object argument)
+   at System.ComponentModel.BackgroundWorker.RunWorkerAsync()
+   at PersonalDiscordBot.MainWindow.tShowNotification(Notification notif) in C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 922
+   at PersonalDiscordBot.MainWindow.ShowNotification(String message, Int32 showTime) in C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 869
+   at PersonalDiscordBot.MainWindow.btnOpenStatus_Click(Object sender, RoutedEventArgs e) in C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 178
+
+
+TimeStamp: 05-15-17_5:18:59 PM
+Exception Type: InvalidOperationException
+Caller: btnOpenStatus_Click at 182
+Message: This BackgroundWorker is currently busy and cannot run multiple tasks concurrently.
+HR: -2146233079
+StackTrace:
+   at System.ComponentModel.BackgroundWorker.RunWorkerAsync(Object argument)
+   at System.ComponentModel.BackgroundWorker.RunWorkerAsync()
+   at PersonalDiscordBot.MainWindow.tShowNotification(Notification notif) in C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 922
+   at PersonalDiscordBot.MainWindow.ShowNotification(String message, Int32 showTime) in C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 869
+   at PersonalDiscordBot.MainWindow.btnOpenStatus_Click(Object sender, RoutedEventArgs e) in C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 178
+
+
+TimeStamp: 05-15-17_5:19:10 PM
+Exception Type: InvalidOperationException
+Caller: btnOpenStatus_Click at 182
+Message: This BackgroundWorker is currently busy and cannot run multiple tasks concurrently.
+HR: -2146233079
+StackTrace:
+   at System.ComponentModel.BackgroundWorker.RunWorkerAsync(Object argument)
+   at System.ComponentModel.BackgroundWorker.RunWorkerAsync()
+   at PersonalDiscordBot.MainWindow.tShowNotification(Notification notif) in C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 922
+   at PersonalDiscordBot.MainWindow.ShowNotification(String message, Int32 showTime) in C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 869
+   at PersonalDiscordBot.MainWindow.btnOpenStatus_Click(Object sender, RoutedEventArgs e) in C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 178
+
+
+TimeStamp: 05-15-17_5:19:16 PM
+Exception Type: InvalidOperationException
+Caller: btnOpenStatus_Click at 182
+Message: This BackgroundWorker is currently busy and cannot run multiple tasks concurrently.
+HR: -2146233079
+StackTrace:
+   at System.ComponentModel.BackgroundWorker.RunWorkerAsync(Object argument)
+   at System.ComponentModel.BackgroundWorker.RunWorkerAsync()
+   at PersonalDiscordBot.MainWindow.tShowNotification(Notification notif) in C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 922
+   at PersonalDiscordBot.MainWindow.ShowNotification(String message, Int32 showTime) in C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 869
+   at PersonalDiscordBot.MainWindow.btnOpenStatus_Click(Object sender, RoutedEventArgs e) in C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 178
+
+
+TimeStamp: 05-15-17_5:20:43 PM
+Exception Type: IOException
+Caller: DumpDebugLog at 491
+Message: The process cannot access the file 'C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs\DebugLog_05-15-17.txt' because it is being used by another process.
+HR: -2147024864
+StackTrace:
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.StreamWriter.CreateFile(String path, Boolean append, Boolean checkHost)
+   at System.IO.StreamWriter..ctor(String path, Boolean append, Encoding encoding, Int32 bufferSize, Boolean checkHost)
+   at System.IO.StreamWriter..ctor(String path, Boolean append)
+   at System.IO.File.AppendText(String path)
+   at PersonalDiscordBot.MainWindow.DumpDebugLog() in C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 477
+
+
+TimeStamp: 05-15-17_5:20:43 PM
+Exception Type: OutOfMemoryException
+Caller: btnOpenStatus_Click at 182
+Message: Exception of type 'System.OutOfMemoryException' was thrown.
+HR: -2147024882
+StackTrace:
+   at System.Runtime.Remoting.Proxies.RemotingProxy.Invoke(Object NotUsed, MessageData& msgData)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStartDelegate.BeginInvoke(Object argument, AsyncCallback callback, Object object)
+   at System.ComponentModel.BackgroundWorker.RunWorkerAsync(Object argument)
+   at System.ComponentModel.BackgroundWorker.RunWorkerAsync()
+   at PersonalDiscordBot.MainWindow.tShowNotification(Notification notif) in C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 922
+   at PersonalDiscordBot.MainWindow.ShowNotification(String message, Int32 showTime) in C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 869
+   at PersonalDiscordBot.MainWindow.btnOpenStatus_Click(Object sender, RoutedEventArgs e) in C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 178
+
+
