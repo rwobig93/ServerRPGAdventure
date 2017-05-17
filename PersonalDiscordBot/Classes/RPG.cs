@@ -12,6 +12,7 @@ namespace PersonalDiscordBot.Classes
     {
         public interface IBackPackItem { };
         public static Random rng = new Random((int)(DateTime.Now.Ticks & 0x7FFFFFFF));
+        
 
         public enum CharacterClass
         {
@@ -84,12 +85,21 @@ namespace PersonalDiscordBot.Classes
 
         public enum RarityType
         {
-            Vendor,  //Vendor is for selling items i.e. Gray
             Common,
             Uncommon,
             Rare,
             Epic,
             Legendary
+            //case RarityType.Common:
+            //    break;
+            //case RarityType.Uncommon:
+            //    break;
+            //case RarityType.Rare:
+            //    break;
+            //case RarityType.Epic:
+            //    break;
+            //case RarityType.Legendary:
+            //    break;
         };
 
         public static OwnerProfile testiculeesProfile = new OwnerProfile()
@@ -143,7 +153,8 @@ namespace PersonalDiscordBot.Classes
                     newChar.Class = chosenClass;
                     newChar.MaxHP = rng.Next(40, 100);
                     newChar.CurrentHP = newChar.MaxHP;
-                    newChar.Mana = rng.Next(5, 10);
+                    newChar.MaxMana = 0;
+                    newChar.CurrentMana = newChar.MaxMana;
                     newChar.Str = rng.Next(4, 18);
                     newChar.Def = rng.Next(3, 16);
                     newChar.Dex = rng.Next(10, 20);
@@ -172,7 +183,8 @@ namespace PersonalDiscordBot.Classes
                     newChar.Class = chosenClass;
                     newChar.MaxHP = rng.Next(20, 80);
                     newChar.CurrentHP = newChar.MaxHP;
-                    newChar.Mana = rng.Next(10, 30);
+                    newChar.MaxMana = 0;
+                    newChar.CurrentMana = newChar.MaxMana;
                     newChar.Str = rng.Next(1, 10);
                     newChar.Def = rng.Next(1, 15);
                     newChar.Dex = rng.Next(1, 7);
@@ -200,7 +212,8 @@ namespace PersonalDiscordBot.Classes
                     newChar.Class = chosenClass;
                     newChar.MaxHP = rng.Next(60, 110);
                     newChar.CurrentHP = newChar.MaxHP;
-                    newChar.Mana = rng.Next(8, 40);
+                    newChar.MaxMana = 0;
+                    newChar.CurrentMana = newChar.MaxMana;
                     newChar.Str = rng.Next(5, 12);
                     newChar.Def = rng.Next(5, 12);
                     newChar.Dex = rng.Next(6, 14);
@@ -223,7 +236,8 @@ namespace PersonalDiscordBot.Classes
                     newChar.Class = chosenClass;
                     newChar.MaxHP = rng.Next(70, 1110);
                     newChar.CurrentHP = newChar.MaxHP;
-                    newChar.Mana = 0;
+                    newChar.MaxMana = 0;
+                    newChar.CurrentMana = newChar.MaxMana;
                     newChar.Str = rng.Next(2, 15);
                     newChar.Def = rng.Next(4, 12);
                     newChar.Dex = rng.Next(10, 20);
@@ -246,7 +260,8 @@ namespace PersonalDiscordBot.Classes
                     newChar.Class = chosenClass;
                     newChar.MaxHP = rng.Next(50, 100);
                     newChar.CurrentHP = newChar.MaxHP;
-                    newChar.Mana = 0;
+                    newChar.MaxMana = 0;
+                    newChar.CurrentMana = newChar.MaxMana;
                     newChar.Str = rng.Next(5, 20);
                     newChar.Def = rng.Next(5, 20);
                     newChar.Dex = rng.Next(1, 15);
@@ -289,7 +304,8 @@ namespace PersonalDiscordBot.Classes
         public int Exp { get; set; }
         public int MaxHP { get; set; }
         public int CurrentHP { get; set; }
-        public int Mana { get; set; }
+        public int MaxMana { get; set; }
+        public int CurrentMana { get; set; }
         public int Str { get; set; }
         public int Def { get; set; }
         public int Dex { get; set; }
@@ -430,7 +446,7 @@ namespace PersonalDiscordBot.Classes
         public static IBackPackItem PickLoot(Character character)
         {
             IBackPackItem chosenLoot = null;
-            LootType chosenType = LootDrop.ChooseType();
+            LootType chosenType = LootType.Weapon; //LootDrop.ChooseType();
             RarityType rarityType = ChooseRarity();
             switch (chosenType)
             {
@@ -499,7 +515,7 @@ namespace PersonalDiscordBot.Classes
         /// </summary>
         protected static int[] _rarityProbabilities = new int[]
         {
-            150, 490, 730, 880, 980, MaxProbability // Chances: Vendor 150(15%), Common 340(34%), Uncommon 250(25%), Rare 150(15%), Epic 100(10%), Legendary 20(2%)
+            430, 730, 880, 980, MaxProbability // Chances: Common(43%), Uncommon(30%), Rare(15%), Epic(10%), Legendary(2%)
         };
 
         public static int[] _weaponProbabilities(CharacterClass charClass)
@@ -508,19 +524,19 @@ namespace PersonalDiscordBot.Classes
             switch (charClass)
             {
                 case CharacterClass.Warrior:
-                    weaponArray = new int[] { 250, 450, 650, 795, 890, 900, 920, 940, 960, 999, MaxProbability}; // Sword(25%), Dagger(20%), Greatsword(20%), Katana(14.5%), Staff(9.5%), FocusStone(1%), Spear(2%), DragonSpear(2%), TwinSwords(2%), Other(2%), Starter(0%)
+                    weaponArray = new int[] { 250, 450, 650, 795, 890, 900, 920, 940, MaxProbability, MaxProbability, MaxProbability}; // Sword(25%), Dagger(20%), Greatsword(20%), Katana(14.5%), Staff(9.5%), FocusStone(1%), Spear(2%), DragonSpear(2%), TwinSwords(6%), Other(0%), Starter(0%)
                     break;
                 case CharacterClass.Dragoon:
-                    weaponArray = new int[] { 100, 200, 250, 300, 350, 400, 600, 800, 990, 999, MaxProbability}; // Sword(10%), Dagger(10%), Greatsword(5%), Katana(5%), Staff(5%), FocusStone(5%), Spear(20%), DragonSpear(20%), TwinSwords(19%), Other(.9%), Starter(0%)
+                    weaponArray = new int[] { 100, 200, 250, 300, 350, 400, 600, 800, MaxProbability, MaxProbability, MaxProbability}; // Sword(10%), Dagger(10%), Greatsword(5%), Katana(5%), Staff(5%), FocusStone(5%), Spear(20%), DragonSpear(20%), TwinSwords(20%), Other(0%), Starter(0%)
                     break;
                 case CharacterClass.Mage:
-                    weaponArray = new int[] { 50, 100, 150, 200, 550, 800, 850, 900, 990, 999, MaxProbability }; // Sword(5%), Dagger(5%), Greatsword(5%), Katana(5%), Staff(55%), FocusStone(25%), Spear(5%), DragonSpear(5%), TwinSwords(9%), Other(.9%), Starter(0%)
+                    weaponArray = new int[] { 50, 100, 150, 200, 550, 800, 850, 900, MaxProbability, MaxProbability, MaxProbability }; // Sword(5%), Dagger(5%), Greatsword(5%), Katana(5%), Staff(55%), FocusStone(25%), Spear(5%), DragonSpear(5%), TwinSwords(10%), Other(0%), Starter(0%)
                     break;
                 case CharacterClass.Necromancer:
-                    weaponArray = new int[] { 50, 100, 150, 200, 450, 800, 850, 900, 990, 999, MaxProbability }; // Sword(5%), Dagger(5%), Greatsword(5%), Katana(5%), Staff(55%), FocusStone(25%), Spear(5%), DragonSpear(5%), TwinSwords(9%), Other(.9%), Starter(0%)
+                    weaponArray = new int[] { 50, 100, 150, 200, 450, 800, 850, 900, MaxProbability, MaxProbability, MaxProbability }; // Sword(5%), Dagger(5%), Greatsword(5%), Katana(5%), Staff(55%), FocusStone(25%), Spear(5%), DragonSpear(5%), TwinSwords(10%), Other (0%), Starter(0%)
                     break;
                 case CharacterClass.Rogue:
-                    weaponArray = new int[] { 150, 450, 550, 600, 650, 700, 750, 770, 970, 999, MaxProbability }; // Sword(15%), Dagger(30%), Greatsword(10%), Katana(5%), Staff(5%), FocusStone(5%), Spear(5%), DragonSpear(2%), TwinSwords(20%), Other(3%), Starter(0%)
+                    weaponArray = new int[] { 150, 450, 550, 600, 650, 700, 750, 770, MaxProbability, MaxProbability, MaxProbability }; // Sword(15%), Dagger(30%), Greatsword(10%), Katana(5%), Staff(5%), FocusStone(5%), Spear(5%), DragonSpear(2%), TwinSwords(23%), Other(0%), Starter(0%)
                     break;
             }
 
@@ -540,7 +556,7 @@ namespace PersonalDiscordBot.Classes
             "Cut you real bad",
             "A sword of sorts",
             "Stabby McStab Stab",
-            "Sword"
+            "Sword from the 7th Floor"
         };
         public static string[] weaponDescSword = // Weapon name & desc index should match
         {
@@ -549,7 +565,8 @@ namespace PersonalDiscordBot.Classes
             "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard",
             "I'm gonna cut you so bad, you gonna wish I never cut you so bad",
             "This might be a sword, or might not, does it matter?",
-            "Stab. Stabby. Stab, stab stab. Stab stab stab stabby Mcstab stab. Stab, stab stab."
+            "Stab. Stabby. Stab, stab stab. Stab stab stab stabby Mcstab stab. Stab, stab stab.",
+            "Ya blew it"
         };
         public static string[] weaponNamesGreatsword = // Weapon name & desc index should match
         {
@@ -687,8 +704,8 @@ namespace PersonalDiscordBot.Classes
                     int dsIndex = rng.Next(0, weaponNamesDragonSpear.Length);
                     if (isUniqueName)
                     {
-                        weaponName = weaponNamesDagger[dsIndex];
-                        weaponDesc = weaponDescDagger[dsIndex];
+                        weaponName = weaponNamesDragonSpear[dsIndex];
+                        weaponDesc = weaponDescDragonSpear[dsIndex];
                     }
                     else
                     {
@@ -700,8 +717,8 @@ namespace PersonalDiscordBot.Classes
                     int fsIndex = rng.Next(0, weaponNamesFocusStone.Length);
                     if (isUniqueName)
                     {
-                        weaponName = weaponNamesDagger[fsIndex];
-                        weaponDesc = weaponDescDagger[fsIndex];
+                        weaponName = weaponNamesFocusStone[fsIndex];
+                        weaponDesc = weaponDescFocusStone[fsIndex];
                     }
                     else
                     {
@@ -713,8 +730,8 @@ namespace PersonalDiscordBot.Classes
                     int gsIndex = rng.Next(0, weaponNamesGreatsword.Length);
                     if (isUniqueName)
                     {
-                        weaponName = weaponNamesDagger[gsIndex];
-                        weaponDesc = weaponDescDagger[gsIndex];
+                        weaponName = weaponNamesGreatsword[gsIndex];
+                        weaponDesc = weaponDescGreatsword[gsIndex];
                     }
                     else
                     {
@@ -726,8 +743,8 @@ namespace PersonalDiscordBot.Classes
                     int katanaIndex = rng.Next(0, weaponNamesKatana.Length);
                     if (isUniqueName)
                     {
-                        weaponName = weaponNamesDagger[katanaIndex];
-                        weaponDesc = weaponDescDagger[katanaIndex];
+                        weaponName = weaponNamesKatana[katanaIndex];
+                        weaponDesc = weaponDescKatana[katanaIndex];
                     }
                     else
                     {
@@ -739,8 +756,8 @@ namespace PersonalDiscordBot.Classes
                     int spearIndex = rng.Next(0, weaponNamesSpear.Length);
                     if (isUniqueName)
                     {
-                        weaponName = weaponNamesDagger[spearIndex];
-                        weaponDesc = weaponDescDagger[spearIndex];
+                        weaponName = weaponNamesSpear[spearIndex];
+                        weaponDesc = weaponDescSpear[spearIndex];
                     }
                     else
                     {
@@ -752,8 +769,8 @@ namespace PersonalDiscordBot.Classes
                     int staffIndex = rng.Next(0, weaponNamesStaff.Length);
                     if (isUniqueName)
                     {
-                        weaponName = weaponNamesDagger[staffIndex];
-                        weaponDesc = weaponDescDagger[staffIndex];
+                        weaponName = weaponNamesStaff[staffIndex];
+                        weaponDesc = weaponDescStaff[staffIndex];
                     }
                     else
                     {
@@ -765,8 +782,8 @@ namespace PersonalDiscordBot.Classes
                     int swordIndex = rng.Next(0, weaponNamesSword.Length);
                     if (isUniqueName)
                     {
-                        weaponName = weaponNamesDagger[swordIndex];
-                        weaponDesc = weaponDescDagger[swordIndex];
+                        weaponName = weaponNamesSword[swordIndex];
+                        weaponDesc = weaponDescSword[swordIndex];
                     }
                     else
                     {
@@ -778,8 +795,8 @@ namespace PersonalDiscordBot.Classes
                     int tsIndex = rng.Next(0, weaponNamesTwinSwords.Length);
                     if (isUniqueName)
                     {
-                        weaponName = weaponNamesDagger[tsIndex];
-                        weaponDesc = weaponDescDagger[tsIndex];
+                        weaponName = weaponNamesTwinSwords[tsIndex];
+                        weaponDesc = weaponDescTwinSwords[tsIndex];
                     }
                     else
                     {
@@ -799,9 +816,6 @@ namespace PersonalDiscordBot.Classes
             string descr = string.Empty;
             switch (rarity)
             {
-                case (RarityType.Vendor):
-                    rarityValue = 1;
-                    break;
                 case (RarityType.Common):
                     rarityValue = 3;
                     break;
@@ -818,8 +832,6 @@ namespace PersonalDiscordBot.Classes
                     rarityValue = 21;
                     break;
             }
-            if (isUniqueName)
-                rarityValue = rarityValue + 2;
             level = level - 5 > 0 ? level + rng.Next(-5, 5) : level + rng.Next(0, 5);
             Weapon weap = new Weapon()
             {
@@ -827,9 +839,11 @@ namespace PersonalDiscordBot.Classes
                 Desc = descr,
                 Type = type,
                 Rarity = rarity,
-                Lvl = level,
-                MaxDurability = (10 * level) + (rarityValue * 4)
+                Lvl = level
             };
+            if (isUniqueName)
+                rarityValue = rarityValue + 2;
+            weap.MaxDurability = (10 * level) + (rarityValue * 4);
             weap.CurrentDurability = weap.MaxDurability;
             switch (type)
             {
@@ -920,4 +934,96 @@ namespace PersonalDiscordBot.Classes
         public static Item smallManaPotion = new Item { Name = "Small Mana Potion", Type = ItemType.Restorative, Lvl = 1, Worth = 5, Desc = "A brew that fills your body with Magic energy, the health information sticker wore off long ago, don't worry about what is inside." };
         public static Item smallManaPotionPack = new Item { Name = "Small Mana Potion Pack", Type = ItemType.Restorative, Lvl = 1, Worth = 5, Count = 5, Desc = "5 mana potions!? Hot damn this pack radiates awesomeness... or is that radiation?" };
     }
+
+    //public class Testing
+    //{
+    //    public static masstest()
+    //    {
+    //        string line = Environment.NewLine;
+    //        var pickedLoot = (Weapon)LootDrop.PickLoot(RPG.testiculeesCharacter);
+    //        return uStatusUpdate($"{line}Name: {pickedLoot.Name}{line}Description: {pickedLoot.Desc}{line}Type: {pickedLoot.Type.ToString()}{line}Rarity: {pickedLoot.Rarity}{line}Level: {pickedLoot.Lvl}{line}Max Durability: {pickedLoot.MaxDurability}{line}Current Durability: {pickedLoot.CurrentDurability}{line}Worth: {pickedLoot.Worth}{line}Speed: {pickedLoot.Speed}{line}Physical Damage: {pickedLoot.PhysicalDamage}");
+    //    }
+    //    //    int sword = 0;
+    //    //    int dagger = 0;
+    //    //    int greatsword = 0;
+    //    //    int katana = 0;
+    //    //    int staff = 0;
+    //    //    int focusStone = 0;
+    //    //    int spear = 0;
+    //    //    int dragonSpear = 0;
+    //    //    int twinSwords = 0;
+    //    //    int other = 0;
+    //    //    int starter = 0;
+    //    //    int unique = 0;
+    //    //    int common = 0;
+    //    //    int uncommon = 0;
+    //    //    int rare = 0;
+    //    //    int epic = 0;
+    //    //    int legendary = 0;
+
+    //    //    for (int i = 0; i <= 1000; i++)
+    //    //    {
+    //    var pickedLoot = (Weapon)LootDrop.PickLoot(RPG.testiculeesCharacter);
+    //        //        switch (pickedLoot.Type)
+    //        //        {
+    //        //            case RPG.WeaponType.Dagger:
+    //        //                dagger++;
+    //        //                break;
+    //        //            case RPG.WeaponType.DragonSpear:
+    //        //                dragonSpear++;
+    //        //                break;
+    //        //            case RPG.WeaponType.FocusStone:
+    //        //                focusStone++;
+    //        //                break;
+    //        //            case RPG.WeaponType.Greatsword:
+    //        //                greatsword++;
+    //        //                break;
+    //        //            case RPG.WeaponType.Katana:
+    //        //                katana++;
+    //        //                break;
+    //        //            case RPG.WeaponType.Spear:
+    //        //                spear++;
+    //        //                break;
+    //        //            case RPG.WeaponType.Staff:
+    //        //                staff++;
+    //        //                break;
+    //        //            case RPG.WeaponType.Sword:
+    //        //                sword++;
+    //        //                break;
+    //        //            case RPG.WeaponType.TwinSwords:
+    //        //                twinSwords++;
+    //        //                break;
+    //        //            case RPG.WeaponType.Other:
+    //        //                other++;
+    //        //                break;
+    //        //            case RPG.WeaponType.Starter:
+    //        //                starter++;
+    //        //                break;
+    //        //        }
+    //        //        switch (pickedLoot.Rarity)
+    //        //        {
+    //        //            case RPG.RarityType.Common:
+    //        //                common++;
+    //        //                break;
+    //        //            case RPG.RarityType.Uncommon:
+    //        //                uncommon++;
+    //        //                break;
+    //        //            case RPG.RarityType.Rare:
+    //        //                rare++;
+    //        //                break;
+    //        //            case RPG.RarityType.Epic:
+    //        //                epic++;
+    //        //                break;
+    //        //            case RPG.RarityType.Legendary:
+    //        //                legendary++;
+    //        //                break;
+    //        //        }
+    //        //        if (!pickedLoot.Desc.ToLower().Contains("average")) unique++;
+    //        uStatusUpdate($"{line}Name: {pickedLoot.Name}{line}Description: {pickedLoot.Desc}{line}Type: {pickedLoot.Type.ToString()}{line}Rarity: {pickedLoot.Rarity}{line}Level: {pickedLoot.Lvl}{line}Max Durability: {pickedLoot.MaxDurability}{line}Current Durability: {pickedLoot.CurrentDurability}{line}Worth: {pickedLoot.Worth}{line}Speed: {pickedLoot.Speed}{line}Physical Damage: {pickedLoot.PhysicalDamage}");
+    //    //    }
+
+    //    //    uStatusUpdate($"{line}sword = {sword}{line}dagger = {dagger}{line}greatsword = {greatsword}{line}katana = {katana}{line}staff = {staff}{line}focusStone = {focusStone}{line}spear = {spear}{line}dragonSpear = {dragonSpear}{line}twinSwords = {twinSwords}{line}other = {other}{line}starter = {starter}{line}unique = {unique}{line}------------------------------------------------{line}common = {common}{line}uncommon = {uncommon}{line}rare = {rare}{line}epic = {epic}{line}legendary = {legendary}{line}");
+
+    //}
+
 }
