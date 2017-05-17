@@ -35,6 +35,27 @@ namespace PersonalDiscordBot.Classes
             TwinSwords,
             Other,
             Starter
+            //switch (type)
+            // {
+            //     case WeaponType.Dagger:
+            //         break;
+            //     case WeaponType.DragonSpear:
+            //         break;
+            //     case WeaponType.FocusStone:
+            //         break;
+            //     case WeaponType.Greatsword:
+            //         break;
+            //     case WeaponType.Katana:
+            //         break;
+            //     case WeaponType.Spear:
+            //         break;
+            //     case WeaponType.Staff:
+            //         break;
+            //     case WeaponType.Sword:
+            //         break;
+            //     case WeaponType.TwinSwords:
+            //         break;
+            // }
         }
 
         public enum SpellType
@@ -315,7 +336,7 @@ namespace PersonalDiscordBot.Classes
         public string Name { get; set; }
         public string Desc { get; set; } = "A weapon like any other";
         public WeaponType Type { get; set; }
-        public RarityType Rarity { get; set; }
+        public RarityType Rarity { get; set; } = RarityType.Common;
         public int Lvl { get; set; } = 0;
         public int MaxDurability { get; set; } = 0;
         public int CurrentDurability { get; set; } = 0;
@@ -366,6 +387,7 @@ namespace PersonalDiscordBot.Classes
         public string Name { get; set; }
         public string Desc { get; set; } = "An armor like any other";
         public ArmorType Type { get; set; }
+        public RarityType Rarity { get; set; }
         public int Lvl { get; set; } = 0;
         public int MaxDurability { get; set; } = 0;
         public int CurrentDurability { get; set; } = 0;
@@ -408,21 +430,18 @@ namespace PersonalDiscordBot.Classes
         public static IBackPackItem PickLoot(Character character)
         {
             IBackPackItem chosenLoot = null;
-            LootType chosenType = LootType.Weapon;  //ChooseType();
+            LootType chosenType = LootDrop.ChooseType();
+            RarityType rarityType = ChooseRarity();
             switch (chosenType)
             {
                 case LootType.Item:
-                    
                     break;
                 case LootType.Nothing:
                     break;
                 case LootType.Armor:
                     break;
                 case LootType.Weapon:
-                    RarityType rarityType = ChooseRarity();
-                    WeaponType weaponType = ChooseWeaponType(character);
-                    int level = character.Lvl;
-                    chosenLoot = Weapons.WeaponRandomGen(rarityType, weaponType, level);
+                    chosenLoot = Weapons.WeaponRandomGen(rarityType, ChooseWeaponType(character), character.Lvl);
                     break;
                 case LootType.Spell:
                     break;
@@ -489,10 +508,19 @@ namespace PersonalDiscordBot.Classes
             switch (charClass)
             {
                 case CharacterClass.Warrior:
-                    weaponArray = new int[] { 250, 450, 650, 795, 890, 900, 920, 940, 960, 999, MaxProbability}; // Sword, Dagger, Greatsword, Katana, Staff, FocusStone, Spear, DragonSpear, TwinSwords, Other, Starter
+                    weaponArray = new int[] { 250, 450, 650, 795, 890, 900, 920, 940, 960, 999, MaxProbability}; // Sword(25%), Dagger(20%), Greatsword(20%), Katana(14.5%), Staff(9.5%), FocusStone(1%), Spear(2%), DragonSpear(2%), TwinSwords(2%), Other(2%), Starter(0%)
                     break;
                 case CharacterClass.Dragoon:
-                    weaponArray = new int[] { 100, 200, 250, 300, 350, 400, 600, 800, 990, 999, MaxProbability}; // Sword, Dagger, Greatsword, Katana, Staff, FocusStone, Spear, DragonSpear, TwinSwords, Other, Starter
+                    weaponArray = new int[] { 100, 200, 250, 300, 350, 400, 600, 800, 990, 999, MaxProbability}; // Sword(10%), Dagger(10%), Greatsword(5%), Katana(5%), Staff(5%), FocusStone(5%), Spear(20%), DragonSpear(20%), TwinSwords(19%), Other(.9%), Starter(0%)
+                    break;
+                case CharacterClass.Mage:
+                    weaponArray = new int[] { 50, 100, 150, 200, 550, 800, 850, 900, 990, 999, MaxProbability }; // Sword(5%), Dagger(5%), Greatsword(5%), Katana(5%), Staff(55%), FocusStone(25%), Spear(5%), DragonSpear(5%), TwinSwords(9%), Other(.9%), Starter(0%)
+                    break;
+                case CharacterClass.Necromancer:
+                    weaponArray = new int[] { 50, 100, 150, 200, 450, 800, 850, 900, 990, 999, MaxProbability }; // Sword(5%), Dagger(5%), Greatsword(5%), Katana(5%), Staff(55%), FocusStone(25%), Spear(5%), DragonSpear(5%), TwinSwords(9%), Other(.9%), Starter(0%)
+                    break;
+                case CharacterClass.Rogue:
+                    weaponArray = new int[] { 150, 450, 550, 600, 650, 700, 750, 770, 970, 999, MaxProbability }; // Sword(15%), Dagger(30%), Greatsword(10%), Katana(5%), Staff(5%), FocusStone(5%), Spear(5%), DragonSpear(2%), TwinSwords(20%), Other(3%), Starter(0%)
                     break;
             }
 
@@ -502,20 +530,278 @@ namespace PersonalDiscordBot.Classes
 
     public static class Weapons
     {
-        public static List<Weapon> WeaponList = new List<Weapon>()
+
+        #region Weapon Names and Descriptions
+        public static string[] weaponNamesSword = // Weapon name & desc index should match
         {
-            
+            "Not a weapon",
+            "Butterknife",
+            "Pokes' you in the eye",
+            "Cut you real bad",
+            "A sword of sorts",
+            "Stabby McStab Stab",
+            "Sword"
         };
+        public static string[] weaponDescSword = // Weapon name & desc index should match
+        {
+            "This isn't a weapon.... at least I don't think it is",
+            "Used to butter that toast, or butter your bread. Mmmmm bread",
+            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard",
+            "I'm gonna cut you so bad, you gonna wish I never cut you so bad",
+            "This might be a sword, or might not, does it matter?",
+            "Stab. Stabby. Stab, stab stab. Stab stab stab stabby Mcstab stab. Stab, stab stab."
+        };
+        public static string[] weaponNamesGreatsword = // Weapon name & desc index should match
+        {
+            "Not a weapon",
+            "Butterknife",
+            "Pokes' you in the eye",
+            "Cut you real bad",
+            "A sword of sorts",
+            "Stabby McStab Stab",
+            "Chainsword",
+            "\"Hammer\" of Thor"
+        };
+        public static string[] weaponDescGreatsword = // Weapon name & desc index should match
+        {
+            "This isn't a weapon.... at least I don't think it is",
+            "Used to butter that toast, or butter your bread. Mmmmm bread",
+            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard",
+            "I'm gonna cut you so bad, you gonna wish I never cut you so bad",
+            "This might be a sword, or might not, does it matter?",
+            "Stab. Stabby. Stab, stab stab. Stab stab stab stabby Mcstab stab. Stab, stab stab.",
+            "A serrated sword that, when the magic word \"Gettum!\" is spoken it causes the serrations to spin around the blade.",
+            "A one handed \"Hammer\" that deals crushing / electric damage"
+        };
+        public static string[] weaponNamesDagger = // Weapon name & desc index should match
+        {
+            "Not a weapon",
+            "Butterknife",
+            "Pokes' you in the eye",
+            "Cut you real bad",
+            "Stabby McStab Stab"
+        };
+        public static string[] weaponDescDagger = // Weapon name & desc index should match
+        {
+            "This isn't a weapon.... at least I don't think it is",
+            "Used to butter that toast, or butter your bread. Mmmmm bread",
+            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard",
+            "I'm gonna cut you so bad, you gonna wish I never cut you so bad",
+            "Stab. Stabby. Stab, stab stab. Stab stab stab stabby Mcstab stab. Stab, stab stab."
+        };
+        public static string[] weaponNamesKatana = // Weapon name & desc index should match
+        {
+            "Not a weapon",
+            "Butterknife",
+            "Pokes' you in the eye",
+            "Cut you real bad",
+            "Stabby McStab Stab"
+        };
+        public static string[] weaponDescKatana = // Weapon name & desc index should match
+        {
+            "This isn't a weapon.... at least I don't think it is",
+            "Used to butter that toast, or butter your bread. Mmmmm bread",
+            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard",
+            "I'm gonna cut you so bad, you gonna wish I never cut you so bad",
+            "Stab. Stabby. Stab, stab stab. Stab stab stab stabby Mcstab stab. Stab, stab stab."
+        };
+        public static string[] weaponNamesStaff = // Weapon name & desc index should match
+        {
+            "Not a weapon",
+            "Pokes' you in the eye"
+        };
+        public static string[] weaponDescStaff = // Weapon name & desc index should match
+        {
+            "This isn't a weapon.... at least I don't think it is",
+            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard"
+        };
+        public static string[] weaponNamesFocusStone = // Weapon name & desc index should match
+        {
+            "Not a weapon",
+            "Pokes' you in the eye"
+        };
+        public static string[] weaponDescFocusStone = // Weapon name & desc index should match
+        {
+            "This isn't a weapon.... at least I don't think it is",
+            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard"
+        };
+        public static string[] weaponNamesSpear = // Weapon name & desc index should match
+        {
+            "Not a weapon",
+            "Pokes' you in the eye"
+        };
+        public static string[] weaponDescSpear = // Weapon name & desc index should match
+        {
+            "This isn't a weapon.... at least I don't think it is",
+            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard"
+        };
+        public static string[] weaponNamesDragonSpear = // Weapon name & desc index should match
+        {
+            "Not a weapon",
+            "Pokes' you in the eye"
+        };
+        public static string[] weaponDescDragonSpear = // Weapon name & desc index should match
+        {
+            "This isn't a weapon.... at least I don't think it is",
+            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard"
+        };
+        public static string[] weaponNamesTwinSwords = // Weapon name & desc index should match
+        {
+            "Not a weapon",
+            "Butterknife",
+            "Pokes' you in the eye",
+            "Cut you real bad",
+            "Stabby McStab Stab"
+        };
+        public static string[] weaponDescTwinSwords = // Weapon name & desc index should match
+        {
+            "This isn't a weapon.... at least I don't think it is",
+            "Used to butter that toast, or butter your bread. Mmmmm bread",
+            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard",
+            "I'm gonna cut you so bad, you gonna wish I never cut you so bad",
+            "Stab. Stabby. Stab, stab stab. Stab stab stab stabby Mcstab stab. Stab, stab stab."
+        }; 
+        #endregion
+
+        public static string WeaponNameandDescGen(WeaponType type, RarityType rarity, out string description, out bool isUniqueName)
+        {
+            string weaponName = string.Empty;
+            string weaponDesc = string.Empty;
+            isUniqueName = rng.Next(0, 101) > 70;
+            switch (type)
+            {
+                case WeaponType.Dagger:
+                    int daggerIndex = rng.Next(0, weaponNamesDagger.Length);
+                    if (isUniqueName)
+                    {
+                        weaponName = weaponNamesDagger[daggerIndex];
+                        weaponDesc = weaponDescDagger[daggerIndex];
+                    }
+                    else
+                    {
+                        weaponName = $"{rarity.ToString()} Dagger";
+                        weaponDesc = $"An average {rarity.ToString()} Dagger";
+                    }
+                    break;
+                case WeaponType.DragonSpear:
+                    int dsIndex = rng.Next(0, weaponNamesDragonSpear.Length);
+                    if (isUniqueName)
+                    {
+                        weaponName = weaponNamesDagger[dsIndex];
+                        weaponDesc = weaponDescDagger[dsIndex];
+                    }
+                    else
+                    {
+                        weaponName = $"{rarity.ToString()} Dragon Spear";
+                        weaponDesc = $"An average {rarity.ToString()} Dragon Spear";
+                    }
+                    break;
+                case WeaponType.FocusStone:
+                    int fsIndex = rng.Next(0, weaponNamesFocusStone.Length);
+                    if (isUniqueName)
+                    {
+                        weaponName = weaponNamesDagger[fsIndex];
+                        weaponDesc = weaponDescDagger[fsIndex];
+                    }
+                    else
+                    {
+                        weaponName = $"{rarity.ToString()} Focus Stone";
+                        weaponDesc = $"An average {rarity.ToString()} Focus Stone";
+                    }
+                    break;
+                case WeaponType.Greatsword:
+                    int gsIndex = rng.Next(0, weaponNamesGreatsword.Length);
+                    if (isUniqueName)
+                    {
+                        weaponName = weaponNamesDagger[gsIndex];
+                        weaponDesc = weaponDescDagger[gsIndex];
+                    }
+                    else
+                    {
+                        weaponName = $"{rarity.ToString()} Great Sword";
+                        weaponDesc = $"An average {rarity.ToString()} Great Sword";
+                    }
+                    break;
+                case WeaponType.Katana:
+                    int katanaIndex = rng.Next(0, weaponNamesKatana.Length);
+                    if (isUniqueName)
+                    {
+                        weaponName = weaponNamesDagger[katanaIndex];
+                        weaponDesc = weaponDescDagger[katanaIndex];
+                    }
+                    else
+                    {
+                        weaponName = $"{rarity.ToString()} Katana";
+                        weaponDesc = $"An average {rarity.ToString()} Katana";
+                    }
+                    break;
+                case WeaponType.Spear:
+                    int spearIndex = rng.Next(0, weaponNamesSpear.Length);
+                    if (isUniqueName)
+                    {
+                        weaponName = weaponNamesDagger[spearIndex];
+                        weaponDesc = weaponDescDagger[spearIndex];
+                    }
+                    else
+                    {
+                        weaponName = $"{rarity.ToString()} Spear";
+                        weaponDesc = $"An average {rarity.ToString()} Spear";
+                    }
+                    break;
+                case WeaponType.Staff:
+                    int staffIndex = rng.Next(0, weaponNamesStaff.Length);
+                    if (isUniqueName)
+                    {
+                        weaponName = weaponNamesDagger[staffIndex];
+                        weaponDesc = weaponDescDagger[staffIndex];
+                    }
+                    else
+                    {
+                        weaponName = $"{rarity.ToString()} Staff";
+                        weaponDesc = $"An average {rarity.ToString()} Staff";
+                    }
+                    break;
+                case WeaponType.Sword:
+                    int swordIndex = rng.Next(0, weaponNamesSword.Length);
+                    if (isUniqueName)
+                    {
+                        weaponName = weaponNamesDagger[swordIndex];
+                        weaponDesc = weaponDescDagger[swordIndex];
+                    }
+                    else
+                    {
+                        weaponName = $"{rarity.ToString()} Sword";
+                        weaponDesc = $"An average {rarity.ToString()} Sword";
+                    }
+                    break;
+                case WeaponType.TwinSwords:
+                    int tsIndex = rng.Next(0, weaponNamesTwinSwords.Length);
+                    if (isUniqueName)
+                    {
+                        weaponName = weaponNamesDagger[tsIndex];
+                        weaponDesc = weaponDescDagger[tsIndex];
+                    }
+                    else
+                    {
+                        weaponName = $"{rarity.ToString()} Twin Swords";
+                        weaponDesc = $"An average {rarity.ToString()} Twin Swords";
+                    }
+                    break;
+            }
+            description = weaponDesc;
+            return weaponName;
+        }
 
         public static Weapon WeaponRandomGen(RarityType rarity, WeaponType type, int level)
         {
             int rarityValue = 0;
+            bool isUniqueName = false;
+            string descr = string.Empty;
             switch (rarity)
             {
                 case (RarityType.Vendor):
                     rarityValue = 1;
                     break;
-
                 case (RarityType.Common):
                     rarityValue = 3;
                     break;
@@ -528,25 +814,78 @@ namespace PersonalDiscordBot.Classes
                 case (RarityType.Epic):
                     rarityValue = 15;
                     break;
-
                 case (RarityType.Legendary):
                     rarityValue = 21;
                     break;
             }
-
+            if (isUniqueName)
+                rarityValue = rarityValue + 2;
+            level = level - 5 > 0 ? level + rng.Next(-5, 5) : level + rng.Next(0, 5);
             Weapon weap = new Weapon()
             {
-                Name = "SomeBody Once Told Me",
-                Desc = "The World is Gonna Rule Me",
+                Name = WeaponNameandDescGen(type, rarity, out descr, out isUniqueName),
+                Desc = descr,
                 Type = type,
                 Rarity = rarity,
                 Lvl = level,
-                MaxDurability = 10 * level
+                MaxDurability = (10 * level) + (rarityValue * 4)
             };
             weap.CurrentDurability = weap.MaxDurability;
-            weap.Speed = (level + rng.Next(20, 50));
-            weap.PhysicalDamage = (level + rng.Next(1, 4) * rarityValue);
-            weap.Worth = ((level + rarityValue) * rarityValue + (weap.Speed / weap.PhysicalDamage));
+            switch (type)
+            {
+                case WeaponType.Dagger:
+                    weap.PhysicalDamage = (level + rng.Next(1, 5) + rarityValue);
+                    weap.Speed = (level + 120 + rng.Next(40, 80));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case WeaponType.DragonSpear:
+                    weap.PhysicalDamage = (level + rng.Next(3, 8) + rarityValue);
+                    weap.FireDamage = rng.Next(0, 100) > 70 ? level + rng.Next(0, 5) : 0;
+                    weap.IceDamage = rng.Next(0, 100) > 70 ? level + rng.Next(0, 5) : 0;
+                    weap.LightningDamage = rng.Next(0, 100) > 70 ? level + rng.Next(0, 5) : 0;
+                    weap.WindDamage = rng.Next(0, 100) > 70 ? level + rng.Next(0, 5) : 0;
+                    weap.Speed = (level + 80 + rng.Next(10, 90));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed + (weap.FireDamage + weap.IceDamage + weap.LightningDamage + weap.WindDamage) / weap.PhysicalDamage));
+                    break;
+                case WeaponType.FocusStone:
+                    weap.PhysicalDamage = (level + rng.Next(0, 2) + rarityValue);
+                    weap.MagicDamage = (level + rng.Next(2, 8) + rarityValue);
+                    weap.Speed = (level + 80 + rng.Next(20, 110));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.MagicDamage));
+                    break;
+                case WeaponType.Greatsword:
+                    weap.PhysicalDamage = (level + rng.Next(8, 20) + rarityValue);
+                    weap.LightningDamage = weap.Name.ToLower().Contains("hammer") ? (level + rng.Next(2, 8) + rarityValue) : 0;
+                    weap.Speed = (level + 70 + rng.Next(10, 40));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case WeaponType.Katana:
+                    weap.PhysicalDamage = (level + rng.Next(5, 15) + rarityValue);
+                    weap.Speed = (level + 100 + rng.Next(10, 110));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case WeaponType.Spear:
+                    weap.PhysicalDamage = (level + rng.Next(4, 10) + rarityValue);
+                    weap.Speed = (level + 90 + rng.Next(10, 110));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case WeaponType.Staff:
+                    weap.PhysicalDamage = (level + rng.Next(0, 3) + rarityValue);
+                    weap.MagicDamage = (level + rng.Next(4, 10) + rarityValue);
+                    weap.Speed = (level + 70 + rng.Next(20, 80));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.MagicDamage));
+                    break;
+                case WeaponType.Sword:
+                    weap.PhysicalDamage = (level + rng.Next(4, 10) + rarityValue);
+                    weap.Speed = (level + 100 + rng.Next(20, 50));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case WeaponType.TwinSwords:
+                    weap.PhysicalDamage = ((level + rng.Next(1, 5) * 2) + rarityValue);
+                    weap.Speed = (level + 80 + rng.Next(20, 70));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+            }
             return weap;
         }
 
