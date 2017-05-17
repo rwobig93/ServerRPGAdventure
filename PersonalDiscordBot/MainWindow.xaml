@@ -77,17 +77,17 @@
                 <Button x:Name="btnChangeName" Click="btnChangeName_Click" Content="Change Name" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="89" Height="21" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" Margin="10,42,0,0"/>
             </Grid>
         </Grid>
-        <Grid x:Name="grdToken" Margin="-734,42,734,365" Background="#FF191919">
+        <Grid x:Name="grdToken" Margin="-734,42,0,0" Background="#FF191919" HorizontalAlignment="Left" Width="734" Height="67" VerticalAlignment="Top">
             <TextBox x:Name="txtTokenValue" Margin="10,10,10,0" TextWrapping="NoWrap"  Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="21" VerticalAlignment="Top"/>
             <Button x:Name="btnSaveToken" Click="btnSaveToken_Click" Content="Save Token" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="89" Height="22" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" Margin="233,36,0,0"/>
             <Button x:Name="btnClearToken" Click="btnClearToken_Click" Content="Clear Token" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="89" Height="22" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" Margin="327,36,0,0"/>
             <Button x:Name="btnCancelToken" Click="btnCancelToken_Click" Content="Cancel" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="89" Height="22" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" Margin="421,36,0,0"/>
         </Grid>
         <TextBlock x:Name="lblConnectionValue" Margin="225,2,238,0" TextWrapping="Wrap" Text="Connection: Offline" VerticalAlignment="Top" FontSize="20" Foreground="#FF0FB3C3"/>
-        <Grid x:Name="grdNotification" Margin="734,109,-734,310" Background="#FF191919">
+        <Grid x:Name="grdNotification" Margin="0,42,-734,0" Background="#FF191919" HorizontalAlignment="Right" Width="734" Height="55" VerticalAlignment="Top" Panel.ZIndex="100">
             <TextBlock x:Name="lblNotificationValue" Margin="10,0" TextWrapping="Wrap" FontSize="16" Foreground="#FF0FB3C3" TextAlignment="Center"/>
         </Grid>
-        <Button x:Name="btnTest" Click="btnTest_Click" Content="Test" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="88" Height="32" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="20" Margin="578,0,0,0" Visibility="Hidden"/>
+        <Button x:Name="btnTest" Click="btnTest_Click" Content="Test" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="88" Height="32" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="20" Margin="578,0,0,0" Visibility="Visible"/>
 
     </Grid>
 </Window>

@@ -1,0 +1,8 @@
+[
+  {
+    "LogLocation": "C:\\Users\\mpegler\\Source\\Repos\\ServerRPGAdventure\\PersonalDiscordBot\\bin\\Debug\\Logs",
+    "ConfigLocation": "C:\\Users\\mpegler\\Source\\Repos\\ServerRPGAdventure\\PersonalDiscordBot\\bin\\Debug\\Config",
+    "PathsConfig": "C:\\Users\\mpegler\\Source\\Repos\\ServerRPGAdventure\\PersonalDiscordBot\\bin\\Debug\\Config\\Paths.json",
+    "ServerConfig": "C:\\Users\\mpegler\\Source\\Repos\\ServerRPGAdventure\\PersonalDiscordBot\\bin\\Debug\\Config\\ServerConfig.xml"
+  }
+]
