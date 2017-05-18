@@ -447,7 +447,7 @@ namespace PersonalDiscordBot.Classes
         {
             IBackPackItem chosenLoot = null;
             LootType chosenType = LootType.Weapon; //LootDrop.ChooseType();
-            RarityType rarityType = ChooseRarity();
+            RarityType rarityType = RarityType.Legendary;   //ChooseRarity();
             switch (chosenType)
             {
                 case LootType.Item:
@@ -457,7 +457,7 @@ namespace PersonalDiscordBot.Classes
                 case LootType.Armor:
                     break;
                 case LootType.Weapon:
-                    chosenLoot = Weapons.WeaponRandomGen(rarityType, ChooseWeaponType(character), character.Lvl);
+                    chosenLoot = WeaponPicker(rarityType, character);
                     break;
                 case LootType.Spell:
                     break;
@@ -541,6 +541,29 @@ namespace PersonalDiscordBot.Classes
             }
 
             return weaponArray;
+        }
+        
+        public static Weapon WeaponPicker(RarityType rarity, Character chara)
+        {
+            Weapon weap = new Weapon();
+
+            if (rarity == RarityType.Legendary)
+            {
+                int luck = rng.Next(0, MaxProbability);
+                if (luck >= 0)
+                {
+                    weap = Weapons.weaponList[rng.Next(0,Weapons.weaponList.Count)];
+                }
+                else
+                {
+                    weap = Weapons.WeaponRandomGen(rarity, ChooseWeaponType(chara), chara.Lvl);
+                }
+            }
+            else
+            { 
+              weap = Weapons.WeaponRandomGen(rarity, ChooseWeaponType(chara), chara.Lvl);
+            }
+            return weap;
         }
     }
 
@@ -812,8 +835,10 @@ namespace PersonalDiscordBot.Classes
         public static Weapon WeaponRandomGen(RarityType rarity, WeaponType type, int level)
         {
             int rarityValue = 0;
+            int maxLevel = 20;
             bool isUniqueName = false;
             string descr = string.Empty;
+
             switch (rarity)
             {
                 case (RarityType.Common):
@@ -832,7 +857,9 @@ namespace PersonalDiscordBot.Classes
                     rarityValue = 21;
                     break;
             }
-            level = level - 5 > 0 ? level + rng.Next(-5, 5) : level + rng.Next(0, 5);
+            if (level < maxLevel) level = level - 2 > 0 ? level + rng.Next(-2, 2) : level + rng.Next(0, 2);
+            level = level > maxLevel ? level = maxLevel : level;
+
             Weapon weap = new Weapon()
             {
                 Name = WeaponNameandDescGen(type, rarity, out descr, out isUniqueName),
@@ -903,11 +930,21 @@ namespace PersonalDiscordBot.Classes
             return weap;
         }
 
-        public static Weapon warriorFists = new Weapon { Name = "Warrior Fists", Type = WeaponType.Starter, PhysicalDamage = 5, Desc = "The mighty fist, great for fisting.... I mean beating the shit out of everyone that gets in your way" };
-        public static Weapon rogueDaggers = new Weapon { Name = "Rogues' Daggers", Speed = 110, PhysicalDamage = 3, Type = WeaponType.Starter, Desc = "A pair of old daggers that are rusted; Like really bad, why are you using these again?" };
-        public static Weapon dragonSpear = new Weapon { Name = "Novice Dragon Hunter Spear", Speed = 80, Type = WeaponType.Starter, PhysicalDamage = 6, FireDamage = 1, LightningDamage = 1, IceDamage = 1, WindDamage = 1, Desc = "Nothing is more bad ass then a Dragon Hunter, thats why you are here, doesn't matter that there aren't any dragons around... Remember: Bad. Ass." };
+
+        public static Weapon warriorFists = new Weapon { Name = "Warrior Fists", Type = WeaponType.Starter, CurrentDurability = -1, MaxDurability = -1, PhysicalDamage = 5, Desc = "The mighty fist, great for fisting.... I mean beating the shit out of everyone that gets in your way" };
+        public static Weapon rogueDaggers = new Weapon { Name = "Rogues' Daggers", Speed = 110, PhysicalDamage = 3, Type = WeaponType.Starter, CurrentDurability = -1, MaxDurability = -1, Desc = "A pair of old daggers that are rusted; Like really bad, why are you using these again?" };
+        public static Weapon dragonSpear = new Weapon { Name = "Novice Dragon Hunter Spear", Speed = 80, Type = WeaponType.Starter, CurrentDurability = -1, MaxDurability = -1, PhysicalDamage = 6, FireDamage = 1, LightningDamage = 1, IceDamage = 1, WindDamage = 1, Desc = "Nothing is more bad ass then a Dragon Hunter, thats why you are here, doesn't matter that there aren't any dragons around... Remember: Bad. Ass." };
         public static Weapon stick = new Weapon { Name = "A Stick", Speed = 500, Lvl = 0, Type = WeaponType.Other, Worth = 0, CurrentDurability = -1, MaxDurability = -1, PhysicalDamage = 1, Desc = "The mighty stick, it doesn't have good damage, level, or worth. But you can hit shit reeeally fast and that can be annoying as hell" };
         public static Weapon glowyOrb = new Weapon { Name = "Glowing Orb", Speed = 300, Lvl = 0, Type = WeaponType.Other, Worth = 0, CurrentDurability = -1, MaxDurability = -1, MagicDamage = 1, Desc = "You found this glowing orb in an abandoned chocolate factory, it glows a tremendous light when you hold it up and... That's it, it was probably a discontinued toy off the line" };
+
+        public static List<Weapon> weaponList = new List<Weapon>()
+        {
+            warriorFists,
+            rogueDaggers,
+            dragonSpear,
+            stick,
+            glowyOrb
+        };
     }
 
     public static class Spells
