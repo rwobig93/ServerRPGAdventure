@@ -1079,87 +1079,9 @@ namespace PersonalDiscordBot
 
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
-            //    int sword = 0;
-            //    int dagger = 0;
-            //    int greatsword = 0;
-            //    int katana = 0;
-            //    int staff = 0;
-            //    int focusStone = 0;
-            //    int spear = 0;
-            //    int dragonSpear = 0;
-            //    int twinSwords = 0;
-            //    int other = 0;
-            //    int starter = 0;
-            //    int unique = 0;
-            //    int common = 0;
-            //    int uncommon = 0;
-            //    int rare = 0;
-            //    int epic = 0;
-            //    int legendary = 0;
-
-            //    for (int i = 0; i <= 1000; i++)
-            //    {
-            var pickedLoot = (Weapon)LootDrop.PickLoot(RPG.testiculeesCharacter);
-            //        switch (pickedLoot.Type)
-            //        {
-            //            case RPG.WeaponType.Dagger:
-            //                dagger++;
-            //                break;
-            //            case RPG.WeaponType.DragonSpear:
-            //                dragonSpear++;
-            //                break;
-            //            case RPG.WeaponType.FocusStone:
-            //                focusStone++;
-            //                break;
-            //            case RPG.WeaponType.Greatsword:
-            //                greatsword++;
-            //                break;
-            //            case RPG.WeaponType.Katana:
-            //                katana++;
-            //                break;
-            //            case RPG.WeaponType.Spear:
-            //                spear++;
-            //                break;
-            //            case RPG.WeaponType.Staff:
-            //                staff++;
-            //                break;
-            //            case RPG.WeaponType.Sword:
-            //                sword++;
-            //                break;
-            //            case RPG.WeaponType.TwinSwords:
-            //                twinSwords++;
-            //                break;
-            //            case RPG.WeaponType.Other:
-            //                other++;
-            //                break;
-            //            case RPG.WeaponType.Starter:
-            //                starter++;
-            //                break;
-            //        }
-            //        switch (pickedLoot.Rarity)
-            //        {
-            //            case RPG.RarityType.Common:
-            //                common++;
-            //                break;
-            //            case RPG.RarityType.Uncommon:
-            //                uncommon++;
-            //                break;
-            //            case RPG.RarityType.Rare:
-            //                rare++;
-            //                break;
-            //            case RPG.RarityType.Epic:
-            //                epic++;
-            //                break;
-            //            case RPG.RarityType.Legendary:
-            //                legendary++;
-            //                break;
-            //        }
-            //        if (!pickedLoot.Desc.ToLower().Contains("average")) unique++;
-            uStatusUpdate($"{line}Name: {pickedLoot.Name}{line}Description: {pickedLoot.Desc}{line}Type: {pickedLoot.Type.ToString()}{line}Rarity: {pickedLoot.Rarity}{line}Level: {pickedLoot.Lvl}{line}Max Durability: {pickedLoot.MaxDurability}{line}Current Durability: {pickedLoot.CurrentDurability}{line}Worth: {pickedLoot.Worth}{line}Speed: {pickedLoot.Speed}{line}Physical Damage: {pickedLoot.PhysicalDamage}");
-            //    }
-
-            //    uStatusUpdate($"{line}sword = {sword}{line}dagger = {dagger}{line}greatsword = {greatsword}{line}katana = {katana}{line}staff = {staff}{line}focusStone = {focusStone}{line}spear = {spear}{line}dragonSpear = {dragonSpear}{line}twinSwords = {twinSwords}{line}other = {other}{line}starter = {starter}{line}unique = {unique}{line}------------------------------------------------{line}common = {common}{line}uncommon = {uncommon}{line}rare = {rare}{line}epic = {epic}{line}legendary = {legendary}{line}");
-            } 
+            uStatusUpdate(Testing.RandomMassTest(1000));
+            uStatusUpdate(Testing.RandomWeap());
+        }     
 
             #endregion
         }

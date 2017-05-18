@@ -1,0 +1,57 @@
+05-18-17_6:13:34 AM :: 
+########################## Application Start ##########################
+
+05-18-17_6:13:34 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-18-17_6:13:34 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+05-18-17_6:13:34 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-18-17_6:13:34 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-18-17_6:13:35 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+05-18-17_6:13:35 AM :: Finished reading config
+05-18-17_6:13:36 AM :: Set Grid grdStatus to Hidden on launch
+05-18-17_6:13:36 AM :: Set Grid grdSettings to Hidden on launch
+05-18-17_6:13:36 AM :: Set Grid grdServers to Hidden on launch
+05-18-17_6:13:36 AM :: Set Grid grdBotInfo to Hidden on launch
+05-18-17_6:13:38 AM :: Revealed Grid grdStatus
+05-18-17_6:13:38 AM :: Hid Grid grdSettings
+05-18-17_6:13:38 AM :: Hid Grid grdServers
+05-18-17_6:13:38 AM :: Hid Grid grdBotInfo
+05-18-17_6:13:38 AM :: Slid Main Menu out of view
+05-18-17_6:13:39 AM :: STATUS: 
+sword = 245
+dagger = 193
+greatsword = 211
+katana = 160
+staff = 96
+focusStone = 15
+spear = 16
+dragonSpear = 13
+twinSwords = 52
+other = 0
+starter = 0
+unique = 333
+------------------------------------------------
+common = 427
+uncommon = 320
+rare = 125
+epic = 103
+legendary = 26
+
+05-18-17_6:13:39 AM :: STATUS: 
+Name: Cut you real bad
+Description: I'm gonna cut you so bad, you gonna wish I never cut you so bad
+Type: Greatsword
+Rarity: Uncommon
+Level: 1
+Max Durability: 42
+Current Durability: 42
+Worth: 77
+Speed: 105
+Physical Damage: 18
+05-18-17_6:14:12 AM :: 
+########################## Application Stop ##########################
+
+
