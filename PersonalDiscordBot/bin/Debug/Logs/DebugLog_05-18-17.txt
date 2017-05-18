@@ -55,3 +55,60 @@ Physical Damage: 18
 ########################## Application Stop ##########################
 
 
+05-18-17_6:19:44 AM :: 
+########################## Application Start ##########################
+
+05-18-17_6:19:44 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+05-18-17_6:19:44 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+05-18-17_6:19:44 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+05-18-17_6:19:44 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+05-18-17_6:19:45 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+05-18-17_6:19:45 AM :: Finished reading config
+05-18-17_6:19:45 AM :: Set Grid grdStatus to Hidden on launch
+05-18-17_6:19:45 AM :: Set Grid grdSettings to Hidden on launch
+05-18-17_6:19:45 AM :: Set Grid grdServers to Hidden on launch
+05-18-17_6:19:45 AM :: Set Grid grdBotInfo to Hidden on launch
+05-18-17_6:19:46 AM :: Revealed Grid grdStatus
+05-18-17_6:19:46 AM :: Hid Grid grdSettings
+05-18-17_6:19:46 AM :: Hid Grid grdServers
+05-18-17_6:19:46 AM :: Hid Grid grdBotInfo
+05-18-17_6:19:46 AM :: Slid Main Menu out of view
+05-18-17_6:19:47 AM :: STATUS: 
+sword = 268
+dagger = 206
+greatsword = 198
+katana = 123
+staff = 103
+focusStone = 9
+spear = 20
+dragonSpear = 15
+twinSwords = 59
+other = 0
+starter = 0
+unique = 287
+------------------------------------------------
+common = 422
+uncommon = 328
+rare = 140
+epic = 96
+legendary = 15
+
+05-18-17_6:19:47 AM :: STATUS: 
+Name: Common Great Sword
+Description: An average Common Great Sword
+Type: Greatsword
+Rarity: Common
+Level: 2
+Max Durability: 32
+Current Durability: 32
+Worth: 21
+Speed: 91
+Physical Damage: 15
+05-18-17_6:19:58 AM :: 
+########################## Application Stop ##########################
+
+
