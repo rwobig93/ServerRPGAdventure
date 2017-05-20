@@ -18,6 +18,22 @@ namespace PersonalDiscordBot.Classes
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Returns true or false if random gen number is greater or equal to the chance entered (1-99) to be true
+        /// </summary>
+        /// <param name="trueChance">Percent that returns true (ex: 30 would mean 30% chance of returning true)</param>
+        /// <returns></returns>
+        public static bool ChanceRoll(int trueChance)
+        {
+            if (trueChance > 100 || trueChance < 0)
+                throw new ArgumentOutOfRangeException("trueChance", "int was above or below argument range");
+            return rng.Next(0, 100) >= (100 - trueChance);
+        }
+
+        #endregion
+
         #region Enums
 
         public enum CharacterClass
@@ -531,6 +547,28 @@ namespace PersonalDiscordBot.Classes
             300, 450, 600, 900, MaxProbability // Restorative(30%), Buff(15%), Damaging(15%), Currency(30%), Repair(10%)
         };
 
+        public static int CurrencyPicker(int characterLevel, int rarityValue)
+        {
+            int currencyReturn = rng.Next(0, MaxProbability);
+            if (currencyReturn < 300)
+                currencyReturn = ((characterLevel * rarityValue) + rng.Next(1, 50));
+            else if (currencyReturn >= 300 && currencyReturn < 500)
+                currencyReturn = ((characterLevel * rarityValue) + rng.Next(50, 100));
+            else if (currencyReturn >= 500 && currencyReturn < 700)
+                currencyReturn = ((characterLevel * rarityValue) + rng.Next(100, 150));
+            else if (currencyReturn >= 700 && currencyReturn < 850)
+                currencyReturn = ((characterLevel * rarityValue) + rng.Next(150, 200));
+            else if (currencyReturn >= 850 && currencyReturn < 900)
+                currencyReturn = ((characterLevel * rarityValue) + rng.Next(200, 300));
+            else if (currencyReturn >= 900 && currencyReturn < 950)
+                currencyReturn = ((characterLevel * rarityValue) + rng.Next(300, 400));
+            else if (currencyReturn >= 950 && currencyReturn < 998)
+                currencyReturn = ((characterLevel * rarityValue) + rng.Next(400, 600));
+            else if (currencyReturn >= 998)
+                currencyReturn = ((characterLevel * rarityValue) + rng.Next(600, 2000));
+            return currencyReturn;
+        }
+
         public static Item ItemPicker(RarityType rarity, Character character)
         {
             Item _item = null;
@@ -539,7 +577,7 @@ namespace PersonalDiscordBot.Classes
             switch (type)
             {
                 case ItemType.Currency:
-                    _item = new Item { Worth = character.Lvl * rarityValue, Type =  type};
+                    _item = new Item { Worth = CurrencyPicker(character.Lvl, rarityValue), Type =  type};
                     break;
                 case ItemType.Restorative:
                     break;
@@ -612,8 +650,7 @@ namespace PersonalDiscordBot.Classes
 
             if (rarity == RarityType.Legendary)
             {
-                int luck = rng.Next(0, MaxProbability);
-                if (luck >= 700)
+                if (ChanceRoll(30))
                 {
                     weap = Weapons.weaponList[rng.Next(0, Weapons.weaponList.Count)];
                 }
@@ -774,7 +811,7 @@ namespace PersonalDiscordBot.Classes
         {
             string weaponName = string.Empty;
             string weaponDesc = string.Empty;
-            isUniqueName = rng.Next(0, 101) > 70;
+            isUniqueName = ChanceRoll(30);
             switch (type)
             {
                 case WeaponType.Dagger:
@@ -931,10 +968,10 @@ namespace PersonalDiscordBot.Classes
                     break;
                 case WeaponType.DragonSpear:
                     weap.PhysicalDamage = (level + rng.Next(3, 8) + rarityValue);
-                    weap.FireDamage = rng.Next(0, 100) > 70 ? level + rng.Next(0, 5) : 0;
-                    weap.IceDamage = rng.Next(0, 100) > 70 ? level + rng.Next(0, 5) : 0;
-                    weap.LightningDamage = rng.Next(0, 100) > 70 ? level + rng.Next(0, 5) : 0;
-                    weap.WindDamage = rng.Next(0, 100) > 70 ? level + rng.Next(0, 5) : 0;
+                    weap.FireDamage = ChanceRoll(30) ? level + rng.Next(0, 5) : 0;
+                    weap.IceDamage = ChanceRoll(30) ? level + rng.Next(0, 5) : 0;
+                    weap.LightningDamage = ChanceRoll(30) ? level + rng.Next(0, 5) : 0;
+                    weap.WindDamage = ChanceRoll(30) ? level + rng.Next(0, 5) : 0;
                     weap.Speed = (level + 80 + rng.Next(10, 90));
                     weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed + (weap.FireDamage + weap.IceDamage + weap.LightningDamage + weap.WindDamage) / weap.PhysicalDamage));
                     break;
@@ -1033,6 +1070,56 @@ namespace PersonalDiscordBot.Classes
         public static Item smallHealthPotionPack = new Item { Name = "Small Health Potion Pack", Type = ItemType.Restorative, Lvl = 1, Worth = 2, Count = 5, Desc = "5 health potions!? Is it christmas already? Get those f**kin socks away from me!" };
         public static Item smallManaPotion = new Item { Name = "Small Mana Potion", Type = ItemType.Restorative, Lvl = 1, Worth = 5, Desc = "A brew that fills your body with Magic energy, the health information sticker wore off long ago, don't worry about what is inside." };
         public static Item smallManaPotionPack = new Item { Name = "Small Mana Potion Pack", Type = ItemType.Restorative, Lvl = 1, Worth = 5, Count = 5, Desc = "5 mana potions!? Hot damn this pack radiates awesomeness... or is that radiation?" };
+        public static Item mediumHealthPotion = new Item { Name = "Medium Health Potion", Type = ItemType.Restorative, Lvl = 2, Worth = 25, Desc = "The good ol' health potion, now with 5 shots of caffeine and no MSG!" };
+        public static Item mediumHealthPotionPack = new Item { Name = "Medium Health Potion Pack", Type = ItemType.Restorative, Lvl = 2, Worth = 25, Desc = "5 medium health potions!? Is it christmas already? Get those f**kin socks away from me!" };
+        public static Item mediumManaPotion = new Item { Name = "Medium Mana Potion", Type = ItemType.Restorative, Lvl = 2, Worth = 35, Desc = "A brew that fills your body with Magic energy, the health information sticker wore off long ago, don't worry about what is inside." };
+        public static Item mediumManaPotionPack = new Item { Name = "Medium Mana Potion Pack", Type = ItemType.Restorative, Lvl = 2, Worth = 35, Desc = "5 medium mana potions!? Hot damn this pack radiates awesomeness... or is that radiation?" };
+        public static Item largeHealthPotion = new Item { Name = "Large Health Potion", Type = ItemType.Restorative, Lvl = 3, Worth = 70, Desc = "The good ol' health potion, now with 55 shots of caffeine and negative MSG!" };
+        public static Item largeManaPotion = new Item { Name = "Large Mana Potion", Type = ItemType.Restorative, Lvl = 3, Worth = 90, Desc = "A brew that fills your body with Medicinal energy, the mana information sticker wore off long ago, don't worry about the organism." };
+        public static Item rockLotion = new Item { Name = "Rock Lotion", Type = ItemType.Buff, Lvl = 1, Worth = 10, Physical = 10, Desc = "Lotion that turns skin to rock hard rock, I know what you are thinking.... but don't put the lotion there, bad idea" };
+        public static Item lightningRod = new Item { Name = "Lightning Rod", Type = ItemType.Buff, Lvl = 1, Worth = 10, Lightning = 10, Desc = "A lightning rod you wear on your back with a metal cable dragging on the ground, no money back guarentee" };
+        public static Item bucketOfWater = new Item { Name = "Bucket of Water", Type = ItemType.Buff, Lvl = 1, Worth = 10, Fire = 10, Desc = "A bucket, filled with water to put out fire. I might have washed my car with it, don't worry it works, I promise" };
+        public static Item dryTowel = new Item { Name = "A Dry Towel", Type = ItemType.Buff, Lvl = 1, Worth = 10, Ice = 10, Desc = "Light this towel on fire and melt some ice! Cuz this towel is flammable... No you're a towel!" };
+        public static Item magicReverb = new Item { Name = "Magic Reverb", Type = ItemType.Buff, Lvl = 1, Worth = 10, Magic = 10, Desc = "Reverberates incoming magic to prevent magic damage. I can feel the vibrations. running. up. my leg!" };
+        public static Item footballJacket = new Item { Name = "Football Jacket", Type = ItemType.Buff, Lvl = 1, Worth = 10, Wind = 10, Desc = "A football jacket that helps prevent wind, it's not soccer, it's FOOTBALL!!!" };
+
+        #endregion
+
+        #region Item Lists
+
+        public static List<Item> itemRestorativeList = new List<Item>()
+        {
+            smallHealthPotion,
+            smallHealthPotionPack,
+            smallManaPotion,
+            smallManaPotionPack,
+            mediumHealthPotion,
+            mediumHealthPotionPack,
+            mediumManaPotion,
+            mediumManaPotionPack,
+            largeHealthPotion,
+            largeManaPotion
+        };
+
+        public static List<Item> itemBuffList = new List<Item>()
+        {
+            rockLotion,
+            lightningRod,
+            bucketOfWater,
+            dryTowel,
+            magicReverb,
+            footballJacket
+        };
+
+        public static List<Item> itemDamagingList = new List<Item>()
+        {
+
+        };
+
+        public static List<Item> itemRepairList = new List<Item>()
+        {
+
+        };
 
         #endregion
     }
