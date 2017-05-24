@@ -490,6 +490,7 @@ namespace PersonalDiscordBot.Classes
                 case LootType.Nothing:
                     break;
                 case LootType.Armor:
+                    chosenLoot = ArmorPicker(rarityType, character);
                     break;
                 case LootType.Weapon:
                     chosenLoot = WeaponPicker(rarityType, character);
@@ -678,7 +679,79 @@ namespace PersonalDiscordBot.Classes
                 weap = Weapons.WeaponRandomGen(rarity, ChooseWeaponType(chara), chara.Lvl);
             }
             return weap;
-        } 
+        }
+
+        #endregion
+
+        #region LootDrop Armor
+
+        public static ArmorType ChooseArmorType(Character chara)
+        {
+            ArmorType armorType = 0;
+            int randomValue = rng.Next(MaxProbability);
+            int[] armorProbabilities = _armorProbabilities(chara.Class);
+            while (armorProbabilities[(int)armorType] <= randomValue)
+            {
+                armorType++;
+            }
+            switch (armorType)
+            {
+                case ArmorType.Light:
+                    break;
+                case ArmorType.Medium:
+                    break;
+                case ArmorType.Heavy:
+                    break;
+            }
+            return armorType;
+        }
+
+        protected static int[] _armorProbabilities(CharacterClass charClass)
+        {
+            int[] armorArray = new int[] { };
+            switch (charClass)
+            {
+                case CharacterClass.Warrior:
+                    armorArray = new int[] { 100, 400, MaxProbability}; // Light(10%), Medium(30%), Heavy(60%)
+                    break;
+                case CharacterClass.Dragoon:
+                    armorArray = new int[] { 100, 600, MaxProbability }; // Light(10%), Medium(50%), Heavy(40%)
+                    break;
+                case CharacterClass.Mage:
+                    armorArray = new int[] { 800, 900, MaxProbability }; // Light(80%), Medium(10%), Heavy(10%)
+                    break;
+                case CharacterClass.Necromancer:
+                    armorArray = new int[] { 100, 800, MaxProbability }; // Light(10%), Medium(80%), Heavy(10%)
+                    break;
+                case CharacterClass.Rogue:
+                    armorArray = new int[] { 100, 900, MaxProbability }; // Light(10%), Medium(80%), Heavy(10%)
+                    break;
+            }
+            return armorArray;
+        }
+
+        public static Armor ArmorPicker(RarityType rarityType, Character chara)
+        {
+            Armor armor = new Armor();
+
+            if (rarityType == RarityType.Legendary)
+            {
+                if (ChanceRoll(20))
+                {
+
+                }
+                else
+                {
+
+                }
+            }
+            else
+            {
+                armor = Armors.ArmorRandomGen(rarityType, ChooseArmorType(chara), chara.Lvl);
+            }
+
+            return armor;
+        }
 
         #endregion
     }
@@ -1065,6 +1138,28 @@ namespace PersonalDiscordBot.Classes
 
     public static class Armors
     {
+        #region Armor Names and Descriptions
+        public static string[] armorBasicLightNames = 
+        {
+            "Robe",
+            "Fur Armor",
+            "Glass Armor"
+        };
+        public static string[] armorBasicMediumNames = 
+        {
+            "Leather Armpor",
+            "Scale Armor"
+        };
+        public static string[] armorBasicHeavyNames = 
+        {
+            "Steel Armor",
+            "Plate Armor",
+            "Diamond Armor",
+            "Mythril Armor",
+            "Obsidian Armor"
+        };
+
+        #endregion
         #region Static Armors
 
         public static Armor knightArmor = new Armor { Name = "Novice Knight Armor", Type = ArmorType.Heavy, Lvl = 1, Speed = 50, Worth = 100, MaxDurability = 20, CurrentDurability = 20, Physical = 100, Desc = "Some beatup old armor you found in the old shed out back, next to the bones of an old dog... what was it's name again?" };
@@ -1072,8 +1167,36 @@ namespace PersonalDiscordBot.Classes
         public static Armor theiveGarb = new Armor { Name = "Novice Theives Garb", Type = ArmorType.Light, CurrentDurability = 15, Lvl = 1, MaxDurability = 15, Speed = 130, Worth = 100, Physical = 70, Magic = 30, Desc = "What better way to rock your first gear then to steal it, even if it was from old miss bitchface who is a blind amputee" };
         public static Armor undeadArmor = new Armor { Name = "Undead Armor", Type = ArmorType.Medium, CurrentDurability = 18, MaxDurability = 18, Lvl = 1, Speed = 80, Worth = 100, Physical = 85, Magic = 30, Desc = "Nothing weird here, you just picked up the bones from some dead people and strapped it to your body... they weren't using it anyway" };
         public static Armor dragonArmor = new Armor { Name = "Novice Dragon Hunter Armor", Type = ArmorType.Medium, Lvl = 1, MaxDurability = 20, CurrentDurability = 20, Speed = 100, Worth = 100, Physical = 80, Fire = 10, Ice = 10, Lightning = 10, Wind = 10, Desc = "Bad. Ass. Bad. Ass. Bad. Ass. Bad. Ass. - Naive thoughts running in your mind" };
-
+        public static Armor royalRobeArmor = new Armor { Name = "Royal Robes", Type = ArmorType.Light, Lvl = 1, MaxDurability = 10, CurrentDurability = 10, Speed = 150, Worth = 100, Magic = 100, Physical = 10, Desc = "Yer a hairy Wizard!" };
+        public static Armor glassArmor = new Armor { Name = "Glass Armor", Type = ArmorType.Light, Lvl = 1, MaxDurability = 10, CurrentDurability = 10, Speed = 150, Worth = 100, Magic = 100, Physical = 10, Desc = "The Emperor's new armor" };
+        public static Armor leatheryArmor = new Armor { Name = "Skin Tight Leather Armor", Type = ArmorType.Medium, Lvl = 1, MaxDurability = 18, CurrentDurability = 18, Speed = 80, Worth = 100, Physical = 85, Magic = 20, Desc = "Why do Rogues wear leather? It's made of hide" };
+        public static Armor scaleArmor = new Armor { Name = "Golden Scale Armor", Type = ArmorType.Medium, Lvl = 1, MaxDurability = 18, CurrentDurability = 18, Speed = 80, Worth = 100, Physical = 85, Magic = 20, Desc = "Scaley scales to scale...scaley" };
+        public static Armor blackPlateArmor = new Armor { Name = "Blackened Plate Armor", Type = ArmorType.Heavy, Lvl = 1, MaxDurability = 30, CurrentDurability = 30, Speed = 60, Worth = 100, Physical = 100, Desc = "Armor darker than your Emo phase" };
+        public static Armor imperialArmor = new Armor { Name = "Imperial Armor", Type = ArmorType.Heavy, Lvl = 1, MaxDurability = 30, CurrentDurability = 30, Speed = 60, Worth = 100, Physical = 100, Desc = "Armor that tends to be weaker around the knees. Mind the arrows" };
         #endregion
+
+        public static List<Armor> lightArmorList = new List<Armor>()
+        {
+            royalRobeArmor,
+            glassArmor
+        };
+
+        public static List<Armor> mediumArmorList = new List<Armor>()
+        {
+            glassArmor,
+            leatheryArmor
+        };
+
+        public static List<Armor> heavyArmorList = new List<Armor>()
+        {
+            blackPlateArmor,
+            imperialArmor
+        };
+
+        public static Armor ArmorRandomGen(RarityType rarity, ArmorType type, int level)
+        {
+
+        }
     }
 
     public static class Items
