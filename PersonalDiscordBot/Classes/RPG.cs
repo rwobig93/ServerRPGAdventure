@@ -485,6 +485,7 @@ namespace PersonalDiscordBot.Classes
             switch (chosenType)
             {
                 case LootType.Item:
+                    chosenLoot = ItemPicker(rarityType, character);
                     break;
                 case LootType.Nothing:
                     break;
@@ -569,6 +570,15 @@ namespace PersonalDiscordBot.Classes
             return currencyReturn;
         }
 
+        public static Item RepairPicker()
+        {
+            var chance = ChanceRoll(5);
+            if (chance)
+                return Items.repairPowderPack;
+            else
+                return Items.repairPowder;
+        }
+
         public static Item ItemPicker(RarityType rarity, Character character)
         {
             Item _item = null;
@@ -580,12 +590,16 @@ namespace PersonalDiscordBot.Classes
                     _item = new Item { Worth = CurrencyPicker(character.Lvl, rarityValue), Type =  type};
                     break;
                 case ItemType.Restorative:
+                    _item = Items.itemRestorativeList[rng.Next(0, Items.itemRestorativeList.Count)];
                     break;
                 case ItemType.Buff:
+                    _item = Items.itemBuffList[rng.Next(0, Items.itemBuffList.Count)];
                     break;
                 case ItemType.Damaging:
+                    _item = Items.itemDamagingList[rng.Next(0, Items.itemDamagingList.Count)];
                     break;
                 case ItemType.Repair:
+                    _item = RepairPicker();
                     break;
             }
             return _item;
@@ -1082,6 +1096,14 @@ namespace PersonalDiscordBot.Classes
         public static Item dryTowel = new Item { Name = "A Dry Towel", Type = ItemType.Buff, Lvl = 1, Worth = 10, Ice = 10, Desc = "Light this towel on fire and melt some ice! Cuz this towel is flammable... No you're a towel!" };
         public static Item magicReverb = new Item { Name = "Magic Reverb", Type = ItemType.Buff, Lvl = 1, Worth = 10, Magic = 10, Desc = "Reverberates incoming magic to prevent magic damage. I can feel the vibrations. running. up. my leg!" };
         public static Item footballJacket = new Item { Name = "Football Jacket", Type = ItemType.Buff, Lvl = 1, Worth = 10, Wind = 10, Desc = "A football jacket that helps prevent wind, it's not soccer, it's FOOTBALL!!!" };
+        public static Item bomb = new Item { Name = "Bomb", Type = ItemType.Damaging, Lvl = 1, Worth = 20, Physical = 10, Count = 1, Desc = "A hard and heavy sphere with rope coming out of the top, what happens if we light it on fire?" };
+        public static Item scrollLightning = new Item { Name = "Scroll of Zap Zap", Type = ItemType.Damaging, Lvl = 1, Worth = 20, Lightning = 10, Count = 1, Desc = "Have you ever butt raced on a carpet and shocked a friend? This is waaaaaaaaaay better!" };
+        public static Item scrollFire = new Item { Name = "The \"Lighter\" Scroll", Type = ItemType.Damaging, Lvl = 1, Worth = 20, Fire = 10, Count = 1, Desc = "Oh, you wanna know if I have a lite huh? I will show you a lite" };
+        public static Item scrollIce = new Item { Name = "Scroll from inside the Ice Machine", Type = ItemType.Damaging, Lvl = 1, Worth = 20, Ice = 10, Count = 1, Desc = "Found inside an old ice machine in the 80's next to a scorpion, they didn't look too friendly towards each other" };
+        public static Item scrollMagic = new Item { Name = "Magic Scroll", Type = ItemType.Damaging, Lvl = 1, Worth = 20, Magic = 10, Count = 1, Desc = "A scroll just oooozing magic energy, don't touch it... It's very sticky" };
+        public static Item scrollWind = new Item { Name = "Wind Scroll", Type = ItemType.Damaging, Lvl = 1, Worth = 20, Wind = 10, Count = 1, Desc = "A scroll that imbues the power of reaally powerfull flatulence, strong winds approach, your beef is strong!" };
+        public static Item repairPowder = new Item { Name = "Repair Powder", Type = ItemType.Repair, Lvl = 1, Worth = 50, Count = 1, Desc = "Powder that repairs stuff, I hear it also gives you a wicked high if snorted... don't ask me how I know" };
+        public static Item repairPowderPack = new Item { Name = "Repair Powder", Type = ItemType.Repair, Lvl = 1, Worth = 50, Count = 5, Desc = "Powder that repairs stuff, I hear it also gives you a wicked high if snorted... don't ask me how I know" };
 
         #endregion
 
@@ -1113,12 +1135,18 @@ namespace PersonalDiscordBot.Classes
 
         public static List<Item> itemDamagingList = new List<Item>()
         {
-
+            bomb,
+            scrollFire,
+            scrollIce,
+            scrollLightning,
+            scrollMagic,
+            scrollWind
         };
 
         public static List<Item> itemRepairList = new List<Item>()
         {
-
+            repairPowder,
+            repairPowderPack
         };
 
         #endregion
