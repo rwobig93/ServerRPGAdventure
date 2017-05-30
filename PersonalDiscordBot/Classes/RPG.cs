@@ -747,7 +747,7 @@ namespace PersonalDiscordBot.Classes
             }
             else
             {
-                armor = Armors.ArmorRandomGen(rarityType, ChooseArmorType(chara), chara.Lvl);
+                //armor = Armors.ArmorRandomGen(rarityType, ChooseArmorType(chara), chara.Lvl);
             }
 
             return armor;
@@ -1193,10 +1193,10 @@ namespace PersonalDiscordBot.Classes
             imperialArmor
         };
 
-        public static Armor ArmorRandomGen(RarityType rarity, ArmorType type, int level)
-        {
+        //public static Armor ArmorRandomGen(RarityType rarity, ArmorType type, int level)
+        //{
 
-        }
+        //}
     }
 
     public static class Items
@@ -1279,9 +1279,10 @@ namespace PersonalDiscordBot.Classes
     {
         public static string line = Environment.NewLine;
 
-        public static string RandomWeap()
+        public static string RandomWeap(out string namer)
         {
             var pickedLoot = (Weapon)LootDrop.PickLoot(testiculeesCharacter);
+            namer = pickedLoot.Name;
             return ($"{line}Name: {pickedLoot.Name}{line}Description: {pickedLoot.Desc}{line}Type: {pickedLoot.Type.ToString()}{line}Rarity: {pickedLoot.Rarity}{line}Level: {pickedLoot.Lvl}{line}Max Durability: {pickedLoot.MaxDurability}{line}Current Durability: {pickedLoot.CurrentDurability}{line}Worth: {pickedLoot.Worth}{line}Speed: {pickedLoot.Speed}{line}Physical Damage: {pickedLoot.PhysicalDamage}");
         }
 
@@ -1366,6 +1367,15 @@ namespace PersonalDiscordBot.Classes
             }
 
                return ($"{line}sword = {sword}{line}dagger = {dagger}{line}greatsword = {greatsword}{line}katana = {katana}{line}staff = {staff}{line}focusStone = {focusStone}{line}spear = {spear}{line}dragonSpear = {dragonSpear}{line}twinSwords = {twinSwords}{line}other = {other}{line}starter = {starter}{line}unique = {unique}{line}------------------------------------------------{line}common = {common}{line}uncommon = {uncommon}{line}rare = {rare}{line}epic = {epic}{line}legendary = {legendary}{line}");
+        }
+
+        public static string GetMarried()
+        {
+            string namer = "";
+            var weapon = RandomWeap(out namer);
+            var time = rng.Next(100000, 382947828);
+            var whatchaSay = weapon != null ? ($"{line}Hello Richard.{line}You have {time} seconds(s) of safety remaining until Heather uses {namer} on yo ass. You know why.{line}Hint: Marriage.{line}Good Luck!{line}**************************{weapon}") : ($"{line}Hello Richard.{line}You have {time} seconds(s) of safety remaining until Heather uses [[ExceptionUnhandled]] on yo ass. You know why.{line}Hint: Marriage.{line}Good Luck!{line}***********************{line}This was supposed to be a weapon but the code blew it.{line}Thankfully I handled the unhandled exception exceptionally.");
+            return whatchaSay;
         }
 
         public static OwnerProfile testiculeesProfile = new OwnerProfile()
