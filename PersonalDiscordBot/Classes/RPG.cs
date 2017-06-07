@@ -89,6 +89,16 @@ namespace PersonalDiscordBot.Classes
             Starter
         }
 
+        public enum ElementType
+        {
+            Physical,
+            Magic,
+            Fire,
+            Lightning,
+            Ice,
+            Wind
+        }
+
         public enum ItemType
         {
             Restorative,
@@ -146,12 +156,9 @@ namespace PersonalDiscordBot.Classes
                         {
                             Items.smallHealthPotionPack,
                             Items.smallManaPotionPack
-                        },
-                        Spells =
-                        {
-                            Spells.dragonRage
                         }
                     };
+                    newChar.SpellBook.Add(Spells.dragonRage);
                     newChar.Class = chosenClass;
                     newChar.MaxHP = rng.Next(40, 100);
                     newChar.CurrentHP = newChar.MaxHP;
@@ -175,13 +182,10 @@ namespace PersonalDiscordBot.Classes
                         {
                             Items.smallHealthPotionPack,
                             Items.smallManaPotionPack
-                        },
-                        Spells =
-                        {
-                            Spells.magesEnergy,
-                            Spells.arcaneArmor
                         }
                     };
+                    newChar.SpellBook.Add(Spells.magesEnergy);
+                    newChar.SpellBook.Add(Spells.arcaneArmor);
                     newChar.Class = chosenClass;
                     newChar.MaxHP = rng.Next(20, 80);
                     newChar.CurrentHP = newChar.MaxHP;
@@ -205,12 +209,9 @@ namespace PersonalDiscordBot.Classes
                         {
                             Items.smallHealthPotionPack,
                             Items.smallManaPotionPack
-                        },
-                        Spells =
-                        {
-                            Spells.boneSpike
                         }
                     };
+                    newChar.SpellBook.Add(Spells.boneSpike);
                     newChar.Class = chosenClass;
                     newChar.MaxHP = rng.Next(60, 110);
                     newChar.CurrentHP = newChar.MaxHP;
@@ -282,17 +283,11 @@ namespace PersonalDiscordBot.Classes
     public class OwnerProfile
     {
         public ulong OwnerID { get; set; }
+        public int Currency { get; set; } = 100;
+        public int TotalPebbles { get; set; } = 0;
         public List<Character> CharacterList = new List<Character>();
         public Character CurrentCharacter { get; set; }
-        public int Currency { get; set; } = 100;
-        public int FightsTotal { get; set; } = 0;
-        public int FightsWon { get; set; } = 0;
-        public int FigthsLost { get; set; } = 0;
-        public int PlayerFightsTotal { get; set; } = 0;
-        public int PlayerFightsWon { get; set; } = 0;
-        public int PlayerFightsLost { get; set; } = 0;
-        public int BossesBeat { get; set; } = 0;
-        public int TotalPebbles { get; set; } = 0;
+        public IDidTheThingOwner ThingsDone = new IDidTheThingOwner();
     }
 
     public class Character
@@ -304,6 +299,8 @@ namespace PersonalDiscordBot.Classes
         public Weapon Weapon { get; set; }
         public Armor Armor { get; set; }
         public BackPack Backpack { get; set; }
+        public List<Spell> SpellBook = new List<Spell>();
+        public IDidTheThingPlayer ThingsDone = new IDidTheThingPlayer();
         public int Pebbles { get; set; } = 0;
         public int Lvl { get; set; }
         public int Exp { get; set; }
@@ -349,7 +346,6 @@ namespace PersonalDiscordBot.Classes
         public int Capacity { get; set; } = 10;
         public int Weight { get; set; } = 10;
         public List<IBackPackItem> Stored = new List<IBackPackItem>();
-        public List<Spell> Spells = new List<Spell>();
     }
 
     public class Weapon : IBackPackItem
@@ -421,6 +417,41 @@ namespace PersonalDiscordBot.Classes
         public int Ice { get; set; } = 0;
         public int Wind { get; set; } = 0;
     } 
+
+    public class IDidTheThingOwner
+    {
+        // General Stats
+        public int FightsTotal { get; set; } = 0;
+        public int FightsWon { get; set; } = 0;
+        public int FigthsLost { get; set; } = 0;
+        public int PlayerFightsTotal { get; set; } = 0;
+        public int PlayerFightsWon { get; set; } = 0;
+        public int PlayerFightsLost { get; set; } = 0;
+        public int BossesBeat { get; set; } = 0;
+        public int TotalCharactersMade { get; set; } = 0;
+
+        // Things that have been done (cheevos)
+        public bool FirstFight { get; set; } = false;
+        public bool FirstBoss { get; set; } = false;
+        public bool FirstPlayerFight { get; set; } = false; 
+    }
+
+    public class IDidTheThingPlayer
+    {
+        // General Stats
+        public int FightsTotal { get; set; } = 0;
+        public int FightsWon { get; set; } = 0;
+        public int FigthsLost { get; set; } = 0;
+        public int PlayerFightsTotal { get; set; } = 0;
+        public int PlayerFightsWon { get; set; } = 0;
+        public int PlayerFightsLost { get; set; } = 0;
+        public int BossesBeat { get; set; } = 0;
+
+        // Things that have been done (cheevos)
+        public bool FirstFight { get; set; } = false;
+        public bool FirstBoss { get; set; } = false;
+        public bool FirstPlayerFight { get; set; } = false;
+    }
 
     #endregion
 
@@ -540,6 +571,17 @@ namespace PersonalDiscordBot.Classes
             return rarityValue;
         }
 
+        public static ElementType PickElement()
+        {
+            ElementType element = 0;
+            int[] elementChances = new int[] { 166, 333, 500, 666, 833, 1000 }; // Physical(16%), Magic(16%), Fire(16%), Lightning(16%), Ice(16%), Wind(16%)
+            while (elementChances[(int)element] <= rng.Next(1000))
+            {
+                element++;
+            }
+            return element;
+        }
+
         #endregion
 
         #region LootDrop Items
@@ -588,7 +630,7 @@ namespace PersonalDiscordBot.Classes
             switch (type)
             {
                 case ItemType.Currency:
-                    _item = new Item { Worth = CurrencyPicker(character.Lvl, rarityValue), Type =  type};
+                    _item = new Item { Worth = CurrencyPicker(character.Lvl, rarityValue), Type = type};
                     break;
                 case ItemType.Restorative:
                     _item = Items.itemRestorativeList[rng.Next(0, Items.itemRestorativeList.Count)];
@@ -751,6 +793,31 @@ namespace PersonalDiscordBot.Classes
             }
 
             return armor;
+        }
+
+        #endregion
+
+        #region LootDrop Spells
+
+        public static SpellType ChooseSpellType()
+        {
+            SpellType spellType = 0;
+            int randomValue = rng.Next(MaxProbability);
+            while (spellProbabilities[(int)spellType] <= randomValue)
+            {
+                spellType++;
+            }
+            return spellType;
+        }
+
+        public static int[] spellProbabilities = new int[]
+        {
+            333, 666, MaxProbability, MaxProbability // Attack(33%), Defense(33%), Restorative(33.1%), Starter(0%)
+        };
+
+        public static Spell SpellPicker(RarityType rarity, Character character)
+        {
+            return Spells.SpellRandomGen(rarity, PickElement(), ChooseSpellType(), character.Lvl);
         }
 
         #endregion
@@ -1126,6 +1193,33 @@ namespace PersonalDiscordBot.Classes
 
     public static class Spells
     {
+
+        public static Spell SpellRandomGen(RarityType rarity, ElementType type, SpellType spellType, int level)
+        {
+            Spell spell = new Spell();
+            int rarityValue = LootDrop.GetRarityValue(rarity);
+            spell.Name = $"{rarity} {type} Spell";
+            spell.Desc = $"{type} spell with {rarity} power levels emanating from within";
+            spell.Type = spellType;
+            switch (type)
+            {
+                case ElementType.Fire:
+                    break;
+                case ElementType.Ice:
+                    break;
+                case ElementType.Lightning:
+                    break;
+                case ElementType.Magic:
+                    break;
+                case ElementType.Physical:
+                    break;
+                case ElementType.Wind:
+                    break;
+            }
+
+            return spell;
+        }
+
         #region Static Spells
 
         public static Spell magesEnergy = new Spell { Name = "Mages' Energy", MagicDamage = 5, ManaCost = 0, Lvl = 0, Type = SpellType.Starter, Desc = "The spell that started them all, some might call it the 'Hello World' spell, it gets the job done and your grueling training means you can infinitely it.... cool!" };
@@ -1383,7 +1477,6 @@ namespace PersonalDiscordBot.Classes
             CurrentCharacter = testiculeesCharacter,
             CharacterList = new List<Character>() { testiculeesCharacter },
             Currency = 696969,
-            BossesBeat = 101,
             OwnerID = 12345678910111213
         };
 
