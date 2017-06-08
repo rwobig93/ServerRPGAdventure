@@ -1,6 +1,7 @@
 ﻿using PersonalDiscordBot.Classes;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,6 +47,21 @@ namespace PersonalDiscordBot.Classes
                     uDebugAddLogExternal(string.Format("Added missing {0} attribute to XMLNode {1}", attribute, node.Name));
                 }
             node.OwnerDocument.Save(MainWindow._paths.ServerConfig);
+        }
+
+        public static string ToUpperFirst(this string str)
+        {
+            if (str.Length <= 0 || str == null)
+                return null;
+            else if (str.Length > 1)
+                return char.ToUpper(str[0]) + str.Substring(1);
+            else
+                return str.ToUpper();
+        }
+
+        public static string ToUpperAllFirst(this string str)
+        {
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str.ToLower());
         }
     }
 }

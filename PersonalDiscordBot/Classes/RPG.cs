@@ -571,7 +571,7 @@ namespace PersonalDiscordBot.Classes
             return rarityValue;
         }
 
-        public static ElementType PickElement()
+        public static ElementType ChooseElement()
         {
             ElementType element = 0;
             int[] elementChances = new int[] { 166, 333, 500, 666, 833, 1000 }; // Physical(16%), Magic(16%), Fire(16%), Lightning(16%), Ice(16%), Wind(16%)
@@ -580,6 +580,12 @@ namespace PersonalDiscordBot.Classes
                 element++;
             }
             return element;
+        }
+
+        public static int ChooseLevel(int level)
+        {
+            if (level < maxLevel) level = level - 2 > 0 ? level + rng.Next(-2, 2) : level + rng.Next(0, 2);
+            return level = level > maxLevel ? level = maxLevel : level;
         }
 
         #endregion
@@ -817,7 +823,7 @@ namespace PersonalDiscordBot.Classes
 
         public static Spell SpellPicker(RarityType rarity, Character character)
         {
-            return Spells.SpellRandomGen(rarity, PickElement(), ChooseSpellType(), character.Lvl);
+            return Spells.SpellRandomGen(rarity, ChooseElement(), ChooseSpellType(), character.Lvl);
         }
 
         #endregion
@@ -1098,16 +1104,13 @@ namespace PersonalDiscordBot.Classes
 
             rarityValue = LootDrop.GetRarityValue(rarity);
 
-            if (level < maxLevel) level = level - 2 > 0 ? level + rng.Next(-2, 2) : level + rng.Next(0, 2);
-            level = level > maxLevel ? level = maxLevel : level;
-
             Weapon weap = new Weapon()
             {
                 Name = WeaponNameandDescGen(type, rarity, out descr, out isUniqueName),
                 Desc = descr,
                 Type = type,
                 Rarity = rarity,
-                Lvl = level
+                Lvl = LootDrop.ChooseLevel(level)
             };
             if (isUniqueName)
                 rarityValue = rarityValue + 2;
@@ -1193,32 +1196,377 @@ namespace PersonalDiscordBot.Classes
 
     public static class Spells
     {
+        #region Spell Names and Descriptions
+
+        public static string[] SpellAttackRanGenNames(ElementType type, RarityType rarity)
+        {
+            string[] names = null;
+            switch (type)
+            {
+                case ElementType.Fire:
+                    names = new string[] 
+                    {
+
+                    };
+                    break;
+                case ElementType.Ice:
+                    names = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Lightning:
+                    names = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Magic:
+                    names = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Physical:
+                    names = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Wind:
+                    names = new string[]
+                    {
+
+                    };
+                    break;
+            }
+            return names;
+        }
+
+        public static string[] SpellAttackRanGenDesc(ElementType type, RarityType rarity)
+        {
+            string[] desc = null;
+            switch (type)
+            {
+                case ElementType.Fire:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Ice:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Lightning:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Magic:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Physical:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Wind:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+            }
+            return desc;
+        }
+
+        public static string[] SpellDefenseRanGenNames(ElementType type, RarityType rarity)
+        {
+            string[] names = null;
+            switch (type)
+            {
+                case ElementType.Fire:
+                    names = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Ice:
+                    names = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Lightning:
+                    names = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Magic:
+                    names = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Physical:
+                    names = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Wind:
+                    names = new string[]
+                    {
+
+                    };
+                    break;
+            }
+            return names;
+        }
+
+        public static string[] SpellDefenseRanGenDesc(ElementType type, RarityType rarity)
+        {
+            string[] desc = null;
+            switch (type)
+            {
+                case ElementType.Fire:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Ice:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Lightning:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Magic:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Physical:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Wind:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+            }
+            return desc;
+        }
+
+        public static string[] SpellRestorativeRanGenNames(ElementType type, RarityType rarity)
+        {
+            string[] names = null;
+            switch (type)
+            {
+                case ElementType.Fire:
+                    names = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Ice:
+                    names = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Lightning:
+                    names = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Magic:
+                    names = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Physical:
+                    names = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Wind:
+                    names = new string[]
+                    {
+
+                    };
+                    break;
+            }
+            return names;
+        }
+
+        public static string[] SpellRestorativeRanGenDesc(ElementType type, RarityType rarity)
+        {
+            string[] desc = null;
+            switch (type)
+            {
+                case ElementType.Fire:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Ice:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Lightning:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Magic:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Physical:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+                case ElementType.Wind:
+                    desc = new string[]
+                    {
+
+                    };
+                    break;
+            }
+            return desc;
+        }
+
+        #endregion
+
+        #region Spell Methods
+
+        public static string SpellNameandDescGen(RarityType rarity, ElementType type, SpellType spellType, out string description, out bool isUniqueName)
+        {
+            string spellName = string.Empty;
+            string spellDesc = string.Empty;
+            isUniqueName = ChanceRoll(30);
+
+
+            description = spellDesc;
+            return spellName;
+        }
 
         public static Spell SpellRandomGen(RarityType rarity, ElementType type, SpellType spellType, int level)
         {
             Spell spell = new Spell();
             int rarityValue = LootDrop.GetRarityValue(rarity);
-            spell.Name = $"{rarity} {type} Spell";
-            spell.Desc = $"{type} spell with {rarity} power levels emanating from within";
+            int typeCount = 1;
+            spell.Name = $"{rarity} {type} Spell".ToUpperAllFirst();
+            spell.Desc = $"{type} spell with {rarity} power levels emanating from within".ToUpperFirst();
             spell.Type = spellType;
+            spell.Lvl = LootDrop.ChooseLevel(level);
+            switch (rarity)
+            {
+                case RarityType.Common:
+                    typeCount = 1;
+                    break;
+                case RarityType.Uncommon:
+                    typeCount = 1;
+                    break;
+                case RarityType.Rare:
+                    typeCount = 2;
+                    break;
+                case RarityType.Epic:
+                    typeCount = 3;
+                    break;
+                case RarityType.Legendary:
+                    typeCount = 4;
+                    break;
+            }
             switch (type)
             {
                 case ElementType.Fire:
+                    spell.FireDamage += (rng.Next(3, 16) + rarityValue);
                     break;
                 case ElementType.Ice:
+                    spell.IceDamage += (rng.Next(3, 16) + rarityValue);
                     break;
                 case ElementType.Lightning:
+                    spell.LightningDamage += (rng.Next(3, 16) + rarityValue);
                     break;
                 case ElementType.Magic:
+                    spell.MagicDamage += (rng.Next(3, 16) + rarityValue);
                     break;
                 case ElementType.Physical:
+                    spell.PhysicalDamage += (rng.Next(3, 16) + rarityValue);
                     break;
                 case ElementType.Wind:
+                    spell.WindDamage += (rng.Next(3, 16) + rarityValue);
                     break;
             }
+            SpellAddElement(spell, typeCount, rarityValue);
 
             return spell;
         }
+
+        public static void SpellAddElement(Spell spell, int typeCount, int rarityValue)
+        {
+            if (typeCount > 1)
+                for (int i = typeCount; i == 1; i--)
+                {
+                    ElementType type = LootDrop.ChooseElement();
+                    switch (type)
+                    {
+                        case ElementType.Fire:
+                            spell.FireDamage += rng.Next(0, rarityValue);
+                            break;
+                        case ElementType.Ice:
+                            spell.IceDamage += rng.Next(0, rarityValue);
+                            break;
+                        case ElementType.Lightning:
+                            spell.LightningDamage += rng.Next(0, rarityValue);
+                            break;
+                        case ElementType.Magic:
+                            spell.MagicDamage += rng.Next(0, rarityValue);
+                            break;
+                        case ElementType.Physical:
+                            spell.PhysicalDamage += rng.Next(0, rarityValue);
+                            break;
+                        case ElementType.Wind:
+                            spell.WindDamage += rng.Next(0, rarityValue);
+                            break;
+                    }
+                }
+        }
+        
+        #endregion
 
         #region Static Spells
 
