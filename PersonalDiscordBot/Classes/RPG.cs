@@ -189,7 +189,7 @@ namespace PersonalDiscordBot.Classes
                     newChar.Class = chosenClass;
                     newChar.MaxHP = rng.Next(20, 80);
                     newChar.CurrentHP = newChar.MaxHP;
-                    newChar.MaxMana = 0;
+                    newChar.MaxMana = 20;
                     newChar.CurrentMana = newChar.MaxMana;
                     newChar.Str = rng.Next(1, 10);
                     newChar.Def = rng.Next(1, 15);
@@ -804,7 +804,14 @@ namespace PersonalDiscordBot.Classes
 
         public static Spell SpellPicker(RarityType rarity, Character character)
         {
-            return Spells.SpellRandomGen(rarity, ChooseElement(), ChooseSpellType(), character.Lvl);
+            Spell spell = new Spell();
+            int rarityValue = LootDrop.GetRarityValue(rarity);
+            spell.Type = ChooseSpellType();
+            bool isUnique = ChanceRoll(30);
+            if (isUnique)
+                return Spells.SpellUniqueGen(spell, rarity, ChooseElement(), spell.Type, rarityValue, character.Lvl);
+            else
+                return Spells.SpellRandomGen(spell, rarity, ChooseElement(), spell.Type, rarityValue, character.Lvl);
         }
 
         #endregion
@@ -1187,86 +1194,276 @@ namespace PersonalDiscordBot.Classes
                 case ElementType.Fire:
                     names = new string[] 
                     {
-
+                        $"{rarity} Flare",
+                        $"{rarity} Fire Bolt",
+                        $"{rarity} Hot Bastard",
+                        $"{rarity} Fire from teh kitchen stove",
+                        $"{rarity} Gatling Flames",
+                        $"{rarity} Wave of Flames"
                     };
                     break;
                 case ElementType.Ice:
                     names = new string[]
                     {
-
+                        $"{rarity} Ice Flash",
+                        $"{rarity} Ice Bolt",
+                        $"{rarity} Cold Bastard",
+                        $"{rarity} Ice from teh kitchen freezer",
+                        $"{rarity} Gatling Ice Shards",
+                        $"{rarity} Slab of Ice"
                     };
                     break;
                 case ElementType.Lightning:
                     names = new string[]
                     {
-
+                        $"{rarity} Lightning Blast",
+                        $"{rarity} Lightning Bolt",
+                        $"{rarity} Static Shock",
+                        $"{rarity} Charge picked up from socks sliding on the carpet",
+                        $"{rarity} Rapid Lightning Bolts",
+                        $"{rarity} Lightning Strike"
                     };
                     break;
                 case ElementType.Magic:
                     names = new string[]
                     {
-
+                        $"{rarity} Magic Bomb",
+                        $"{rarity} Magic Bolt",
+                        $"{rarity} Arcane Tingle",
+                        $"{rarity} Magic from a magic show",
+                        $"{rarity} Gatling magic bolt",
+                        $"{rarity} Arcane Energy Wave"
                     };
                     break;
                 case ElementType.Physical:
                     names = new string[]
                     {
-
+                        $"{rarity} Bomb",
+                        $"{rarity} Death Spike",
+                        $"{rarity} Heavy Rock",
+                        $"{rarity} Hammer from the shed",
+                        $"{rarity} Gatling Gun",
+                        $"{rarity} Concrete Wall"
                     };
                     break;
                 case ElementType.Wind:
                     names = new string[]
                     {
-
+                        $"{rarity} Jetstream Pressure Nuke",
+                        $"{rarity} Wind Bolt",
+                        $"{rarity} Windy Breeze",
+                        $"{rarity} Light breeze coming through the apartment window",
+                        $"{rarity} Gatling wind balls",
+                        $"{rarity} Wall of Wind"
                     };
                     break;
             }
             return names;
         }
 
-        public static string[] SpellAttackRanGenDesc(ElementType type, RarityType rarity)
+        public static void SpellAttackRanGenAdditions(ElementType type, Spell spell, int rarityValue, int index)
         {
-            string[] desc = null;
             switch (type)
             {
                 case ElementType.Fire:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 0:
+                            spell.Desc = "Like a mini nuke but in a firey death that melts away your organs";
+                            spell.FireDamage += (rng.Next(1, 5) * rarityValue) * spell.Lvl;
+                            spell.ManaCost = 10 + spell.Lvl;
+                            spell.Speed = 80;
+                            break;
+                        case 1:
+                            spell.Desc = "A bolt of fire, a bolt can be anything, it doesn't need to be lightning... right?";
+                            spell.FireDamage += (rng.Next(1, 10) + (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 100;
+                            spell.ManaCost = 3 + spell.Lvl;
+                            break;
+                        case 2:
+                            spell.Desc = "Daaaaaaamn, this bastard is hot! tsssssssss";
+                            spell.FireDamage += (rng.Next(1, 3) * (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 90;
+                            spell.ManaCost = 6 + spell.Lvl;
+                            break;
+                        case 3:
+                            spell.Desc = "You took this from the stove of the old lady down the street while she was cooking... heartless much?";
+                            spell.FireDamage += (rng.Next(1, 8) + (rarityValue / 2) + (rarityValue / 3)) * spell.Lvl;
+                            spell.Speed = 110;
+                            spell.ManaCost = 5 + spell.Lvl;
+                            break;
+                        case 4:
+                            spell.Desc = "Now you can shoot flames really fast, who needs accuracy anyway?";
+                            spell.FireDamage += (rng.Next(1, 5) + (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 150;
+                            spell.ManaCost = 2 + spell.Lvl;
+                            break;
+                        case 5:
+                            spell.Desc = "Like a tsunami but made of flames, what's more awesome than that?";
+                            spell.FireDamage += ((rng.Next(1, 3) * rarityValue) + (rarityValue / 3)) * spell.Lvl;
+                            spell.Speed = 95;
+                            spell.ManaCost = 10 + spell.Lvl;
+                            break;
+                    }
                     break;
                 case ElementType.Ice:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 0:
+                            spell.Desc = "Big blast of below 0 tounge-stuck-to-the-pole goodness";
+                            spell.IceDamage += (rng.Next(1, 5) * rarityValue) * spell.Lvl;
+                            spell.ManaCost = 10 + spell.Lvl;
+                            spell.Speed = 80;
+                            break;
+                        case 1:
+                            spell.Desc = "A bolt of ice, a bolt can be anything, it doesn't need to be lightning... right?";
+                            spell.IceDamage += (rng.Next(1, 10) + (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 100;
+                            spell.ManaCost = 3 + spell.Lvl;
+                            break;
+                        case 2:
+                            spell.Desc = "Daaaaaaamn, this bastard is cold! brrrrrrrrr";
+                            spell.IceDamage += (rng.Next(1, 3) * (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 90;
+                            spell.ManaCost = 6 + spell.Lvl;
+                            break;
+                        case 3:
+                            spell.Desc = "Your hand almost got stuck getting this from the freezer.... worth it";
+                            spell.IceDamage += (rng.Next(1, 8) + (rarityValue / 2) + (rarityValue / 3)) * spell.Lvl;
+                            spell.Speed = 110;
+                            spell.ManaCost = 5 + spell.Lvl;
+                            break;
+                        case 4:
+                            spell.Desc = "Now you can shoot ice shards really fast, who needs accuracy anyway?";
+                            spell.IceDamage += (rng.Next(1, 5) + (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 150;
+                            spell.ManaCost = 2 + spell.Lvl;
+                            break;
+                        case 5:
+                            spell.Desc = "A giant slab of ice summoned from wherever cold stuff comes from";
+                            spell.IceDamage += ((rng.Next(1, 3) * rarityValue) + (rarityValue / 3)) * spell.Lvl;
+                            spell.Speed = 95;
+                            spell.ManaCost = 10 + spell.Lvl;
+                            break;
+                    }
                     break;
                 case ElementType.Lightning:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 0:
+                            spell.Desc = "Large ball of concentrated electricity ready to explode, I hope you aren't standing in water";
+                            spell.LightningDamage += (rng.Next(1, 5) * rarityValue) * spell.Lvl;
+                            spell.ManaCost = 10 + spell.Lvl;
+                            spell.Speed = 80;
+                            break;
+                        case 1:
+                            spell.Desc = "A bolt of lightning, a bolt can't be anything, it needs to be lightning... LIGHTNING!!!!";
+                            spell.LightningDamage += (rng.Next(1, 10) + (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 100;
+                            spell.ManaCost = 3 + spell.Lvl;
+                            break;
+                        case 2:
+                            spell.Desc = "You have built up a static charge, time to start poking people";
+                            spell.LightningDamage += (rng.Next(1, 3) * (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 90;
+                            spell.ManaCost = 6 + spell.Lvl;
+                            break;
+                        case 3:
+                            spell.Desc = "You have been building this charge for awhile to get an unsuspecting target... It's time";
+                            spell.LightningDamage += (rng.Next(1, 8) + (rarityValue / 2) + (rarityValue / 3)) * spell.Lvl;
+                            spell.Speed = 110;
+                            spell.ManaCost = 5 + spell.Lvl;
+                            break;
+                        case 4:
+                            spell.Desc = "Rapidly fire bolts of lightning.... don't let anyone get on your bad side";
+                            spell.LightningDamage += (rng.Next(1, 5) + (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 150;
+                            spell.ManaCost = 2 + spell.Lvl;
+                            break;
+                        case 5:
+                            spell.Desc = "A storm approaches and whispers in your ear \"I wanna strike someone\", what you do next is up to you";
+                            spell.LightningDamage += ((rng.Next(1, 3) * rarityValue) + (rarityValue / 3)) * spell.Lvl;
+                            spell.Speed = 95;
+                            spell.ManaCost = 10 + spell.Lvl;
+                            break;
+                    }
                     break;
                 case ElementType.Magic:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 0:
+                            spell.Desc = "A bomb made of arcane energy you summon out of nowhere, great for kids parties";
+                            spell.MagicDamage += (rng.Next(1, 5) * rarityValue) * spell.Lvl;
+                            spell.ManaCost = 10 + spell.Lvl;
+                            spell.Speed = 80;
+                            break;
+                        case 1:
+                            spell.Desc = "A bolt of arcane energy, a bolt can be anything, it doesn't need to be lightning... right?";
+                            spell.MagicDamage += (rng.Next(1, 10) + (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 100;
+                            spell.ManaCost = 3 + spell.Lvl;
+                            break;
+                        case 2:
+                            spell.Desc = "Arcance energy that produces a tingle in the subject, right before shit gets real";
+                            spell.MagicDamage += (rng.Next(1, 3) * (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 90;
+                            spell.ManaCost = 6 + spell.Lvl;
+                            break;
+                        case 3:
+                            spell.Desc = "You have been building this charge for awhile to get an unsuspecting target... It's time";
+                            spell.MagicDamage += (rng.Next(1, 8) + (rarityValue / 2) + (rarityValue / 3)) * spell.Lvl;
+                            spell.Speed = 110;
+                            spell.ManaCost = 5 + spell.Lvl;
+                            break;
+                        case 4:
+                            spell.Desc = "Rapidly fire bolts of lightning.... don't let anyone get on your bad side";
+                            spell.MagicDamage += (rng.Next(1, 5) + (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 150;
+                            spell.ManaCost = 2 + spell.Lvl;
+                            break;
+                        case 5:
+                            spell.Desc = "A storm approaches and whispers in your ear \"I wanna strike someone\", what you do next is up to you";
+                            spell.MagicDamage += ((rng.Next(1, 3) * rarityValue) + (rarityValue / 3)) * spell.Lvl;
+                            spell.Speed = 95;
+                            spell.ManaCost = 10 + spell.Lvl;
+                            break;
+                    }
                     break;
                 case ElementType.Physical:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 0:
+                            break;
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                    }
                     break;
                 case ElementType.Wind:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 0:
+                            break;
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                    }
                     break;
             }
-            return desc;
         }
 
         public static string[] SpellDefenseRanGenNames(ElementType type, RarityType rarity)
@@ -1314,49 +1511,113 @@ namespace PersonalDiscordBot.Classes
             return names;
         }
 
-        public static string[] SpellDefenseRanGenDesc(ElementType type, RarityType rarity)
+        public static void SpellDefenseRanGenAdditions(ElementType type, Spell spell, int rarityValue, int index)
         {
-            string[] desc = null;
             switch (type)
             {
                 case ElementType.Fire:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
                     break;
                 case ElementType.Ice:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
                     break;
                 case ElementType.Lightning:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
                     break;
                 case ElementType.Magic:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
                     break;
                 case ElementType.Physical:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
                     break;
                 case ElementType.Wind:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
                     break;
             }
-            return desc;
         }
 
         public static string[] SpellRestorativeRanGenNames(ElementType type, RarityType rarity)
@@ -1404,49 +1665,113 @@ namespace PersonalDiscordBot.Classes
             return names;
         }
 
-        public static string[] SpellRestorativeRanGenDesc(ElementType type, RarityType rarity)
+        public static void SpellRestorativeRanGenAdditions(ElementType type, Spell spell, int rarityValue, int index)
         {
-            string[] desc = null;
             switch (type)
             {
                 case ElementType.Fire:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
                     break;
                 case ElementType.Ice:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
                     break;
                 case ElementType.Lightning:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
                     break;
                 case ElementType.Magic:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
                     break;
                 case ElementType.Physical:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
                     break;
                 case ElementType.Wind:
-                    desc = new string[]
+                    switch (index)
                     {
-
-                    };
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                    }
                     break;
             }
-            return desc;
         }
 
         #endregion
@@ -1464,10 +1789,8 @@ namespace PersonalDiscordBot.Classes
             return spellName;
         }
 
-        public static Spell SpellRandomGen(RarityType rarity, ElementType type, SpellType spellType, int level)
+        public static Spell SpellRandomGen(Spell spell, RarityType rarity, ElementType type, SpellType spellType, int rarityValue, int level)
         {
-            Spell spell = new Spell();
-            int rarityValue = LootDrop.GetRarityValue(rarity);
             int typeCount = 1;
             spell.Name = $"{rarity} {type} Spell".ToUpperAllFirst();
             spell.Desc = $"{type} spell with {rarity} power levels emanating from within".ToUpperFirst();
@@ -1513,6 +1836,12 @@ namespace PersonalDiscordBot.Classes
                     break;
             }
             SpellAddElement(spell, typeCount, rarityValue);
+
+            return spell;
+        }
+
+        public static Spell SpellUniqueGen(Spell spell, RarityType rarity, ElementType type, SpellType spellType, int rarityValue, int level)
+        {
 
             return spell;
         }
