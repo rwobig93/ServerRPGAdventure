@@ -742,15 +742,6 @@ namespace PersonalDiscordBot.Classes
             {
                 armorType++;
             }
-            switch (armorType)
-            {
-                case ArmorType.Light:
-                    break;
-                case ArmorType.Medium:
-                    break;
-                case ArmorType.Heavy:
-                    break;
-            }
             return armorType;
         }
 
@@ -781,24 +772,14 @@ namespace PersonalDiscordBot.Classes
         public static Armor ArmorPicker(RarityType rarityType, Character chara)
         {
             Armor armor = new Armor();
+            int rarityValue = LootDrop.GetRarityValue(rarityType);
+            bool isUnique = ChanceRoll(30);
+            armor.Type = ChooseArmorType(chara);
 
-            if (rarityType == RarityType.Legendary)
-            {
-                if (ChanceRoll(20))
-                {
-
-                }
-                else
-                {
-
-                }
-            }
+            if (isUnique)
+                return Armors.ArmorUniqueGen(armor, rarityType, rarityValue);
             else
-            {
-                //armor = Armors.ArmorRandomGen(rarityType, ChooseArmorType(chara), chara.Lvl);
-            }
-
-            return armor;
+                return Armors.ArmorRandomGen(rarityType, rarityValue, armor, chara.Lvl);
         }
 
         #endregion
@@ -1587,11 +1568,37 @@ namespace PersonalDiscordBot.Classes
             "Fur Armor",
             "Glass Armor"
         };
+
+        public static string[] armorUniqueLightNames =
+{
+            "Grand Wizard Robes",
+            "Basically Paper Garments"
+        };
+
+        public static string[] armorUniqueLightDesc =
+        {
+            "Grand white robes fit for a wizard. Just don't wear a white hood as well..",
+            "It's amazing how powerful you become when you aren't weighed down by 'protection'."
+        };
+
         public static string[] armorBasicMediumNames = 
         {
-            "Leather Armpor",
+            "Leather Armor",
             "Scale Armor"
         };
+
+        public static string[] armorUniqueMediumNames =
+        {
+            "Hide Armor",
+            "Furry Armor"
+        };
+
+        public static string[] armorUniqueMediumDesc =
+        {
+            "Why do Rogues wear hide armor? Because it's made of leather. Wait..",
+            "Diaper not included"
+        };
+
         public static string[] armorBasicHeavyNames = 
         {
             "Steel Armor",
@@ -1600,6 +1607,19 @@ namespace PersonalDiscordBot.Classes
             "Mythril Armor",
             "Obsidian Armor"
         };
+
+        public static string[] armorUniqueHeavyNames =
+        {
+            "Diamond Armor",
+            "Titanforged Steel"
+        };
+
+        public static string[] armorUniqueHeavyDesc =
+        {
+            "Protects your body, not your pride.",
+            "\"What is this? Armor for ants?\" - Titans, probably"
+        };
+
 
         #endregion
         #region Static Armors
@@ -1616,7 +1636,7 @@ namespace PersonalDiscordBot.Classes
         public static Armor blackPlateArmor = new Armor { Name = "Blackened Plate Armor", Type = ArmorType.Heavy, Lvl = 1, MaxDurability = 30, CurrentDurability = 30, Speed = 60, Worth = 100, Physical = 100, Desc = "Armor darker than your Emo phase" };
         public static Armor imperialArmor = new Armor { Name = "Imperial Armor", Type = ArmorType.Heavy, Lvl = 1, MaxDurability = 30, CurrentDurability = 30, Speed = 60, Worth = 100, Physical = 100, Desc = "Armor that tends to be weaker around the knees. Mind the arrows" };
         #endregion
-
+        #region Armor Lists
         public static List<Armor> lightArmorList = new List<Armor>()
         {
             royalRobeArmor,
@@ -1634,11 +1654,40 @@ namespace PersonalDiscordBot.Classes
             blackPlateArmor,
             imperialArmor
         };
+        #endregion
 
-        //public static Armor ArmorRandomGen(RarityType rarity, ArmorType type, int level)
-        //{
+        public static Armor ArmorUniqueGen(Armor armor, RarityType rarity, int rarityValue)
+        {
 
-        //}
+
+            return armor;
+        }
+
+
+        public static Armor ArmorRandomGen(RarityType rarity, int rarityValue, Armor armor, int charLevel)
+        {
+            switch (armor.Type)
+            {
+                case ArmorType.Light:
+                    int lightNum = rng.Next(0, armorBasicLightNames.Length);
+                    armor.Name = $"{rarity} {armorBasicLightNames[lightNum]}";
+                    armor.Desc = $"{armor.Type} {armor.Name}";
+                    break;
+                case ArmorType.Medium:
+                    int mediumNum = rng.Next(0, armorBasicMediumNames.Length);
+                    armor.Name = $"{rarity} {armorBasicLightNames[mediumNum]}";
+                    armor.Desc = $"{armor.Type} {armor.Name}";
+                    break;
+                case ArmorType.Heavy:
+                    int heavyNum = rng.Next(0, armorBasicHeavyNames.Length);
+                    armor.Name = $"{rarity} {armorBasicLightNames[heavyNum]}";
+                    armor.Desc = $"{armor.Type} {armor.Name}";
+                    break;
+            }
+            
+
+            return armor;
+        }
     }
 
     public static class Items
