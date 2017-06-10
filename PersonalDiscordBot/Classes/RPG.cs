@@ -1404,25 +1404,25 @@ namespace PersonalDiscordBot.Classes
                             spell.ManaCost = 3 + spell.Lvl;
                             break;
                         case 2:
-                            spell.Desc = "Arcance energy that produces a tingle in the subject, right before shit gets real";
+                            spell.Desc = "Arcane energy that produces a tingle in the target, right before shit gets real";
                             spell.MagicDamage += (rng.Next(1, 3) * (rarityValue / 2)) * spell.Lvl;
                             spell.Speed = 90;
                             spell.ManaCost = 6 + spell.Lvl;
                             break;
                         case 3:
-                            spell.Desc = "You have been building this charge for awhile to get an unsuspecting target... It's time";
+                            spell.Desc = "This magic was stolen from a stage magician in vegas, it's so unreal it's almost like.... magic?";
                             spell.MagicDamage += (rng.Next(1, 8) + (rarityValue / 2) + (rarityValue / 3)) * spell.Lvl;
                             spell.Speed = 110;
                             spell.ManaCost = 5 + spell.Lvl;
                             break;
                         case 4:
-                            spell.Desc = "Rapidly fire bolts of lightning.... don't let anyone get on your bad side";
+                            spell.Desc = "Rapidly fire bolts of arcane energy, like a boss";
                             spell.MagicDamage += (rng.Next(1, 5) + (rarityValue / 2)) * spell.Lvl;
                             spell.Speed = 150;
                             spell.ManaCost = 2 + spell.Lvl;
                             break;
                         case 5:
-                            spell.Desc = "A storm approaches and whispers in your ear \"I wanna strike someone\", what you do next is up to you";
+                            spell.Desc = "Magnificent wave of arcane energy ready to topple kingdoms";
                             spell.MagicDamage += ((rng.Next(1, 3) * rarityValue) + (rarityValue / 3)) * spell.Lvl;
                             spell.Speed = 95;
                             spell.ManaCost = 10 + spell.Lvl;
@@ -1433,16 +1433,40 @@ namespace PersonalDiscordBot.Classes
                     switch (index)
                     {
                         case 0:
+                            spell.Desc = "A bomb is summoned out of your pocket.... magically";
+                            spell.MagicDamage += (rng.Next(1, 5) * rarityValue) * spell.Lvl;
+                            spell.ManaCost = 10 + spell.Lvl;
+                            spell.Speed = 80;
                             break;
                         case 1:
+                            spell.Desc = "A spike of death, I believe that's how it got it's name";
+                            spell.MagicDamage += (rng.Next(1, 10) + (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 100;
+                            spell.ManaCost = 3 + spell.Lvl;
                             break;
                         case 2:
+                            spell.Desc = "Hurling a giant boulder from the ground, that's what you do on the weekends, and now";
+                            spell.MagicDamage += (rng.Next(1, 3) * (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 90;
+                            spell.ManaCost = 6 + spell.Lvl;
                             break;
                         case 3:
+                            spell.Desc = "This \"Hammer\" was found in the shed out back and you are throwing it at your enemy... did I mention it weighs 350lbs?";
+                            spell.MagicDamage += (rng.Next(1, 8) + (rarityValue / 2) + (rarityValue / 3)) * spell.Lvl;
+                            spell.Speed = 110;
+                            spell.ManaCost = 5 + spell.Lvl;
                             break;
                         case 4:
+                            spell.Desc = "Someone showed you how to smuggle items through security and what did you do with that? You smuggled a gatling gun. (Up your butt)";
+                            spell.MagicDamage += (rng.Next(1, 5) + (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 150;
+                            spell.ManaCost = 2 + spell.Lvl;
                             break;
                         case 5:
+                            spell.Desc = "A concrete wall rises from the ground, it's like heavy and stuff, it hurts and stuff, and.... stuff";
+                            spell.MagicDamage += ((rng.Next(1, 3) * rarityValue) + (rarityValue / 3)) * spell.Lvl;
+                            spell.Speed = 95;
+                            spell.ManaCost = 10 + spell.Lvl;
                             break;
                     }
                     break;
@@ -1450,16 +1474,40 @@ namespace PersonalDiscordBot.Classes
                     switch (index)
                     {
                         case 0:
+                            spell.Desc = "A spherical nuke containing pure pressurized jetstream, for only 2 easy payments of 19.99!";
+                            spell.MagicDamage += (rng.Next(1, 5) * rarityValue) * spell.Lvl;
+                            spell.ManaCost = 10 + spell.Lvl;
+                            spell.Speed = 80;
                             break;
                         case 1:
+                            spell.Desc = "Bolt of wind, some might ask how this is possible. But I don't know so stop asking!";
+                            spell.MagicDamage += (rng.Next(1, 10) + (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 100;
+                            spell.ManaCost = 3 + spell.Lvl;
                             break;
                         case 2:
+                            spell.Desc = "A windy breeze flows past your enemy, here windy breeze means lvl 4 hurricane but same difference eh?";
+                            spell.MagicDamage += (rng.Next(1, 3) * (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 90;
+                            spell.ManaCost = 6 + spell.Lvl;
                             break;
                         case 3:
+                            spell.Desc = "Bottle of wind captured from an apartment window. That's about it, nothing to see here.";
+                            spell.MagicDamage += (rng.Next(1, 8) + (rarityValue / 2) + (rarityValue / 3)) * spell.Lvl;
+                            spell.Speed = 110;
+                            spell.ManaCost = 5 + spell.Lvl;
                             break;
                         case 4:
+                            spell.Desc = "BALLS! Windy, Gatling, Windy Balls!!!";
+                            spell.MagicDamage += (rng.Next(1, 5) + (rarityValue / 2)) * spell.Lvl;
+                            spell.Speed = 150;
+                            spell.ManaCost = 2 + spell.Lvl;
                             break;
                         case 5:
+                            spell.Desc = "Massive \"Wall\" of wind uncontrollably eager to rip your enemies apart";
+                            spell.MagicDamage += ((rng.Next(1, 3) * rarityValue) + (rarityValue / 3)) * spell.Lvl;
+                            spell.Speed = 95;
+                            spell.ManaCost = 10 + spell.Lvl;
                             break;
                     }
                     break;
@@ -1474,37 +1522,49 @@ namespace PersonalDiscordBot.Classes
                 case ElementType.Fire:
                     names = new string[]
                     {
-
+                        $"{rarity} Heat Shield",
+                        $"{rarity} Fire Vacuum",
+                        $"{rarity} Fire Extinquisher",
                     };
                     break;
                 case ElementType.Ice:
                     names = new string[]
                     {
-
+                        $"{rarity} Ice Shield",
+                        $"{rarity} Blow Torch",
+                        $"{rarity} Lamp",
                     };
                     break;
                 case ElementType.Lightning:
                     names = new string[]
                     {
-
+                        $"{rarity} Static Buildup Dispersal",
+                        $"{rarity} Lightning Rod",
+                        $"{rarity} Metal Thing",
                     };
                     break;
                 case ElementType.Magic:
                     names = new string[]
                     {
-
+                        $"{rarity} Arcane Leech",
+                        $"{rarity} Disbelief",
+                        $"{rarity} Magic Shield",
                     };
                     break;
                 case ElementType.Physical:
                     names = new string[]
                     {
-
+                        $"{rarity} Beating Shield",
+                        $"{rarity} Metal Armor",
+                        $"{rarity} Rock Barrier",
                     };
                     break;
                 case ElementType.Wind:
                     names = new string[]
                     {
-
+                        $"{rarity} Wind Shield",
+                        $"{rarity} Wind Jacket",
+                        $"{rarity} Wind Wall",
                     };
                     break;
             }
@@ -1518,102 +1578,144 @@ namespace PersonalDiscordBot.Classes
                 case ElementType.Fire:
                     switch (index)
                     {
+                        case 0:
+                            spell.Desc = "Magical shield that blocks any heat source, just like the ad said it would";
+                            spell.FireDamage += rng.Next(0, 30) + spell.Lvl;
+                            spell.ManaCost = 10 + spell.Lvl;
+                            spell.Speed = 80;
+                            break;
                         case 1:
+                            spell.Desc = "Sphere containing an oxygen vacuum to snuff out fire, yea I said snuff... what about it?";
+                            var valueGen = rng.Next(1, 5) * spell.Lvl;
+                            spell.FireDamage += valueGen > 100 ? 100 : valueGen;
+                            spell.Speed = 100;
+                            spell.ManaCost = 8 + spell.Lvl;
                             break;
                         case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                        case 6:
+                            spell.Desc = "Magical fire extinguisher with an energy emanating from within your body, you have a chance of getting crabs... worth it?";
+                            spell.FireDamage += spell.Lvl <= 25 ? rng.Next(0, 50) + spell.Lvl : rng.Next(40, 100) + spell.Lvl;
+                            spell.Speed = spell.Lvl <= 25 ? 90 : 125;
+                            spell.ManaCost = spell.Lvl <= 25 ? 6 + spell.Lvl : 12 + spell.Lvl;
                             break;
                     }
                     break;
                 case ElementType.Ice:
                     switch (index)
                     {
+                        case 0:
+                            spell.Desc = "Magical shield that blocks any cold source, just like the ad said it would";
+                            spell.IceDamage += rng.Next(0, 30) + spell.Lvl;
+                            spell.ManaCost = 10 + spell.Lvl;
+                            spell.Speed = 80;
+                            break;
                         case 1:
+                            spell.Desc = "\"Magical\" auto torch to melt away ice, also great to make creme brulee with!";
+                            var valueGen = rng.Next(1, 5) * spell.Lvl;
+                            spell.IceDamage += valueGen > 100 ? 100 : valueGen;
+                            spell.Speed = 100;
+                            spell.ManaCost = 8 + spell.Lvl;
                             break;
                         case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                        case 6:
+                            spell.Desc = "I love.......";
+                            spell.IceDamage += spell.Lvl <= 25 ? rng.Next(0, 50) + spell.Lvl : rng.Next(40, 100) + spell.Lvl;
+                            spell.Speed = spell.Lvl <= 25 ? 90 : 125;
+                            spell.ManaCost = spell.Lvl <= 25 ? 6 + spell.Lvl : 12 + spell.Lvl;
                             break;
                     }
                     break;
                 case ElementType.Lightning:
                     switch (index)
                     {
+                        case 0:
+                            spell.Desc = "Like a mini EMP nuke that disperses static electricity, also causes cancer but don't worry about that";
+                            spell.FireDamage += rng.Next(0, 30) + spell.Lvl;
+                            spell.ManaCost = 10 + spell.Lvl;
+                            spell.Speed = 80;
+                            break;
                         case 1:
+                            spell.Desc = "Lightning rod that absorbs lightning strikes, it doesn't look funny on your back at all, I promise!";
+                            spell.FireDamage += spell.Lvl <= 25 ? rng.Next(0, 50) + spell.Lvl : rng.Next(40, 100) + spell.Lvl;
+                            spell.Speed = spell.Lvl <= 25 ? 90 : 125;
+                            spell.ManaCost = spell.Lvl <= 25 ? 6 + spell.Lvl : 12 + spell.Lvl;
                             break;
                         case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                        case 6:
+                            spell.Desc = @"Metal thing you found on the ground, ¯\_(ツ)_/¯";
+                            var valueGen = rng.Next(1, 5) * spell.Lvl;
+                            spell.FireDamage += valueGen > 100 ? 100 : valueGen;
+                            spell.Speed = 100;
+                            spell.ManaCost = 8 + spell.Lvl;
                             break;
                     }
                     break;
                 case ElementType.Magic:
                     switch (index)
                     {
+                        case 0:
+                            spell.Desc = "Magical leech that leeches and absorbs magic for itself magically.... magic. magic. magic. magic.";
+                            spell.FireDamage += spell.Lvl <= 25 ? rng.Next(0, 50) + spell.Lvl : rng.Next(40, 100) + spell.Lvl;
+                            spell.Speed = spell.Lvl <= 25 ? 90 : 125;
+                            spell.ManaCost = spell.Lvl <= 25 ? 6 + spell.Lvl : 12 + spell.Lvl;
+                            break;
                         case 1:
+                            spell.Desc = "Power to use real disbelief of magic to dispel magical energy, #conspiracy";
+                            var valueGen = rng.Next(1, 5) * spell.Lvl;
+                            spell.FireDamage += valueGen > 100 ? 100 : valueGen;
+                            spell.Speed = 100;
+                            spell.ManaCost = 8 + spell.Lvl;
                             break;
                         case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                        case 6:
+                            spell.Desc = "Magical shield that blocks any magic source, just like the ad said it would";
+                            spell.FireDamage += rng.Next(0, 30) + spell.Lvl;
+                            spell.ManaCost = 10 + spell.Lvl;
+                            spell.Speed = 80;
                             break;
                     }
                     break;
                 case ElementType.Physical:
                     switch (index)
                     {
+                        case 0:
+                            spell.Desc = "Physical shield that blocks any physical beating, just like the ad said it would";
+                            spell.FireDamage += rng.Next(0, 30) + spell.Lvl;
+                            spell.ManaCost = 10 + spell.Lvl;
+                            spell.Speed = 80;
+                            break;
                         case 1:
+                            spell.Desc = @"Armor summoned from earth metals and morphed around your body, snug, cupping your genitals like only a lover would (° ͜ʖ°)";
+                            spell.FireDamage += spell.Lvl <= 25 ? rng.Next(0, 50) + spell.Lvl : rng.Next(40, 100) + spell.Lvl;
+                            spell.Speed = spell.Lvl <= 25 ? 90 : 125;
+                            spell.ManaCost = spell.Lvl <= 25 ? 6 + spell.Lvl : 12 + spell.Lvl;
                             break;
                         case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                        case 6:
+                            spell.Desc = "Summon a wall made of rock from the {insert planet name here}";
+                            var valueGen = rng.Next(1, 5) * spell.Lvl;
+                            spell.FireDamage += valueGen > 100 ? 100 : valueGen;
+                            spell.Speed = 100;
+                            spell.ManaCost = 8 + spell.Lvl;
                             break;
                     }
                     break;
                 case ElementType.Wind:
                     switch (index)
                     {
+                        case 0:
+                            spell.Desc = "Magical shield that blocks any wind source, just like the ad said it would";
+                            spell.FireDamage += rng.Next(0, 30) + spell.Lvl;
+                            spell.ManaCost = 10 + spell.Lvl;
+                            spell.Speed = 80;
+                            break;
                         case 1:
+                            spell.Desc = "Windbreaker jacket that breaks wind, while you break wind";
+                            spell.FireDamage += spell.Lvl <= 25 ? rng.Next(0, 50) + spell.Lvl : rng.Next(40, 100) + spell.Lvl;
+                            spell.Speed = spell.Lvl <= 25 ? 90 : 125;
+                            spell.ManaCost = spell.Lvl <= 25 ? 6 + spell.Lvl : 12 + spell.Lvl;
                             break;
                         case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                        case 6:
+                            spell.Desc = "Wall of magical energy that dissipates wind, even the gas you passed a few minutes ago";
+                            var valueGen = rng.Next(1, 5) * spell.Lvl;
+                            spell.FireDamage += valueGen > 100 ? 100 : valueGen;
+                            spell.Speed = 100;
+                            spell.ManaCost = 8 + spell.Lvl;
                             break;
                     }
                     break;
@@ -1672,6 +1774,8 @@ namespace PersonalDiscordBot.Classes
                 case ElementType.Fire:
                     switch (index)
                     {
+                        case 0:
+                            break;
                         case 1:
                             break;
                         case 2:
@@ -1681,14 +1785,14 @@ namespace PersonalDiscordBot.Classes
                         case 4:
                             break;
                         case 5:
-                            break;
-                        case 6:
                             break;
                     }
                     break;
                 case ElementType.Ice:
                     switch (index)
                     {
+                        case 0:
+                            break;
                         case 1:
                             break;
                         case 2:
@@ -1698,14 +1802,14 @@ namespace PersonalDiscordBot.Classes
                         case 4:
                             break;
                         case 5:
-                            break;
-                        case 6:
                             break;
                     }
                     break;
                 case ElementType.Lightning:
                     switch (index)
                     {
+                        case 0:
+                            break;
                         case 1:
                             break;
                         case 2:
@@ -1715,14 +1819,14 @@ namespace PersonalDiscordBot.Classes
                         case 4:
                             break;
                         case 5:
-                            break;
-                        case 6:
                             break;
                     }
                     break;
                 case ElementType.Magic:
                     switch (index)
                     {
+                        case 0:
+                            break;
                         case 1:
                             break;
                         case 2:
@@ -1732,14 +1836,14 @@ namespace PersonalDiscordBot.Classes
                         case 4:
                             break;
                         case 5:
-                            break;
-                        case 6:
                             break;
                     }
                     break;
                 case ElementType.Physical:
                     switch (index)
                     {
+                        case 0:
+                            break;
                         case 1:
                             break;
                         case 2:
@@ -1749,14 +1853,14 @@ namespace PersonalDiscordBot.Classes
                         case 4:
                             break;
                         case 5:
-                            break;
-                        case 6:
                             break;
                     }
                     break;
                 case ElementType.Wind:
                     switch (index)
                     {
+                        case 0:
+                            break;
                         case 1:
                             break;
                         case 2:
@@ -1766,8 +1870,6 @@ namespace PersonalDiscordBot.Classes
                         case 4:
                             break;
                         case 5:
-                            break;
-                        case 6:
                             break;
                     }
                     break;
@@ -1778,17 +1880,6 @@ namespace PersonalDiscordBot.Classes
 
         #region Spell Methods
 
-        public static string SpellNameandDescGen(RarityType rarity, ElementType type, SpellType spellType, out string description, out bool isUniqueName)
-        {
-            string spellName = string.Empty;
-            string spellDesc = string.Empty;
-            isUniqueName = ChanceRoll(30);
-
-
-            description = spellDesc;
-            return spellName;
-        }
-
         public static Spell SpellRandomGen(Spell spell, RarityType rarity, ElementType type, SpellType spellType, int rarityValue, int level)
         {
             int typeCount = 1;
@@ -1796,6 +1887,7 @@ namespace PersonalDiscordBot.Classes
             spell.Desc = $"{type} spell with {rarity} power levels emanating from within".ToUpperFirst();
             spell.Type = spellType;
             spell.Lvl = LootDrop.ChooseLevel(level);
+            spell.Speed = ChanceRoll(35) ? rng.Next(60, 200) + rarityValue : rng.Next(60, 200);
             switch (rarity)
             {
                 case RarityType.Common:
@@ -1817,22 +1909,34 @@ namespace PersonalDiscordBot.Classes
             switch (type)
             {
                 case ElementType.Fire:
-                    spell.FireDamage += (rng.Next(3, 16) + rarityValue);
+                    spell.FireDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
+                    if (spell.Speed < 100) spell.FireDamage += (rarityValue * spell.Lvl) / 2;
+                    else if (spell.Speed > 150) spell.FireDamage -= (rarityValue * spell.Lvl) / 2;
                     break;
                 case ElementType.Ice:
-                    spell.IceDamage += (rng.Next(3, 16) + rarityValue);
+                    spell.IceDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
+                    if (spell.Speed < 100) spell.IceDamage += (rarityValue * spell.Lvl) / 2;
+                    else if (spell.Speed > 150) spell.IceDamage -= (rarityValue * spell.Lvl) / 2;
                     break;
                 case ElementType.Lightning:
-                    spell.LightningDamage += (rng.Next(3, 16) + rarityValue);
+                    spell.LightningDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
+                    if (spell.Speed < 100) spell.LightningDamage += (rarityValue * spell.Lvl) / 2;
+                    else if (spell.Speed > 150) spell.LightningDamage -= (rarityValue * spell.Lvl) / 2;
                     break;
                 case ElementType.Magic:
-                    spell.MagicDamage += (rng.Next(3, 16) + rarityValue);
+                    spell.MagicDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
+                    if (spell.Speed < 100) spell.MagicDamage += (rarityValue * spell.Lvl) / 2;
+                    else if (spell.Speed > 150) spell.MagicDamage -= (rarityValue * spell.Lvl) / 2;
                     break;
                 case ElementType.Physical:
-                    spell.PhysicalDamage += (rng.Next(3, 16) + rarityValue);
+                    spell.PhysicalDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
+                    if (spell.Speed < 100) spell.PhysicalDamage += (rarityValue * spell.Lvl) / 2;
+                    else if (spell.Speed > 150) spell.PhysicalDamage -= (rarityValue * spell.Lvl) / 2;
                     break;
                 case ElementType.Wind:
-                    spell.WindDamage += (rng.Next(3, 16) + rarityValue);
+                    spell.WindDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
+                    if (spell.Speed < 100) spell.WindDamage += (rarityValue * spell.Lvl) / 2;
+                    else if (spell.Speed > 150) spell.WindDamage -= (rarityValue * spell.Lvl) / 2;
                     break;
             }
             SpellAddElement(spell, typeCount, rarityValue);
@@ -1842,7 +1946,27 @@ namespace PersonalDiscordBot.Classes
 
         public static Spell SpellUniqueGen(Spell spell, RarityType rarity, ElementType type, SpellType spellType, int rarityValue, int level)
         {
-
+            switch (spellType)
+            {
+                case SpellType.Attack:
+                    var attackNames = SpellAttackRanGenNames(type, rarity);
+                    int atkIndex = rng.Next(0, attackNames.Length);
+                    spell.Name = attackNames[atkIndex];
+                    SpellAttackRanGenAdditions(type, spell, rarityValue, atkIndex);
+                    break;
+                case SpellType.Defense:
+                    var defNames = SpellDefenseRanGenNames(type, rarity);
+                    int defIndex = rng.Next(0, defNames.Length);
+                    spell.Name = defNames[defIndex];
+                    SpellDefenseRanGenAdditions(type, spell, rarityValue, defIndex);
+                    break;
+                case SpellType.Restorative:
+                    var restNames = SpellRestorativeRanGenNames(type, rarity);
+                    int restIndex = rng.Next(0, restNames.Length);
+                    spell.Name = restNames[restIndex];
+                    SpellRestorativeRanGenAdditions(type, spell, rarityValue, restIndex);
+                    break;
+            }
             return spell;
         }
 
@@ -1855,22 +1979,22 @@ namespace PersonalDiscordBot.Classes
                     switch (type)
                     {
                         case ElementType.Fire:
-                            spell.FireDamage += rng.Next(0, rarityValue);
+                            spell.FireDamage += rng.Next(0, rarityValue) * spell.Lvl;
                             break;
                         case ElementType.Ice:
-                            spell.IceDamage += rng.Next(0, rarityValue);
+                            spell.IceDamage += rng.Next(0, rarityValue) * spell.Lvl;
                             break;
                         case ElementType.Lightning:
-                            spell.LightningDamage += rng.Next(0, rarityValue);
+                            spell.LightningDamage += rng.Next(0, rarityValue) * spell.Lvl;
                             break;
                         case ElementType.Magic:
-                            spell.MagicDamage += rng.Next(0, rarityValue);
+                            spell.MagicDamage += rng.Next(0, rarityValue) * spell.Lvl;
                             break;
                         case ElementType.Physical:
-                            spell.PhysicalDamage += rng.Next(0, rarityValue);
+                            spell.PhysicalDamage += rng.Next(0, rarityValue) * spell.Lvl;
                             break;
                         case ElementType.Wind:
-                            spell.WindDamage += rng.Next(0, rarityValue);
+                            spell.WindDamage += rng.Next(0, rarityValue) * spell.Lvl;
                             break;
                     }
                 }
