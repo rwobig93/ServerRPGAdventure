@@ -15,13 +15,13 @@ namespace PersonalDiscordBot.Classes
         {
             string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
             string _timeNow = DateTime.Now.ToLocalTime().ToLongTimeString();
-            MainWindow._debugLog.AppendLine(string.Format("{0}_{1} :: {2}", _dateNow, _timeNow, _log));
+            Toolbox.uDebugAddLog(string.Format("{0}_{1} :: {2}", _dateNow, _timeNow, _log));
         }
         public static void AddToDebugLog(this string _log)
         {
             string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
             string _timeNow = DateTime.Now.ToLocalTime().ToLongTimeString();
-            MainWindow._debugLog.AppendLine(string.Format("{0}_{1} :: {2}", _dateNow, _timeNow, _log));
+            Toolbox.uDebugAddLog(string.Format("{0}_{1} :: {2}", _dateNow, _timeNow, _log));
         }
 
         public static void VerifyXMLNodeAttributes(this XmlNode node, string attribute)

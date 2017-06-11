@@ -488,7 +488,6 @@ namespace PersonalDiscordBot.Classes
                     }
                     var sentMsg = await Context.Channel.SendMessageAsync(verifyServ);
                     await Task.Delay(TimeSpan.FromSeconds(3));
-                    int waited = 0;
                     int servNumber = 0;
                     bool respReceived = false;
                     string response = string.Empty;
