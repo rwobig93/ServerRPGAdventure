@@ -49,7 +49,7 @@ namespace PersonalDiscordBot
         }
 
         #region Global Variables
-
+        
         public static DiscordSocketClient client;
         private CommandService commands;
         private DependencyMap map;
@@ -87,6 +87,7 @@ namespace PersonalDiscordBot
         private void winMain_Loaded(object sender, RoutedEventArgs e)
         {
             HideGrids();
+            UpdateVerison();
         }
 
         private void winMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -797,6 +798,17 @@ namespace PersonalDiscordBot
                 grd.Visibility = Visibility.Hidden;
                 Toolbox.uDebugAddLog(string.Format("Set Grid {0} to Hidden on launch", grd.Name));
             }
+        }
+
+        private void UpdateVerison()
+        {
+            lblVersionNumber.Text = $"Version {GetVersionNumber()}";
+            uStatusUpdate($"Current Version: {GetVersionNumber()}");
+        }
+
+        private string GetVersionNumber()
+        {
+            return Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
