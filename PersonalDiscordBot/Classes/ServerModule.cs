@@ -61,6 +61,7 @@ namespace PersonalDiscordBot.Classes
                 }
                 if (servsFound.Count == 0)
                 {
+                    Toolbox.uDebugAddLog($"No servers were found, servCount: {servsFound.Count}");
                     await Context.Channel.SendMessageAsync(string.Format("There currently aren't any game servers in the server list running the game {0}", gameServer));
                     return;
                 }
@@ -68,6 +69,7 @@ namespace PersonalDiscordBot.Classes
                 #region If More Than 1 Result
                 else if (servsFound.Count > 1)
                 {
+                    Toolbox.uDebugAddLog($"Multiple servers found, servCount: {servsFound.Count}");
                     int servCount = 0;
                     string verifyServ = string.Format("Multiple servers running the game {0} was found, which one would you like? (Enter the number){1}", gameServer, Environment.NewLine);
                     foreach (var serv in servsFound)
@@ -77,34 +79,41 @@ namespace PersonalDiscordBot.Classes
                     }
                     var sentMsg = await Context.Channel.SendMessageAsync(verifyServ);
                     await Task.Delay(TimeSpan.FromSeconds(3));
-                    int waited = 0;
                     int servNumber = 0;
+                    var timeNow = DateTime.Now;
                     bool respReceived = false;
                     string response = string.Empty;
+                    Toolbox.uDebugAddLog("Waiting for response now");
                     while (!respReceived)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1));
+                        Toolbox.uDebugAddLog("Gathering message list");
                         var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        Toolbox.uDebugAddLog("Gathered message list");
                         foreach (IMessage msg in newList)
                         {
-                            if (Context.Message.Author == msg.Author && sentMsg.Timestamp < msg.Timestamp)
+                            if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime))
                             {
+                                Toolbox.uDebugAddLog("Message found from author that has a newer DateTime than send message");
+                                Toolbox.uDebugAddLog($"Before response: {msg.Content.ToString()}");
                                 response = Regex.Replace(msg.Content.ToString(), @"\s+", "");
+                                Toolbox.uDebugAddLog($"After response: {response}");
                                 respReceived = true;
                                 var answer = int.TryParse(response, out servNumber);
                                 if (!(answer && servNumber <= servCount))
                                 {
+                                    Toolbox.uDebugAddLog($"Response wasn't valid: {response}");
                                     await Context.Channel.SendMessageAsync(string.Format("The response \"{0}\" entered wasn't valid, please try the reboot again.", response));
                                     return;
                                 }
                             }
                         }
-                        if (waited >= 60)
+                        if (timeNow + TimeSpan.FromSeconds(60) <= DateTime.Now)
                         {
+                            Toolbox.uDebugAddLog("Response wasn't recieved in the last 1 minute");
                             await Context.Channel.SendMessageAsync("An answer wasn't recieved within 1 minute, canceling reboot request.");
                             return;
                         }
-                        waited++;
                     }
                     GameServer chosenServ = servsFound[servNumber -1];
                     if (string.IsNullOrWhiteSpace(chosenServ.ServerBatchPath) || string.IsNullOrWhiteSpace(chosenServ.ServerProcName) || string.IsNullOrWhiteSpace(chosenServ.ServerExe))
@@ -223,10 +232,12 @@ namespace PersonalDiscordBot.Classes
                 }
                 if (serversFound.Count == 0)
                 {
+                    Toolbox.uDebugAddLog($"No servers found, servCount: {serversFound.Count}");
                     await Context.Channel.SendMessageAsync(string.Format("There currently aren't any game servers in the server list matching {0}", gameServer));
                 }
                 else if (serversFound.Count == 1)
                 {
+                    Toolbox.uDebugAddLog($"One server found, servCount: {serversFound.Count}");
                     GameServer game = serversFound[0];
                     if (string.IsNullOrWhiteSpace(game.ServerLogPath))
                     {
@@ -249,6 +260,7 @@ namespace PersonalDiscordBot.Classes
                 }
                 else
                 {
+                    Toolbox.uDebugAddLog($"Multiple servers found, servCount: {serversFound.Count}");
                     int servCount = 0;
                     string verifyServ = string.Format("Multiple servers running the game {0} was found, which one would you like? (Enter the number){1}", gameServer, Environment.NewLine);
                     foreach (var serv in serversFound)
@@ -258,36 +270,42 @@ namespace PersonalDiscordBot.Classes
                     }
                     var sentMsg = await Context.Channel.SendMessageAsync(verifyServ);
                     await Task.Delay(TimeSpan.FromSeconds(3));
-                    int waited = 0;
+                    var timeNow = DateTime.Now;
                     int servNumber = 0;
                     bool respReceived = false;
                     string response = string.Empty;
                     while (!respReceived)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1));
+                        Toolbox.uDebugAddLog("Gathering message list");
                         var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        Toolbox.uDebugAddLog("Gathered message list");
                         foreach (IMessage msg in newList)
                         {
-                            if (Context.Message.Author == msg.Author && sentMsg.Timestamp < msg.Timestamp)
+                            if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime))
                             {
+                                Toolbox.uDebugAddLog("Message from same author found newer than original message");
+                                Toolbox.uDebugAddLog($"Before response: {msg.Content.ToString()}");
                                 response = Regex.Replace(msg.Content.ToString(), @"\s+", "");
+                                Toolbox.uDebugAddLog($"After response: {response}");
                                 respReceived = true;
                                 var answer = int.TryParse(response, out servNumber);
                                 if (!(answer && servNumber <= servCount))
                                 {
+                                    Toolbox.uDebugAddLog($"Response was invalid: {response}");
                                     await Context.Channel.SendMessageAsync(string.Format("The response \"{0}\" entered wasn't valid, please try the reboot again.", response));
                                     return;
                                 }
                             }
                         }
-                        if (waited >= 60)
+                        if (timeNow + TimeSpan.FromSeconds(60) <= DateTime.Now)
                         {
-                            await Context.Channel.SendMessageAsync("An answer wasn't recieved within 1 minute, canceling reboot request.");
+                            Toolbox.uDebugAddLog("Response wasn't received within 60 seconds, canceling");
+                            await Context.Channel.SendMessageAsync("An answer wasn't recieved within 1 minute, canceling log request.");
                             return;
                         }
-                        waited++;
                     }
-                    GameServer game = serversFound[servNumber];
+                    GameServer game = serversFound[servNumber - 1];
                     if (string.IsNullOrWhiteSpace(game.ServerLogPath))
                     {
                         await Context.Channel.SendMessageAsync(string.Format("The game server {0} isn't setup to pull logs, please ask the server admin to enable this functionality by entering a server log location", game.ServerName));
@@ -367,6 +385,7 @@ namespace PersonalDiscordBot.Classes
                 }
                 else
                 {
+                    Toolbox.uDebugAddLog($"Multiple servers found, servCount: {serversFound.Count}");
                     int servCount = 0;
                     string verifyServ = string.Format("Multiple servers running the game {0} was found, which one would you like? (Enter the number){1}", gameServer, Environment.NewLine);
                     foreach (var serv in serversFound)
@@ -376,36 +395,42 @@ namespace PersonalDiscordBot.Classes
                     }
                     var sentMsg = await Context.Channel.SendMessageAsync(verifyServ);
                     await Task.Delay(TimeSpan.FromSeconds(3));
-                    int waited = 0;
+                    var timeNow = DateTime.Now;
                     int servNumber = 0;
                     bool respReceived = false;
                     string response = string.Empty;
                     while (!respReceived)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1));
+                        Toolbox.uDebugAddLog("Gathering message list");
                         var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        Toolbox.uDebugAddLog("Gathered message list");
                         foreach (IMessage msg in newList)
                         {
-                            if (Context.Message.Author == msg.Author && sentMsg.Timestamp < msg.Timestamp)
+                            if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime))
                             {
+                                Toolbox.uDebugAddLog("Message from same author found newer than original message");
+                                Toolbox.uDebugAddLog($"Before response: {msg.Content.ToString()}");
                                 response = Regex.Replace(msg.Content.ToString(), @"\s+", "");
+                                Toolbox.uDebugAddLog($"After response: {response}");
                                 respReceived = true;
                                 var answer = int.TryParse(response, out servNumber);
                                 if (!(answer && servNumber <= servCount))
                                 {
+                                    Toolbox.uDebugAddLog($"Response was invalid: {response}");
                                     await Context.Channel.SendMessageAsync(string.Format("The response \"{0}\" entered wasn't valid, please try the reboot again.", response));
                                     return;
                                 }
                             }
                         }
-                        if (waited >= 60)
+                        if (timeNow + TimeSpan.FromSeconds(60) <= DateTime.Now)
                         {
-                            await Context.Channel.SendMessageAsync("An answer wasn't recieved within 1 minute, canceling reboot request.");
+                            Toolbox.uDebugAddLog("Response wasn't received within 60 seconds, canceling");
+                            await Context.Channel.SendMessageAsync("An answer wasn't recieved within 1 minute, canceling log request.");
                             return;
                         }
-                        waited++;
                     }
-                    GameServer game = serversFound[servNumber];
+                    GameServer game = serversFound[servNumber - 1];
                     if (string.IsNullOrWhiteSpace(game.ServerLogPath))
                     {
                         await Context.Channel.SendMessageAsync(string.Format("The game server {0} isn't setup to pull logs, please ask the server admin to enable this functionality by entering a server log location", game.ServerName));
@@ -517,15 +542,15 @@ namespace PersonalDiscordBot.Classes
                                 }
                             }
                         }
-                        if (DateTime.Now + TimeSpan.FromSeconds(60) >= timeNow)
+                        if (timeNow + TimeSpan.FromSeconds(60) <= DateTime.Now)
                         {
-                            await Context.Channel.SendMessageAsync("An answer wasn't recieved within 1 minute, canceling reboot request.");
+                            await Context.Channel.SendMessageAsync("An answer wasn't recieved within 1 minute, canceling status request.");
                             Toolbox.uDebugAddLog("Waited 60 seconds, no answer received");
                             return;
                         }
                     }
                     Toolbox.uDebugAddLog($"Answer recieved, rebooting server {servNumber} for {gameServer}");
-                    GameServer game = serversFound[servNumber];
+                    GameServer game = serversFound[servNumber - 1];
                     cacheGame = game;
                     string responseStatus = string.Format("_{0}{1} Server Status:{0}", Environment.NewLine, game.Game);
                     IPEndPoint endpoint = CreateIPEndPoint(string.Format("{0}:{1}", game.IPAddress, game.QueryPort));
