@@ -983,7 +983,7 @@ namespace PersonalDiscordBot.Classes
     public static class Toolbox
     {
         public static StringBuilder debugLog = new StringBuilder();
-        public static Classes.Paths _paths = new Classes.Paths();
+        public static Classes.LocalSettings _paths = new Classes.LocalSettings();
 
         public static void uDebugAddLog(string _log)
         {

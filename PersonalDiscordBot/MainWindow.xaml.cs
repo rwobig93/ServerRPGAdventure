@@ -53,7 +53,7 @@ namespace PersonalDiscordBot
         public static DiscordSocketClient client;
         private CommandService commands;
         private DependencyMap map;
-        public static Classes.Paths _paths = new Classes.Paths();
+        public static Classes.LocalSettings _paths = new Classes.LocalSettings();
         private bool _activeSession = false;
         private bool notificationPlaying = false;
         public static ObservableCollection<GameServer> ServerList = new ObservableCollection<GameServer>();
@@ -111,11 +111,11 @@ namespace PersonalDiscordBot
             try
             {
                 _activeSession = true;
-                if (string.IsNullOrEmpty(sGeneral.Default.Token))
+                if (string.IsNullOrEmpty(_paths.BotToken))
                 {
-                    Toolbox.uDebugAddLog("Token wasn't found in sGeneral.Settings, prompting for token and sending notification");
-                    Thickness to = new Thickness(-734, 42, 0, 0);
-                    Thickness from = new Thickness(0, 42, 0, 0);
+                    Toolbox.uDebugAddLog("Token wasn't found in LocalSettings, prompting for token and sending notification");
+                    Thickness from = new Thickness(-734, 97, 0, 0);
+                    Thickness to = new Thickness(0, 97, 0, 0);
                     SlideGrid(from, to, grdToken);
                     ShowNotification("A previous token wasn't found, please enter a bot token, save, then try again.", 4);
                     return;
@@ -188,11 +188,11 @@ namespace PersonalDiscordBot
         {
             try
             {
-                sGeneral.Default.Token = txtTokenValue.Text;
-                sGeneral.Default.Save();
-                Toolbox.uDebugAddLog(string.Format("Saved new token: {0}", txtTokenValue.Text));
-                Thickness from = new Thickness(-734, 42, 0, 0);
-                Thickness to = new Thickness(0, 42, 0, 0);
+                _paths.BotToken = txtTokenValue.Text;
+                SaveConfig(ConfigType.Paths);
+                Toolbox.uDebugAddLog(string.Format("Saved new token: {0}", _paths.BotToken));
+                Thickness from = new Thickness(0, 97, 0, 0);
+                Thickness to = new Thickness(-734, 97, 0, 0);
                 SlideGrid(from, to, grdToken);
                 Toolbox.uDebugAddLog("Slid grdToken back out of view");
                 ShowNotification($"Successfully saved new token!", 3);
@@ -207,10 +207,10 @@ namespace PersonalDiscordBot
         {
             try
             {
-                sGeneral.Default.Token = string.Empty;
-                sGeneral.Default.Save();
+                _paths.BotToken = string.Empty;
+                SaveConfig(ConfigType.Paths);
                 txtTokenValue.Text = string.Empty;
-                Toolbox.uDebugAddLog("Cleared token from sGeneral.Settings and the txtTokenValue textbox");
+                Toolbox.uDebugAddLog("Cleared token from LocalSettings and the txtTokenValue textbox");
                 ShowNotification("Cleared token data", 3);
             }
             catch (Exception ex)
@@ -223,8 +223,8 @@ namespace PersonalDiscordBot
         {
             try
             {
-                Thickness from = new Thickness(-734, 42, 0, 0);
-                Thickness to = new Thickness(0, 42, 0, 0);
+                Thickness from = new Thickness(0, 97, 0, 0);
+                Thickness to = new Thickness(-734, 97, 0, 0);
                 SlideGrid(from, to, grdToken);
                 Toolbox.uDebugAddLog("Slid grdToken out of view");
             }
@@ -232,6 +232,13 @@ namespace PersonalDiscordBot
             {
                 FullExceptionLog(ex);
             }
+        }
+
+        private void btnChangeToken_Click(object sender, RoutedEventArgs e)
+        {
+            Thickness from = new Thickness(-734, 97, 0, 0);
+            Thickness to = new Thickness(0, 97, 0, 0);
+            SlideGrid(from, to, grdToken);
         }
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
@@ -499,10 +506,10 @@ namespace PersonalDiscordBot
                     case ConfigType.Paths:
                         using (StreamReader _sr = File.OpenText(_paths.PathsConfig))
                         {
-                            Paths pathsCopy = _paths;
+                            LocalSettings pathsCopy = _paths;
                             string _origPath = _paths.PathsConfig;
                             string _json = _sr.ReadToEnd();
-                            _paths = JsonConvert.DeserializeObject<List<Paths>>(_json)[0];
+                            _paths = JsonConvert.DeserializeObject<List<LocalSettings>>(_json)[0];
                             if (!Directory.Exists(_paths.ConfigLocation))
                                 _paths.ConfigLocation = pathsCopy.ConfigLocation;
                             if (!Directory.Exists(_paths.LogLocation))
@@ -568,16 +575,17 @@ namespace PersonalDiscordBot
                 switch (confType)
                 {
                     case ConfigType.Paths:
-                        List<Paths> _pathsT = new List<Paths>();
+                        List<LocalSettings> _pathsT = new List<LocalSettings>();
                         FileInfo _fI = new FileInfo(_paths.PathsConfig);
                         if (File.Exists(_fI.FullName))
                             _fI.Delete();
-                        _pathsT.Add(new Paths
+                        _pathsT.Add(new LocalSettings
                         {
                             LogLocation = _paths.LogLocation,
                             ConfigLocation = _paths.ConfigLocation,
                             PathsConfig = _paths.PathsConfig,
-                            ServerConfig = _paths.ServerConfig
+                            ServerConfig = _paths.ServerConfig,
+                            BotToken = _paths.BotToken
                         });
                         string jSon = JsonConvert.SerializeObject(_pathsT.ToArray(), Newtonsoft.Json.Formatting.Indented);
                         File.WriteAllText(_paths.PathsConfig, jSon);
@@ -632,8 +640,8 @@ namespace PersonalDiscordBot
                 switch (confType)
                 {
                     case ConfigType.Paths:
-                        List<Classes.Paths> _pathsT = new List<Classes.Paths>();
-                        _pathsT.Add(new Classes.Paths
+                        List<Classes.LocalSettings> _pathsT = new List<Classes.LocalSettings>();
+                        _pathsT.Add(new Classes.LocalSettings
                         {
                             LogLocation = _logDir,
                             ConfigLocation = _confDir,
@@ -697,6 +705,7 @@ namespace PersonalDiscordBot
                 _animate.AccelerationRatio = .9;
                 _animate.Duration = new Duration(TimeSpan.FromSeconds(.3));
                 _grd.BeginAnimation(Grid.MarginProperty, _animate);
+                Toolbox.uDebugAddLog($"Slid Grid {_grd.Name} from {from.ToString()} to {to.ToString()}");
             }
             catch (Exception ex)
             {
@@ -940,7 +949,7 @@ namespace PersonalDiscordBot
                 // Define the DiscordSocketClient
                 client = new DiscordSocketClient();
 
-                var token = sGeneral.Default.Token;
+                var token = _paths.BotToken;
                 commands = new CommandService();
                 map = new DependencyMap();
                 map.Add(client);
@@ -1050,10 +1059,10 @@ namespace PersonalDiscordBot
         {
             //uStatusUpdate(Testing.RandomMassTest(1000));
             uStatusUpdate(Testing.GetMarried());
-        }     
-
-            #endregion
         }
+
+        #endregion
+    }
 
     public class Notification
     {
