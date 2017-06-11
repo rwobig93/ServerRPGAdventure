@@ -642,7 +642,7 @@ namespace PersonalDiscordBot
                             serv.SetAttribute("password", game.Password ?? "");
                             serv.SetAttribute("ipaddress", game.IPAddress ?? "");
                             serv.SetAttribute("port", game.PortNum.ToString() ?? "");
-                            serv.SetAttribute("queryport", game.PortNum.ToString() ?? "");
+                            serv.SetAttribute("queryport", game.QueryPort.ToString() ?? "");
                             serv.SetAttribute("exthost", game.ExtHostname ?? "");
                             serv.SetAttribute("modded", game.Modded.ToString() ?? "");
                             serv.SetAttribute("runexepath", game.ServerExe.ToString() ?? "");

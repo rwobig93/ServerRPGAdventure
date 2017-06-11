@@ -688,19 +688,19 @@ namespace PersonalDiscordBot.Classes
             switch (charClass)
             {
                 case CharacterClass.Warrior:
-                    weaponArray = new int[] { 250, 450, 650, 795, 890, 900, 920, 940, MaxProbability, MaxProbability, MaxProbability }; // Sword(25%), Dagger(20%), Greatsword(20%), Katana(14.5%), Staff(9.5%), FocusStone(1%), Spear(2%), DragonSpear(2%), TwinSwords(6%), Other(0%), Starter(0%)
+                    weaponArray = new int[] { 250, 450, 650, 795, 890, 900, 920, 940, MaxProbability, 1001, 1001 }; // Sword(25%), Dagger(20%), Greatsword(20%), Katana(14.5%), Staff(9.5%), FocusStone(1%), Spear(2%), DragonSpear(2%), TwinSwords(6%), Other(0%), Starter(0%)
                     break;
                 case CharacterClass.Dragoon:
-                    weaponArray = new int[] { 100, 200, 250, 300, 350, 400, 600, 800, MaxProbability, MaxProbability, MaxProbability }; // Sword(10%), Dagger(10%), Greatsword(5%), Katana(5%), Staff(5%), FocusStone(5%), Spear(20%), DragonSpear(20%), TwinSwords(20%), Other(0%), Starter(0%)
+                    weaponArray = new int[] { 100, 200, 250, 300, 350, 400, 600, 800, MaxProbability, 1001, 1001 }; // Sword(10%), Dagger(10%), Greatsword(5%), Katana(5%), Staff(5%), FocusStone(5%), Spear(20%), DragonSpear(20%), TwinSwords(20%), Other(0%), Starter(0%)
                     break;
                 case CharacterClass.Mage:
-                    weaponArray = new int[] { 50, 100, 150, 200, 550, 800, 850, 900, MaxProbability, MaxProbability, MaxProbability }; // Sword(5%), Dagger(5%), Greatsword(5%), Katana(5%), Staff(55%), FocusStone(25%), Spear(5%), DragonSpear(5%), TwinSwords(10%), Other(0%), Starter(0%)
+                    weaponArray = new int[] { 50, 100, 150, 200, 550, 800, 850, 900, MaxProbability, 1001, 1001 }; // Sword(5%), Dagger(5%), Greatsword(5%), Katana(5%), Staff(55%), FocusStone(25%), Spear(5%), DragonSpear(5%), TwinSwords(10%), Other(0%), Starter(0%)
                     break;
                 case CharacterClass.Necromancer:
-                    weaponArray = new int[] { 50, 100, 150, 200, 450, 800, 850, 900, MaxProbability, MaxProbability, MaxProbability }; // Sword(5%), Dagger(5%), Greatsword(5%), Katana(5%), Staff(55%), FocusStone(25%), Spear(5%), DragonSpear(5%), TwinSwords(10%), Other (0%), Starter(0%)
+                    weaponArray = new int[] { 50, 100, 150, 200, 450, 800, 850, 900, MaxProbability, 1001, 1001 }; // Sword(5%), Dagger(5%), Greatsword(5%), Katana(5%), Staff(55%), FocusStone(25%), Spear(5%), DragonSpear(5%), TwinSwords(10%), Other (0%), Starter(0%)
                     break;
                 case CharacterClass.Rogue:
-                    weaponArray = new int[] { 150, 450, 550, 600, 650, 700, 750, 770, MaxProbability, MaxProbability, MaxProbability }; // Sword(15%), Dagger(30%), Greatsword(10%), Katana(5%), Staff(5%), FocusStone(5%), Spear(5%), DragonSpear(2%), TwinSwords(23%), Other(0%), Starter(0%)
+                    weaponArray = new int[] { 150, 450, 550, 600, 650, 700, 750, 770, MaxProbability, 1001, 1001 }; // Sword(15%), Dagger(30%), Greatsword(10%), Katana(5%), Staff(5%), FocusStone(5%), Spear(5%), DragonSpear(2%), TwinSwords(23%), Other(0%), Starter(0%)
                     break;
             }
 
@@ -1628,20 +1628,20 @@ namespace PersonalDiscordBot.Classes
                     {
                         case 0:
                             spell.Desc = "Like a mini EMP nuke that disperses static electricity, also causes cancer but don't worry about that";
-                            spell.FireDamage += rng.Next(0, 30) + spell.Lvl;
+                            spell.LightningDamage += rng.Next(0, 30) + spell.Lvl;
                             spell.ManaCost = 10 + spell.Lvl;
                             spell.Speed = 80;
                             break;
                         case 1:
                             spell.Desc = "Lightning rod that absorbs lightning strikes, it doesn't look funny on your back at all, I promise!";
-                            spell.FireDamage += spell.Lvl <= 25 ? rng.Next(0, 50) + spell.Lvl : rng.Next(40, 100) + spell.Lvl;
+                            spell.LightningDamage += spell.Lvl <= 25 ? rng.Next(0, 50) + spell.Lvl : rng.Next(40, 100) + spell.Lvl;
                             spell.Speed = spell.Lvl <= 25 ? 90 : 125;
                             spell.ManaCost = spell.Lvl <= 25 ? 6 + spell.Lvl : 12 + spell.Lvl;
                             break;
                         case 2:
                             spell.Desc = @"Metal thing you found on the ground, ¯\_(ツ)_/¯";
                             var valueGen = rng.Next(1, 5) * spell.Lvl;
-                            spell.FireDamage += valueGen > 100 ? 100 : valueGen;
+                            spell.LightningDamage += valueGen > 100 ? 100 : valueGen;
                             spell.Speed = 100;
                             spell.ManaCost = 8 + spell.Lvl;
                             break;
@@ -1652,20 +1652,20 @@ namespace PersonalDiscordBot.Classes
                     {
                         case 0:
                             spell.Desc = "Magical leech that leeches and absorbs magic for itself magically.... magic. magic. magic. magic.";
-                            spell.FireDamage += spell.Lvl <= 25 ? rng.Next(0, 50) + spell.Lvl : rng.Next(40, 100) + spell.Lvl;
+                            spell.MagicDamage += spell.Lvl <= 25 ? rng.Next(0, 50) + spell.Lvl : rng.Next(40, 100) + spell.Lvl;
                             spell.Speed = spell.Lvl <= 25 ? 90 : 125;
                             spell.ManaCost = spell.Lvl <= 25 ? 6 + spell.Lvl : 12 + spell.Lvl;
                             break;
                         case 1:
                             spell.Desc = "Power to use real disbelief of magic to dispel magical energy, #conspiracy";
                             var valueGen = rng.Next(1, 5) * spell.Lvl;
-                            spell.FireDamage += valueGen > 100 ? 100 : valueGen;
+                            spell.MagicDamage += valueGen > 100 ? 100 : valueGen;
                             spell.Speed = 100;
                             spell.ManaCost = 8 + spell.Lvl;
                             break;
                         case 2:
                             spell.Desc = "Magical shield that blocks any magic source, just like the ad said it would";
-                            spell.FireDamage += rng.Next(0, 30) + spell.Lvl;
+                            spell.MagicDamage += rng.Next(0, 30) + spell.Lvl;
                             spell.ManaCost = 10 + spell.Lvl;
                             spell.Speed = 80;
                             break;
@@ -1676,20 +1676,20 @@ namespace PersonalDiscordBot.Classes
                     {
                         case 0:
                             spell.Desc = "Physical shield that blocks any physical beating, just like the ad said it would";
-                            spell.FireDamage += rng.Next(0, 30) + spell.Lvl;
+                            spell.PhysicalDamage += rng.Next(0, 30) + spell.Lvl;
                             spell.ManaCost = 10 + spell.Lvl;
                             spell.Speed = 80;
                             break;
                         case 1:
                             spell.Desc = @"Armor summoned from earth metals and morphed around your body, snug, cupping your genitals like only a lover would (° ͜ʖ°)";
-                            spell.FireDamage += spell.Lvl <= 25 ? rng.Next(0, 50) + spell.Lvl : rng.Next(40, 100) + spell.Lvl;
+                            spell.PhysicalDamage += spell.Lvl <= 25 ? rng.Next(0, 50) + spell.Lvl : rng.Next(40, 100) + spell.Lvl;
                             spell.Speed = spell.Lvl <= 25 ? 90 : 125;
                             spell.ManaCost = spell.Lvl <= 25 ? 6 + spell.Lvl : 12 + spell.Lvl;
                             break;
                         case 2:
                             spell.Desc = "Summon a wall made of rock from the {insert planet name here}";
                             var valueGen = rng.Next(1, 5) * spell.Lvl;
-                            spell.FireDamage += valueGen > 100 ? 100 : valueGen;
+                            spell.PhysicalDamage += valueGen > 100 ? 100 : valueGen;
                             spell.Speed = 100;
                             spell.ManaCost = 8 + spell.Lvl;
                             break;
@@ -1700,20 +1700,20 @@ namespace PersonalDiscordBot.Classes
                     {
                         case 0:
                             spell.Desc = "Magical shield that blocks any wind source, just like the ad said it would";
-                            spell.FireDamage += rng.Next(0, 30) + spell.Lvl;
+                            spell.WindDamage += rng.Next(0, 30) + spell.Lvl;
                             spell.ManaCost = 10 + spell.Lvl;
                             spell.Speed = 80;
                             break;
                         case 1:
                             spell.Desc = "Windbreaker jacket that breaks wind, while you break wind";
-                            spell.FireDamage += spell.Lvl <= 25 ? rng.Next(0, 50) + spell.Lvl : rng.Next(40, 100) + spell.Lvl;
+                            spell.WindDamage += spell.Lvl <= 25 ? rng.Next(0, 50) + spell.Lvl : rng.Next(40, 100) + spell.Lvl;
                             spell.Speed = spell.Lvl <= 25 ? 90 : 125;
                             spell.ManaCost = spell.Lvl <= 25 ? 6 + spell.Lvl : 12 + spell.Lvl;
                             break;
                         case 2:
                             spell.Desc = "Wall of magical energy that dissipates wind, even the gas you passed a few minutes ago";
                             var valueGen = rng.Next(1, 5) * spell.Lvl;
-                            spell.FireDamage += valueGen > 100 ? 100 : valueGen;
+                            spell.WindDamage += valueGen > 100 ? 100 : valueGen;
                             spell.Speed = 100;
                             spell.ManaCost = 8 + spell.Lvl;
                             break;

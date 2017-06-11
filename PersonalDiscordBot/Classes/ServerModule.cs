@@ -495,7 +495,7 @@ namespace PersonalDiscordBot.Classes
                         var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
                         foreach (IMessage msg in newList)
                         {
-                            if (Context.Message.Author == msg.Author && sentMsg.Timestamp < msg.Timestamp)
+                            if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime))
                             {
                                 response = Regex.Replace(msg.Content.ToString(), @"\s+", "");
                                 respReceived = true;
