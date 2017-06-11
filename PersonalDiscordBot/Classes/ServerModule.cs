@@ -454,11 +454,13 @@ namespace PersonalDiscordBot.Classes
                 }
                 if (serversFound.Count == 0)
                 {
+                    Toolbox.uDebugAddLog($";server status {gameServer}: found {serversFound.Count} games");
                     await Context.Channel.SendMessageAsync(string.Format("There currently aren't any game servers in the server list matching {0}", gameServer));
                     return;
                 }
                 else if (serversFound.Count == 1)
                 {
+                    Toolbox.uDebugAddLog($";server status {gameServer}: found {serversFound.Count} game");
                     GameServer game = serversFound[0];
                     cacheGame = game;
                     string response = string.Format("_{0}{1} Server Status:{0}", Environment.NewLine, game.Game);
@@ -476,6 +478,7 @@ namespace PersonalDiscordBot.Classes
                 }
                 else
                 {
+                    Toolbox.uDebugAddLog($";server status {gameServer}: found {serversFound.Count} games");
                     int servCount = 0;
                     string verifyServ = string.Format("Multiple servers running the game {0} was found, which one would you like? (Enter the number){1}", gameServer, Environment.NewLine);
                     foreach (var serv in serversFound)
@@ -489,31 +492,40 @@ namespace PersonalDiscordBot.Classes
                     int servNumber = 0;
                     bool respReceived = false;
                     string response = string.Empty;
+                    var timeNow = DateTime.Now;
+                    Toolbox.uDebugAddLog("Waiting for response on server number");
                     while (!respReceived)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1));
+                        Toolbox.uDebugAddLog("Generating message list");
                         var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        Toolbox.uDebugAddLog("Generated message list");
                         foreach (IMessage msg in newList)
                         {
                             if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime))
                             {
+                                Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
+                                Toolbox.uDebugAddLog($"Before response: {msg.Content.ToString()}");
                                 response = Regex.Replace(msg.Content.ToString(), @"\s+", "");
+                                Toolbox.uDebugAddLog($"After response: {response}");
                                 respReceived = true;
                                 var answer = int.TryParse(response, out servNumber);
                                 if (!(answer && servNumber <= servCount))
                                 {
                                     await Context.Channel.SendMessageAsync(string.Format("The response \"{0}\" entered wasn't valid, please try the reboot again.", response));
+                                    Toolbox.uDebugAddLog($"Answer was invalid: {answer}, servCount: {servCount}, servNum: {servNumber}");
                                     return;
                                 }
                             }
                         }
-                        if (waited >= 60)
+                        if (DateTime.Now + TimeSpan.FromSeconds(60) >= timeNow)
                         {
                             await Context.Channel.SendMessageAsync("An answer wasn't recieved within 1 minute, canceling reboot request.");
+                            Toolbox.uDebugAddLog("Waited 60 seconds, no answer received");
                             return;
                         }
-                        waited++;
                     }
+                    Toolbox.uDebugAddLog($"Answer recieved, rebooting server {servNumber} for {gameServer}");
                     GameServer game = serversFound[servNumber];
                     cacheGame = game;
                     string responseStatus = string.Format("_{0}{1} Server Status:{0}", Environment.NewLine, game.Game);
@@ -689,17 +701,17 @@ namespace PersonalDiscordBot.Classes
                 while (servInfo == null)
                 {
                     await Task.Delay(TimeSpan.FromSeconds(30));
-                    uDebugAddLog(string.Format("Waited 30 seconds after rebooting the {0} game server", game.ServerName));
+                    Toolbox.uDebugAddLog(string.Format("Waited 30 seconds after rebooting the {0} game server", game.ServerName));
                     totalTime = totalTime - TimeSpan.FromSeconds(30);
                     if (totalTime <= TimeSpan.FromSeconds(0))
                     {
                         await Context.Channel.SendMessageAsync(string.Format("I tried checking on the {0} server for you but it never came up or I can't connect to it for some reason, its been 15min so I'm gonna stop checking...", game.ServerName));
-                        uDebugAddLog(string.Format("Waited the full 15 min after rebooting the {0} game server without connectivity", game.ServerName));
+                        Toolbox.uDebugAddLog(string.Format("Waited the full 15 min after rebooting the {0} game server without connectivity", game.ServerName));
                         return;
                     }
                 }
                 await Context.Channel.SendMessageAsync(string.Format("The server {0} is now up and running", game.ServerName));
-                uDebugAddLog(string.Format("Successfully alerted when the {0} game server came back up, took {1} min", game.ServerName, totalTime.Minutes));
+                Toolbox.uDebugAddLog(string.Format("Successfully alerted when the {0} game server came back up, took {1} min", game.ServerName, totalTime.Minutes));
             }
             catch (Exception ex)
             {
@@ -755,7 +767,7 @@ namespace PersonalDiscordBot.Classes
         public static void FullExceptionLog(Exception ex, [CallerLineNumber] int lineNumber = 0, [CallerMemberName] string caller = null, [CallerFilePath] string filePath = null)
         {
             string exString = string.Format("TimeStamp: {1}{0}Exception Type: {2}{0}Caller: {3} at {4}{0}Message: {5}{0}HR: {6}{0}StackTrace:{0}{7}{0}", Environment.NewLine, DateTime.Now.ToLocalTime().ToShortTimeString(), ex.GetType().Name, caller, lineNumber, ex.Message, ex.HResult, ex.StackTrace);
-            uDebugAddLog(string.Format("EXCEPTION: {0} at {1}", caller, lineNumber));
+            Toolbox.uDebugAddLog(string.Format("EXCEPTION: {0} at {1}", caller, lineNumber));
             string _logLocation = string.Format(@"{0}\Exceptions.log", MainWindow._paths.LogLocation);
             if (!File.Exists(_logLocation))
                 using (StreamWriter _sw = new StreamWriter(_logLocation))
@@ -763,13 +775,6 @@ namespace PersonalDiscordBot.Classes
             else
                 using (StreamWriter _sw = File.AppendText(_logLocation))
                     _sw.WriteLine(exString + Environment.NewLine);
-        }
-
-        public static void uDebugAddLog(string _log)
-        { 
-            string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
-            string _timeNow = DateTime.Now.ToLocalTime().ToLongTimeString();
-            MainWindow._debugLog.AppendLine(string.Format("{0}_{1} :: {2}", _dateNow, _timeNow, _log));
         }
     }
 
@@ -928,12 +933,91 @@ namespace PersonalDiscordBot.Classes
         [Command(""), Summary("Testicules Engage")]
         public async Task Testacules()
         {
+            await Context.Channel.SendMessageAsync("No default test method is set");
+        }
 
+        [Command("weap"), Summary("Testicules Weap Gen")]
+        public async Task Testacules2()
+        {
+            string weapName = string.Empty;
+            string randGen = Testing.RandomWeap(out weapName);
+            await Context.Channel.SendMessageAsync($"Generated {weapName}{randGen}");
+        }
+
+        [Command("rng"), Summary("Testicules RNG Gen")]
+        public async Task Testacules3(string times)
+        {
+            var intTimes = 1000;
+            var isANum = int.TryParse(times, out intTimes);
+            if (isANum)
+                await Context.Channel.SendMessageAsync($"Generated {intTimes} Weapons:{Environment.NewLine}{Testing.RandomMassTest(intTimes)}");
+            else
+                await Context.Channel.SendMessageAsync($"Generated {1000} Weapons:{Environment.NewLine}{Testing.RandomMassTest(1000)}");
         }
     }
 
     public static class Toolbox
     {
+        public static StringBuilder debugLog = new StringBuilder();
+        public static Classes.Paths _paths = new Classes.Paths();
+
+        public static void uDebugAddLog(string _log)
+        {
+            try
+            {
+                string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
+                string _timeNow = DateTime.Now.ToLocalTime().ToLongTimeString();
+                debugLog.AppendLine(string.Format("{0}_{1} :: {2}", _dateNow, _timeNow, _log));
+                if (debugLog.Length >= 5000)
+                    DumpDebugLog();
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
+        }
+
+        public static void DumpDebugLog()
+        {
+            try
+            {
+                string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
+                string _debugLocation = string.Format(@"{0}\DebugLog_{1}.txt", _paths.LogLocation, _dateNow);
+                if (!File.Exists(_debugLocation))
+                    using (StreamWriter _sw = new StreamWriter(_debugLocation))
+                        _sw.WriteLine(debugLog.ToString());
+                else
+                    using (StreamWriter _sw = File.AppendText(_debugLocation))
+                        _sw.WriteLine(debugLog.ToString());
+                debugLog.Clear();
+                DirectoryInfo _dI = new DirectoryInfo(_paths.LogLocation);
+                foreach (FileInfo _fI in _dI.GetFiles())
+                {
+                    if (_fI.Name.StartsWith("DebugLog") && _fI.CreationTime.ToLocalTime() <= DateTime.Now.AddDays(-14).ToLocalTime())
+                    {
+                        _fI.Delete(); uDebugAddLog(string.Format("Deleted old DebugLog: {0}", _fI.Name));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
+        }
+
+        private static void FullExceptionLog(Exception ex, [CallerLineNumber] int lineNumber = 0, [CallerMemberName] string caller = null, [CallerFilePath] string filePath = null)
+        {
+            string exString = string.Format("TimeStamp: {1}{0}Exception Type: {2}{0}Caller: {3} at {4}{0}Message: {5}{0}HR: {6}{0}StackTrace:{0}{7}{0}", Environment.NewLine, string.Format("{0}_{1}", DateTime.Now.ToLocalTime().ToString("MM-dd-yy"), DateTime.Now.ToLocalTime().ToLongTimeString()), ex.GetType().Name, caller, lineNumber, ex.Message, ex.HResult, ex.StackTrace);
+            uDebugAddLog(string.Format("EXCEPTION: {0} at {1}", caller, lineNumber));
+            string _logLocation = string.Format(@"{0}\Exceptions.log", _paths.LogLocation);
+            if (!File.Exists(_logLocation))
+                using (StreamWriter _sw = new StreamWriter(_logLocation))
+                    _sw.WriteLine(exString + Environment.NewLine);
+            else
+                using (StreamWriter _sw = File.AppendText(_logLocation))
+                    _sw.WriteLine(exString + Environment.NewLine);
+        }
+
         public static List<RebootedServer> serversRebooted = new List<RebootedServer>();
 
         public static void RemoveRebootedServer(RebootedServer rebServ)

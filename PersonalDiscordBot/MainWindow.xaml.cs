@@ -43,7 +43,7 @@ namespace PersonalDiscordBot
         public MainWindow()
         {
             InitializeComponent();
-            uDebugAddLog(string.Format("{0}########################## Application Start ##########################{0}", Environment.NewLine));
+            Toolbox.uDebugAddLog(string.Format("{0}########################## Application Start ##########################{0}", Environment.NewLine));
             SetupConfig();
             txtLogDirectory.Text = _paths.LogLocation;
         }
@@ -53,7 +53,6 @@ namespace PersonalDiscordBot
         public static DiscordSocketClient client;
         private CommandService commands;
         private DependencyMap map;
-        public static StringBuilder _debugLog = new StringBuilder();
         public static Classes.Paths _paths = new Classes.Paths();
         private bool _activeSession = false;
         private bool notificationPlaying = false;
@@ -92,8 +91,8 @@ namespace PersonalDiscordBot
 
         private void winMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            uDebugAddLog(string.Format("{0}########################## Application Stop ##########################{0}", Environment.NewLine));
-            DumpDebugLog();
+            Toolbox.uDebugAddLog(string.Format("{0}########################## Application Stop ##########################{0}", Environment.NewLine));
+            Toolbox.DumpDebugLog();
         }
 
         private void winMain_Closed(object sender, EventArgs e)
@@ -113,7 +112,7 @@ namespace PersonalDiscordBot
                 _activeSession = true;
                 if (string.IsNullOrEmpty(sGeneral.Default.Token))
                 {
-                    uDebugAddLog("Token wasn't found in sGeneral.Settings, prompting for token and sending notification");
+                    Toolbox.uDebugAddLog("Token wasn't found in sGeneral.Settings, prompting for token and sending notification");
                     Thickness to = new Thickness(-734, 42, 0, 0);
                     Thickness from = new Thickness(0, 42, 0, 0);
                     SlideGrid(from, to, grdToken);
@@ -137,9 +136,9 @@ namespace PersonalDiscordBot
             try
             {
                 await client.DisconnectAsync();
-                uDebugAddLog("Disconnected Client");
+                Toolbox.uDebugAddLog("Disconnected Client");
                 await client.LogoutAsync();
-                uDebugAddLog("Logged out");
+                Toolbox.uDebugAddLog("Logged out");
                 _activeSession = false;
             }
             catch (Exception ex)
@@ -190,11 +189,11 @@ namespace PersonalDiscordBot
             {
                 sGeneral.Default.Token = txtTokenValue.Text;
                 sGeneral.Default.Save();
-                uDebugAddLog(string.Format("Saved new token: {0}", txtTokenValue.Text));
+                Toolbox.uDebugAddLog(string.Format("Saved new token: {0}", txtTokenValue.Text));
                 Thickness from = new Thickness(-734, 42, 0, 0);
                 Thickness to = new Thickness(0, 42, 0, 0);
                 SlideGrid(from, to, grdToken);
-                uDebugAddLog("Slid grdToken back out of view");
+                Toolbox.uDebugAddLog("Slid grdToken back out of view");
                 ShowNotification($"Successfully saved new token!", 3);
             }
             catch (Exception ex)
@@ -210,7 +209,7 @@ namespace PersonalDiscordBot
                 sGeneral.Default.Token = string.Empty;
                 sGeneral.Default.Save();
                 txtTokenValue.Text = string.Empty;
-                uDebugAddLog("Cleared token from sGeneral.Settings and the txtTokenValue textbox");
+                Toolbox.uDebugAddLog("Cleared token from sGeneral.Settings and the txtTokenValue textbox");
                 ShowNotification("Cleared token data", 3);
             }
             catch (Exception ex)
@@ -226,7 +225,7 @@ namespace PersonalDiscordBot
                 Thickness from = new Thickness(-734, 42, 0, 0);
                 Thickness to = new Thickness(0, 42, 0, 0);
                 SlideGrid(from, to, grdToken);
-                uDebugAddLog("Slid grdToken out of view");
+                Toolbox.uDebugAddLog("Slid grdToken out of view");
             }
             catch (Exception ex)
             {
@@ -250,7 +249,7 @@ namespace PersonalDiscordBot
         {
             try
             {
-                uDebugAddLog(string.Format("Log Directory Location changed to: {0}", txtLogDirectory.Text));
+                Toolbox.uDebugAddLog(string.Format("Log Directory Location changed to: {0}", txtLogDirectory.Text));
             }
             catch (Exception ex)
             {
@@ -309,12 +308,12 @@ namespace PersonalDiscordBot
                 if (entry != null && entry.Type == ServModifyType.NewServer)
                 {
                     uStatusUpdate(string.Format("The game server {0} was successfully added, if you want this change to stick please save!", entry.Server.ServerName));
-                    uDebugAddLog(string.Format("Successfully added server {0} || Type {1}", entry.Server.ServerName, entry.Type.ToString()));
+                    Toolbox.uDebugAddLog(string.Format("Successfully added server {0} || Type {1}", entry.Server.ServerName, entry.Type.ToString()));
                 }
                 else if (entry != null)
                 {
                     uStatusUpdate(string.Format("Something unexpected happened, the return entry wasn't null but the return type wasn't ExistingServer. ServName: {0} || Type: {1}", entry.Server.ServerName, entry.Type.ToString()));
-                    uDebugAddLog(string.Format("Unexpected Server Entry Returned: Serv: {0} || Type {1} || Type Expect {3}", entry.Server.ServerName, entry.Type.ToString(), ServModifyType.NewServer.ToString()));
+                    Toolbox.uDebugAddLog(string.Format("Unexpected Server Entry Returned: Serv: {0} || Type {1} || Type Expect {3}", entry.Server.ServerName, entry.Type.ToString(), ServModifyType.NewServer.ToString()));
                 }
             }
             catch (Exception ex)
@@ -334,12 +333,12 @@ namespace PersonalDiscordBot
                     if (entry != null && entry.Type == ServModifyType.ExistingServer)
                     {
                         uStatusUpdate(string.Format("The game server {0} was successfully updated, if you want this change to stick please save!", entry.Server.ServerName));
-                        uDebugAddLog(string.Format("Successfully added server {0} || Type {1}", entry.Server.ServerName, entry.Type.ToString()));
+                        Toolbox.uDebugAddLog(string.Format("Successfully added server {0} || Type {1}", entry.Server.ServerName, entry.Type.ToString()));
                     }
                     else if (entry != null)
                     {
                         uStatusUpdate(string.Format("Something unexpected happened, the return entry wasn't null but the return type wasn't ExistingServer. ServName: {0} || Type: {1}", entry.Server.ServerName, entry.Type.ToString()));
-                        uDebugAddLog(string.Format("Unexpected Server Entry Returned: Serv: {0} || Type Ret {1} || Type Expect {3}", entry.Server.ServerName, entry.Type.ToString(), ServModifyType.ExistingServer.ToString()));
+                        Toolbox.uDebugAddLog(string.Format("Unexpected Server Entry Returned: Serv: {0} || Type Ret {1} || Type Expect {3}", entry.Server.ServerName, entry.Type.ToString(), ServModifyType.ExistingServer.ToString()));
                     }
                 }
             }
@@ -437,55 +436,11 @@ namespace PersonalDiscordBot
                 string _statusString = string.Format("{0} :: {1}{2}", _timeNow, _status, Environment.NewLine);
                 bool isFocused = true;
                 Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { txtStatusValue.AppendText(_statusString); });
-                uDebugAddLog(string.Format("STATUS: {0}", _status));
+                Toolbox.uDebugAddLog(string.Format("STATUS: {0}", _status));
                 Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { isFocused = txtStatusValue.IsFocused; });
                 if (!isFocused)
                 {
                     Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { txtStatusValue.ScrollToEnd(); });
-                }
-            }
-            catch (Exception ex)
-            {
-                FullExceptionLog(ex);
-            }
-        }
-
-        private void uDebugAddLog(string _log)
-        {
-            try
-            {
-                string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
-                string _timeNow = DateTime.Now.ToLocalTime().ToLongTimeString();
-                _debugLog.AppendLine(string.Format("{0}_{1} :: {2}", _dateNow, _timeNow, _log));
-                if (_debugLog.Length >= 5000)
-                    DumpDebugLog();
-            }
-            catch (Exception ex)
-            {
-                FullExceptionLog(ex);
-            }
-        }
-
-        private void DumpDebugLog()
-        {
-            try
-            {
-                string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
-                string _debugLocation = string.Format(@"{0}\DebugLog_{1}.txt", _paths.LogLocation, _dateNow);
-                if (!File.Exists(_debugLocation))
-                    using (StreamWriter _sw = new StreamWriter(_debugLocation))
-                        _sw.WriteLine(_debugLog.ToString());
-                else
-                    using (StreamWriter _sw = File.AppendText(_debugLocation))
-                        _sw.WriteLine(_debugLog.ToString());
-                _debugLog.Clear();
-                DirectoryInfo _dI = new DirectoryInfo(_paths.LogLocation);
-                foreach (FileInfo _fI in _dI.GetFiles())
-                {
-                    if (_fI.Name.StartsWith("DebugLog") && _fI.CreationTime.ToLocalTime() <= DateTime.Now.AddDays(-14).ToLocalTime())
-                    {
-                        _fI.Delete(); uDebugAddLog(string.Format("Deleted old DebugLog: {0}", _fI.Name));
-                    }
                 }
             }
             catch (Exception ex)
@@ -506,27 +461,27 @@ namespace PersonalDiscordBot
                 _paths.ConfigLocation = _confDir; _paths.LogLocation = _logDir; _paths.PathsConfig = _pathConfig; _paths.ServerConfig = _servConfig;
                 if (!Directory.Exists(_logDir))
                 {
-                    Directory.CreateDirectory(_logDir); uDebugAddLog(string.Format("Didn't find Log Directory, created at: {0}", _logDir));
+                    Directory.CreateDirectory(_logDir); Toolbox.uDebugAddLog(string.Format("Didn't find Log Directory, created at: {0}", _logDir));
                 }
-                else { uDebugAddLog(string.Format("Found Log Directory at: {0}", _logDir)); }
+                else { Toolbox.uDebugAddLog(string.Format("Found Log Directory at: {0}", _logDir)); }
                 if (!Directory.Exists(_confDir))
                 {
-                    Directory.CreateDirectory(_confDir); uDebugAddLog(string.Format("Didn't find Config Directory, created at: {0}", _confDir));
+                    Directory.CreateDirectory(_confDir); Toolbox.uDebugAddLog(string.Format("Didn't find Config Directory, created at: {0}", _confDir));
                 }
-                else { uDebugAddLog(string.Format("Found Config Directory at: {0}", _confDir)); }
+                else { Toolbox.uDebugAddLog(string.Format("Found Config Directory at: {0}", _confDir)); }
                 if (!File.Exists(_pathConfig))
                 {
-                    CreateDefaultConfig(ConfigType.Paths); uDebugAddLog(string.Format("Paths.json not found, created at: {0}", _pathConfig));
+                    CreateDefaultConfig(ConfigType.Paths); Toolbox.uDebugAddLog(string.Format("Paths.json not found, created at: {0}", _pathConfig));
                 }
-                else { uDebugAddLog(string.Format("Found Paths.json at: {0}", _pathConfig)); }
+                else { Toolbox.uDebugAddLog(string.Format("Found Paths.json at: {0}", _pathConfig)); }
                 if (!File.Exists(_servConfig))
                 {
-                    CreateDefaultConfig(ConfigType.Servers); uDebugAddLog(string.Format("ServerConfig.xml not found, created at {0}", _servConfig));
+                    CreateDefaultConfig(ConfigType.Servers); Toolbox.uDebugAddLog(string.Format("ServerConfig.xml not found, created at {0}", _servConfig));
                 }
-                else { uDebugAddLog(string.Format("Found ServerConfig.xml at: {0}", _servConfig)); }
+                else { Toolbox.uDebugAddLog(string.Format("Found ServerConfig.xml at: {0}", _servConfig)); }
                 ReadConfig(ConfigType.Paths);
                 ReadConfig(ConfigType.Servers);
-                uDebugAddLog("Finished reading config");
+                Toolbox.uDebugAddLog("Finished reading config");
             }
             catch (Exception ex)
             {
@@ -555,7 +510,9 @@ namespace PersonalDiscordBot
                                 _paths.PathsConfig = pathsCopy.PathsConfig;
                             if (!File.Exists(_paths.ServerConfig))
                                 _paths.ServerConfig = pathsCopy.ServerConfig;
-                            uDebugAddLog(string.Format("{0} Deserialized:{1} LogLocation[{2}]{1} ConfigLocation[{3}]{1} PathsConfig[{4}]{1} ServerConfig[{5}]", _origPath, Environment.NewLine, _paths.LogLocation, _paths.ConfigLocation, _paths.PathsConfig, _paths.ServerConfig));
+                            Toolbox._paths = _paths;
+                            Toolbox.uDebugAddLog(string.Format("{0} Deserialized:{1} LogLocation[{2}]{1} ConfigLocation[{3}]{1} PathsConfig[{4}]{1} ServerConfig[{5}]", _origPath, Environment.NewLine, _paths.LogLocation, _paths.ConfigLocation, _paths.PathsConfig, _paths.ServerConfig));
+                            
                         }
                         break;
                     case ConfigType.Servers:
@@ -589,7 +546,7 @@ namespace PersonalDiscordBot
                                         ServerLogPath = node.Attributes["logpath"].Value ?? ""
                                     };
                                     ServerList.Add(gs);
-                                    uDebugAddLog(string.Format("Added GameServer from config: Game[{0}] ServName[{1}]", gs.Game, gs.ServerName));
+                                    Toolbox.uDebugAddLog(string.Format("Added GameServer from config: Game[{0}] ServName[{1}]", gs.Game, gs.ServerName));
                                 }
                         ServerList = new ObservableCollection<GameServer>(ServerList.OrderBy(x => x.Game));
                         lvServers.ItemsSource = null;
@@ -623,7 +580,7 @@ namespace PersonalDiscordBot
                         });
                         string jSon = JsonConvert.SerializeObject(_pathsT.ToArray(), Newtonsoft.Json.Formatting.Indented);
                         File.WriteAllText(_paths.PathsConfig, jSon);
-                        uDebugAddLog("Saved current config to Paths.json");
+                        Toolbox.uDebugAddLog("Saved current config to Paths.json");
                         break;
                     case ConfigType.Servers:
                         XmlDocument doc = new XmlDocument();
@@ -652,7 +609,7 @@ namespace PersonalDiscordBot
                             gameServ.AppendChild(serv);
                         }
                         doc.Save(_paths.ServerConfig);
-                        uDebugAddLog("Saved current game server list to ServerConfig.xml");
+                        Toolbox.uDebugAddLog("Saved current game server list to ServerConfig.xml");
                         break;
                 }
             }
@@ -685,12 +642,12 @@ namespace PersonalDiscordBot
                         _paths.LogLocation = _logDir; _paths.ConfigLocation = _confDir; _paths.PathsConfig = _pathConfig; _paths.ServerConfig = _servConfig;
                         string _json = JsonConvert.SerializeObject(_pathsT, Newtonsoft.Json.Formatting.Indented);
                         File.WriteAllText(_pathConfig, _json);
-                        uDebugAddLog(string.Format("Created default Paths.json: LogLoc: {0} ConfLoc: {1} PathLoc: {2} ServLoc: {3}", _logDir, _confDir, _pathConfig, _servConfig));
+                        Toolbox.uDebugAddLog(string.Format("Created default Paths.json: LogLoc: {0} ConfLoc: {1} PathLoc: {2} ServLoc: {3}", _logDir, _confDir, _pathConfig, _servConfig));
                         break;
                     case ConfigType.Servers:
                         XDocument doc = new XDocument(new XElement("GameServers"));
                         doc.Save(_paths.ServerConfig);
-                        uDebugAddLog(string.Format("Created default ServerConfig.xml at {0}", _servConfig));
+                        Toolbox.uDebugAddLog(string.Format("Created default ServerConfig.xml at {0}", _servConfig));
                         break;
                 }
             }
@@ -703,7 +660,7 @@ namespace PersonalDiscordBot
         private void FullExceptionLog(Exception ex, [CallerLineNumber] int lineNumber = 0, [CallerMemberName] string caller = null, [CallerFilePath] string filePath = null)
         {
             string exString = string.Format("TimeStamp: {1}{0}Exception Type: {2}{0}Caller: {3} at {4}{0}Message: {5}{0}HR: {6}{0}StackTrace:{0}{7}{0}", Environment.NewLine, string.Format("{0}_{1}", DateTime.Now.ToLocalTime().ToString("MM-dd-yy"), DateTime.Now.ToLocalTime().ToLongTimeString()), ex.GetType().Name, caller, lineNumber, ex.Message, ex.HResult, ex.StackTrace);
-            uDebugAddLog(string.Format("EXCEPTION: {0} at {1}", caller, lineNumber));
+            Toolbox.uDebugAddLog(string.Format("EXCEPTION: {0} at {1}", caller, lineNumber));
             uStatusUpdate(string.Format("An Exception Occured: {0} at {1}{2}Msg: {3}", caller, lineNumber, Environment.NewLine, ex.Message));
             string _logLocation = string.Format(@"{0}\Exceptions.log", _paths.LogLocation);
             if (!File.Exists(_logLocation))
@@ -718,7 +675,7 @@ namespace PersonalDiscordBot
         {
             if (ex.ErrorReason.ToLower() == "unknown command.") return;
             string exString = string.Format("ErrorReason[{0}] ErrorValue[{1}]", ex.ErrorReason, ex.Error.Value);
-            uDebugAddLog(string.Format("RSLTFAIL: {0}", exString));
+            Toolbox.uDebugAddLog(string.Format("RSLTFAIL: {0}", exString));
             uStatusUpdate(string.Format("A result failed: {0}", exString));
             string _logLocation = string.Format(@"{0}\Exceptions.txt", _paths.LogLocation);
             if (!File.Exists(_logLocation))
@@ -791,12 +748,12 @@ namespace PersonalDiscordBot
                 if (!secondClick)
                 {
                     SlideGridTo(0, 0, 0, 0, grdMenu);
-                    uDebugAddLog("Slid Main Menu out of view");
+                    Toolbox.uDebugAddLog("Slid Main Menu out of view");
                 }
                 else if (secondClick)
                 {
                     SlideGridTo(0, 0, 0, -285, grdMenu);
-                    uDebugAddLog("Slid Main Menu into view");
+                    Toolbox.uDebugAddLog("Slid Main Menu into view");
                 }
             }
             catch (Exception ex)
@@ -811,7 +768,7 @@ namespace PersonalDiscordBot
             {
                 case Visibility.Visible:
                     grd.Visibility = Visibility.Hidden;
-                    uDebugAddLog(string.Format("Hid Grid {0}", grd.Name));
+                    Toolbox.uDebugAddLog(string.Format("Hid Grid {0}", grd.Name));
                     MainMenuGridSlide(true);
                     break;
                 case Visibility.Hidden:
@@ -820,12 +777,12 @@ namespace PersonalDiscordBot
                         if (grid != grd)
                         {
                             grid.Visibility = Visibility.Hidden;
-                            uDebugAddLog(string.Format("Hid Grid {0}", grid.Name));
+                            Toolbox.uDebugAddLog(string.Format("Hid Grid {0}", grid.Name));
                         }
                         else
                         {
                             grid.Visibility = Visibility.Visible;
-                            uDebugAddLog(string.Format("Revealed Grid {0}", grid.Name));
+                            Toolbox.uDebugAddLog(string.Format("Revealed Grid {0}", grid.Name));
                         }
                     }
                     MainMenuGridSlide(false);
@@ -838,7 +795,7 @@ namespace PersonalDiscordBot
             foreach (Grid grd in FindVisualChildren<Grid>(grdMenu))
             {
                 grd.Visibility = Visibility.Hidden;
-                uDebugAddLog(string.Format("Set Grid {0} to Hidden on launch", grd.Name));
+                Toolbox.uDebugAddLog(string.Format("Set Grid {0} to Hidden on launch", grd.Name));
             }
         }
 
@@ -889,7 +846,7 @@ namespace PersonalDiscordBot
                             grdNotification.BeginAnimation(Grid.MarginProperty, slideIn);
                             break;
                         default:
-                            uDebugAddLog("Something happened and the incorrect notification state was used, accepted states: 1 or 2");
+                            Toolbox.uDebugAddLog("Something happened and the incorrect notification state was used, accepted states: 1 or 2");
                             break;
                     }
                 };
@@ -898,11 +855,11 @@ namespace PersonalDiscordBot
                     try
                     {
                         Notification newNote = new Notification() { Message = notification, ShowTime = showTime };
-                        uDebugAddLog($"New Notification: {newNote.Message}, {newNote.ShowTime}sec(s)");
+                        Toolbox.uDebugAddLog($"New Notification: {newNote.Message}, {newNote.ShowTime}sec(s)");
                         Notification.notifications.Add(newNote);
-                        if (notificationPlaying) { uDebugAddLog("Notification is currently playing, returning"); return; }
+                        if (notificationPlaying) { Toolbox.uDebugAddLog("Notification is currently playing, returning"); return; }
                         notificationPlaying = true;
-                        uDebugAddLog("Notification wasn't playing, starting notification play cycles");
+                        Toolbox.uDebugAddLog("Notification wasn't playing, starting notification play cycles");
                         while (Notification.notifications.Count != 0)
                         {
                             foreach (var notif in Notification.notifications.ToList())
@@ -912,12 +869,12 @@ namespace PersonalDiscordBot
                                 Thread.Sleep(TimeSpan.FromSeconds(notif.ShowTime));
                                 worker.ReportProgress(2);
                                 Notification.notifications.Remove(notif);
-                                uDebugAddLog($"Removed notification: {notif.Message}");
-                                uDebugAddLog($"Notifications left: {Notification.notifications.Count}");
+                                Toolbox.uDebugAddLog($"Removed notification: {notif.Message}");
+                                Toolbox.uDebugAddLog($"Notifications left: {Notification.notifications.Count}");
                             }
                         }
                         notificationPlaying = false;
-                        uDebugAddLog("Finished playing all notifications");
+                        Toolbox.uDebugAddLog("Finished playing all notifications");
                     }
                     catch (Exception ex)
                     {
@@ -1058,7 +1015,7 @@ namespace PersonalDiscordBot
                 CommandContext context = new CommandContext(client, msg);
                 string cmd = string.Format("User: {0} ◥◤ Command: {1}", arg.Author.Username, arg.ToString());
                 uStatusUpdate(cmd);
-                uDebugAddLog(string.Format("COMMAND: {0}", cmd));
+                Toolbox.uDebugAddLog(string.Format("COMMAND: {0}", cmd));
                 var result = await commands.ExecuteAsync(context, argPos, map);
                 if (!result.IsSuccess)
                 {
