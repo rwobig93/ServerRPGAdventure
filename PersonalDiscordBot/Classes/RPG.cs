@@ -139,7 +139,6 @@ namespace PersonalDiscordBot.Classes
 
     public static class Management
     {
-
         public static Character CreateNewCharacter(ulong ownerId, CharacterClass chosenClass)
         {
             Character newChar = new Character();
@@ -275,7 +274,6 @@ namespace PersonalDiscordBot.Classes
             }
             return newChar;
         }
-
     }
 
     #region Base Classes
@@ -367,11 +365,12 @@ namespace PersonalDiscordBot.Classes
         public int WindDamage { get; set; } = 0;
     }
 
-    public class Spell
+    public class Spell : IBackPackItem
     {
         public string Name { get; set; }
         public string Desc { get; set; } = "What is this? Magic or something?";
         public int Lvl { get; set; } = 0;
+        public int Worth { get; set; } = 0;
         public SpellType Type { get; set; } = SpellType.Attack;
         public int ManaCost { get; set; } = 1;
         public int Speed { get; set; } = 100;
@@ -527,6 +526,7 @@ namespace PersonalDiscordBot.Classes
                     chosenLoot = WeaponPicker(rarityType, character);
                     break;
                 case LootType.Spell:
+                    chosenLoot = SpellPicker(rarityType, character);
                     break;
                 case LootType.Backpack:
                     break;
@@ -586,6 +586,30 @@ namespace PersonalDiscordBot.Classes
         {
             if (level < maxLevel) level = level - 2 > 0 ? level + rng.Next(-2, 2) : level + rng.Next(0, 2);
             return level = level > maxLevel ? level = maxLevel : level;
+        }
+
+        public static int ChooseElementCount(RarityType rarity)
+        {
+            int typeCount = 0;
+            switch (rarity)
+            {
+                case RarityType.Common:
+                    typeCount = 1;
+                    break;
+                case RarityType.Uncommon:
+                    typeCount = 1;
+                    break;
+                case RarityType.Rare:
+                    typeCount = 2;
+                    break;
+                case RarityType.Epic:
+                    typeCount = 3;
+                    break;
+                case RarityType.Legendary:
+                    typeCount = 4;
+                    break;
+            }
+            return typeCount;
         }
 
         #endregion
@@ -710,22 +734,14 @@ namespace PersonalDiscordBot.Classes
         public static Weapon WeaponPicker(RarityType rarity, Character chara)
         {
             Weapon weap = new Weapon();
-
-            if (rarity == RarityType.Legendary)
-            {
-                if (ChanceRoll(30))
-                {
-                    weap = Weapons.weaponList[rng.Next(0, Weapons.weaponList.Count)];
-                }
-                else
-                {
-                    weap = Weapons.WeaponRandomGen(rarity, ChooseWeaponType(chara), chara.Lvl);
-                }
-            }
+            int rarityValue = LootDrop.GetRarityValue(rarity);
+            int level = ChooseLevel(chara.Lvl);
+            WeaponType type = ChooseWeaponType(chara);
+            var isUnique = ChanceRoll(30);
+            if (isUnique)
+                weap = Weapons.WeaponRandomGen(rarity, type, rarityValue, level);
             else
-            {
-                weap = Weapons.WeaponRandomGen(rarity, ChooseWeaponType(chara), chara.Lvl);
-            }
+                weap = Weapons.WeaponUniqueGen(rarity, type, rarityValue, level);
             return weap;
         }
 
@@ -809,9 +825,20 @@ namespace PersonalDiscordBot.Classes
             spell.Type = ChooseSpellType();
             bool isUnique = ChanceRoll(30);
             if (isUnique)
-                return Spells.SpellUniqueGen(spell, rarity, ChooseElement(), spell.Type, rarityValue, character.Lvl);
+            {
+                rarityValue += 2;
+                return Spells.SpellUniqueGen(character, spell, rarity, ChooseElement(), spell.Type, rarityValue, character.Lvl);
+            }
             else
-                return Spells.SpellRandomGen(spell, rarity, ChooseElement(), spell.Type, rarityValue, character.Lvl);
+                return Spells.SpellRandomGen(character, spell, rarity, ChooseElement(), spell.Type, rarityValue, character.Lvl);
+        }
+
+        public static void ChooseSpellWorth(Spell spell, int rarityValue, bool isUnique = false)
+        {
+            int dmgTotal = spell.PhysicalDamage + spell.FireDamage + spell.IceDamage + spell.LightningDamage + spell.MagicDamage + spell.WindDamage;
+            spell.Worth = (((spell.Lvl + rarityValue) * rarityValue) + (spell.Speed / (dmgTotal)));
+            if (isUnique)
+                spell.Worth = spell.Worth + ((spell.Lvl * rarityValue) + ((spell.Speed * rarityValue) / dmgTotal));
         }
 
         #endregion
@@ -821,297 +848,432 @@ namespace PersonalDiscordBot.Classes
     {
 
         #region Weapon Names and Descriptions
-        public static string[] weaponNamesSword = // Weapon name & desc index should match
+
+        public static string[] weaponNamesSword(RarityType rarity)
         {
-            "Not a weapon",
-            "Butterknife",
-            "Pokes' you in the eye",
-            "Cut you real bad",
-            "A sword of sorts",
-            "Stabby McStab Stab",
-            "Sword from the 7th Floor"
-        };
-        public static string[] weaponDescSword = // Weapon name & desc index should match
+            return new string[] 
+            {
+                $"{rarity} Not a weapon",
+                $"{rarity} Butterknife",
+                $"{rarity} Pokes' you in the eye",
+                $"{rarity} Cut you real bad",
+                $"{rarity} A sword of sorts",
+                $"{rarity} Stabby McStab Stab",
+                $"{rarity} Sword from the 7th Floor"
+            };
+        }
+        public static void WeaponSwordAddition(Weapon weap, int rarityValue, int level, int index)
         {
-            "This isn't a weapon.... at least I don't think it is",
-            "Used to butter that toast, or butter your bread. Mmmmm bread",
-            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard",
-            "I'm gonna cut you so bad, you gonna wish I never cut you so bad",
-            "This might be a sword, or might not, does it matter?",
-            "Stab. Stabby. Stab, stab stab. Stab stab stab stabby Mcstab stab. Stab, stab stab.",
-            "Ya blew it"
-        };
-        public static string[] weaponNamesGreatsword = // Weapon name & desc index should match
+            switch (index)
+            {
+                case 0:
+                    weap.Desc = "This isn't a weapon.... at least I don't think it is";
+                    weap.PhysicalDamage = (level + rng.Next(2, 14) + rarityValue);
+                    weap.Speed = (level + 100 + rng.Next(20, 80));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 1:
+                    weap.Desc = "Used to butter that toast, or butter your bread. Mmmmm bread";
+                    weap.PhysicalDamage = (level + rng.Next(5, 12) + rarityValue);
+                    weap.Speed = (level + 120 + rng.Next(30, 60));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 2:
+                    weap.Desc = "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard";
+                    weap.PhysicalDamage = (level + rng.Next(8, 14) + rarityValue);
+                    weap.Speed = (level + 100 + rng.Next(20, 50));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 3:
+                    weap.Desc = "I'm gonna cut you so bad, you gonna wish I never cut you so bad";
+                    weap.PhysicalDamage = (level + rng.Next(8, 20) + rarityValue);
+                    weap.Speed = (level + 120 + rng.Next(30, 60));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 4:
+                    weap.Desc = "This might be a sword, or might not, does it matter?";
+                    weap.PhysicalDamage = (level + rng.Next(3, 11) + rarityValue);
+                    weap.Speed = (level + 110 + rng.Next(30, 60));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 5:
+                    weap.Desc = "Stab. Stabby. Stab, stab stab. Stab stab stab stabby Mcstab stab. Stab, stab stab.";
+                    weap.PhysicalDamage = (level + rng.Next(5, 22) + rarityValue);
+                    weap.Speed = (level + 100 + rng.Next(10, 80));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 6:
+                    weap.Desc = "Ya blew it";
+                    weap.PhysicalDamage = (level + rng.Next(1, 30) + rarityValue);
+                    weap.Speed = (level + 100 + rng.Next(10, 100));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+            }
+        }
+        public static string[] weaponNamesGreatsword(RarityType rarity)
         {
-            "Not a weapon",
-            "Butterknife",
-            "Pokes' you in the eye",
-            "Cut you real bad",
-            "A sword of sorts",
-            "Stabby McStab Stab",
-            "Chainsword",
-            "\"Hammer\" of Thor"
-        };
-        public static string[] weaponDescGreatsword = // Weapon name & desc index should match
+            return new string[]
+            {
+                $"{rarity} Not a weapon",
+                $"{rarity} Butterknife",
+                $"{rarity} Pokes' you in the eye",
+                $"{rarity} Cut you real bad",
+                $"{rarity} A sword of sorts",
+                $"{rarity} Stabby McStab Stab",
+                $"{rarity} Chainsword",
+                $"{rarity} \"Hammer\" of Thor"
+            };
+        }
+        public static void WeaponGreatSwordAddition(Weapon weap, int rarityValue, int level, int index)
         {
-            "This isn't a weapon.... at least I don't think it is",
-            "Used to butter that toast, or butter your bread. Mmmmm bread",
-            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard",
-            "I'm gonna cut you so bad, you gonna wish I never cut you so bad",
-            "This might be a sword, or might not, does it matter?",
-            "Stab. Stabby. Stab, stab stab. Stab stab stab stabby Mcstab stab. Stab, stab stab.",
-            "A serrated sword that, when the magic word \"Gettum!\" is spoken it causes the serrations to spin around the blade.",
-            "A one handed \"Hammer\" that deals crushing / electric damage"
-        };
-        public static string[] weaponNamesDagger = // Weapon name & desc index should match
+            switch (index)
+            {
+                case 0:
+                    weap.Desc = "This isn't a weapon.... at least I don't think it is";
+                    weap.PhysicalDamage = (level + rng.Next(10, 23) + rarityValue);
+                    weap.Speed = (level + 70 + rng.Next(30, 60));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 1:
+                    weap.Desc = "Used to butter that toast, or butter your bread. Mmmmm bread";
+                    weap.PhysicalDamage = (level + rng.Next(8, 25) + rarityValue);
+                    weap.Speed = (level + 100 + rng.Next(20, 80));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 2:
+                    weap.Desc = "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard";
+                    weap.PhysicalDamage = (level + rng.Next(12, 18) + rarityValue);
+                    weap.Speed = (level + 110 + rng.Next(20, 70));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 3:
+                    weap.Desc = "I'm gonna cut you so bad, you gonna wish I never cut you so bad";
+                    weap.PhysicalDamage = (level + rng.Next(8, 27) + rarityValue);
+                    weap.Speed = (level + 60 + rng.Next(50, 80));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 4:
+                    weap.Desc = "This might be a sword, or might not, does it matter?";
+                    weap.PhysicalDamage = (level + rng.Next(2, 30) + rarityValue);
+                    weap.Speed = (level + 50 + rng.Next(20, 800));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 5:
+                    weap.Desc = "Stab. Stabby. Stab, stab stab. Stab stab stab stabby Mcstab stab. Stab, stab stab.";
+                    weap.PhysicalDamage = (level + rng.Next(12, 20) + rarityValue);
+                    weap.Speed = (level + 80 + rng.Next(40, 70));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 6:
+                    weap.Desc = "A serrated sword that, when the magic word \"Gettum!\" is spoken it causes the serrations to spin around the blade.";
+                    weap.PhysicalDamage = (level + rng.Next(5, 28) + rarityValue);
+                    weap.Speed = (level + 90 + rng.Next(20, 50));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 7:
+                    weap.Desc = "A one handed \"Hammer\" that deals crushing / electric damage";
+                    weap.PhysicalDamage = (level + rng.Next(10, 25) + rarityValue);
+                    weap.LightningDamage = (level + rng.Next(5, 15) + rarityValue);
+                    weap.Speed = (level + 90 + rng.Next(20, 70));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+            }
+        }
+        public static string[] weaponNamesDagger(RarityType rarity)
         {
-            "Not a weapon",
-            "Butterknife",
-            "Pokes' you in the eye",
-            "Cut you real bad",
-            "Stabby McStab Stab"
-        };
-        public static string[] weaponDescDagger = // Weapon name & desc index should match
+            return new string[]
+            {
+                $"{rarity} Not a weapon",
+                $"{rarity} Butterknife",
+                $"{rarity} Pokes' you in the eye",
+                $"{rarity} Cut you real bad",
+                $"{rarity} Stabby McStab Stab"
+            };
+        }
+        public static void WeaponDaggerAddition(Weapon weap, int rarityValue, int level, int index)
         {
-            "This isn't a weapon.... at least I don't think it is",
-            "Used to butter that toast, or butter your bread. Mmmmm bread",
-            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard",
-            "I'm gonna cut you so bad, you gonna wish I never cut you so bad",
-            "Stab. Stabby. Stab, stab stab. Stab stab stab stabby Mcstab stab. Stab, stab stab."
-        };
-        public static string[] weaponNamesKatana = // Weapon name & desc index should match
+            switch (index)
+            {
+                case 0:
+                    weap.Desc = "This isn't a weapon.... at least I don't think it is";
+                    weap.PhysicalDamage = (level + rng.Next(2, 8) + rarityValue);
+                    weap.Speed = (level + 120 + rng.Next(30, 110));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 1:
+                    weap.Desc = "Used to butter that toast, or butter your bread. Mmmmm bread";
+                    weap.PhysicalDamage = (level + rng.Next(6, 10) + rarityValue);
+                    weap.Speed = (level + 130 + rng.Next(70, 100));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 2:
+                    weap.Desc = "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard";
+                    weap.PhysicalDamage = (level + rng.Next(5, 11) + rarityValue);
+                    weap.Speed = (level + 120 + rng.Next(30, 110));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 3:
+                    weap.Desc = "I'm gonna cut you so bad, you gonna wish I never cut you so bad";
+                    weap.PhysicalDamage = (level + rng.Next(8, 15) + rarityValue);
+                    weap.Speed = (level + 100 + rng.Next(20, 90));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 4:
+                    weap.Desc = "Stab. Stabby. Stab, stab stab. Stab stab stab stabby Mcstab stab. Stab, stab stab.";
+                    weap.PhysicalDamage = (level + rng.Next(6, 13) + rarityValue);
+                    weap.Speed = (level + 140 + rng.Next(60, 100));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+            }
+        }
+        public static string[] weaponNamesKatana(RarityType rarity)
         {
-            "Not a weapon",
-            "Butterknife",
-            "Pokes' you in the eye",
-            "Cut you real bad",
-            "Stabby McStab Stab"
-        };
-        public static string[] weaponDescKatana = // Weapon name & desc index should match
+            return new string[]
+            {
+                $"{rarity} Not a weapon",
+                $"{rarity} Butterknife",
+                $"{rarity} Pokes' you in the eye",
+                $"{rarity} Cut you real bad",
+                $"{rarity} Stabby McStab Stab"
+            };
+        }
+        public static void WeaponKatanaAddition(Weapon weap, int rarityValue, int level, int index)
         {
-            "This isn't a weapon.... at least I don't think it is",
-            "Used to butter that toast, or butter your bread. Mmmmm bread",
-            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard",
-            "I'm gonna cut you so bad, you gonna wish I never cut you so bad",
-            "Stab. Stabby. Stab, stab stab. Stab stab stab stabby Mcstab stab. Stab, stab stab."
-        };
-        public static string[] weaponNamesStaff = // Weapon name & desc index should match
+            switch (index)
+            {
+                case 0:
+                    weap.Desc = "This isn't a weapon.... at least I don't think it is";
+                    weap.PhysicalDamage = (level + rng.Next(7, 17) + rarityValue);
+                    weap.Speed = (level + 110 + rng.Next(20, 100));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 1:
+                    weap.Desc = "Used to butter that toast, or butter your bread. Mmmmm bread";
+                    weap.PhysicalDamage = (level + rng.Next(9, 18) + rarityValue);
+                    weap.Speed = (level + 130 + rng.Next(40, 130));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 2:
+                    weap.Desc = "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard";
+                    weap.PhysicalDamage = (level + rng.Next(10, 17) + rarityValue);
+                    weap.Speed = (level + 120 + rng.Next(20, 90));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 3:
+                    weap.Desc = "I'm gonna cut you so bad, you gonna wish I never cut you so bad";
+                    weap.PhysicalDamage = (level + rng.Next(12, 19) + rarityValue);
+                    weap.Speed = (level + 110 + rng.Next(40, 120));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 4:
+                    weap.Desc = "Stab. Stabby. Stab, stab stab. Stab stab stab stabby Mcstab stab. Stab, stab stab.";
+                    weap.PhysicalDamage = (level + rng.Next(8, 16) + rarityValue);
+                    weap.Speed = (level + 150 + rng.Next(10, 80));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+            }
+        }
+        public static string[] weaponNamesStaff(RarityType rarity)
         {
-            "Not a weapon",
-            "Pokes' you in the eye"
-        };
-        public static string[] weaponDescStaff = // Weapon name & desc index should match
+            return new string[]
+            {
+                $"{rarity} Not a weapon",
+                $"{rarity} Pokes' you in the eye"
+            };
+        }
+        public static void WeaponStaffAddition(Weapon weap, int rarityValue, int level, int index)
         {
-            "This isn't a weapon.... at least I don't think it is",
-            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard"
-        };
-        public static string[] weaponNamesFocusStone = // Weapon name & desc index should match
+            switch (index)
+            {
+                case 0:
+                    weap.Desc = "This isn't a weapon.... at least I don't think it is";
+                    weap.PhysicalDamage = (level + rng.Next(2, 8) + rarityValue);
+                    weap.MagicDamage = (level + rng.Next(8, 15) + rarityValue);
+                    weap.Speed = (level + 90 + rng.Next(10, 90));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.MagicDamage));
+                    break;
+                case 1:
+                    weap.Desc = "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard";
+                    weap.PhysicalDamage = (level + rng.Next(5, 10) + rarityValue);
+                    weap.MagicDamage = (level + rng.Next(5, 20) + rarityValue);
+                    weap.Speed = (level + 50 + rng.Next(10, 150));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.MagicDamage));
+                    break;
+            }
+        }
+        public static string[] weaponNamesFocusStone(RarityType rarity)
         {
-            "Not a weapon",
-            "Pokes' you in the eye"
-        };
-        public static string[] weaponDescFocusStone = // Weapon name & desc index should match
+            return new string[]
+            {
+                $"{rarity} Not a weapon",
+                $"{rarity} Pokes' you in the eye"
+            };
+        }
+        public static void WeaponFocusStoneAddition(Weapon weap, int rarityValue, int level, int index)
         {
-            "This isn't a weapon.... at least I don't think it is",
-            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard"
-        };
-        public static string[] weaponNamesSpear = // Weapon name & desc index should match
+            switch (index)
+            {
+                case 0:
+                    weap.Desc = "This isn't a weapon.... at least I don't think it is";
+                    weap.PhysicalDamage = (level + rng.Next(1, 4) + rarityValue);
+                    weap.MagicDamage = (level + rng.Next(5, 12) + rarityValue);
+                    weap.Speed = (level + 90 + rng.Next(60, 110));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.MagicDamage));
+                    break;
+                case 1:
+                    weap.Desc = "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard";
+                    weap.PhysicalDamage = (level + rng.Next(2, 6) + rarityValue);
+                    weap.MagicDamage = (level + rng.Next(4, 10) + rarityValue);
+                    weap.Speed = (level + 100 + rng.Next(50, 100));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.MagicDamage));
+                    break;
+            }
+        }
+        public static string[] weaponNamesSpear(RarityType rarity)
         {
-            "Not a weapon",
-            "Pokes' you in the eye"
-        };
-        public static string[] weaponDescSpear = // Weapon name & desc index should match
+            return new string[]
+            {
+                $"{rarity} Not a weapon",
+                $"{rarity} Pokes' you in the eye"
+            };
+        }
+        public static void WeaponSpearAddition(Weapon weap, int rarityValue, int level, int index)
         {
-            "This isn't a weapon.... at least I don't think it is",
-            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard"
-        };
-        public static string[] weaponNamesDragonSpear = // Weapon name & desc index should match
+            switch (index)
+            {
+                case 0:
+                    weap.Desc = "This isn't a weapon.... at least I don't think it is";
+                    weap.PhysicalDamage = (level + rng.Next(8, 14) + rarityValue);
+                    weap.Speed = (level + 100 + rng.Next(30, 90));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 1:
+                    weap.Desc = "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard";
+                    weap.PhysicalDamage = (level + rng.Next(10, 18) + rarityValue);
+                    weap.Speed = (level + 90 + rng.Next(10, 160));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+            }
+        }
+        public static string[] weaponNamesDragonSpear(RarityType rarity)
         {
-            "Not a weapon",
-            "Pokes' you in the eye"
-        };
-        public static string[] weaponDescDragonSpear = // Weapon name & desc index should match
+            return new string[]
+            {
+                $"{rarity} Not a weapon",
+                $"{rarity} Pokes' you in the eye",
+                $"{rarity} Spear of the Ultres Dragon"
+            };
+        }
+        public static void WeaponDragonSpearAddition(Weapon weap, int rarityValue, int level, int index)
         {
-            "This isn't a weapon.... at least I don't think it is",
-            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard"
-        };
-        public static string[] weaponNamesTwinSwords = // Weapon name & desc index should match
+            switch (index)
+            {
+                case 0:
+                    weap.Desc = "This isn't a weapon.... at least I don't think it is";
+                    weap.PhysicalDamage = (level + rng.Next(5, 10) + rarityValue);
+                    weap.FireDamage = ChanceRoll(30) ? level + rng.Next(0, 7) : 0;
+                    weap.IceDamage = ChanceRoll(30) ? level + rng.Next(0, 7) : 0;
+                    weap.LightningDamage = ChanceRoll(30) ? level + rng.Next(0, 7) : 0;
+                    weap.WindDamage = ChanceRoll(30) ? level + rng.Next(0, 7) : 0;
+                    weap.Speed = (level + 90 + rng.Next(10, 100));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed + (weap.FireDamage + weap.IceDamage + weap.LightningDamage + weap.WindDamage) / weap.PhysicalDamage));
+                    break;
+                case 1:
+                    weap.Desc = "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard";
+                    weap.PhysicalDamage = (level + rng.Next(10, 20) + rarityValue);
+                    weap.FireDamage = ChanceRoll(30) ? level + rng.Next(0, 10) : 0;
+                    weap.IceDamage = ChanceRoll(30) ? level + rng.Next(0, 10) : 0;
+                    weap.LightningDamage = ChanceRoll(30) ? level + rng.Next(0, 10) : 0;
+                    weap.WindDamage = ChanceRoll(30) ? level + rng.Next(0, 10) : 0;
+                    weap.Speed = (level + 70 + rng.Next(30, 70));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed + (weap.FireDamage + weap.IceDamage + weap.LightningDamage + weap.WindDamage) / weap.PhysicalDamage));
+                    break;
+                case 2:
+                    weap.Desc = "Spear bestowed to an ancient dragon tamer by the Great Dragon Ultres, shits waaaaaaaaaaack!";
+                    weap.PhysicalDamage = (level + rng.Next(12, 30) + rarityValue);
+                    weap.FireDamage = ChanceRoll(30) ? level + rng.Next(0, 7) : 0;
+                    weap.IceDamage = ChanceRoll(30) ? level + rng.Next(0, 7) : 0;
+                    weap.LightningDamage = ChanceRoll(30) ? level + rng.Next(10, 20) : rng.Next(5, 12);
+                    weap.WindDamage = ChanceRoll(30) ? level + rng.Next(10, 20) : rng.Next(5, 12);
+                    weap.Speed = (level + 100 + rng.Next(0, 100));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed + (weap.FireDamage + weap.IceDamage + weap.LightningDamage + weap.WindDamage) / weap.PhysicalDamage));
+                    break;
+            }
+        }
+        public static string[] weaponNamesTwinSwords(RarityType rarity)
         {
-            "Not a weapon",
-            "Butterknife",
-            "Pokes' you in the eye",
-            "Cut you real bad",
-            "Stabby McStab Stab"
-        };
-        public static string[] weaponDescTwinSwords = // Weapon name & desc index should match
+            return new string[]
+            {
+                $"{rarity} Not a weapon",
+                $"{rarity} Butterknife",
+                $"{rarity} Pokes' you in the eye",
+                $"{rarity} Cut you real bad",
+                $"{rarity} Stabby McStab Stab"
+            };
+        }
+        public static void WeaponTwinSwordsAddition(Weapon weap, int rarityValue, int level, int index)
         {
-            "This isn't a weapon.... at least I don't think it is",
-            "Used to butter that toast, or butter your bread. Mmmmm bread",
-            "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard",
-            "I'm gonna cut you so bad, you gonna wish I never cut you so bad",
-            "Stab. Stabby. Stab, stab stab. Stab stab stab stabby Mcstab stab. Stab, stab stab."
-        };
+            switch (index)
+            {
+                case 0:
+                    weap.Desc = "This isn't a weapon.... at least I don't think it is";
+                    weap.PhysicalDamage = ((level + rng.Next(2, 6) * 2) + rarityValue);
+                    weap.Speed = (level + 90 + rng.Next(20, 70));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 1:
+                    weap.Desc = "Used to butter that toast, or butter your bread. Mmmmm bread";
+                    weap.PhysicalDamage = ((level + rng.Next(1, 10) * 2) + rarityValue);
+                    weap.Speed = (level + 100 + rng.Next(10, 80));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 2:
+                    weap.Desc = "Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard";
+                    weap.PhysicalDamage = ((level + rng.Next(3, 8) * 2) + rarityValue);
+                    weap.Speed = (level + 90 + rng.Next(20, 70));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 3:
+                    weap.Desc = "I'm gonna cut you so bad, you gonna wish I never cut you so bad";
+                    weap.PhysicalDamage = ((level + rng.Next(4, 10) * 2) + rarityValue);
+                    weap.Speed = (level + 90 + rng.Next(30, 60));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+                case 4:
+                    weap.Desc = "Stab. Stabby. Stab, stab stab. Stab stab stab stabby Mcstab stab. Stab, stab stab.";
+                    weap.PhysicalDamage = ((level + rng.Next(3, 12) * 2) + rarityValue);
+                    weap.Speed = (level + 100 + rng.Next(10, 100));
+                    weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
+                    break;
+            }
+        }
+
         #endregion
 
         #region Weapon Methods
 
-        public static string WeaponNameandDescGen(WeaponType type, RarityType rarity, out string description, out bool isUniqueName)
+        public static Weapon WeaponRandomGen(RarityType rarity, WeaponType type, int rarityValue, int level)
         {
-            string weaponName = string.Empty;
-            string weaponDesc = string.Empty;
-            isUniqueName = ChanceRoll(30);
-            switch (type)
-            {
-                case WeaponType.Dagger:
-                    int daggerIndex = rng.Next(0, weaponNamesDagger.Length);
-                    if (isUniqueName)
-                    {
-                        weaponName = weaponNamesDagger[daggerIndex];
-                        weaponDesc = weaponDescDagger[daggerIndex];
-                    }
-                    else
-                    {
-                        weaponName = $"{rarity.ToString()} Dagger";
-                        weaponDesc = $"An average {rarity.ToString()} Dagger";
-                    }
-                    break;
-                case WeaponType.DragonSpear:
-                    int dsIndex = rng.Next(0, weaponNamesDragonSpear.Length);
-                    if (isUniqueName)
-                    {
-                        weaponName = weaponNamesDragonSpear[dsIndex];
-                        weaponDesc = weaponDescDragonSpear[dsIndex];
-                    }
-                    else
-                    {
-                        weaponName = $"{rarity.ToString()} Dragon Spear";
-                        weaponDesc = $"An average {rarity.ToString()} Dragon Spear";
-                    }
-                    break;
-                case WeaponType.FocusStone:
-                    int fsIndex = rng.Next(0, weaponNamesFocusStone.Length);
-                    if (isUniqueName)
-                    {
-                        weaponName = weaponNamesFocusStone[fsIndex];
-                        weaponDesc = weaponDescFocusStone[fsIndex];
-                    }
-                    else
-                    {
-                        weaponName = $"{rarity.ToString()} Focus Stone";
-                        weaponDesc = $"An average {rarity.ToString()} Focus Stone";
-                    }
-                    break;
-                case WeaponType.Greatsword:
-                    int gsIndex = rng.Next(0, weaponNamesGreatsword.Length);
-                    if (isUniqueName)
-                    {
-                        weaponName = weaponNamesGreatsword[gsIndex];
-                        weaponDesc = weaponDescGreatsword[gsIndex];
-                    }
-                    else
-                    {
-                        weaponName = $"{rarity.ToString()} Great Sword";
-                        weaponDesc = $"An average {rarity.ToString()} Great Sword";
-                    }
-                    break;
-                case WeaponType.Katana:
-                    int katanaIndex = rng.Next(0, weaponNamesKatana.Length);
-                    if (isUniqueName)
-                    {
-                        weaponName = weaponNamesKatana[katanaIndex];
-                        weaponDesc = weaponDescKatana[katanaIndex];
-                    }
-                    else
-                    {
-                        weaponName = $"{rarity.ToString()} Katana";
-                        weaponDesc = $"An average {rarity.ToString()} Katana";
-                    }
-                    break;
-                case WeaponType.Spear:
-                    int spearIndex = rng.Next(0, weaponNamesSpear.Length);
-                    if (isUniqueName)
-                    {
-                        weaponName = weaponNamesSpear[spearIndex];
-                        weaponDesc = weaponDescSpear[spearIndex];
-                    }
-                    else
-                    {
-                        weaponName = $"{rarity.ToString()} Spear";
-                        weaponDesc = $"An average {rarity.ToString()} Spear";
-                    }
-                    break;
-                case WeaponType.Staff:
-                    int staffIndex = rng.Next(0, weaponNamesStaff.Length);
-                    if (isUniqueName)
-                    {
-                        weaponName = weaponNamesStaff[staffIndex];
-                        weaponDesc = weaponDescStaff[staffIndex];
-                    }
-                    else
-                    {
-                        weaponName = $"{rarity.ToString()} Staff";
-                        weaponDesc = $"An average {rarity.ToString()} Staff";
-                    }
-                    break;
-                case WeaponType.Sword:
-                    int swordIndex = rng.Next(0, weaponNamesSword.Length);
-                    if (isUniqueName)
-                    {
-                        weaponName = weaponNamesSword[swordIndex];
-                        weaponDesc = weaponDescSword[swordIndex];
-                    }
-                    else
-                    {
-                        weaponName = $"{rarity.ToString()} Sword";
-                        weaponDesc = $"An average {rarity.ToString()} Sword";
-                    }
-                    break;
-                case WeaponType.TwinSwords:
-                    int tsIndex = rng.Next(0, weaponNamesTwinSwords.Length);
-                    if (isUniqueName)
-                    {
-                        weaponName = weaponNamesTwinSwords[tsIndex];
-                        weaponDesc = weaponDescTwinSwords[tsIndex];
-                    }
-                    else
-                    {
-                        weaponName = $"{rarity.ToString()} Twin Swords";
-                        weaponDesc = $"An average {rarity.ToString()} Twin Swords";
-                    }
-                    break;
-            }
-            description = weaponDesc;
-            return weaponName;
-        }
-
-        public static Weapon WeaponRandomGen(RarityType rarity, WeaponType type, int level)
-        {
-            int rarityValue = 0;
-            bool isUniqueName = false;
-            string descr = string.Empty;
-
-            rarityValue = LootDrop.GetRarityValue(rarity);
-
             Weapon weap = new Weapon()
             {
-                Name = WeaponNameandDescGen(type, rarity, out descr, out isUniqueName),
-                Desc = descr,
                 Type = type,
                 Rarity = rarity,
-                Lvl = LootDrop.ChooseLevel(level)
+                Lvl = LootDrop.ChooseLevel(level),
+                MaxDurability = (10 * level) + (rarityValue * 4)
             };
-            if (isUniqueName)
-                rarityValue = rarityValue + 2;
-            weap.MaxDurability = (10 * level) + (rarityValue * 4);
             weap.CurrentDurability = weap.MaxDurability;
             switch (type)
             {
                 case WeaponType.Dagger:
+                    weap.Name = $"{rarity} {type}";
+                    weap.Desc = $"A {rarity} {type}";
                     weap.PhysicalDamage = (level + rng.Next(1, 5) + rarityValue);
                     weap.Speed = (level + 120 + rng.Next(40, 80));
                     weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
                     break;
                 case WeaponType.DragonSpear:
+                    weap.Name = $"{rarity} {type}";
+                    weap.Desc = $"A {rarity} {type}";
                     weap.PhysicalDamage = (level + rng.Next(3, 8) + rarityValue);
                     weap.FireDamage = ChanceRoll(30) ? level + rng.Next(0, 5) : 0;
                     weap.IceDamage = ChanceRoll(30) ? level + rng.Next(0, 5) : 0;
@@ -1121,44 +1283,121 @@ namespace PersonalDiscordBot.Classes
                     weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed + (weap.FireDamage + weap.IceDamage + weap.LightningDamage + weap.WindDamage) / weap.PhysicalDamage));
                     break;
                 case WeaponType.FocusStone:
+                    weap.Name = $"{rarity} {type}";
+                    weap.Desc = $"A {rarity} {type}";
                     weap.PhysicalDamage = (level + rng.Next(0, 2) + rarityValue);
                     weap.MagicDamage = (level + rng.Next(2, 8) + rarityValue);
                     weap.Speed = (level + 80 + rng.Next(20, 110));
                     weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.MagicDamage));
                     break;
                 case WeaponType.Greatsword:
+                    weap.Name = $"{rarity} {type}";
+                    weap.Desc = $"A {rarity} {type}";
                     weap.PhysicalDamage = (level + rng.Next(8, 20) + rarityValue);
-                    weap.LightningDamage = weap.Name.ToLower().Contains("hammer") ? (level + rng.Next(2, 8) + rarityValue) : 0;
                     weap.Speed = (level + 70 + rng.Next(10, 40));
                     weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
                     break;
                 case WeaponType.Katana:
+                    weap.Name = $"{rarity} {type}";
+                    weap.Desc = $"A {rarity} {type}";
                     weap.PhysicalDamage = (level + rng.Next(5, 15) + rarityValue);
                     weap.Speed = (level + 100 + rng.Next(10, 110));
                     weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
                     break;
                 case WeaponType.Spear:
+                    weap.Name = $"{rarity} {type}";
+                    weap.Desc = $"A {rarity} {type}";
                     weap.PhysicalDamage = (level + rng.Next(4, 10) + rarityValue);
                     weap.Speed = (level + 90 + rng.Next(10, 110));
                     weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
                     break;
                 case WeaponType.Staff:
+                    weap.Name = $"{rarity} {type}";
+                    weap.Desc = $"A {rarity} {type}";
                     weap.PhysicalDamage = (level + rng.Next(0, 3) + rarityValue);
                     weap.MagicDamage = (level + rng.Next(4, 10) + rarityValue);
                     weap.Speed = (level + 70 + rng.Next(20, 80));
                     weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.MagicDamage));
                     break;
                 case WeaponType.Sword:
+                    weap.Name = $"{rarity} {type}";
+                    weap.Desc = $"A {rarity} {type}";
                     weap.PhysicalDamage = (level + rng.Next(4, 10) + rarityValue);
                     weap.Speed = (level + 100 + rng.Next(20, 50));
                     weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
                     break;
                 case WeaponType.TwinSwords:
+                    weap.Name = $"{rarity} {type}";
+                    weap.Desc = $"{rarity} {type}";
                     weap.PhysicalDamage = ((level + rng.Next(1, 5) * 2) + rarityValue);
                     weap.Speed = (level + 80 + rng.Next(20, 70));
                     weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
                     break;
             }
+            return weap;
+        }
+
+        public static Weapon WeaponUniqueGen(RarityType rarity, WeaponType type, int rarityValue, int level)
+        {
+            Weapon weap = new Weapon();
+            rarityValue += 2;
+            switch (type)
+             {
+                 case WeaponType.Dagger:
+                    var dagNames = weaponNamesDagger(rarity);
+                    int dagIndex = rng.Next(0, dagNames.Length);
+                    weap.Name = dagNames[dagIndex];
+                    WeaponDaggerAddition(weap, rarityValue, level, dagIndex);
+                     break;
+                 case WeaponType.DragonSpear:
+                    var dsNames = weaponNamesDragonSpear(rarity);
+                    int dsIndex = rng.Next(0, dsNames.Length);
+                    weap.Name = dsNames[dsIndex];
+                    WeaponDragonSpearAddition(weap, rarityValue, level, dsIndex);
+                     break;
+                 case WeaponType.FocusStone:
+                    var fsNames = weaponNamesFocusStone(rarity);
+                    int fsIndex = rng.Next(0, fsNames.Length);
+                    weap.Name = fsNames[fsIndex];
+                    WeaponFocusStoneAddition(weap, rarityValue, level, fsIndex);
+                     break;
+                 case WeaponType.Greatsword:
+                    var gsNames = weaponNamesGreatsword(rarity);
+                    int gsIndex = rng.Next(0, gsNames.Length);
+                    weap.Name = gsNames[gsIndex];
+                    WeaponGreatSwordAddition(weap, rarityValue, level, gsIndex);
+                     break;
+                 case WeaponType.Katana:
+                    var ktNames = weaponNamesKatana(rarity);
+                    int ktIndex = rng.Next(0, ktNames.Length);
+                    weap.Name = ktNames[ktIndex];
+                    WeaponKatanaAddition(weap, rarityValue, level, ktIndex);
+                     break;
+                 case WeaponType.Spear:
+                    var spNames = weaponNamesSpear(rarity);
+                    int spIndex = rng.Next(0, spNames.Length);
+                    weap.Name = spNames[spIndex];
+                    WeaponSpearAddition(weap, rarityValue, level, spIndex);
+                     break;
+                 case WeaponType.Staff:
+                    var stNames = weaponNamesStaff(rarity);
+                    int stIndex = rng.Next(0, stNames.Length);
+                    weap.Name = stNames[stIndex];
+                    WeaponStaffAddition(weap, rarityValue, level, stIndex);
+                     break;
+                 case WeaponType.Sword:
+                    var swNames = weaponNamesSword(rarity);
+                    int swIndex = rng.Next(0, swNames.Length);
+                    weap.Name = swNames[swIndex];
+                    WeaponSwordAddition(weap, rarityValue, level, swIndex);
+                     break;
+                 case WeaponType.TwinSwords:
+                    var tsNames = weaponNamesTwinSwords(rarity);
+                    int tsIndex = rng.Next(0, tsNames.Length);
+                    weap.Name = tsNames[tsIndex];
+                    WeaponTwinSwordsAddition(weap, rarityValue, level, tsIndex);
+                     break;
+             }
             return weap;
         }
 
@@ -1724,154 +1963,42 @@ namespace PersonalDiscordBot.Classes
 
         public static string[] SpellRestorativeRanGenNames(ElementType type, RarityType rarity)
         {
-            string[] names = null;
-            switch (type)
+            string[] names =
             {
-                case ElementType.Fire:
-                    names = new string[]
-                    {
-
-                    };
-                    break;
-                case ElementType.Ice:
-                    names = new string[]
-                    {
-
-                    };
-                    break;
-                case ElementType.Lightning:
-                    names = new string[]
-                    {
-
-                    };
-                    break;
-                case ElementType.Magic:
-                    names = new string[]
-                    {
-
-                    };
-                    break;
-                case ElementType.Physical:
-                    names = new string[]
-                    {
-
-                    };
-                    break;
-                case ElementType.Wind:
-                    names = new string[]
-                    {
-
-                    };
-                    break;
-            }
+                $"{rarity} Healing Wind",
+                $"{rarity} Foot Rub",
+                $"{rarity} Happy Ending",
+                $"{rarity} Belief that we aren't just meat sacks brought to life by accident"
+            };
+            
             return names;
         }
 
-        public static void SpellRestorativeRanGenAdditions(ElementType type, Spell spell, int rarityValue, int index)
+        public static void SpellRestorativeRanGenAdditions(Character charac, Spell spell, int rarityValue, int index)
         {
-            switch (type)
+            switch (index)
             {
-                case ElementType.Fire:
-                    switch (index)
-                    {
-                        case 0:
-                            break;
-                        case 1:
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                    }
+                case 0:
+                    spell.Desc = "Suddenly a wind rolls in that just happens to heal you, go figure, it's those healing winds we hear so much about";
+                    spell.PhysicalDamage += (charac.MaxHP / 2) + (rarityValue * spell.Lvl);
+                    spell.ManaCost += 7 + spell.Lvl;
+                    spell.Speed = 90;
                     break;
-                case ElementType.Ice:
-                    switch (index)
-                    {
-                        case 0:
-                            break;
-                        case 1:
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                    }
+                case 1:
+                    spell.Desc = "Ooooooowwwwwwwhhhhhh yeeeeeaaaaaa that feels gooooooood. Give me a few minutes, wait your turn";
+                    spell.PhysicalDamage += (charac.MaxHP / 3) + (rarityValue * spell.Lvl);
+                    spell.ManaCost += 3 + spell.Lvl;
+                    spell.Speed = 100;
                     break;
-                case ElementType.Lightning:
-                    switch (index)
-                    {
-                        case 0:
-                            break;
-                        case 1:
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                    }
+                case 2:
+                    spell.Desc = "You know what this is and damn it feels good! Only 5 currency at your local massage parlor (° ͜ʖ°)";
+                    spell.PhysicalDamage += (rarityValue * spell.Lvl) * rarityValue;
+                    spell.ManaCost += 10 + spell.Lvl;
                     break;
-                case ElementType.Magic:
-                    switch (index)
-                    {
-                        case 0:
-                            break;
-                        case 1:
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                    }
-                    break;
-                case ElementType.Physical:
-                    switch (index)
-                    {
-                        case 0:
-                            break;
-                        case 1:
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                    }
-                    break;
-                case ElementType.Wind:
-                    switch (index)
-                    {
-                        case 0:
-                            break;
-                        case 1:
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                    }
+                case 3:
+                    spell.Desc = "Let it be known the spaghetti monster rose from the ashes and blessed it's words upon us: Tomato's make spaghetti sauce, the life blood";
+                    spell.PhysicalDamage += (charac.MaxHP / 8) + (rarityValue + spell.Lvl + (charac.MaxHP / 6)) + rarityValue;
+                    spell.ManaCost += 5 + spell.Lvl;
                     break;
             }
         }
@@ -1880,71 +2007,67 @@ namespace PersonalDiscordBot.Classes
 
         #region Spell Methods
 
-        public static Spell SpellRandomGen(Spell spell, RarityType rarity, ElementType type, SpellType spellType, int rarityValue, int level)
+        public static Spell SpellRandomGen(Character charac, Spell spell, RarityType rarity, ElementType type, SpellType spellType, int rarityValue, int level)
         {
-            int typeCount = 1;
+            int typeCount = LootDrop.ChooseElementCount(rarity);
             spell.Name = $"{rarity} {type} Spell".ToUpperAllFirst();
             spell.Desc = $"{type} spell with {rarity} power levels emanating from within".ToUpperFirst();
             spell.Type = spellType;
             spell.Lvl = LootDrop.ChooseLevel(level);
             spell.Speed = ChanceRoll(35) ? rng.Next(60, 200) + rarityValue : rng.Next(60, 200);
-            switch (rarity)
+            spell.ManaCost = rng.Next((2 + spell.Lvl), rarityValue + spell.Lvl);
+            if (spell.Type != SpellType.Restorative)
+                switch (type)
+                {
+                    case ElementType.Fire:
+                        spell.FireDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
+                        if (spell.Speed < 100) spell.FireDamage += (rarityValue * spell.Lvl) / 2;
+                        else if (spell.Speed > 150) spell.FireDamage -= (rarityValue * spell.Lvl) / 2;
+                        spell.ManaCost = rng.Next((2 + spell.Lvl), (rarityValue + spell.Lvl));
+                        break;
+                    case ElementType.Ice:
+                        spell.IceDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
+                        if (spell.Speed < 100) spell.IceDamage += (rarityValue * spell.Lvl) / 2;
+                        else if (spell.Speed > 150) spell.IceDamage -= (rarityValue * spell.Lvl) / 2;
+                        spell.ManaCost = rng.Next((2 + spell.Lvl), (rarityValue + spell.Lvl));
+                        break;
+                    case ElementType.Lightning:
+                        spell.LightningDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
+                        if (spell.Speed < 100) spell.LightningDamage += (rarityValue * spell.Lvl) / 2;
+                        else if (spell.Speed > 150) spell.LightningDamage -= (rarityValue * spell.Lvl) / 2;
+                        spell.ManaCost = rng.Next((2 + spell.Lvl), (rarityValue + spell.Lvl));
+                        break;
+                    case ElementType.Magic:
+                        spell.MagicDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
+                        if (spell.Speed < 100) spell.MagicDamage += (rarityValue * spell.Lvl) / 2;
+                        else if (spell.Speed > 150) spell.MagicDamage -= (rarityValue * spell.Lvl) / 2;
+                        spell.ManaCost = rng.Next((2 + spell.Lvl), (rarityValue + spell.Lvl));
+                        break;
+                    case ElementType.Physical:
+                        spell.PhysicalDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
+                        if (spell.Speed < 100) spell.PhysicalDamage += (rarityValue * spell.Lvl) / 2;
+                        else if (spell.Speed > 150) spell.PhysicalDamage -= (rarityValue * spell.Lvl) / 2;
+                        spell.ManaCost = rng.Next((2 + spell.Lvl), (rarityValue + spell.Lvl));
+                        break;
+                    case ElementType.Wind:
+                        spell.WindDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
+                        if (spell.Speed < 100) spell.WindDamage += (rarityValue * spell.Lvl) / 2;
+                        else if (spell.Speed > 150) spell.WindDamage -= (rarityValue * spell.Lvl) / 2;
+                        spell.ManaCost = rng.Next((2 + spell.Lvl), (rarityValue + spell.Lvl));
+                        break;
+                }
+            else
             {
-                case RarityType.Common:
-                    typeCount = 1;
-                    break;
-                case RarityType.Uncommon:
-                    typeCount = 1;
-                    break;
-                case RarityType.Rare:
-                    typeCount = 2;
-                    break;
-                case RarityType.Epic:
-                    typeCount = 3;
-                    break;
-                case RarityType.Legendary:
-                    typeCount = 4;
-                    break;
-            }
-            switch (type)
-            {
-                case ElementType.Fire:
-                    spell.FireDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
-                    if (spell.Speed < 100) spell.FireDamage += (rarityValue * spell.Lvl) / 2;
-                    else if (spell.Speed > 150) spell.FireDamage -= (rarityValue * spell.Lvl) / 2;
-                    break;
-                case ElementType.Ice:
-                    spell.IceDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
-                    if (spell.Speed < 100) spell.IceDamage += (rarityValue * spell.Lvl) / 2;
-                    else if (spell.Speed > 150) spell.IceDamage -= (rarityValue * spell.Lvl) / 2;
-                    break;
-                case ElementType.Lightning:
-                    spell.LightningDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
-                    if (spell.Speed < 100) spell.LightningDamage += (rarityValue * spell.Lvl) / 2;
-                    else if (spell.Speed > 150) spell.LightningDamage -= (rarityValue * spell.Lvl) / 2;
-                    break;
-                case ElementType.Magic:
-                    spell.MagicDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
-                    if (spell.Speed < 100) spell.MagicDamage += (rarityValue * spell.Lvl) / 2;
-                    else if (spell.Speed > 150) spell.MagicDamage -= (rarityValue * spell.Lvl) / 2;
-                    break;
-                case ElementType.Physical:
-                    spell.PhysicalDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
-                    if (spell.Speed < 100) spell.PhysicalDamage += (rarityValue * spell.Lvl) / 2;
-                    else if (spell.Speed > 150) spell.PhysicalDamage -= (rarityValue * spell.Lvl) / 2;
-                    break;
-                case ElementType.Wind:
-                    spell.WindDamage += (rng.Next(3, 16) + rarityValue) * spell.Lvl;
-                    if (spell.Speed < 100) spell.WindDamage += (rarityValue * spell.Lvl) / 2;
-                    else if (spell.Speed > 150) spell.WindDamage -= (rarityValue * spell.Lvl) / 2;
-                    break;
+                spell.PhysicalDamage += (rarityValue * spell.Lvl) >= charac.MaxHP ? charac.MaxHP : rng.Next((rarityValue * spell.Lvl), charac.MaxHP);
+                spell.ManaCost = rng.Next((2 + spell.Lvl), (rarityValue + spell.Lvl));
+                spell.Speed = rng.Next(60, 150);
             }
             SpellAddElement(spell, typeCount, rarityValue);
-
+            LootDrop.ChooseSpellWorth(spell, rarityValue);
             return spell;
         }
 
-        public static Spell SpellUniqueGen(Spell spell, RarityType rarity, ElementType type, SpellType spellType, int rarityValue, int level)
+        public static Spell SpellUniqueGen(Character charac, Spell spell, RarityType rarity, ElementType type, SpellType spellType, int rarityValue, int level)
         {
             switch (spellType)
             {
@@ -1964,9 +2087,10 @@ namespace PersonalDiscordBot.Classes
                     var restNames = SpellRestorativeRanGenNames(type, rarity);
                     int restIndex = rng.Next(0, restNames.Length);
                     spell.Name = restNames[restIndex];
-                    SpellRestorativeRanGenAdditions(type, spell, rarityValue, restIndex);
+                    SpellRestorativeRanGenAdditions(charac, spell, rarityValue, restIndex);
                     break;
             }
+            LootDrop.ChooseSpellWorth(spell, rarityValue, true);
             return spell;
         }
 
@@ -2004,7 +2128,7 @@ namespace PersonalDiscordBot.Classes
 
         #region Static Spells
 
-        public static Spell magesEnergy = new Spell { Name = "Mages' Energy", MagicDamage = 5, ManaCost = 0, Lvl = 0, Type = SpellType.Starter, Desc = "The spell that started them all, some might call it the 'Hello World' spell, it gets the job done and your grueling training means you can infinitely it.... cool!" };
+        public static Spell magesEnergy = new Spell { Name = "Mages' Energy", MagicDamage = 5, ManaCost = 0, Lvl = 0, Type = SpellType.Starter, Desc = "The spell that started them all, some might call it the 'Hello World' spell, it gets the job done and your grueling training means you can infinitely use it.... cool!" };
         public static Spell boneSpike = new Spell { Name = "Necromancer Bone Spike", ManaCost = 0, PhysicalDamage = 3, WindDamage = 1, MagicDamage = 2, Type = SpellType.Starter, Desc = "A giant spike comes out of the ground with a 70% chance of hitting the genitals, what's more to like?" };
         public static Spell arcaneArmor = new Spell { Name = "Novice Arcane Armor", Type = SpellType.Defense, PhysicalDamage = 3, ManaCost = 2, MagicDamage = 5, Lvl = 1, Desc = "Thin hovering layers of pure arcane defense here to protect you, I think the warranty expired last week. Be Careful" };
         public static Spell dragonRage = new Spell { Name = "Novice Dragon Rage", Type = SpellType.Defense, Lvl = 1, Speed = 50, ManaCost = 5, PhysicalDamage = 3, FireDamage = 3, IceDamage = 3, LightningDamage = 3, MagicDamage = 3, WindDamage = 3, Desc = "You have learned to harness a dragon's rage and use it to fuel your body to whoop some major ass" };
@@ -2115,7 +2239,6 @@ namespace PersonalDiscordBot.Classes
 
             return armor;
         }
-
 
         public static Armor ArmorRandomGen(RarityType rarity, int rarityValue, Armor armor, int charLevel)
         {
