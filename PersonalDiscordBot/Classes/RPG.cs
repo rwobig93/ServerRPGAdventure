@@ -2307,40 +2307,74 @@ namespace PersonalDiscordBot.Classes
 
         public static Armor ArmorUniqueGen(Armor armor, RarityType rarity, int rarityValue, int charLevel)
         {
-
+            //armor.Unique = true;
 
             return armor;
         }
 
         public static Armor ArmorRandomGen(RarityType rarity, int rarityValue, Armor armor, int charLevel)
         {
-            // int typeCount = LootDrop.ChooseElement(rarity)
+            int typeCount = LootDrop.ChooseElementCount(rarity);
             armor.Lvl = LootDrop.ChooseLevel(charLevel);
             armor.MaxDurability = (10 * armor.Lvl) + (rarityValue * 4);
             armor.CurrentDurability = armor.MaxDurability;
-            armor.Worth = (rng.Next(0, 100) * armor.Lvl) * (rarityValue);
+            armor.Worth = (rng.Next(0, 100) * armor.Lvl) * (typeCount);
             switch (armor.Type)
             {
                 case ArmorType.Light:
                     int lightNum = rng.Next(0, armorBasicLightNames.Length);
                     armor.Name = $"{rarity} {armorBasicLightNames[lightNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
-                    armor.Speed = 50 + (rarityValue * 1); //change 1 to typeCount
+                    armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 80;
                     break;
                 case ArmorType.Medium:
                     int mediumNum = rng.Next(0, armorBasicMediumNames.Length);
                     armor.Name = $"{rarity} {armorBasicLightNames[mediumNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
+                    armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 60;
                     break;
                 case ArmorType.Heavy:
                     int heavyNum = rng.Next(0, armorBasicHeavyNames.Length);
                     armor.Name = $"{rarity} {armorBasicLightNames[heavyNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
+                    armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 40;
                     break;
             }
-            
+            ArmorAddElement(armor, typeCount, rarityValue);
 
             return armor;
+        }
+
+        public static void ArmorAddElement(Armor armor, int typeCount, int rarityValue)
+        {
+
+            if (typeCount > 1)
+                for (int i = typeCount; i == 1; i--)
+                {
+                    ElementType type = LootDrop.ChooseElement();
+                    switch (type)
+                    {
+                        case ElementType.Fire:
+                            armor.Fire += rng.Next(0, rarityValue) * armor.Lvl;
+                            break;
+                        case ElementType.Ice:
+                            armor.Ice += rng.Next(0, rarityValue) * armor.Lvl;
+                            break;
+                        case ElementType.Lightning:
+                            armor.Lightning += rng.Next(0, rarityValue) * armor.Lvl;
+                            break;
+                        case ElementType.Magic:
+                            armor.Magic += rng.Next(0, rarityValue) * armor.Lvl;
+                            break;
+                        case ElementType.Physical:
+                            armor.Physical += rng.Next(0, rarityValue) * armor.Lvl;
+                            break;
+                        case ElementType.Wind:
+                            armor.Wind += rng.Next(0, rarityValue) * armor.Lvl;
+                            break;
+                    }
+                }
+
         }
     }
 
