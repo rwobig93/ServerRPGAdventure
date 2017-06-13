@@ -2277,7 +2277,7 @@ namespace PersonalDiscordBot.Classes
                     int lightNum = rng.Next(0, armorBasicLightNames.Length);
                     armor.Name = $"{rarity} {armorBasicLightNames[lightNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
-                    armor.Speed = 50 + (rarityValue * 1) //change 1 to typeCount
+                    armor.Speed = 50 + (rarityValue * 1); //change 1 to typeCount
                     break;
                 case ArmorType.Medium:
                     int mediumNum = rng.Next(0, armorBasicMediumNames.Length);
