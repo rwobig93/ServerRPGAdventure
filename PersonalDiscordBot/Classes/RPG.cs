@@ -132,7 +132,15 @@ namespace PersonalDiscordBot.Classes
             //    break;
             //case RarityType.Legendary:
             //    break;
-        };
+        }
+
+        public enum Turn
+        {
+            Player,
+            Enemy,
+            Player1,
+            Player2
+        }
 
         #endregion
     }
@@ -290,7 +298,7 @@ namespace PersonalDiscordBot.Classes
 
     public class Character
     {
-        public ulong OwnerID { get; set; }
+        public OwnerProfile Owner { get; set; }
         public string Name { get; set; }
         public string Desc { get; set; } = "A new adventurer set out to..... Adventure?";
         public CharacterClass Class { get; set; }
@@ -314,6 +322,23 @@ namespace PersonalDiscordBot.Classes
         public int Lck { get; set; }
     }
 
+    public class Match
+    {
+        public Character Player { get; set; }
+        public List<Enemy> EnemyList { get; set; }
+        public Enemy CurrentEnemy { get; set; }
+        public Turn CurrentTurn { get; set; }
+        public int TurnTimeLimit { get; set; }
+    }
+
+    public class PlayerMatch
+    {
+        public Character Player1 { get; set; }
+        public Character Player2 { get; set; }
+        public Turn CurrentTurn { get; set; }
+        public TimeSpan TurnTimeLimit { get; set; } = TimeSpan.FromDays(1);
+    }
+
     public class Enemy
     {
         public string Name { get; set; }
@@ -334,13 +359,13 @@ namespace PersonalDiscordBot.Classes
 
     public class Boss : Enemy
     {
-        public LootDrop Loot { get; set; }
+        public List<IBackPackItem> Loot { get; set; }
     }
 
     public class BackPack
     {
-        public string Name { get; set; }
-        public string Desc { get; set; } = "This weird container made of animal skin holds stuff..... I think";
+        public string Name { get; set; } = "BackPack";
+        public string Desc { get; set; } = "Your trusty friend you shove shit into";
         public int Capacity { get; set; } = 10;
         public int Weight { get; set; } = 10;
         public List<IBackPackItem> Stored = new List<IBackPackItem>();
@@ -352,6 +377,7 @@ namespace PersonalDiscordBot.Classes
         public string Desc { get; set; } = "A weapon like any other";
         public WeaponType Type { get; set; }
         public RarityType Rarity { get; set; } = RarityType.Common;
+        public bool IsUnique { get; set; } = false;
         public int Lvl { get; set; } = 0;
         public int MaxDurability { get; set; } = 0;
         public int CurrentDurability { get; set; } = 0;
@@ -372,6 +398,8 @@ namespace PersonalDiscordBot.Classes
         public int Lvl { get; set; } = 0;
         public int Worth { get; set; } = 0;
         public SpellType Type { get; set; } = SpellType.Attack;
+        public RarityType Rarity { get; set; } = RarityType.Common;
+        public bool IsUnique { get; set; } = false;
         public int ManaCost { get; set; } = 1;
         public int Speed { get; set; } = 100;
         public int PhysicalDamage { get; set; } = 0;
@@ -404,6 +432,7 @@ namespace PersonalDiscordBot.Classes
         public string Desc { get; set; } = "An armor like any other";
         public ArmorType Type { get; set; }
         public RarityType Rarity { get; set; }
+        public bool IsUnique { get; set; } = false;
         public int Lvl { get; set; } = 0;
         public int MaxDurability { get; set; } = 0;
         public int CurrentDurability { get; set; } = 0;
@@ -415,7 +444,12 @@ namespace PersonalDiscordBot.Classes
         public int Lightning { get; set; } = 0;
         public int Ice { get; set; } = 0;
         public int Wind { get; set; } = 0;
-    } 
+    }
+    
+    public class Pebble : IBackPackItem
+    {
+        public int Count { get { return 1; } }
+    }
 
     public class IDidTheThingOwner
     {
@@ -469,17 +503,19 @@ namespace PersonalDiscordBot.Classes
         /// </summary>
         public enum LootType
         {
-            Item, Armor, Weapon, Spell, Backpack, Nothing
+            Item, Armor, Weapon, Spell, Nothing
         };
 
         /// <summary>
         /// Cumulative probabilities - each entry corresponds to the member of LootType in the corresponding position.
         /// </summary>
-        protected static int[] _lootProbabilites = new int[]
+        protected static int[] LootProbabilites(CharacterClass charClass)
         {
-            600, 700, 800, 850, 870,  // Chances: Item(60%), Armor(10%), Weapon(10%), Spell(5%), Backpack(2%), Nothing(13%)
-            MaxProbability
-        };
+            if (charClass == CharacterClass.Mage)
+                return new int[] { 600, 700, 750, 850, MaxProbability }; // Chances: Item(60%), Armor(10%), Weapon(5%), Spell(10%), Nothing(13%)
+            else
+                return new int[] { 600, 700, 800, 850, MaxProbability }; // Chances: Item(60%), Armor(10%), Weapon(10%), Spell(5%), Nothing(13%)
+        }
 
         /// <summary>
         /// Cumulative probabilities - each entry corresponds to the member of RarityType in the corresponding position.
@@ -492,11 +528,12 @@ namespace PersonalDiscordBot.Classes
         /// <summary>
         /// Choose a random loot type.
         /// </summary>
-        public static LootType ChooseType()
+        public static LootType ChooseLootType(CharacterClass charClass)
         {
             LootType lootType = 0;         // start at first one
             int randomValue = rng.Next(MaxProbability);
-            while (_lootProbabilites[(int)lootType] <= randomValue)
+            var lootProb = LootProbabilites(charClass);
+            while (lootProb[(int)lootType] <= randomValue)
             {
                 lootType++;         // next loot type
             }
@@ -510,7 +547,7 @@ namespace PersonalDiscordBot.Classes
         public static IBackPackItem PickLoot(Character character)
         {
             IBackPackItem chosenLoot = null;
-            LootType chosenType = LootType.Weapon; //LootDrop.ChooseType();
+            LootType chosenType = LootDrop.ChooseLootType(character.Class);
             RarityType rarityType = ChooseRarity();
             switch (chosenType)
             {
@@ -518,6 +555,7 @@ namespace PersonalDiscordBot.Classes
                     chosenLoot = ItemPicker(rarityType, character);
                     break;
                 case LootType.Nothing:
+                    chosenLoot = new Pebble();
                     break;
                 case LootType.Armor:
                     chosenLoot = ArmorPicker(rarityType, character);
@@ -527,8 +565,6 @@ namespace PersonalDiscordBot.Classes
                     break;
                 case LootType.Spell:
                     chosenLoot = SpellPicker(rarityType, character);
-                    break;
-                case LootType.Backpack:
                     break;
             }
             return chosenLoot;
@@ -610,6 +646,20 @@ namespace PersonalDiscordBot.Classes
                     break;
             }
             return typeCount;
+        }
+
+        public static LootType GetLootType(IBackPackItem bpItem)
+        {
+            if (bpItem is Item)
+                return LootType.Item;
+            else if (bpItem is Weapon)
+                return LootType.Weapon;
+            else if (bpItem is Armor)
+                return LootType.Armor;
+            else if (bpItem is Spell)
+                return LootType.Spell;
+            else
+                return LootType.Nothing;
         }
 
         #endregion
@@ -823,14 +873,34 @@ namespace PersonalDiscordBot.Classes
             Spell spell = new Spell();
             int rarityValue = LootDrop.GetRarityValue(rarity);
             spell.Type = ChooseSpellType();
+            spell.Lvl = LootDrop.ChooseLevel(character.Lvl);
+            var element = ChooseElement();
             bool isUnique = ChanceRoll(30);
             if (isUnique)
             {
                 rarityValue += 2;
-                return Spells.SpellUniqueGen(character, spell, rarity, ChooseElement(), spell.Type, rarityValue, character.Lvl);
+                return Spells.SpellUniqueGen(character, spell, rarity, element, spell.Type, rarityValue, character.Lvl);
             }
             else
-                return Spells.SpellRandomGen(character, spell, rarity, ChooseElement(), spell.Type, rarityValue, character.Lvl);
+                return Spells.SpellRandomGen(character, spell, rarity, element, spell.Type, rarityValue, character.Lvl);
+        }
+
+        public static Spell SpellPicker(RarityType rarity, Character character, out ElementType element)
+        {
+            Spell spell = new Spell();
+            int rarityValue = LootDrop.GetRarityValue(rarity);
+            spell.Type = ChooseSpellType();
+            spell.Rarity = rarity;
+            spell.Lvl = LootDrop.ChooseLevel(character.Lvl);
+            element = ChooseElement();
+            bool isUnique = ChanceRoll(30);
+            if (isUnique)
+            {
+                rarityValue += 2;
+                return Spells.SpellUniqueGen(character, spell, rarity, element, spell.Type, rarityValue, character.Lvl);
+            }
+            else
+                return Spells.SpellRandomGen(character, spell, rarity, element, spell.Type, rarityValue, character.Lvl);
         }
 
         public static void ChooseSpellWorth(Spell spell, int rarityValue, bool isUnique = false)
@@ -955,7 +1025,7 @@ namespace PersonalDiscordBot.Classes
                 case 4:
                     weap.Desc = "This might be a sword, or might not, does it matter?";
                     weap.PhysicalDamage = (level + rng.Next(2, 30) + rarityValue);
-                    weap.Speed = (level + 50 + rng.Next(20, 800));
+                    weap.Speed = (level + 50 + rng.Next(20, 80));
                     weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
                     break;
                 case 5:
@@ -1341,6 +1411,7 @@ namespace PersonalDiscordBot.Classes
         {
             Weapon weap = new Weapon();
             rarityValue += 2;
+            weap.IsUnique = true;
             switch (type)
              {
                  case WeaponType.Dagger:
@@ -2069,6 +2140,7 @@ namespace PersonalDiscordBot.Classes
 
         public static Spell SpellUniqueGen(Character charac, Spell spell, RarityType rarity, ElementType type, SpellType spellType, int rarityValue, int level)
         {
+            spell.IsUnique = true;
             switch (spellType)
             {
                 case SpellType.Attack:
@@ -2235,74 +2307,41 @@ namespace PersonalDiscordBot.Classes
 
         public static Armor ArmorUniqueGen(Armor armor, RarityType rarity, int rarityValue, int charLevel)
         {
-            //armor.Unique = true;
+
 
             return armor;
         }
 
         public static Armor ArmorRandomGen(RarityType rarity, int rarityValue, Armor armor, int charLevel)
         {
-            int typeCount = LootDrop.ChooseElementCount(rarity);
+            // int typeCount = LootDrop.ChooseElement(rarity)
             armor.Lvl = LootDrop.ChooseLevel(charLevel);
             armor.MaxDurability = (10 * armor.Lvl) + (rarityValue * 4);
             armor.CurrentDurability = armor.MaxDurability;
-            armor.Worth = (rng.Next(0, 100) * armor.Lvl) * (typeCount);
+            armor.Worth = (rng.Next(0, 100) * armor.Lvl) * (rarityValue);
             switch (armor.Type)
             {
                 case ArmorType.Light:
                     int lightNum = rng.Next(0, armorBasicLightNames.Length);
                     armor.Name = $"{rarity} {armorBasicLightNames[lightNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
-                    armor.Speed = ((rng.Next(0,2) + typeCount + armor.Lvl) * 10) + 80;
+                    armor.Speed = 50 + (rarityValue * 1); //change 1 to typeCount
                     break;
                 case ArmorType.Medium:
                     int mediumNum = rng.Next(0, armorBasicMediumNames.Length);
                     armor.Name = $"{rarity} {armorBasicLightNames[mediumNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
-                    armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 60;
                     break;
                 case ArmorType.Heavy:
                     int heavyNum = rng.Next(0, armorBasicHeavyNames.Length);
                     armor.Name = $"{rarity} {armorBasicLightNames[heavyNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
-                    armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 40;
                     break;
             }
-            ArmorAddElement(armor, typeCount, rarityValue);
+            
 
             return armor;
         }
-
-        public static void ArmorAddElement(Armor armor, int typeCount, int rarityValue)
-        {
-
-            if (typeCount > 1)
-                for (int i = typeCount; i == 1; i--)
-                {
-                    ElementType type = LootDrop.ChooseElement();
-                    switch (type)
-                    {
-                        case ElementType.Fire:
-                            armor.Fire += rng.Next(0, rarityValue) * armor.Lvl;
-                            break;
-                        case ElementType.Ice:
-                            armor.Ice += rng.Next(0, rarityValue) * armor.Lvl;
-                            break;
-                        case ElementType.Lightning:
-                            armor.Lightning += rng.Next(0, rarityValue) * armor.Lvl;
-                            break;
-                        case ElementType.Magic:
-                            armor.Magic += rng.Next(0, rarityValue) * armor.Lvl;
-                            break;
-                        case ElementType.Physical:
-                            armor.Physical += rng.Next(0, rarityValue) * armor.Lvl;
-                            break;
-                        case ElementType.Wind:
-                            armor.Wind += rng.Next(0, rarityValue) * armor.Lvl;
-                            break;
-                    }
-                }
-
     }
 
     public static class Items
@@ -2387,12 +2426,20 @@ namespace PersonalDiscordBot.Classes
 
         public static string RandomWeap(out string namer)
         {
-            var pickedLoot = (Weapon)LootDrop.PickLoot(testiculeesCharacter);
+            RarityType rarity = LootDrop.ChooseRarity();
+            var pickedLoot = LootDrop.WeaponPicker(rarity, testiculeesCharacter);
             namer = pickedLoot.Name;
-            return ($"{line}Name: {pickedLoot.Name}{line}Description: {pickedLoot.Desc}{line}Type: {pickedLoot.Type.ToString()}{line}Rarity: {pickedLoot.Rarity}{line}Level: {pickedLoot.Lvl}{line}Max Durability: {pickedLoot.MaxDurability}{line}Current Durability: {pickedLoot.CurrentDurability}{line}Worth: {pickedLoot.Worth}{line}Speed: {pickedLoot.Speed}{line}Physical Damage: {pickedLoot.PhysicalDamage}");
+            return ($"{line}Name: {pickedLoot.Name}{line}Description: {pickedLoot.Desc}{line}Type: {pickedLoot.Type.ToString()}{line}Unique: {pickedLoot.IsUnique}{line}Rarity: {pickedLoot.Rarity}{line}Level: {pickedLoot.Lvl}{line}Max Durability: {pickedLoot.MaxDurability}{line}Current Durability: {pickedLoot.CurrentDurability}{line}Worth: {pickedLoot.Worth}{line}Speed: {pickedLoot.Speed}{line}Physical Damage: {pickedLoot.PhysicalDamage}");
         }
 
-        public static string RandomMassTest(int num)
+        public static string RandomSpell()
+        {
+            RarityType rarity = LootDrop.ChooseRarity();
+            var spell = LootDrop.SpellPicker(rarity, testiculeesCharacter);
+            return $"{line}Name: {spell.Name}{line}Description: {spell.Desc}{line}Type: {spell.Type}{line}Unique: {spell.IsUnique}{line}Rarity: {spell.Rarity}{line}ManaCost: {spell.ManaCost}{line}Level: {spell.Lvl}{line}Speed: {spell.Speed}{line}Worth: {spell.Worth}{line}Physical: {spell.PhysicalDamage}{line}Fire: {spell.FireDamage}{line}Ice: {spell.IceDamage}{line}Lightning: {spell.LightningDamage}{line}Magic: {spell.MagicDamage}{line}Wind: {spell.WindDamage}";
+        }
+
+        public static string RandomMassTestWeap(int num)
         {
             int sword = 0;
             int dagger = 0;
@@ -2414,7 +2461,8 @@ namespace PersonalDiscordBot.Classes
 
             for (int i = 0; i <= num; i++)
             {
-                var pickedLoot = (Weapon)LootDrop.PickLoot(testiculeesCharacter);
+                RarityType rarity = LootDrop.ChooseRarity();
+                var pickedLoot = LootDrop.WeaponPicker(rarity, testiculeesCharacter);
                 switch (pickedLoot.Type)
                 {
                     case RPG.WeaponType.Dagger:
@@ -2469,10 +2517,104 @@ namespace PersonalDiscordBot.Classes
                         legendary++;
                         break;
                 }
-                if (!pickedLoot.Desc.ToLower().Contains("average")) unique++;
+                if (pickedLoot.IsUnique) unique++;
             }
 
                return ($"{line}sword = {sword}{line}dagger = {dagger}{line}greatsword = {greatsword}{line}katana = {katana}{line}staff = {staff}{line}focusStone = {focusStone}{line}spear = {spear}{line}dragonSpear = {dragonSpear}{line}twinSwords = {twinSwords}{line}other = {other}{line}starter = {starter}{line}unique = {unique}{line}------------------------------------------------{line}common = {common}{line}uncommon = {uncommon}{line}rare = {rare}{line}epic = {epic}{line}legendary = {legendary}{line}");
+        }
+
+        public static string RandomMassTestSpell(int num)
+        {
+            int attack = 0;
+            int defense = 0;
+            int restorative = 0;
+            int starter = 0;
+            int physical = 0;
+            int magic = 0;
+            int fire = 0;
+            int lightning = 0;
+            int ice = 0;
+            int wind = 0;
+            int unique = 0;
+            int common = 0;
+            int uncommon = 0;
+            int rare = 0;
+            int epic = 0;
+            int legendary = 0;
+
+            for (int i = 0; i <= num; i++)
+            {
+                RarityType rarity = LootDrop.ChooseRarity();
+                ElementType element;
+                var spell = LootDrop.SpellPicker(rarity, testiculeesCharacter, out element);
+                switch (spell.Type)
+                {
+                    case SpellType.Attack:
+                        attack++;
+                        break;
+                    case SpellType.Defense:
+                        defense++;
+                        break;
+                    case SpellType.Restorative:
+                        restorative++;
+                        break;
+                    case SpellType.Starter:
+                        starter++;
+                        break;
+                }
+                switch (element)
+                {
+                    case ElementType.Fire:
+                        fire++;
+                        break;
+                    case ElementType.Ice:
+                        ice++;
+                        break;
+                    case ElementType.Lightning:
+                        lightning++;
+                        break;
+                    case ElementType.Magic:
+                        magic++;
+                        break;
+                    case ElementType.Physical:
+                        physical++;
+                        break;
+                    case ElementType.Wind:
+                        wind++;
+                        break;
+                }
+                switch (spell.Rarity)
+                {
+                    case RarityType.Common:
+                        common++;
+                        break;
+                    case RarityType.Epic:
+                        epic++;
+                        break;
+                    case RarityType.Legendary:
+                        legendary++;
+                        break;
+                    case RarityType.Rare:
+                        rare++;
+                        break;
+                    case RarityType.Uncommon:
+                        uncommon++;
+                        break;
+                }
+                if (spell.IsUnique) unique++;
+            }
+            return $"{line}Attack: {attack}{line}Defense: {defense}{line}Restorative: {restorative}{line}Starter: {starter}{line}--------------------------------------------{line}Physical: {physical}{line}Magic: {magic}{line}Fire: {fire}{line}Lightning: {lightning}{line}Ice: {ice}{line}Wind: {wind}{line}--------------------------------------------{line}Unique: {unique}{line}--------------------------------------------{line}Common: {common}{line}UnCommon: {uncommon}{line}Rare: {rare}{line}Epic: {epic}{line}Legendary: {legendary}{line}";
+        }
+
+        public static string LootDropGen()
+        {
+            string result = string.Empty;
+            IBackPackItem loot = LootDrop.PickLoot(testiculeesCharacter);
+            foreach (var prop in loot.GetType().GetProperties())
+            {
+                result = $"{result}{line}{prop.Name}: {prop.GetValue(loot)}";
+            }
+            return $"Your Loot is: {LootDrop.GetLootType(loot)}{result}";
         }
 
         public static string GetMarried()
@@ -2497,7 +2639,7 @@ namespace PersonalDiscordBot.Classes
             Name = "Testiculees teh Great",
             Class = CharacterClass.Warrior,
             Lvl = 1,
-            OwnerID = testiculeesProfile.OwnerID,
+            Owner = testiculeesProfile,
             Armor = Armors.knightArmor,
             MaxHP = 12000000,
             CurrentHP = 12000000,

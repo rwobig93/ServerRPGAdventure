@@ -961,22 +961,45 @@ namespace PersonalDiscordBot.Classes
         }
 
         [Command("weap"), Summary("Testicules Weap Gen")]
-        public async Task Testacules2()
+        public async Task Testacules2w()
         {
             string weapName = string.Empty;
             string randGen = Testing.RandomWeap(out weapName);
             await Context.Channel.SendMessageAsync($"Generated {weapName}{randGen}");
         }
 
-        [Command("rng"), Summary("Testicules RNG Gen")]
-        public async Task Testacules3(string times)
+        [Command("spell"), Summary("Testicules Spell Gen")]
+        public async Task Testacules2s()
+        {
+            await Context.Channel.SendMessageAsync(Testing.RandomSpell());
+        }
+
+        [Command("rng weap"), Summary("Testicules RNG Gen Weap")]
+        public async Task Testacules3w(string times)
         {
             var intTimes = 1000;
             var isANum = int.TryParse(times, out intTimes);
             if (isANum)
-                await Context.Channel.SendMessageAsync($"Generated {intTimes} Weapons:{Environment.NewLine}{Testing.RandomMassTest(intTimes)}");
+                await Context.Channel.SendMessageAsync($"Generated {intTimes} Weapons:{Environment.NewLine}{Testing.RandomMassTestWeap(intTimes)}");
             else
-                await Context.Channel.SendMessageAsync($"Generated {1000} Weapons:{Environment.NewLine}{Testing.RandomMassTest(1000)}");
+                await Context.Channel.SendMessageAsync($"Generated {1000} Weapons:{Environment.NewLine}{Testing.RandomMassTestWeap(1000)}");
+        }
+
+        [Command("rng spell"), Summary("Testicules RNG Gen Spell")]
+        public async Task Testacules3s(string times)
+        {
+            var intTimes = 1000;
+            var isANum = int.TryParse(times, out intTimes);
+            if (isANum)
+                await Context.Channel.SendMessageAsync($"Generated {intTimes} Weapons:{Environment.NewLine}{Testing.RandomMassTestSpell(intTimes)}");
+            else
+                await Context.Channel.SendMessageAsync($"Generated {1000} Weapons:{Environment.NewLine}{Testing.RandomMassTestSpell(1000)}");
+        }
+
+        [Command("lootdrop"), Summary("Testicules Lootdrop")]
+        public async Task Testacules4()
+        {
+            await Context.Channel.SendMessageAsync($"```{Testing.LootDropGen()}```");
         }
     }
 
