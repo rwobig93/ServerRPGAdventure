@@ -777,7 +777,7 @@ namespace PersonalDiscordBot.Classes
             armor.Type = ChooseArmorType(chara);
 
             if (isUnique)
-                return Armors.ArmorUniqueGen(armor, rarityType, rarityValue);
+                return Armors.ArmorUniqueGen(armor, rarityType, rarityValue, chara.Lvl);
             else
                 return Armors.ArmorRandomGen(rarityType, rarityValue, armor, chara.Lvl);
         }
@@ -2109,7 +2109,7 @@ namespace PersonalDiscordBot.Classes
         };
         #endregion
 
-        public static Armor ArmorUniqueGen(Armor armor, RarityType rarity, int rarityValue)
+        public static Armor ArmorUniqueGen(Armor armor, RarityType rarity, int rarityValue, int charLevel)
         {
 
 
@@ -2119,12 +2119,18 @@ namespace PersonalDiscordBot.Classes
 
         public static Armor ArmorRandomGen(RarityType rarity, int rarityValue, Armor armor, int charLevel)
         {
+            // int typeCount = LootDrop.ChooseElement(rarity)
+            armor.Lvl = LootDrop.ChooseLevel(charLevel);
+            armor.MaxDurability = (10 * armor.Lvl) + (rarityValue * 4);
+            armor.CurrentDurability = armor.MaxDurability;
+            armor.Worth = (rng.Next(0, 100) * armor.Lvl) * (rarityValue);
             switch (armor.Type)
             {
                 case ArmorType.Light:
                     int lightNum = rng.Next(0, armorBasicLightNames.Length);
                     armor.Name = $"{rarity} {armorBasicLightNames[lightNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
+                    armor.Speed = 50 + (rarityValue * 1) //change 1 to typeCount
                     break;
                 case ArmorType.Medium:
                     int mediumNum = rng.Next(0, armorBasicMediumNames.Length);
