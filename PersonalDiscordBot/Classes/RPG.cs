@@ -132,7 +132,15 @@ namespace PersonalDiscordBot.Classes
             //    break;
             //case RarityType.Legendary:
             //    break;
-        };
+        }
+
+        public enum Turn
+        {
+            Player,
+            Enemy,
+            Player1,
+            Player2
+        }
 
         #endregion
     }
@@ -290,7 +298,7 @@ namespace PersonalDiscordBot.Classes
 
     public class Character
     {
-        public ulong OwnerID { get; set; }
+        public OwnerProfile Owner { get; set; }
         public string Name { get; set; }
         public string Desc { get; set; } = "A new adventurer set out to..... Adventure?";
         public CharacterClass Class { get; set; }
@@ -314,6 +322,23 @@ namespace PersonalDiscordBot.Classes
         public int Lck { get; set; }
     }
 
+    public class Match
+    {
+        public Character Player { get; set; }
+        public List<Enemy> EnemyList { get; set; }
+        public Enemy CurrentEnemy { get; set; }
+        public Turn CurrentTurn { get; set; }
+        public int TurnTimeLimit { get; set; }
+    }
+
+    public class PlayerMatch
+    {
+        public Character Player1 { get; set; }
+        public Character Player2 { get; set; }
+        public Turn CurrentTurn { get; set; }
+        public TimeSpan TurnTimeLimit { get; set; } = TimeSpan.FromDays(1);
+    }
+
     public class Enemy
     {
         public string Name { get; set; }
@@ -334,13 +359,13 @@ namespace PersonalDiscordBot.Classes
 
     public class Boss : Enemy
     {
-        public LootDrop Loot { get; set; }
+        public List<IBackPackItem> Loot { get; set; }
     }
 
     public class BackPack
     {
-        public string Name { get; set; }
-        public string Desc { get; set; } = "This weird container made of animal skin holds stuff..... I think";
+        public string Name { get; set; } = "BackPack";
+        public string Desc { get; set; } = "Your trusty friend you shove shit into";
         public int Capacity { get; set; } = 10;
         public int Weight { get; set; } = 10;
         public List<IBackPackItem> Stored = new List<IBackPackItem>();
@@ -419,7 +444,12 @@ namespace PersonalDiscordBot.Classes
         public int Lightning { get; set; } = 0;
         public int Ice { get; set; } = 0;
         public int Wind { get; set; } = 0;
-    } 
+    }
+    
+    public class Pebble : IBackPackItem
+    {
+        public int Count { get { return 1; } }
+    }
 
     public class IDidTheThingOwner
     {
@@ -473,17 +503,19 @@ namespace PersonalDiscordBot.Classes
         /// </summary>
         public enum LootType
         {
-            Item, Armor, Weapon, Spell, Backpack, Nothing
+            Item, Armor, Weapon, Spell, Nothing
         };
 
         /// <summary>
         /// Cumulative probabilities - each entry corresponds to the member of LootType in the corresponding position.
         /// </summary>
-        protected static int[] _lootProbabilites = new int[]
+        protected static int[] LootProbabilites(CharacterClass charClass)
         {
-            600, 700, 800, 850, 870,  // Chances: Item(60%), Armor(10%), Weapon(10%), Spell(5%), Backpack(2%), Nothing(13%)
-            MaxProbability
-        };
+            if (charClass == CharacterClass.Mage)
+                return new int[] { 600, 700, 750, 850, MaxProbability }; // Chances: Item(60%), Armor(10%), Weapon(5%), Spell(10%), Nothing(13%)
+            else
+                return new int[] { 600, 700, 800, 850, MaxProbability }; // Chances: Item(60%), Armor(10%), Weapon(10%), Spell(5%), Nothing(13%)
+        }
 
         /// <summary>
         /// Cumulative probabilities - each entry corresponds to the member of RarityType in the corresponding position.
@@ -496,11 +528,12 @@ namespace PersonalDiscordBot.Classes
         /// <summary>
         /// Choose a random loot type.
         /// </summary>
-        public static LootType ChooseType()
+        public static LootType ChooseLootType(CharacterClass charClass)
         {
             LootType lootType = 0;         // start at first one
             int randomValue = rng.Next(MaxProbability);
-            while (_lootProbabilites[(int)lootType] <= randomValue)
+            var lootProb = LootProbabilites(charClass);
+            while (lootProb[(int)lootType] <= randomValue)
             {
                 lootType++;         // next loot type
             }
@@ -514,7 +547,7 @@ namespace PersonalDiscordBot.Classes
         public static IBackPackItem PickLoot(Character character)
         {
             IBackPackItem chosenLoot = null;
-            LootType chosenType = LootType.Weapon; //LootDrop.ChooseType();
+            LootType chosenType = LootDrop.ChooseLootType(character.Class);
             RarityType rarityType = ChooseRarity();
             switch (chosenType)
             {
@@ -522,6 +555,7 @@ namespace PersonalDiscordBot.Classes
                     chosenLoot = ItemPicker(rarityType, character);
                     break;
                 case LootType.Nothing:
+                    chosenLoot = new Pebble();
                     break;
                 case LootType.Armor:
                     chosenLoot = ArmorPicker(rarityType, character);
@@ -531,8 +565,6 @@ namespace PersonalDiscordBot.Classes
                     break;
                 case LootType.Spell:
                     chosenLoot = SpellPicker(rarityType, character);
-                    break;
-                case LootType.Backpack:
                     break;
             }
             return chosenLoot;
@@ -614,6 +646,20 @@ namespace PersonalDiscordBot.Classes
                     break;
             }
             return typeCount;
+        }
+
+        public static LootType GetLootType(IBackPackItem bpItem)
+        {
+            if (bpItem is Item)
+                return LootType.Item;
+            else if (bpItem is Weapon)
+                return LootType.Weapon;
+            else if (bpItem is Armor)
+                return LootType.Armor;
+            else if (bpItem is Spell)
+                return LootType.Spell;
+            else
+                return LootType.Nothing;
         }
 
         #endregion
@@ -827,6 +873,7 @@ namespace PersonalDiscordBot.Classes
             Spell spell = new Spell();
             int rarityValue = LootDrop.GetRarityValue(rarity);
             spell.Type = ChooseSpellType();
+            spell.Lvl = LootDrop.ChooseLevel(character.Lvl);
             var element = ChooseElement();
             bool isUnique = ChanceRoll(30);
             if (isUnique)
@@ -844,6 +891,7 @@ namespace PersonalDiscordBot.Classes
             int rarityValue = LootDrop.GetRarityValue(rarity);
             spell.Type = ChooseSpellType();
             spell.Rarity = rarity;
+            spell.Lvl = LootDrop.ChooseLevel(character.Lvl);
             element = ChooseElement();
             bool isUnique = ChanceRoll(30);
             if (isUnique)
@@ -977,7 +1025,7 @@ namespace PersonalDiscordBot.Classes
                 case 4:
                     weap.Desc = "This might be a sword, or might not, does it matter?";
                     weap.PhysicalDamage = (level + rng.Next(2, 30) + rarityValue);
-                    weap.Speed = (level + 50 + rng.Next(20, 800));
+                    weap.Speed = (level + 50 + rng.Next(20, 80));
                     weap.Worth = (((level + rarityValue) * rarityValue) + (weap.Speed / weap.PhysicalDamage));
                     break;
                 case 5:
@@ -2558,6 +2606,17 @@ namespace PersonalDiscordBot.Classes
             return $"{line}Attack: {attack}{line}Defense: {defense}{line}Restorative: {restorative}{line}Starter: {starter}{line}--------------------------------------------{line}Physical: {physical}{line}Magic: {magic}{line}Fire: {fire}{line}Lightning: {lightning}{line}Ice: {ice}{line}Wind: {wind}{line}--------------------------------------------{line}Unique: {unique}{line}--------------------------------------------{line}Common: {common}{line}UnCommon: {uncommon}{line}Rare: {rare}{line}Epic: {epic}{line}Legendary: {legendary}{line}";
         }
 
+        public static string LootDropGen()
+        {
+            string result = string.Empty;
+            IBackPackItem loot = LootDrop.PickLoot(testiculeesCharacter);
+            foreach (var prop in loot.GetType().GetProperties())
+            {
+                result = $"{result}{line}{prop.Name}: {prop.GetValue(loot)}";
+            }
+            return $"Your Loot is: {LootDrop.GetLootType(loot)}{result}";
+        }
+
         public static string GetMarried()
         {
             string namer = "";
@@ -2580,7 +2639,7 @@ namespace PersonalDiscordBot.Classes
             Name = "Testiculees teh Great",
             Class = CharacterClass.Warrior,
             Lvl = 1,
-            OwnerID = testiculeesProfile.OwnerID,
+            Owner = testiculeesProfile,
             Armor = Armors.knightArmor,
             MaxHP = 12000000,
             CurrentHP = 12000000,

@@ -63,5 +63,10 @@ namespace PersonalDiscordBot.Classes
         {
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str.ToLower());
         }
+
+        public static string ReturnType(this object obj)
+        {
+            return obj.GetType().ToString();
+        }
     }
 }

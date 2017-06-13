@@ -995,6 +995,12 @@ namespace PersonalDiscordBot.Classes
             else
                 await Context.Channel.SendMessageAsync($"Generated {1000} Weapons:{Environment.NewLine}{Testing.RandomMassTestSpell(1000)}");
         }
+
+        [Command("lootdrop"), Summary("Testicules Lootdrop")]
+        public async Task Testacules4()
+        {
+            await Context.Channel.SendMessageAsync($"```{Testing.LootDropGen()}```");
+        }
     }
 
     public static class Toolbox

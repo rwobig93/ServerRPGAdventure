@@ -1057,8 +1057,7 @@ namespace PersonalDiscordBot
 
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
-            //uStatusUpdate(Testing.RandomMassTest(1000));
-            uStatusUpdate(Testing.GetMarried());
+            uStatusUpdate(Testing.TestLootType());
         }
 
         #endregion
