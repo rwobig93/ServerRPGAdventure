@@ -676,7 +676,7 @@ namespace PersonalDiscordBot.Classes
                         }
                         waited++;
                     }
-                    GameServer game = serversFound[servNumber];
+                    GameServer game = serversFound[servNumber - 1];
                     gameCache = game;
                     string responsePlayers = string.Format("_{0}Players found on {1}:{0}", Environment.NewLine, game.ServerName);
                     IPEndPoint endpoint = CreateIPEndPoint(string.Format("{0}:{1}", game.IPAddress, game.QueryPort));
@@ -789,7 +789,7 @@ namespace PersonalDiscordBot.Classes
 
         public static void FullExceptionLog(Exception ex, [CallerLineNumber] int lineNumber = 0, [CallerMemberName] string caller = null, [CallerFilePath] string filePath = null)
         {
-            string exString = string.Format("TimeStamp: {1}{0}Exception Type: {2}{0}Caller: {3} at {4}{0}Message: {5}{0}HR: {6}{0}StackTrace:{0}{7}{0}", Environment.NewLine, DateTime.Now.ToLocalTime().ToShortTimeString(), ex.GetType().Name, caller, lineNumber, ex.Message, ex.HResult, ex.StackTrace);
+            string exString = string.Format("TimeStamp: {1}{0}Exception Type: {2}{0}Caller: {3} at {4}{0}Message: {5}{0}HR: {6}{0}StackTrace:{0}{7}{0}", Environment.NewLine, $"{DateTime.Now.ToLocalTime().ToShortDateString()} {DateTime.Now.ToLocalTime().ToShortTimeString()}", ex.GetType().Name, caller, lineNumber, ex.Message, ex.HResult, ex.StackTrace);
             Toolbox.uDebugAddLog(string.Format("EXCEPTION: {0} at {1}", caller, lineNumber));
             string _logLocation = string.Format(@"{0}\Exceptions.log", MainWindow._paths.LogLocation);
             if (!File.Exists(_logLocation))
