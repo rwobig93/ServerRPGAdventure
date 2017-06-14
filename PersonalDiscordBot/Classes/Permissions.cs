@@ -70,3 +70,4 @@ namespace PersonalDiscordBot.Classes
             };
         }
     }
+}
