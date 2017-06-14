@@ -89,10 +89,13 @@ namespace PersonalDiscordBot
         {
             HideGrids();
             UpdateVerison();
+            Management.DeSerializeData();
+            tSaveRPGData();
         }
 
         private void winMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Management.SerializeData();
             Toolbox.uDebugAddLog(string.Format("{0}########################## Application Stop ##########################{0}", Environment.NewLine));
             Toolbox.DumpDebugLog();
         }
@@ -928,6 +931,18 @@ namespace PersonalDiscordBot
             }
         }
 
+        private void tSaveRPGData()
+        {
+            Thread save = new Thread(() =>
+            {
+                while (true)
+                {
+                    Thread.Sleep(TimeSpan.FromMinutes(10));
+                    Management.SerializeData();
+                }
+            });
+            save.Start();
+        }
         #endregion
 
         #region Async Methods
@@ -1058,7 +1073,7 @@ namespace PersonalDiscordBot
 
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
-            uStatusUpdate(Testing.TestLootType());
+            uStatusUpdate(Testing.LootDropGen());
         }
 
         #endregion
