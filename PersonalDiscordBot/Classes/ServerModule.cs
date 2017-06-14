@@ -1001,6 +1001,12 @@ namespace PersonalDiscordBot.Classes
         {
             await Context.Channel.SendMessageAsync($"```{Testing.LootDropGen()}```");
         }
+
+        [Command("create"), Summary("Testicules Create")]
+        public async Task Testacules5()
+        {
+            await Context.Channel.SendMessageAsync($"```{Testing.LootDropGen()}```");
+        }
     }
 
     public static class Toolbox

@@ -69,4 +69,22 @@ namespace PersonalDiscordBot.Classes
             return obj.GetType().ToString();
         }
     }
+
+    public class PromptArgs : EventArgs
+    {
+        public delegate void MessageShown(PromptArgs args);
+        public static event MessageShown MessagePromptShown;
+        private string content;
+        public PromptArgs(string msgContent)
+        {
+            this.content = msgContent;
+        }
+        public string Content { get { return content; } }
+        public static void uStatusExtUpdate(string update)
+        {
+            PromptArgs args = new PromptArgs(update);
+            MessagePromptShown(args);
+        }
+    }
+
 }

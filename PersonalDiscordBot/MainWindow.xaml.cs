@@ -46,6 +46,7 @@ namespace PersonalDiscordBot
             Toolbox.uDebugAddLog(string.Format("{0}########################## Application Start ##########################{0}", Environment.NewLine));
             SetupConfig();
             txtLogDirectory.Text = _paths.LogLocation;
+            PromptArgs.MessagePromptShown += (e) => { uStatusUpdate(e.Content); };
         }
 
         #region Global Variables

@@ -1,6 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +19,7 @@ namespace PersonalDiscordBot.Classes
         public interface IBackPackItem { };
         public static Random rng = new Random((int)(DateTime.Now.Ticks & 0x7FFFFFFF));
         public static int maxLevel = 20;
+        public static List<OwnerProfile> Owners = new List<OwnerProfile>();
 
         #endregion
 
@@ -147,6 +152,66 @@ namespace PersonalDiscordBot.Classes
 
     public static class Management
     {
+        public static void SerializeData()
+        {
+            BackgroundWorker worker = new BackgroundWorker() { WorkerReportsProgress = true };
+            worker.ProgressChanged += (sender, e) => { PromptArgs.uStatusExtUpdate($"Serialize Progress: {e.ProgressPercentage}%"); };
+            worker.RunWorkerCompleted += (sender, e) => { worker.ReportProgress(100); };
+            worker.DoWork += (sender, e) =>
+            {
+                int progress = 0;
+                string savePath = $@"{Assembly.GetExecutingAssembly().Location}\SaveData";
+                if (!Directory.Exists(savePath))
+                    Directory.CreateDirectory(savePath);
+                foreach (OwnerProfile owner in Owners)
+                    progress++;
+                progress = 100 / progress;
+                foreach (OwnerProfile owner in Owners)
+                {
+                    var json = JsonConvert.SerializeObject(owner, Formatting.Indented);
+                    File.WriteAllText($@"{savePath}\{owner.OwnerID}.owner", json);
+                    Toolbox.uDebugAddLog($"Serialized Owner: {owner.OwnerID}");
+                    progress = progress + progress;
+                    worker.ReportProgress(progress);
+                }
+            };
+        }
+
+        public static void DeSerializeData()
+        {
+            int progress = 0;
+            BackgroundWorker worker = new BackgroundWorker() { WorkerReportsProgress = true };
+            worker.ProgressChanged += (sender, e) => { PromptArgs.uStatusExtUpdate($"Deserialize Progress: {e.ProgressPercentage}%"); };
+            worker.RunWorkerCompleted += (sender, e) => { worker.ReportProgress(100); };
+            worker.DoWork += (sender, e) =>
+            {
+                string loadPath = $@"{Assembly.GetExecutingAssembly().Location}\SaveData";
+                if (!Directory.Exists(loadPath))
+                    return;
+                foreach (var file in Directory.EnumerateFiles(loadPath))
+                    progress++;
+                progress = 100 / progress;
+                foreach (var file in Directory.EnumerateFiles(loadPath))
+                {
+                    var info = new FileInfo(file);
+                    if (info.Extension.ToLower() == "owner")
+                    {
+                        Toolbox.uDebugAddLog($"Found .owner file: {file}");
+                        using (StreamReader sr = File.OpenText(file))
+                        {
+                            OwnerProfile owner = JsonConvert.DeserializeObject<OwnerProfile>(sr.ReadToEnd());
+                            Owners.Add(owner);
+                            Toolbox.uDebugAddLog($"Added Owner {owner.OwnerID} to Owners List");
+                        }
+                    }
+                    else
+                        Toolbox.uDebugAddLog($"Skipped file for not being .owner: {file} || {info.Extension.ToLower()}");
+                    progress = progress + progress;
+                    worker.ReportProgress(progress);
+                }
+            };
+        }
+
         public static Character CreateNewCharacter(ulong ownerId, CharacterClass chosenClass)
         {
             Character newChar = new Character();
