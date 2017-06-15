@@ -46,6 +46,7 @@ namespace PersonalDiscordBot
             Toolbox.uDebugAddLog(string.Format("{0}########################## Application Start ##########################{0}", Environment.NewLine));
             SetupConfig();
             txtLogDirectory.Text = _paths.LogLocation;
+            Toolbox.MessagePromptShown += (e) => { uStatusUpdate(e.Content); };
         }
 
         #region Global Variables
@@ -88,10 +89,14 @@ namespace PersonalDiscordBot
         {
             HideGrids();
             UpdateVerison();
+            Management.DeSerializeData();
+            tSaveRPGData();
+            RefreshAdminList();
         }
 
         private void winMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Management.SerializeData();
             Toolbox.uDebugAddLog(string.Format("{0}########################## Application Stop ##########################{0}", Environment.NewLine));
             Toolbox.DumpDebugLog();
         }
@@ -432,6 +437,40 @@ namespace PersonalDiscordBot
             }
         }
 
+        private void btnDumpDebug_Click(object sender, RoutedEventArgs e)
+        {
+            Toolbox.DumpDebugLog();
+        }
+
+        private void btnAddAdmin_Click(object sender, RoutedEventArgs e)
+        {
+            ulong adminID = 0;
+            var isUlong = ulong.TryParse(txtAdminUlong.Text, out adminID);
+            if (!isUlong)
+            {
+                ShowNotification("Admin Id entered was invalid, please try again", 5);
+                return;
+            }
+            Permissions.Administrators.Add(adminID);
+            Toolbox.uStatusUpdateExt($"Added admin ID: {adminID}");
+            RefreshAdminList();
+        }
+
+        private void btnRemoveAdmin_Click(object sender, RoutedEventArgs e)
+        {
+            ulong adminID = 0;
+            var isUlong = ulong.TryParse(comboAdmins.SelectedItem.ToString(), out adminID);
+            if (!isUlong)
+            {
+                ShowNotification("Admin ID selected from combobox is invalid", 5);
+                uStatusUpdate($"Combobox Admin ID invalid: {adminID}");
+                return;
+            }
+            Permissions.Administrators.Remove(adminID);
+            uStatusUpdate($"Removed admin ID: {adminID}");
+            RefreshAdminList();
+        }
+
         #endregion
 
         #region Methods
@@ -440,7 +479,7 @@ namespace PersonalDiscordBot
         {
             try
             {
-                string _timeNow = DateTime.Now.ToLocalTime().ToShortTimeString();
+                string _timeNow = $"{DateTime.Now.ToLocalTime().ToShortDateString()}_{DateTime.Now.ToLocalTime().ToShortTimeString()}";
                 string _statusString = string.Format("{0} :: {1}{2}", _timeNow, _status, Environment.NewLine);
                 bool isFocused = true;
                 Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { txtStatusValue.AppendText(_statusString); });
@@ -842,6 +881,19 @@ namespace PersonalDiscordBot
             }
         }
 
+        private void RefreshAdminList()
+        {
+            Toolbox.uDebugAddLog("Refreshing admin list");
+            comboAdmins.Items.Clear();
+            int count = 0;
+            foreach (var admin in Permissions.Administrators)
+            {
+                count++;
+                comboAdmins.Items.Add(admin);
+            }
+            Toolbox.uStatusUpdateExt($"Refreshed admin list, total admins: {count}");
+        }
+
         #endregion
 
         #region Threaded Methods
@@ -927,6 +979,18 @@ namespace PersonalDiscordBot
             }
         }
 
+        private void tSaveRPGData()
+        {
+            Thread save = new Thread(() =>
+            {
+                while (true)
+                {
+                    Thread.Sleep(TimeSpan.FromMinutes(10));
+                    Management.SerializeData();
+                }
+            });
+            save.Start();
+        }
         #endregion
 
         #region Async Methods
@@ -1057,7 +1121,7 @@ namespace PersonalDiscordBot
 
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
-            uStatusUpdate(Testing.TestLootType());
+            uStatusUpdate(Testing.LootDropGen());
         }
 
         #endregion

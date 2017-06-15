@@ -26,7 +26,6 @@ namespace PersonalDiscordBot.Classes
     [Group("server")]
     public class ServerModule : ModuleBase
     {
-
         [Command("games"), Summary("Returns List of Current Servers")]
         public async Task Games()
         {
@@ -677,7 +676,7 @@ namespace PersonalDiscordBot.Classes
                         }
                         waited++;
                     }
-                    GameServer game = serversFound[servNumber];
+                    GameServer game = serversFound[servNumber - 1];
                     gameCache = game;
                     string responsePlayers = string.Format("_{0}Players found on {1}:{0}", Environment.NewLine, game.ServerName);
                     IPEndPoint endpoint = CreateIPEndPoint(string.Format("{0}:{1}", game.IPAddress, game.QueryPort));
@@ -790,7 +789,7 @@ namespace PersonalDiscordBot.Classes
 
         public static void FullExceptionLog(Exception ex, [CallerLineNumber] int lineNumber = 0, [CallerMemberName] string caller = null, [CallerFilePath] string filePath = null)
         {
-            string exString = string.Format("TimeStamp: {1}{0}Exception Type: {2}{0}Caller: {3} at {4}{0}Message: {5}{0}HR: {6}{0}StackTrace:{0}{7}{0}", Environment.NewLine, DateTime.Now.ToLocalTime().ToShortTimeString(), ex.GetType().Name, caller, lineNumber, ex.Message, ex.HResult, ex.StackTrace);
+            string exString = string.Format("TimeStamp: {1}{0}Exception Type: {2}{0}Caller: {3} at {4}{0}Message: {5}{0}HR: {6}{0}StackTrace:{0}{7}{0}", Environment.NewLine, $"{DateTime.Now.ToLocalTime().ToShortDateString()} {DateTime.Now.ToLocalTime().ToShortTimeString()}", ex.GetType().Name, caller, lineNumber, ex.Message, ex.HResult, ex.StackTrace);
             Toolbox.uDebugAddLog(string.Format("EXCEPTION: {0} at {1}", caller, lineNumber));
             string _logLocation = string.Format(@"{0}\Exceptions.log", MainWindow._paths.LogLocation);
             if (!File.Exists(_logLocation))
@@ -954,6 +953,7 @@ namespace PersonalDiscordBot.Classes
     [Group("test"), Summary("For Testing")]
     public class TestingModule : ModuleBase
     {
+        private static string line = Environment.NewLine;
         [Command(""), Summary("Testicules Engage")]
         public async Task Testacules()
         {
@@ -1001,139 +1001,341 @@ namespace PersonalDiscordBot.Classes
         {
             await Context.Channel.SendMessageAsync($"```{Testing.LootDropGen()}```");
         }
-    }
 
-    public static class Toolbox
-    {
-        public static StringBuilder debugLog = new StringBuilder();
-        public static Classes.LocalSettings _paths = new Classes.LocalSettings();
-
-        public static void uDebugAddLog(string _log)
+        [Command("create"), Summary("Testicules Create")]
+        public async Task Testacules5()
         {
-            try
+            OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+            if (ownerProfile == null)
             {
-                string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
-                string _timeNow = DateTime.Now.ToLocalTime().ToLongTimeString();
-                debugLog.AppendLine(string.Format("{0}_{1} :: {2}", _dateNow, _timeNow, _log));
-                if (debugLog.Length >= 5000)
-                    DumpDebugLog();
+                OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id };
+                RPG.Owners.Add(owner);
+                Toolbox.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you didn't have a profile yet so I made you one");
             }
-            catch (Exception ex)
-            {
-                FullExceptionLog(ex);
-            }
-        }
-
-        public static void DumpDebugLog()
-        {
-            try
-            {
-                string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
-                string _debugLocation = string.Format(@"{0}\DebugLog_{1}.txt", _paths.LogLocation, _dateNow);
-                if (!File.Exists(_debugLocation))
-                    using (StreamWriter _sw = new StreamWriter(_debugLocation))
-                        _sw.WriteLine(debugLog.ToString());
-                else
-                    using (StreamWriter _sw = File.AppendText(_debugLocation))
-                        _sw.WriteLine(debugLog.ToString());
-                debugLog.Clear();
-                DirectoryInfo _dI = new DirectoryInfo(_paths.LogLocation);
-                foreach (FileInfo _fI in _dI.GetFiles())
-                {
-                    if (_fI.Name.StartsWith("DebugLog") && _fI.CreationTime.ToLocalTime() <= DateTime.Now.AddDays(-14).ToLocalTime())
-                    {
-                        _fI.Delete(); uDebugAddLog(string.Format("Deleted old DebugLog: {0}", _fI.Name));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                FullExceptionLog(ex);
-            }
-        }
-
-        private static void FullExceptionLog(Exception ex, [CallerLineNumber] int lineNumber = 0, [CallerMemberName] string caller = null, [CallerFilePath] string filePath = null)
-        {
-            string exString = string.Format("TimeStamp: {1}{0}Exception Type: {2}{0}Caller: {3} at {4}{0}Message: {5}{0}HR: {6}{0}StackTrace:{0}{7}{0}", Environment.NewLine, string.Format("{0}_{1}", DateTime.Now.ToLocalTime().ToString("MM-dd-yy"), DateTime.Now.ToLocalTime().ToLongTimeString()), ex.GetType().Name, caller, lineNumber, ex.Message, ex.HResult, ex.StackTrace);
-            uDebugAddLog(string.Format("EXCEPTION: {0} at {1}", caller, lineNumber));
-            string _logLocation = string.Format(@"{0}\Exceptions.log", _paths.LogLocation);
-            if (!File.Exists(_logLocation))
-                using (StreamWriter _sw = new StreamWriter(_logLocation))
-                    _sw.WriteLine(exString + Environment.NewLine);
             else
-                using (StreamWriter _sw = File.AppendText(_logLocation))
-                    _sw.WriteLine(exString + Environment.NewLine);
-        }
-
-        public static List<RebootedServer> serversRebooted = new List<RebootedServer>();
-
-        public static void RemoveRebootedServer(RebootedServer rebServ)
-        {
-            try
+                Toolbox.uDebugAddLog($"Owner profile was found for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
+            bool hasCharacters = ownerProfile.CharacterList.Count == 0 ? false : true;
+            if (hasCharacters)
             {
-                Thread remServ = new Thread(() =>
+                int cost = Management.DetermineCharacterCost(ownerProfile);
+                if (ownerProfile.Currency < cost)
                 {
-                    try
-                    {
-                        Thread.Sleep(TimeSpan.FromMinutes(15));
-                        serversRebooted.Remove(rebServ);
-                        string.Format("Removed rebooted server entry for game server {0} after 15 min", rebServ.Server.ServerName).AddToDebugLog();
-                    }
-                    catch (Exception ex)
-                    {
-                        ServerModule.FullExceptionLog(ex);
-                    }
-                });
-                remServ.Start();
-            }
-            catch (Exception ex)
-            {
-                ServerModule.FullExceptionLog(ex);
-            }
-        }
-
-        public static void uUpdateStatusExternal(string status)
-        {
-            try
-            {
-                foreach (Window window in Application.Current.Windows)
+                    await Context.Channel.SendMessageAsync($"A new character for you costs {cost} currency but you only have {ownerProfile.Currency}, please get good");
+                    return;
+                }
+                var costQuestion = await Context.Channel.SendMessageAsync(
+                    $"It will cost you {cost} currency to create a new character, would you still like to create a character? (Yes/No){line}" +
+                    $"(You have {ownerProfile.Currency} currently)");
+                DateTime costTimeStamp = DateTime.Now;
+                bool costResponseRecvd = false;
+                while (!costResponseRecvd)
                 {
-                    if (window.GetType() == typeof(MainWindow))
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                    Toolbox.uDebugAddLog("Generated message list");
+                    string response = string.Empty;
+                    foreach (IMessage msg in newList)
                     {
-                        (window as MainWindow).txtStatusValue.AppendText(status);
+                        if ((Context.Message.Author == msg.Author) && (costQuestion.Timestamp.DateTime < msg.Timestamp.DateTime))
+                        {
+                            response = msg.Content.ToString();
+                            Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
+                            Toolbox.uDebugAddLog($"Response: {response}");
+                            costResponseRecvd = true;
+                        }
+                    }
+                    if (costTimeStamp + TimeSpan.FromSeconds(60) <= DateTime.Now)
+                    {
+                        Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 60s, canceled character creation");
+                        await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} A valid response wasn't received within 60 seconds, canceling creation request");
+                        return;
                     }
                 }
             }
-            catch (Exception ex)
+            var sentMsg = await Context.Channel.SendMessageAsync(
+                $"What class would you like your new adventurer to be?{line}" +
+                $"```Warrior | Focus on Strength/Melee Damage, Higher Loot Chance: Swords, Greatswords, Katanas{line}" +
+                $"Dragoon | Focus on Dexterity/Elements, Higher Loot Chance: Spears, DragonSpears, Twinswords{line}" +
+                $"Mage | Focus on All Spells, Higher Loot Chance: Staffs, FocusStones {line}" +
+                $"Necromancer | Focus on Attack Spells/Summonding, Higher Loot Chance: FocusStones, Staffs {line}" +
+                $"Rogue | Focus on Speed/Dexterity, Higher Loot Chance: Dagger, TwinSwords {line}```"
+                );
+            bool responseRecvd = false;
+            bool nameChosen = false;
+            DateTime timeStamp = DateTime.Now;
+            RPG.CharacterClass chosenClass = 0;
+            while (!responseRecvd)
             {
-                ServerModule.FullExceptionLog(ex);
-            }
-        }
-
-        public static void RefreshItemSource(this ListView listView)
-        {
-            var tempStorage = listView.ItemsSource;
-            listView.ItemsSource = null;
-            listView.ItemsSource = tempStorage;
-        }
-
-        public static bool IsPortOpen(string ipAddress, int portNum)
-        {
-            using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
-            {
-                try
+                await Task.Delay(TimeSpan.FromSeconds(1));
+                var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                Toolbox.uDebugAddLog("Generated message list");
+                string response = string.Empty;
+                foreach (IMessage msg in newList)
                 {
-                    socket.Connect(ipAddress, portNum);
-                }
-                catch (SocketException ex)
-                {
-                    if (ex.SocketErrorCode == SocketError.ConnectionRefused || ex.SocketErrorCode == SocketError.TimedOut)
+                    if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime))
                     {
-                        return false;
+                        Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
+                        Toolbox.uDebugAddLog($"Before response: {msg.Content.ToString()}");
+                        response = Regex.Replace(msg.Content.ToString(), @"\s+", "");
+                        Toolbox.uDebugAddLog($"After response: {response}");
+                        response = response.ToLower();
+                        switch (response)
+                        {
+                            case "warrior":
+                                chosenClass = RPG.CharacterClass.Warrior;
+                                responseRecvd = true;
+                                break;
+                            case "dragoon":
+                                chosenClass = RPG.CharacterClass.Dragoon;
+                                responseRecvd = true;
+                                break;
+                            case "mage":
+                                chosenClass = RPG.CharacterClass.Mage;
+                                responseRecvd = true;
+                                break;
+                            case "necromancer":
+                                chosenClass = RPG.CharacterClass.Necromancer;
+                                responseRecvd = true;
+                                break;
+                            case "rogue":
+                                chosenClass = RPG.CharacterClass.Rogue;
+                                responseRecvd = true;
+                                break;
+                            default:
+                                await Context.Channel.SendMessageAsync($"{response} isn't a valid response, please try again");
+                                break;
+                        }
                     }
                 }
-                return true;
+                if (timeStamp + TimeSpan.FromSeconds(60) <= DateTime.Now)
+                {
+                    Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 60s, canceled character creation");
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} A valid response wasn't received within 60 seconds, canceling creation request");
+                    return;
+                }
             }
+            while (!nameChosen)
+            {
+                DateTime nameTimeStamp = DateTime.Now;
+                await Context.Channel.SendMessageAsync($"What can we call your {chosenClass}?");
+                bool responseRecvd2 = false;
+                string charName = string.Empty;
+                DateTime timeStamp2 = DateTime.Now;
+                while (!responseRecvd2)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                    Toolbox.uDebugAddLog("Generated message list");
+                    string response = string.Empty;
+                    foreach (IMessage msg in newList)
+                    {
+                        if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime))
+                        {
+                            response = msg.Content.ToString();
+                            Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
+                            Toolbox.uDebugAddLog($"Response: {response}");
+                            charName = response;
+                            responseRecvd2 = true;
+                        }
+                    }
+                    if (timeStamp2 + TimeSpan.FromSeconds(60) <= DateTime.Now)
+                    {
+                        Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 60s, canceled character creation");
+                        await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} A valid response wasn't received within 60 seconds, canceling creation request");
+                        return;
+                    }
+                }
+                await Context.Channel.SendMessageAsync($"Would you like your {chosenClass} to be called {charName}? (Yes/No)");
+                List<IMessage> respondedList = new List<IMessage>();
+                bool responseRecvd3 = false;
+                DateTime timeStamp3 = DateTime.Now;
+                while (!responseRecvd3)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                    Toolbox.uDebugAddLog("Generated message list");
+                    string response = string.Empty;
+                    foreach (IMessage msg in newList)
+                    {
+                        if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime) && (!respondedList.Contains(msg)))
+                        {
+                            respondedList.Add(msg);
+                            response = msg.Content.ToString();
+                            Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
+                            Toolbox.uDebugAddLog($"Response: {response}");
+                            switch (response.ToLower())
+                            {
+                                case "yes":
+                                    nameChosen = true;
+                                    responseRecvd3 = true;
+                                    break;
+                                case "no":
+                                    nameChosen = false;
+                                    responseRecvd3 = true;
+                                    break;
+                                default:
+                                    nameChosen = false;
+                                    responseRecvd3 = false;
+                                    await Context.Channel.SendMessageAsync($"{response} isn't a valid response, please try again");
+                                    break;
+                            }
+                        }
+                    }
+                    if (timeStamp3 + TimeSpan.FromSeconds(60) <= DateTime.Now)
+                    {
+                        Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 60s, canceled character creation");
+                        await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} A valid response wasn't received within 60 seconds, canceling creation request");
+                        return;
+                    }
+                }
+                if (nameTimeStamp + TimeSpan.FromMinutes(5) <= DateTime.Now)
+                {
+                    Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 60s, canceled character creation");
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} A valid response wasn't received within 60 seconds, canceling creation request");
+                    return;
+                }
+            }
+            Character newChar = Management.CreateNewCharacter(Context.Message.Author.Id, chosenClass);
+            ownerProfile.CharacterList.Add(newChar);
+            if (ownerProfile.CharacterList.Count == 1)
+                ownerProfile.CurrentCharacter = newChar;
+            await Context.Channel.SendMessageAsync($"Congratulations! Your new hero has been born:```{line}" +
+                $"Name:{newChar.Name}{line}" +
+                $"Class: {newChar.Class}{line}" +
+                $"HP: {newChar.MaxHP}{line}" +
+                $"Mana:{newChar.MaxMana}{line}" +
+                $"Defense: {newChar.Def}{line}" +
+                $"Dexterity: {newChar.Dex}{line}" +
+                $"Intelligence: {newChar.Int}{line}" +
+                $"Luck: {newChar.Lck}{line}" +
+                $"Speed: {newChar.Spd}{line}" +
+                $"Strength: {newChar.Str}{line}" +
+                $"Level: {newChar.Lvl}{line}" +
+                $"Experience: {newChar.Exp}```" +
+                $"```Weapon:{line}" +
+                $"Name: {newChar.Weapon.Name}{line}" +
+                $"Description: {newChar.Weapon.Desc}```" +
+                $"```Armor:{line}" +
+                $"Name: {newChar.Armor.Name}{line}" +
+                $"Description: {newChar.Armor.Desc}```");
+        }
+
+        [Command("give"), Summary("Testicules Give Currency")]
+        public async Task Testacules6(string mentionedUser, string amount)
+        {
+            if (!Permissions.Administrators.Contains(Context.Message.Author.Id))
+            {
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have rights to run this command");
+                return;
+            }
+            int currency = 0;
+            var isNum = int.TryParse(amount, out currency);
+            if (!isNum)
+            {
+                Toolbox.uDebugAddLog($"Invalid Number: {amount}");
+                await Context.Channel.SendMessageAsync($"{amount} isn't a valid number");
+                return;
+            }
+            ulong userID = 0;
+            var isUlong = ulong.TryParse(mentionedUser, out userID);
+            if (!isUlong)
+            {
+                Toolbox.uDebugAddLog($"Invalid Ulong: {userID}");
+                await Context.Channel.SendMessageAsync($"{mentionedUser} isn't a valid discord user");
+                return;
+            }
+            var userFound = await Context.Channel.GetUserAsync(userID);
+            if (userFound == null)
+            {
+                Toolbox.uDebugAddLog($"Invalid User: {userFound.Username} | {userID}");
+                await Context.Channel.SendMessageAsync($"{userID} doesn't match a discord user on your server");
+                return;
+            }
+            Toolbox.uStatusUpdateExt($"MentionedUser: {mentionedUser}");
+            int foundUsers = 0;
+            foreach (var owner in RPG.Owners)
+            {
+                if (userFound.Id == owner.OwnerID)
+                {
+                    owner.Currency += currency;
+                    Toolbox.uStatusUpdateExt($"Added {currency} currency to {userFound.Username} | {userFound.Id}");
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} Added {currency} currency to {userFound.Mention}'s profile");
+                    foundUsers++;
+                }
+            }
+            if (foundUsers == 0)
+            {
+                Toolbox.uDebugAddLog($"No users found matching ID: {userFound.Id} Users: {foundUsers}");
+                await Context.Channel.SendMessageAsync($"{userFound.Mention} doesn't have an owner profile yet, to get one they need to create a character");
+                return;
+            }
+        }
+
+        [Command("switch"), Summary("Testicules Switch Character")]
+        public async Task Testacules7()
+        {
+            OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+            if (ownerProfile == null)
+            {
+                OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id };
+                RPG.Owners.Add(owner);
+                Toolbox.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you didn't have a profile yet so I made you one");
+            }
+            else
+                Toolbox.uDebugAddLog($"Owner profile was found for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
+            bool hasCharacters = ownerProfile.CharacterList.Count == 0 ? false : true;
+            if (!hasCharacters)
+            {
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't have a character yet, try creating one... pleb");
+                return;
+            }
+            string response = $"Please enter the number for the respective character you want to use:{line}";
+            int counter = 0;
+            foreach (Character chara in ownerProfile.CharacterList)
+            {
+                counter++;
+                response = $"{response}[{counter}] {chara.Name}{line}";
+            }
+            var sentMsg = await Context.Channel.SendMessageAsync($"{response}"); DateTime timeStamp2 = DateTime.Now;
+            bool respRecvd = false;
+            int chosenCharacter = 0;
+            while (!respRecvd)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(1));
+                var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                Toolbox.uDebugAddLog("Generated message list");
+                string answer = string.Empty;
+                foreach (IMessage msg in newList)
+                {
+                    if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime))
+                    {
+                        answer = msg.Content.ToString();
+                        Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
+                        Toolbox.uDebugAddLog($"Before Response: {answer}");
+                        answer = Regex.Replace(msg.Content.ToString(), @"\s+", "");
+                        Toolbox.uDebugAddLog($"After response: {answer}");
+                        var isNum = int.TryParse(answer, out chosenCharacter);
+                        if (!isNum)
+                        {
+                            await Context.Channel.SendMessageAsync($"{answer} isnt' a valid response");
+                            respRecvd = false;
+                        }
+                        else
+                            respRecvd = true;
+                    }
+                }
+                if (timeStamp2 + TimeSpan.FromSeconds(60) <= DateTime.Now)
+                {
+                    Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 60s, canceled character creation");
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} A valid response wasn't received within 60 seconds, canceling creation request");
+                    return;
+                }
+            }
+            Character selChara = ownerProfile.CharacterList[chosenCharacter - 1];
+            Management.ChangeCharacter(ownerProfile.OwnerID, selChara);
+            await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} your active character is now {selChara.Name}!");
         }
     }
 }

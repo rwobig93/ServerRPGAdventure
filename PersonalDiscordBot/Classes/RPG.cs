@@ -1,6 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +19,7 @@ namespace PersonalDiscordBot.Classes
         public interface IBackPackItem { };
         public static Random rng = new Random((int)(DateTime.Now.Ticks & 0x7FFFFFFF));
         public static int maxLevel = 20;
+        public static List<OwnerProfile> Owners = new List<OwnerProfile>();
 
         #endregion
 
@@ -142,11 +147,107 @@ namespace PersonalDiscordBot.Classes
             Player2
         }
 
+        public enum EnemyTier
+        {
+            Standard,
+            Armored,
+            Honed,
+            BloodStarved,
+            Sickly,
+            HyperSensitive
+        }
+
+        public enum EnemyType
+        {
+            Goblin,
+            Troll,
+            Knight,
+            DarkKnight,
+            Bear,
+            MattPegler
+        }
+
         #endregion
     }
 
     public static class Management
     {
+        #region General Methods
+
+        public static void SerializeData()
+        {
+            BackgroundWorker worker = new BackgroundWorker() { WorkerReportsProgress = true };
+            worker.ProgressChanged += (sender, e) => { Toolbox.uStatusUpdateExt($"Serialize Progress: {e.ProgressPercentage}%"); };
+            worker.RunWorkerCompleted += (sender, e) => { worker.ReportProgress(100); };
+            worker.DoWork += (sender, e) =>
+            {
+                Toolbox.uStatusUpdateExt("Serializing Save Data");
+                int progress = 0;
+                string savePath = $@"{Assembly.GetExecutingAssembly().Location}\SaveData";
+                if (!Directory.Exists(savePath))
+                {
+                    Directory.CreateDirectory(savePath);
+                    Toolbox.uDebugAddLog($"SaveData folder created: {savePath}");
+                }
+                else
+                    Toolbox.uDebugAddLog($"SaveData already exists: {savePath}");
+                foreach (OwnerProfile owner in Owners)
+                    progress++;
+                progress = 100 / progress;
+                foreach (OwnerProfile owner in Owners)
+                {
+                    var json = JsonConvert.SerializeObject(owner, Formatting.Indented);
+                    File.WriteAllText($@"{savePath}\{owner.OwnerID}.owner", json);
+                    Toolbox.uDebugAddLog($"Serialized Owner: {owner.OwnerID}");
+                    progress = progress + progress;
+                    worker.ReportProgress(progress);
+                }
+            };
+        }
+
+        public static void DeSerializeData()
+        {
+            int progress = 0;
+            BackgroundWorker worker = new BackgroundWorker() { WorkerReportsProgress = true };
+            worker.ProgressChanged += (sender, e) => { Toolbox.uStatusUpdateExt($"Deserialize Progress: {e.ProgressPercentage}%"); };
+            worker.RunWorkerCompleted += (sender, e) => { worker.ReportProgress(100); };
+            worker.DoWork += (sender, e) =>
+            {
+                Toolbox.uStatusUpdateExt("Deserializing Sava Data");
+                string loadPath = $@"{Assembly.GetExecutingAssembly().Location}\SaveData";
+                if (!Directory.Exists(loadPath))
+                {
+                    Toolbox.uDebugAddLog($"SaveData folder doesn't exist, stopping deserialization: {loadPath}");
+                    return;
+                }
+                foreach (var file in Directory.EnumerateFiles(loadPath))
+                    progress++;
+                progress = 100 / progress;
+                foreach (var file in Directory.EnumerateFiles(loadPath))
+                {
+                    var info = new FileInfo(file);
+                    if (info.Extension.ToLower() == "owner")
+                    {
+                        Toolbox.uDebugAddLog($"Found .owner file: {file}");
+                        using (StreamReader sr = File.OpenText(file))
+                        {
+                            OwnerProfile owner = JsonConvert.DeserializeObject<OwnerProfile>(sr.ReadToEnd());
+                            Owners.Add(owner);
+                            Toolbox.uDebugAddLog($"Added Owner {owner.OwnerID} to Owners List");
+                        }
+                    }
+                    else
+                        Toolbox.uDebugAddLog($"Skipped file for not being .owner: {file} || {info.Extension.ToLower()}");
+                    progress = progress + progress;
+                    worker.ReportProgress(progress);
+                }
+            };
+        }
+
+        #endregion
+
+        #region Character Methods
+
         public static Character CreateNewCharacter(ulong ownerId, CharacterClass chosenClass)
         {
             Character newChar = new Character();
@@ -281,6 +382,49 @@ namespace PersonalDiscordBot.Classes
                     break;
             }
             return newChar;
+        }
+
+        public static void ChangeCharacter(ulong ownerID, Character chosenCharacter)
+        {
+            OwnerProfile profile = RPG.Owners.Find(x => x.OwnerID == ownerID);
+            profile.CurrentCharacter = chosenCharacter;
+        }
+
+        public static int DetermineCharacterCost(OwnerProfile owner)
+        {
+            int cost = 0;
+            switch (owner.CharacterList.Count)
+            {
+                case 1:
+                    cost = 500;
+                    break;
+                case 2:
+                    cost = 1000;
+                    break;
+                case 3:
+                    cost = 2000;
+                    break;
+                case 4:
+                    cost = 5000;
+                    break;
+                case 5:
+                    cost = 10000;
+                    break;
+                case 6:
+                    cost = 50000;
+                    break;
+                default:
+                    cost = 100000;
+                    break;
+            }
+            return cost;
+        }
+
+        #endregion
+
+        public static void AttackEnemy(Character chara, Enemy enemy)
+        {
+
         }
     }
 
@@ -771,7 +915,7 @@ namespace PersonalDiscordBot.Classes
                     weaponArray = new int[] { 50, 100, 150, 200, 550, 800, 850, 900, MaxProbability, 1001, 1001 }; // Sword(5%), Dagger(5%), Greatsword(5%), Katana(5%), Staff(55%), FocusStone(25%), Spear(5%), DragonSpear(5%), TwinSwords(10%), Other(0%), Starter(0%)
                     break;
                 case CharacterClass.Necromancer:
-                    weaponArray = new int[] { 50, 100, 150, 200, 450, 800, 850, 900, MaxProbability, 1001, 1001 }; // Sword(5%), Dagger(5%), Greatsword(5%), Katana(5%), Staff(55%), FocusStone(25%), Spear(5%), DragonSpear(5%), TwinSwords(10%), Other (0%), Starter(0%)
+                    weaponArray = new int[] { 50, 100, 150, 200, 450, 800, 850, 900, MaxProbability, 1001, 1001 }; // Sword(5%), Dagger(5%), Greatsword(5%), Katana(5%), Staff(25%), FocusStone(35%), Spear(5%), DragonSpear(5%), TwinSwords(10%), Other (0%), Starter(0%)
                     break;
                 case CharacterClass.Rogue:
                     weaponArray = new int[] { 150, 450, 550, 600, 650, 700, 750, 770, MaxProbability, 1001, 1001 }; // Sword(15%), Dagger(30%), Greatsword(10%), Katana(5%), Staff(5%), FocusStone(5%), Spear(5%), DragonSpear(2%), TwinSwords(23%), Other(0%), Starter(0%)
@@ -2452,6 +2596,22 @@ namespace PersonalDiscordBot.Classes
         };
 
         #endregion
+    }
+
+    public static class Enemies
+    {
+        public static EnemyType ChooseEnemyType()
+        {
+            EnemyType type = EnemyType.Goblin;
+            return type;
+        }
+
+        public static Enemy EnemyRanGen(int level)
+        {
+            Enemy enemy = new Enemy();
+
+            return enemy;
+        }
     }
 
     public class Testing
