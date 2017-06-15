@@ -1121,7 +1121,7 @@ namespace PersonalDiscordBot
 
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
-            uStatusUpdate(Testing.LootDropGen());
+            uStatusUpdate(Testing.RandomArmor());
         }
 
         #endregion

@@ -1,0 +1,992 @@
+06-15-17_7:38:49 AM :: 
+########################## Application Start ##########################
+
+06-15-17_7:38:49 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-15-17_7:38:49 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-15-17_7:38:49 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-15-17_7:38:49 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-15-17_7:38:49 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-15-17_7:38:49 AM :: Finished reading config
+06-15-17_7:38:50 AM :: Set Grid grdStatus to Hidden on launch
+06-15-17_7:38:50 AM :: Set Grid grdSettings to Hidden on launch
+06-15-17_7:38:50 AM :: Set Grid grdServers to Hidden on launch
+06-15-17_7:38:50 AM :: Set Grid grdBotInfo to Hidden on launch
+06-15-17_7:38:50 AM :: STATUS: Current Version: 1.0.6375.13763
+06-15-17_7:38:50 AM :: Refreshing admin list
+06-15-17_7:38:50 AM :: STATUS: Refreshed admin list, total admins: 0
+06-15-17_7:38:52 AM :: Revealed Grid grdStatus
+06-15-17_7:38:52 AM :: Hid Grid grdSettings
+06-15-17_7:38:52 AM :: Hid Grid grdServers
+06-15-17_7:38:52 AM :: Hid Grid grdBotInfo
+06-15-17_7:38:52 AM :: Slid Main Menu out of view
+06-15-17_7:38:52 AM :: STATUS: Your armor is: 
+Name: Common Plate Armor
+Desc: Heavy Common Plate Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 22
+CurrentDurability: 22
+Worth: 43
+Speed: 60
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:38:57 AM :: STATUS: Your armor is: 
+Name: Common Steel Armor
+Desc: Heavy Common Steel Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 32
+CurrentDurability: 32
+Worth: 42
+Speed: 80
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:38:59 AM :: STATUS: Your armor is: 
+Name: Common Leather Armor
+Desc: Medium Common Leather Armor
+Type: Medium
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 22
+CurrentDurability: 22
+Worth: 97
+Speed: 80
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:02 AM :: STATUS: Your armor is: 
+Name: Common Steel Armor
+Desc: Heavy Common Steel Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 32
+CurrentDurability: 32
+Worth: 160
+Speed: 80
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:03 AM :: STATUS: Your armor is: 
+Name: Rare Leather Armor
+Desc: Medium Rare Leather Armor
+Type: Medium
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 60
+CurrentDurability: 60
+Worth: 216
+Speed: 110
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:04 AM :: STATUS: Your armor is: 
+Name: Common Steel Armor
+Desc: Heavy Common Steel Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 32
+CurrentDurability: 32
+Worth: 154
+Speed: 70
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:05 AM :: STATUS: Your armor is: 
+Name: Common Diamond Armor
+Desc: Heavy Common Diamond Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 22
+CurrentDurability: 22
+Worth: 28
+Speed: 60
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:05 AM :: STATUS: Your armor is: 
+Name: Common Plate Armor
+Desc: Heavy Common Plate Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 32
+CurrentDurability: 32
+Worth: 12
+Speed: 80
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:05 AM :: STATUS: Your armor is: 
+Name: Common Plate Armor
+Desc: Heavy Common Plate Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 32
+CurrentDurability: 32
+Worth: 10
+Speed: 70
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:06 AM :: STATUS: Your armor is: 
+Name: Common Steel Armor
+Desc: Heavy Common Steel Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 32
+CurrentDurability: 32
+Worth: 188
+Speed: 80
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:06 AM :: STATUS: Your armor is: 
+Name: Uncommon Steel Armor
+Desc: Heavy Uncommon Steel Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 34
+CurrentDurability: 34
+Worth: 17
+Speed: 60
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+
+06-15-17_7:39:06 AM :: Deleted old DebugLog: DebugLog_05-30-17.txt
+06-15-17_7:39:07 AM :: STATUS: Your armor is: 
+Name: Common Leather Armor
+Desc: Medium Common Leather Armor
+Type: Medium
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 32
+CurrentDurability: 32
+Worth: 122
+Speed: 100
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:07 AM :: STATUS: Your armor is: 
+Name: 
+Desc: An armor like any other
+Type: Light
+Rarity: Common
+IsUnique: False
+Lvl: 0
+MaxDurability: 0
+CurrentDurability: 0
+Worth: 0
+Speed: 100
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:07 AM :: STATUS: Your armor is: 
+Name: Uncommon Plate Armor
+Desc: Heavy Uncommon Plate Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 44
+CurrentDurability: 44
+Worth: 122
+Speed: 80
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:07 AM :: STATUS: Your armor is: 
+Name: Uncommon Mythril Armor
+Desc: Heavy Uncommon Mythril Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 44
+CurrentDurability: 44
+Worth: 114
+Speed: 80
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:08 AM :: STATUS: Your armor is: 
+Name: Common Diamond Armor
+Desc: Heavy Common Diamond Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 32
+CurrentDurability: 32
+Worth: 34
+Speed: 80
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:08 AM :: STATUS: Your armor is: 
+Name: Epic Plate Armor
+Desc: Heavy Epic Plate Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 70
+CurrentDurability: 70
+Worth: 237
+Speed: 80
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:09 AM :: STATUS: Your armor is: 
+Name: Uncommon Mythril Armor
+Desc: Heavy Uncommon Mythril Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 44
+CurrentDurability: 44
+Worth: 110
+Speed: 70
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:09 AM :: STATUS: Your armor is: 
+Name: Common Mythril Armor
+Desc: Heavy Common Mythril Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 32
+CurrentDurability: 32
+Worth: 194
+Speed: 70
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:09 AM :: STATUS: Your armor is: 
+Name: Uncommon Diamond Armor
+Desc: Heavy Uncommon Diamond Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 44
+CurrentDurability: 44
+Worth: 86
+Speed: 70
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:10 AM :: STATUS: Your armor is: 
+Name: Common Robe
+Desc: Light Common Robe
+Type: Light
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 22
+CurrentDurability: 22
+Worth: 32
+Speed: 110
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:10 AM :: STATUS: Your armor is: 
+Name: Common Mythril Armor
+Desc: Heavy Common Mythril Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 32
+CurrentDurability: 32
+Worth: 32
+Speed: 70
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:10 AM :: STATUS: Your armor is: 
+Name: Common Plate Armor
+Desc: Heavy Common Plate Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 22
+CurrentDurability: 22
+Worth: 6
+Speed: 60
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:10 AM :: STATUS: Your armor is: 
+Name: Common Plate Armor
+Desc: Heavy Common Plate Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 22
+CurrentDurability: 22
+Worth: 71
+Speed: 60
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:11 AM :: STATUS: Your armor is: 
+Name: Epic Mythril Armor
+Desc: Heavy Epic Mythril Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 70
+CurrentDurability: 70
+Worth: 222
+Speed: 80
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:11 AM :: STATUS: Your armor is: 
+Name: 
+Desc: An armor like any other
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 0
+MaxDurability: 0
+CurrentDurability: 0
+Worth: 0
+Speed: 100
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:12 AM :: STATUS: Your armor is: 
+Name: Common Steel Armor
+Desc: Heavy Common Steel Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 32
+CurrentDurability: 32
+Worth: 2
+Speed: 70
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:13 AM :: STATUS: Your armor is: 
+Name: Rare Leather Armor
+Desc: Medium Rare Leather Armor
+Type: Medium
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 50
+CurrentDurability: 50
+Worth: 62
+Speed: 100
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:13 AM :: STATUS: Your armor is: 
+Name: Common Leather Armor
+Desc: Medium Common Leather Armor
+Type: Medium
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 32
+CurrentDurability: 32
+Worth: 34
+Speed: 90
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+
+06-15-17_7:39:14 AM :: STATUS: Your armor is: 
+Name: 
+Desc: An armor like any other
+Type: Medium
+Rarity: Common
+IsUnique: False
+Lvl: 0
+MaxDurability: 0
+CurrentDurability: 0
+Worth: 0
+Speed: 100
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:14 AM :: STATUS: Your armor is: 
+Name: Uncommon Leather Armor
+Desc: Medium Uncommon Leather Armor
+Type: Medium
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 34
+CurrentDurability: 34
+Worth: 41
+Speed: 90
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:15 AM :: STATUS: Your armor is: 
+Name: Uncommon Leather Armor
+Desc: Medium Uncommon Leather Armor
+Type: Medium
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 44
+CurrentDurability: 44
+Worth: 108
+Speed: 90
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:15 AM :: STATUS: Your armor is: 
+Name: Common Steel Armor
+Desc: Heavy Common Steel Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 22
+CurrentDurability: 22
+Worth: 65
+Speed: 70
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:16 AM :: STATUS: Your armor is: 
+Name: Uncommon Fur Armor
+Desc: Light Uncommon Fur Armor
+Type: Light
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 44
+CurrentDurability: 44
+Worth: 134
+Speed: 120
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:17 AM :: STATUS: Your armor is: 
+Name: Uncommon Plate Armor
+Desc: Heavy Uncommon Plate Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 44
+CurrentDurability: 44
+Worth: 108
+Speed: 70
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:17 AM :: STATUS: Your armor is: 
+Name: 
+Desc: An armor like any other
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 0
+MaxDurability: 0
+CurrentDurability: 0
+Worth: 0
+Speed: 100
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:17 AM :: STATUS: Your armor is: 
+Name: Common Leather Armor
+Desc: Medium Common Leather Armor
+Type: Medium
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 32
+CurrentDurability: 32
+Worth: 8
+Speed: 100
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:18 AM :: STATUS: Your armor is: 
+Name: Rare Mythril Armor
+Desc: Heavy Rare Mythril Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 60
+CurrentDurability: 60
+Worth: 340
+Speed: 90
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:18 AM :: STATUS: Your armor is: 
+Name: 
+Desc: An armor like any other
+Type: Medium
+Rarity: Common
+IsUnique: False
+Lvl: 0
+MaxDurability: 0
+CurrentDurability: 0
+Worth: 0
+Speed: 100
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:19 AM :: STATUS: Your armor is: 
+Name: Epic Leather Armor
+Desc: Medium Epic Leather Armor
+Type: Medium
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 70
+CurrentDurability: 70
+Worth: 219
+Speed: 100
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:20 AM :: STATUS: Your armor is: 
+Name: 
+Desc: An armor like any other
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 0
+MaxDurability: 0
+CurrentDurability: 0
+Worth: 0
+Speed: 100
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:20 AM :: STATUS: Your armor is: 
+Name: 
+Desc: An armor like any other
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 0
+MaxDurability: 0
+CurrentDurability: 0
+Worth: 0
+Speed: 100
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:21 AM :: STATUS: Your armor is: 
+Name: Rare Diamond Armor
+Desc: Heavy Rare Diamond Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 60
+CurrentDurability: 60
+Worth: 388
+Speed: 90
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:22 AM :: STATUS: Your armor is: 
+Name: Common Plate Armor
+Desc: Heavy Common Plate Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 22
+CurrentDurability: 22
+Worth: 17
+Speed: 70
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:22 AM :: STATUS: Your armor is: 
+Name: Epic Leather Armor
+Desc: Medium Epic Leather Armor
+Type: Medium
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 80
+CurrentDurability: 80
+Worth: 402
+Speed: 120
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:23 AM :: STATUS: Your armor is: 
+Name: Uncommon Steel Armor
+Desc: Heavy Uncommon Steel Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 34
+CurrentDurability: 34
+Worth: 66
+Speed: 70
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:24 AM :: STATUS: Your armor is: 
+Name: Uncommon Diamond Armor
+Desc: Heavy Uncommon Diamond Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 44
+CurrentDurability: 44
+Worth: 162
+Speed: 70
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+
+06-15-17_7:39:26 AM :: STATUS: Your armor is: 
+Name: Common Leather Armor
+Desc: Medium Common Leather Armor
+Type: Medium
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 32
+CurrentDurability: 32
+Worth: 88
+Speed: 90
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:26 AM :: STATUS: Your armor is: 
+Name: Common Plate Armor
+Desc: Heavy Common Plate Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 22
+CurrentDurability: 22
+Worth: 27
+Speed: 60
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:27 AM :: STATUS: Your armor is: 
+Name: Uncommon Fur Armor
+Desc: Light Uncommon Fur Armor
+Type: Light
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 34
+CurrentDurability: 34
+Worth: 34
+Speed: 100
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:39:32 AM :: 
+########################## Application Stop ##########################
+
+
+06-15-17_7:47:08 AM :: 
+########################## Application Start ##########################
+
+06-15-17_7:47:08 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-15-17_7:47:08 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-15-17_7:47:08 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-15-17_7:47:08 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-15-17_7:47:08 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-15-17_7:47:08 AM :: Finished reading config
+06-15-17_7:47:09 AM :: Set Grid grdStatus to Hidden on launch
+06-15-17_7:47:09 AM :: Set Grid grdSettings to Hidden on launch
+06-15-17_7:47:09 AM :: Set Grid grdServers to Hidden on launch
+06-15-17_7:47:09 AM :: Set Grid grdBotInfo to Hidden on launch
+06-15-17_7:47:09 AM :: STATUS: Current Version: 1.0.6375.14013
+06-15-17_7:47:09 AM :: Refreshing admin list
+06-15-17_7:47:10 AM :: STATUS: Refreshed admin list, total admins: 0
+06-15-17_7:47:11 AM :: Revealed Grid grdStatus
+06-15-17_7:47:11 AM :: Hid Grid grdSettings
+06-15-17_7:47:11 AM :: Hid Grid grdServers
+06-15-17_7:47:11 AM :: Hid Grid grdBotInfo
+06-15-17_7:47:11 AM :: Slid Main Menu out of view
+06-15-17_7:47:12 AM :: STATUS: Your armor is: 
+Name: Epic Diamond Armor
+Desc: Heavy Epic Diamond Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 80
+CurrentDurability: 80
+Worth: 150
+Speed: 90
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:47:16 AM :: STATUS: Your armor is: 
+Name: Common Leather Armor
+Desc: Medium Common Leather Armor
+Type: Medium
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 32
+CurrentDurability: 32
+Worth: 148
+Speed: 90
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:47:22 AM :: STATUS: Your armor is: 
+Name: Epic Steel Armor
+Desc: Heavy Epic Steel Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 80
+CurrentDurability: 80
+Worth: 12
+Speed: 100
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-15-17_7:47:34 AM :: 
+########################## Application Stop ##########################
+
+
+06-15-17_7:48:05 AM :: 
+########################## Application Start ##########################
+
+06-15-17_7:48:05 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-15-17_7:48:05 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-15-17_7:48:05 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-15-17_7:48:05 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-15-17_7:48:06 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-15-17_7:48:06 AM :: Finished reading config
+06-15-17_7:48:06 AM :: Set Grid grdStatus to Hidden on launch
+06-15-17_7:48:06 AM :: Set Grid grdSettings to Hidden on launch
+06-15-17_7:48:06 AM :: Set Grid grdServers to Hidden on launch
+06-15-17_7:48:06 AM :: Set Grid grdBotInfo to Hidden on launch
+06-15-17_7:48:06 AM :: STATUS: Current Version: 1.0.6375.14013
+06-15-17_7:48:06 AM :: Refreshing admin list
+06-15-17_7:48:06 AM :: STATUS: Refreshed admin list, total admins: 0
+06-15-17_7:48:12 AM :: Revealed Grid grdStatus
+06-15-17_7:48:12 AM :: Hid Grid grdSettings
+06-15-17_7:48:12 AM :: Hid Grid grdServers
+06-15-17_7:48:12 AM :: Hid Grid grdBotInfo
+06-15-17_7:48:12 AM :: Slid Main Menu out of view
+06-15-17_7:48:15 AM :: 
+########################## Application Stop ##########################
+
+

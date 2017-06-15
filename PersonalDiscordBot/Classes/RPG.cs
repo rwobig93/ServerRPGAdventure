@@ -2362,19 +2362,34 @@ namespace PersonalDiscordBot.Classes
             "Glass Armor"
         };
 
-        public static string[] armorUniqueLightNames =
-{
-            "Grand Wizard Robes",
-            "Basically Paper Garments"
-        };
-
-        public static string[] armorUniqueLightDesc =
+        public static string[] ArmorUniqueLightNames(RarityType rarity)
         {
-            "Grand white robes fit for a wizard. Just don't wear a white hood as well..",
-            "It's amazing how powerful you become when you aren't weighed down by 'protection'."
-        };
+            return new string[]
+            {
+            $"{rarity} Grand Wizard Robes",
+            $"{rarity} Basically Paper Garments"
+            };
+        }
+        public static void ArmorUniqueLightAddition(Armor armor, int rarityValue, int level, int index)
+        {
+            switch (index)
+            {
+                case 0:
+                    armor.Desc = "Grand white robes fit for a wizard. Just don't wear a white hood as well..";
+                    armor.Physical = (level + rng.Next(7, 17) + rarityValue);
+                    armor.Speed = (level + 110 + rng.Next(20, 100));
+                    armor.Worth = (((level + rarityValue) * rarityValue) + (armor.Speed / armor.Physical));
+                    break;
+                case 1:
+                    armor.Desc = "It's amazing how powerful you become when you aren't weighed down by 'protection'.";
+                    armor.Physical = (level + rng.Next(9, 18) + rarityValue);
+                    armor.Speed = (level + 130 + rng.Next(40, 130));
+                    armor.Worth = (((level + rarityValue) * rarityValue) + (armor.Speed / armor.Physical));
+                    break;
+            }
+        }
 
-        public static string[] armorBasicMediumNames = 
+        public static string[] armorBasicMediumNames =
         {
             "Leather Armor",
             "Scale Armor"
@@ -2466,20 +2481,20 @@ namespace PersonalDiscordBot.Classes
             switch (armor.Type)
             {
                 case ArmorType.Light:
-                    int lightNum = rng.Next(0, armorBasicLightNames.Length);
+                    int lightNum = rng.Next(0, (armorBasicLightNames.Length - 1));
                     armor.Name = $"{rarity} {armorBasicLightNames[lightNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 80;
                     break;
                 case ArmorType.Medium:
-                    int mediumNum = rng.Next(0, armorBasicMediumNames.Length);
-                    armor.Name = $"{rarity} {armorBasicLightNames[mediumNum]}";
+                    int mediumNum = rng.Next(0, (armorBasicMediumNames.Length - 1));
+                    armor.Name = $"{rarity} {armorBasicMediumNames[mediumNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 60;
                     break;
                 case ArmorType.Heavy:
-                    int heavyNum = rng.Next(0, armorBasicHeavyNames.Length);
-                    armor.Name = $"{rarity} {armorBasicLightNames[heavyNum]}";
+                    int heavyNum = rng.Next(0, (armorBasicHeavyNames.Length - 1));
+                    armor.Name = $"{rarity} {armorBasicHeavyNames[heavyNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 40;
                     break;
@@ -2631,6 +2646,18 @@ namespace PersonalDiscordBot.Classes
             RarityType rarity = LootDrop.ChooseRarity();
             var spell = LootDrop.SpellPicker(rarity, testiculeesCharacter);
             return $"{line}Name: {spell.Name}{line}Description: {spell.Desc}{line}Type: {spell.Type}{line}Unique: {spell.IsUnique}{line}Rarity: {spell.Rarity}{line}ManaCost: {spell.ManaCost}{line}Level: {spell.Lvl}{line}Speed: {spell.Speed}{line}Worth: {spell.Worth}{line}Physical: {spell.PhysicalDamage}{line}Fire: {spell.FireDamage}{line}Ice: {spell.IceDamage}{line}Lightning: {spell.LightningDamage}{line}Magic: {spell.MagicDamage}{line}Wind: {spell.WindDamage}";
+        }
+
+        public static string RandomArmor()
+        {
+            string result = string.Empty;
+            RarityType rarity = LootDrop.ChooseRarity();
+            var armor = LootDrop.ArmorPicker(rarity, testiculeesCharacter);
+            foreach (var prop in armor.GetType().GetProperties())
+            {
+                result = $"{result}{line}{prop.Name}: {prop.GetValue(armor)}";
+            }
+            return $"Your armor is: {result}";
         }
 
         public static string RandomMassTestWeap(int num)
