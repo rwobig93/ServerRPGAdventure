@@ -205,6 +205,7 @@ namespace PersonalDiscordBot.Classes
                     worker.ReportProgress(progress);
                 }
             };
+            worker.RunWorkerAsync();
         }
 
         public static void DeSerializeData()
@@ -244,18 +245,20 @@ namespace PersonalDiscordBot.Classes
                     worker.ReportProgress(progress);
                 }
             };
+            worker.RunWorkerAsync();
         }
 
         #endregion
 
         #region Character Methods
 
-        public static Character CreateNewCharacter(ulong ownerId, CharacterClass chosenClass)
+        public static Character CreateNewCharacter(ulong ownerId, CharacterClass chosenClass, string name)
         {
             Character newChar = new Character();
             switch (chosenClass)
             {
                 case CharacterClass.Dragoon:
+                    newChar.Name = name;
                     newChar.Lvl = 1;
                     newChar.Exp = 0;
                     newChar.Weapon = Weapons.dragonSpear;
@@ -282,6 +285,7 @@ namespace PersonalDiscordBot.Classes
                     newChar.Lck = rng.Next(0, 10);
                     break;
                 case CharacterClass.Mage:
+                    newChar.Name = name;
                     newChar.Lvl = 1;
                     newChar.Exp = 0;
                     newChar.Weapon = Weapons.stick;
@@ -309,6 +313,7 @@ namespace PersonalDiscordBot.Classes
                     newChar.Lck = rng.Next(0, 10);
                     break;
                 case CharacterClass.Necromancer:
+                    newChar.Name = name;
                     newChar.Lvl = 1;
                     newChar.Exp = 0;
                     newChar.Weapon = Weapons.glowyOrb;
@@ -335,6 +340,7 @@ namespace PersonalDiscordBot.Classes
                     newChar.Lck = rng.Next(0, 10);
                     break;
                 case CharacterClass.Rogue:
+                    newChar.Name = name;
                     newChar.Lvl = 1;
                     newChar.Exp = 0;
                     newChar.Weapon = Weapons.rogueDaggers;
@@ -359,6 +365,7 @@ namespace PersonalDiscordBot.Classes
                     newChar.Lck = rng.Next(1, 12);
                     break;
                 case CharacterClass.Warrior:
+                    newChar.Name = name;
                     newChar.Lvl = 1;
                     newChar.Exp = 0;
                     newChar.Weapon = Weapons.warriorFists;

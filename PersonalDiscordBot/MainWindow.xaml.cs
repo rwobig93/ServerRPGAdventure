@@ -90,6 +90,7 @@ namespace PersonalDiscordBot
             HideGrids();
             UpdateVerison();
             Management.DeSerializeData();
+            Permissions.DeSerializePermissions();
             tSaveRPGData();
             RefreshAdminList();
         }
@@ -97,6 +98,7 @@ namespace PersonalDiscordBot
         private void winMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Management.SerializeData();
+            Permissions.SerializePermissions();
             Toolbox.uDebugAddLog(string.Format("{0}########################## Application Stop ##########################{0}", Environment.NewLine));
             Toolbox.DumpDebugLog();
         }

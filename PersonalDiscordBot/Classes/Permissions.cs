@@ -37,6 +37,7 @@ namespace PersonalDiscordBot.Classes
                 Toolbox.uDebugAddLog($"Serialized Administrators.perm");
                 worker.ReportProgress(25);
             };
+            worker.RunWorkerAsync();
         }
 
         public static void DeSerializePermissions()
@@ -68,6 +69,7 @@ namespace PersonalDiscordBot.Classes
                     Toolbox.uDebugAddLog($"Administrators.perm doesn't exist: {adminPerm}");
                 worker.ReportProgress(25);
             };
+            worker.RunWorkerAsync();
         }
     }
 }

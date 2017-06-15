@@ -980,7 +980,15 @@ namespace PersonalDiscordBot.Classes
             var intTimes = 1000;
             var isANum = int.TryParse(times, out intTimes);
             if (isANum)
-                await Context.Channel.SendMessageAsync($"Generated {intTimes} Weapons:{Environment.NewLine}{Testing.RandomMassTestWeap(intTimes)}");
+            {
+                if (intTimes >= 100000)
+                {
+                    await Context.Channel.SendMessageAsync("The highest integer allowed is 100,000. I'm generating that for you now, don't do that again!");
+                    await Context.Channel.SendMessageAsync($"Generated {100000} Weapons:{Environment.NewLine}{Testing.RandomMassTestWeap(1000)}");
+                }
+                else
+                    await Context.Channel.SendMessageAsync($"Generated {intTimes} Weapons:{Environment.NewLine}{Testing.RandomMassTestWeap(intTimes)}");
+            }
             else
                 await Context.Channel.SendMessageAsync($"Generated {1000} Weapons:{Environment.NewLine}{Testing.RandomMassTestWeap(1000)}");
         }
@@ -991,7 +999,15 @@ namespace PersonalDiscordBot.Classes
             var intTimes = 1000;
             var isANum = int.TryParse(times, out intTimes);
             if (isANum)
-                await Context.Channel.SendMessageAsync($"Generated {intTimes} Spells:{Environment.NewLine}{Testing.RandomMassTestSpell(intTimes)}");
+            {
+                if (intTimes >= 100000)
+                {
+                    await Context.Channel.SendMessageAsync("The highest integer allowed is 100,000. I'm generating that for you now, don't do that again!");
+                    await Context.Channel.SendMessageAsync($"Generated {1000} Spells:{Environment.NewLine}{Testing.RandomMassTestSpell(100000)}");
+                }
+                else
+                    await Context.Channel.SendMessageAsync($"Generated {intTimes} Spells:{Environment.NewLine}{Testing.RandomMassTestSpell(intTimes)}");
+            }
             else
                 await Context.Channel.SendMessageAsync($"Generated {1000} Spells:{Environment.NewLine}{Testing.RandomMassTestSpell(1000)}");
         }
@@ -1012,13 +1028,14 @@ namespace PersonalDiscordBot.Classes
                 RPG.Owners.Add(owner);
                 Toolbox.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
                 await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you didn't have a profile yet so I made you one");
+                ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
             }
             else
                 Toolbox.uDebugAddLog($"Owner profile was found for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
             bool hasCharacters = ownerProfile.CharacterList.Count == 0 ? false : true;
+            int cost = Management.DetermineCharacterCost(ownerProfile);
             if (hasCharacters)
             {
-                int cost = Management.DetermineCharacterCost(ownerProfile);
                 if (ownerProfile.Currency < cost)
                 {
                     await Context.Channel.SendMessageAsync($"A new character for you costs {cost} currency but you only have {ownerProfile.Currency}, please get good");
@@ -1063,7 +1080,8 @@ namespace PersonalDiscordBot.Classes
                 );
             bool responseRecvd = false;
             bool nameChosen = false;
-            List<IMessage> respondedList3 = new List<IMessage>();
+            string charName = string.Empty;
+            List<IMessage> respondedList = new List<IMessage>();
             DateTime timeStamp = DateTime.Now;
             RPG.CharacterClass chosenClass = 0;
             while (!responseRecvd)
@@ -1074,9 +1092,9 @@ namespace PersonalDiscordBot.Classes
                 string response = string.Empty;
                 foreach (IMessage msg in newList)
                 {
-                    if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime) && (!respondedList3.Contains(msg)))
+                    if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime) && (!respondedList.Contains(msg)))
                     {
-                        respondedList3.Add(msg);
+                        respondedList.Add(msg);
                         Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
                         Toolbox.uDebugAddLog($"Before response: {msg.Content.ToString()}");
                         response = Regex.Replace(msg.Content.ToString(), @"\s+", "");
@@ -1120,10 +1138,8 @@ namespace PersonalDiscordBot.Classes
             while (!nameChosen)
             {
                 DateTime nameTimeStamp = DateTime.Now;
-                await Context.Channel.SendMessageAsync($"What can we call your {chosenClass}?");
+                var nameQuestion = await Context.Channel.SendMessageAsync($"What can we call your {chosenClass}?");
                 bool responseRecvd2 = false;
-                string charName = string.Empty;
-                List<IMessage> respondedList2 = new List<IMessage>();
                 DateTime timeStamp2 = DateTime.Now;
                 while (!responseRecvd2)
                 {
@@ -1133,9 +1149,9 @@ namespace PersonalDiscordBot.Classes
                     string response = string.Empty;
                     foreach (IMessage msg in newList)
                     {
-                        if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime) && (!respondedList2.Contains(msg)))
+                        if ((Context.Message.Author == msg.Author) && (nameQuestion.Timestamp.DateTime < msg.Timestamp.DateTime) && (!respondedList.Contains(msg)))
                         {
-                            respondedList2.Add(msg);
+                            respondedList.Add(msg);
                             response = msg.Content.ToString();
                             Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
                             Toolbox.uDebugAddLog($"Response: {response}");
@@ -1150,8 +1166,7 @@ namespace PersonalDiscordBot.Classes
                         return;
                     }
                 }
-                await Context.Channel.SendMessageAsync($"Would you like your {chosenClass} to be called {charName}? (Yes/No)");
-                List<IMessage> respondedList = new List<IMessage>();
+                var verification = await Context.Channel.SendMessageAsync($"Would you like your {chosenClass} to be called \"{charName}\"? (Yes/No)");
                 bool responseRecvd3 = false;
                 DateTime timeStamp3 = DateTime.Now;
                 while (!responseRecvd3)
@@ -1162,7 +1177,7 @@ namespace PersonalDiscordBot.Classes
                     string response = string.Empty;
                     foreach (IMessage msg in newList)
                     {
-                        if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime) && (!respondedList.Contains(msg)))
+                        if ((Context.Message.Author == msg.Author) && (verification.Timestamp.DateTime < msg.Timestamp.DateTime) && (!respondedList.Contains(msg)))
                         {
                             respondedList.Add(msg);
                             response = msg.Content.ToString();
@@ -1195,12 +1210,14 @@ namespace PersonalDiscordBot.Classes
                 }
                 if (nameTimeStamp + TimeSpan.FromMinutes(5) <= DateTime.Now)
                 {
-                    Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 60s, canceled character creation");
+                    Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 5min, canceled character creation");
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} A valid response wasn't received within 60 seconds, canceling creation request");
                     return;
                 }
             }
-            Character newChar = Management.CreateNewCharacter(Context.Message.Author.Id, chosenClass);
+            ownerProfile.Currency -= cost;
+            await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You have been charged {cost} currency, you now have: {ownerProfile.Currency}");
+            Character newChar = Management.CreateNewCharacter(Context.Message.Author.Id, chosenClass, charName);
             ownerProfile.CharacterList.Add(newChar);
             if (ownerProfile.CharacterList.Count == 1)
                 ownerProfile.CurrentCharacter = newChar;
@@ -1389,6 +1406,24 @@ namespace PersonalDiscordBot.Classes
             ownerProfile.CharacterList.Add(testiculees);
             ownerProfile.CurrentCharacter = testiculees;
             await Context.Channel.SendMessageAsync($"```{Testing.LootDropGen()}```");
+        }
+
+        [Command("delete"), Summary("Testicules Delete Profile")]
+        public async Task Testacules10()
+        {
+            if (!Permissions.Administrators.Contains(Context.Message.Author.Id))
+            {
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have rights to run this command");
+                return;
+            }
+            OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+            if (ownerProfile != null)
+            {
+                RPG.Owners.Remove(ownerProfile);
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} your profile has been successfully deleted");
+            }
+            else
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't have a profile to delete");
         }
     }
 }
