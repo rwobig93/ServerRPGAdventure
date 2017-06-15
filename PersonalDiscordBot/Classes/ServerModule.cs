@@ -1233,7 +1233,7 @@ namespace PersonalDiscordBot.Classes
             var isNum = int.TryParse(amount, out currency);
             if (!isNum)
             {
-                
+                Toolbox.uDebugAddLog($"Invalid Number: {amount}");
                 await Context.Channel.SendMessageAsync($"{amount} isn't a valid number");
                 return;
             }
@@ -1241,12 +1241,14 @@ namespace PersonalDiscordBot.Classes
             var isUlong = ulong.TryParse(mentionedUser, out userID);
             if (!isUlong)
             {
+                Toolbox.uDebugAddLog($"Invalid Ulong: {userID}");
                 await Context.Channel.SendMessageAsync($"{mentionedUser} isn't a valid discord user");
                 return;
             }
             var userFound = await Context.Channel.GetUserAsync(userID);
             if (userFound == null)
             {
+                Toolbox.uDebugAddLog($"Invalid User: {userFound.Username} | {userID}");
                 await Context.Channel.SendMessageAsync($"{userID} doesn't match a discord user on your server");
                 return;
             }
@@ -1264,6 +1266,7 @@ namespace PersonalDiscordBot.Classes
             }
             if (foundUsers == 0)
             {
+                Toolbox.uDebugAddLog($"No users found matching ID: {userFound.Id} Users: {foundUsers}");
                 await Context.Channel.SendMessageAsync($"{userFound.Mention} doesn't have an owner profile yet, to get one they need to create a character");
                 return;
             }
