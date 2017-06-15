@@ -1,4 +1,5 @@
-﻿using PersonalDiscordBot.Classes;
+﻿using Discord.Commands;
+using PersonalDiscordBot.Classes;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -72,6 +73,11 @@ namespace PersonalDiscordBot.Classes
         public static string ReturnType(this object obj)
         {
             return obj.GetType().ToString();
+        }
+
+        public static int ToArrayLength(this Array array)
+        {
+            return array.Length - 1;
         }
     }
 

@@ -991,9 +991,9 @@ namespace PersonalDiscordBot.Classes
             var intTimes = 1000;
             var isANum = int.TryParse(times, out intTimes);
             if (isANum)
-                await Context.Channel.SendMessageAsync($"Generated {intTimes} Weapons:{Environment.NewLine}{Testing.RandomMassTestSpell(intTimes)}");
+                await Context.Channel.SendMessageAsync($"Generated {intTimes} Spells:{Environment.NewLine}{Testing.RandomMassTestSpell(intTimes)}");
             else
-                await Context.Channel.SendMessageAsync($"Generated {1000} Weapons:{Environment.NewLine}{Testing.RandomMassTestSpell(1000)}");
+                await Context.Channel.SendMessageAsync($"Generated {1000} Spells:{Environment.NewLine}{Testing.RandomMassTestSpell(1000)}");
         }
 
         [Command("lootdrop"), Summary("Testicules Lootdrop")]
@@ -1063,6 +1063,7 @@ namespace PersonalDiscordBot.Classes
                 );
             bool responseRecvd = false;
             bool nameChosen = false;
+            List<IMessage> respondedList3 = new List<IMessage>();
             DateTime timeStamp = DateTime.Now;
             RPG.CharacterClass chosenClass = 0;
             while (!responseRecvd)
@@ -1073,8 +1074,9 @@ namespace PersonalDiscordBot.Classes
                 string response = string.Empty;
                 foreach (IMessage msg in newList)
                 {
-                    if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime))
+                    if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime) && (!respondedList3.Contains(msg)))
                     {
+                        respondedList3.Add(msg);
                         Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
                         Toolbox.uDebugAddLog($"Before response: {msg.Content.ToString()}");
                         response = Regex.Replace(msg.Content.ToString(), @"\s+", "");
@@ -1121,6 +1123,7 @@ namespace PersonalDiscordBot.Classes
                 await Context.Channel.SendMessageAsync($"What can we call your {chosenClass}?");
                 bool responseRecvd2 = false;
                 string charName = string.Empty;
+                List<IMessage> respondedList2 = new List<IMessage>();
                 DateTime timeStamp2 = DateTime.Now;
                 while (!responseRecvd2)
                 {
@@ -1130,8 +1133,9 @@ namespace PersonalDiscordBot.Classes
                     string response = string.Empty;
                     foreach (IMessage msg in newList)
                     {
-                        if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime))
+                        if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime) && (!respondedList2.Contains(msg)))
                         {
+                            respondedList2.Add(msg);
                             response = msg.Content.ToString();
                             Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
                             Toolbox.uDebugAddLog($"Response: {response}");
@@ -1237,6 +1241,9 @@ namespace PersonalDiscordBot.Classes
                 await Context.Channel.SendMessageAsync($"{amount} isn't a valid number");
                 return;
             }
+            Toolbox.uDebugAddLog($"Before Removing '<,@,>': {mentionedUser}");
+            mentionedUser = mentionedUser.Replace("<", string.Empty).Replace("@", string.Empty).Replace(">", string.Empty);
+            Toolbox.uDebugAddLog($"After Removing '<,@,>': {mentionedUser}");
             ulong userID = 0;
             var isUlong = ulong.TryParse(mentionedUser, out userID);
             if (!isUlong)

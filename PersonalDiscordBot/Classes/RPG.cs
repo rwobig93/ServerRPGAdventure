@@ -424,7 +424,12 @@ namespace PersonalDiscordBot.Classes
 
         public static void AttackEnemy(Character chara, Enemy enemy)
         {
-
+            int physDamage = 0;
+            int magiDamage = 0;
+            int fireDamage = 0;
+            int lighDamage = 0;
+            int iceeDamage = 0;
+            int windDamage = 0;
         }
     }
 
@@ -933,9 +938,9 @@ namespace PersonalDiscordBot.Classes
             WeaponType type = ChooseWeaponType(chara);
             var isUnique = ChanceRoll(30);
             if (isUnique)
-                weap = Weapons.WeaponRandomGen(rarity, type, rarityValue, level);
-            else
                 weap = Weapons.WeaponUniqueGen(rarity, type, rarityValue, level);
+            else
+                weap = Weapons.WeaponRandomGen(rarity, type, rarityValue, level);
             return weap;
         }
 
@@ -1560,55 +1565,55 @@ namespace PersonalDiscordBot.Classes
              {
                  case WeaponType.Dagger:
                     var dagNames = weaponNamesDagger(rarity);
-                    int dagIndex = rng.Next(0, dagNames.Length);
+                    int dagIndex = rng.Next(0, dagNames.ToArrayLength());
                     weap.Name = dagNames[dagIndex];
                     WeaponDaggerAddition(weap, rarityValue, level, dagIndex);
                      break;
                  case WeaponType.DragonSpear:
                     var dsNames = weaponNamesDragonSpear(rarity);
-                    int dsIndex = rng.Next(0, dsNames.Length);
+                    int dsIndex = rng.Next(0, dsNames.ToArrayLength());
                     weap.Name = dsNames[dsIndex];
                     WeaponDragonSpearAddition(weap, rarityValue, level, dsIndex);
                      break;
                  case WeaponType.FocusStone:
                     var fsNames = weaponNamesFocusStone(rarity);
-                    int fsIndex = rng.Next(0, fsNames.Length);
+                    int fsIndex = rng.Next(0, fsNames.ToArrayLength());
                     weap.Name = fsNames[fsIndex];
                     WeaponFocusStoneAddition(weap, rarityValue, level, fsIndex);
                      break;
                  case WeaponType.Greatsword:
                     var gsNames = weaponNamesGreatsword(rarity);
-                    int gsIndex = rng.Next(0, gsNames.Length);
+                    int gsIndex = rng.Next(0, gsNames.ToArrayLength());
                     weap.Name = gsNames[gsIndex];
                     WeaponGreatSwordAddition(weap, rarityValue, level, gsIndex);
                      break;
                  case WeaponType.Katana:
                     var ktNames = weaponNamesKatana(rarity);
-                    int ktIndex = rng.Next(0, ktNames.Length);
+                    int ktIndex = rng.Next(0, ktNames.ToArrayLength());
                     weap.Name = ktNames[ktIndex];
                     WeaponKatanaAddition(weap, rarityValue, level, ktIndex);
                      break;
                  case WeaponType.Spear:
                     var spNames = weaponNamesSpear(rarity);
-                    int spIndex = rng.Next(0, spNames.Length);
+                    int spIndex = rng.Next(0, spNames.ToArrayLength());
                     weap.Name = spNames[spIndex];
                     WeaponSpearAddition(weap, rarityValue, level, spIndex);
                      break;
                  case WeaponType.Staff:
                     var stNames = weaponNamesStaff(rarity);
-                    int stIndex = rng.Next(0, stNames.Length);
+                    int stIndex = rng.Next(0, stNames.ToArrayLength());
                     weap.Name = stNames[stIndex];
                     WeaponStaffAddition(weap, rarityValue, level, stIndex);
                      break;
                  case WeaponType.Sword:
                     var swNames = weaponNamesSword(rarity);
-                    int swIndex = rng.Next(0, swNames.Length);
+                    int swIndex = rng.Next(0, swNames.ToArrayLength());
                     weap.Name = swNames[swIndex];
                     WeaponSwordAddition(weap, rarityValue, level, swIndex);
                      break;
                  case WeaponType.TwinSwords:
                     var tsNames = weaponNamesTwinSwords(rarity);
-                    int tsIndex = rng.Next(0, tsNames.Length);
+                    int tsIndex = rng.Next(0, tsNames.ToArrayLength());
                     weap.Name = tsNames[tsIndex];
                     WeaponTwinSwordsAddition(weap, rarityValue, level, tsIndex);
                      break;
@@ -2289,19 +2294,19 @@ namespace PersonalDiscordBot.Classes
             {
                 case SpellType.Attack:
                     var attackNames = SpellAttackRanGenNames(type, rarity);
-                    int atkIndex = rng.Next(0, attackNames.Length);
+                    int atkIndex = rng.Next(0, attackNames.ToArrayLength());
                     spell.Name = attackNames[atkIndex];
                     SpellAttackRanGenAdditions(type, spell, rarityValue, atkIndex);
                     break;
                 case SpellType.Defense:
                     var defNames = SpellDefenseRanGenNames(type, rarity);
-                    int defIndex = rng.Next(0, defNames.Length);
+                    int defIndex = rng.Next(0, defNames.ToArrayLength());
                     spell.Name = defNames[defIndex];
                     SpellDefenseRanGenAdditions(type, spell, rarityValue, defIndex);
                     break;
                 case SpellType.Restorative:
                     var restNames = SpellRestorativeRanGenNames(type, rarity);
-                    int restIndex = rng.Next(0, restNames.Length);
+                    int restIndex = rng.Next(0, restNames.ToArrayLength());
                     spell.Name = restNames[restIndex];
                     SpellRestorativeRanGenAdditions(charac, spell, rarityValue, restIndex);
                     break;
@@ -2466,19 +2471,19 @@ namespace PersonalDiscordBot.Classes
             switch (armor.Type)
             {
                 case ArmorType.Light:
-                    int lightNum = rng.Next(0, armorBasicLightNames.Length);
+                    int lightNum = rng.Next(0, armorBasicLightNames.ToArrayLength());
                     armor.Name = $"{rarity} {armorBasicLightNames[lightNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 80;
                     break;
                 case ArmorType.Medium:
-                    int mediumNum = rng.Next(0, armorBasicMediumNames.Length);
+                    int mediumNum = rng.Next(0, armorBasicMediumNames.ToArrayLength());
                     armor.Name = $"{rarity} {armorBasicLightNames[mediumNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 60;
                     break;
                 case ArmorType.Heavy:
-                    int heavyNum = rng.Next(0, armorBasicHeavyNames.Length);
+                    int heavyNum = rng.Next(0, armorBasicHeavyNames.ToArrayLength());
                     armor.Name = $"{rarity} {armorBasicLightNames[heavyNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 40;
