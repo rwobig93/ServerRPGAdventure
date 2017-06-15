@@ -1344,5 +1344,51 @@ namespace PersonalDiscordBot.Classes
             Management.ChangeCharacter(ownerProfile.OwnerID, selChara);
             await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} your active character is now {selChara.Name}!");
         }
+
+        [Command("fight"), Summary("Testicules Enemy Gen")]
+        public async Task Testacules8()
+        {
+            OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+            if (ownerProfile == null)
+            {
+                OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id };
+                RPG.Owners.Add(owner);
+                Toolbox.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you didn't have a profile yet so I made you one");
+            }
+            else
+                Toolbox.uDebugAddLog($"Owner profile was found for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
+            bool hasCharacter = ownerProfile.CurrentCharacter != null ? false : true;
+            if (!hasCharacter)
+            {
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't currently have a character, please create one");
+                return;
+            }
+            await Context.Channel.SendMessageAsync($"```{Testing.LootDropGen()}```");
+        }
+
+        [Command("testiculees"), Summary("Testicules Add Testiculees")]
+        public async Task Testacules9()
+        {
+            if (!Permissions.Administrators.Contains(Context.Message.Author.Id))
+            {
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have rights to run this command");
+                return;
+            }
+            OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+            if (ownerProfile == null)
+            {
+                OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id };
+                RPG.Owners.Add(owner);
+                Toolbox.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you didn't have a profile yet so I made you one");
+            }
+            else
+                Toolbox.uDebugAddLog($"Owner profile was found for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
+            Character testiculees = Testing.testiculeesCharacter;
+            ownerProfile.CharacterList.Add(testiculees);
+            ownerProfile.CurrentCharacter = testiculees;
+            await Context.Channel.SendMessageAsync($"```{Testing.LootDropGen()}```");
+        }
     }
 }

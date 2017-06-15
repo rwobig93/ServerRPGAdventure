@@ -20,6 +20,8 @@ namespace PersonalDiscordBot.Classes
         public static Random rng = new Random((int)(DateTime.Now.Ticks & 0x7FFFFFFF));
         public static int maxLevel = 20;
         public static List<OwnerProfile> Owners = new List<OwnerProfile>();
+        public static List<Match> MatchList = new List<Match>();
+        public static List<PlayerMatch> PlayerMatchList = new List<PlayerMatch>();
 
         #endregion
 
@@ -422,15 +424,67 @@ namespace PersonalDiscordBot.Classes
 
         #endregion
 
-        public static void AttackEnemy(Character chara, Enemy enemy)
+        #region Combat Methods
+
+        public static string AttackEnemy(Character chara, Enemy enemy)
         {
+            int totalDamage = 0;
             int physDamage = 0;
             int magiDamage = 0;
             int fireDamage = 0;
             int lighDamage = 0;
             int iceeDamage = 0;
             int windDamage = 0;
+
+            physDamage = (chara.Weapon.PhysicalDamage * chara.Str) - (enemy.Armor.Physical * enemy.Def);
+            magiDamage = CalculateElement(chara.Weapon.MagicDamage, enemy.Armor.Magic);
+            fireDamage = CalculateElement(chara.Weapon.FireDamage, enemy.Armor.Fire);
+            lighDamage = CalculateElement(chara.Weapon.LightningDamage, enemy.Armor.Lightning);
+            iceeDamage = CalculateElement(chara.Weapon.IceDamage, enemy.Armor.Ice);
+            windDamage = CalculateElement(chara.Weapon.WindDamage, enemy.Armor.Wind);
+
+            totalDamage = physDamage + magiDamage + fireDamage + lighDamage + iceeDamage + windDamage;
+
+            if (totalDamage > 0)
+            {
+                if (enemy.CurrentHP - totalDamage <= 0)
+                    return EnemyDied(chara, enemy);
+                else
+                {
+                    enemy.CurrentHP -= totalDamage;
+                    return $"{chara.Name} attacked {enemy.Name} and dealt {totalDamage} damage";
+                }
+            }
+            else if (totalDamage == 0)
+            {
+                return $"{chara.Name} attacked {enemy.Name} and didn't deal any damage";
+            }
+            else
+            {
+                if (enemy.CurrentHP + totalDamage < enemy.MaxHP)
+                    enemy.CurrentHP -= totalDamage;
+                else
+                    enemy.CurrentHP = enemy.MaxHP;
+                return $"{chara.Name} attacked, {enemy.Name} absorbed {totalDamage} damage and was healed";
+            }
         }
+
+        public static string EnemyDied(Character chara, Enemy enemy)
+        {
+            return $"";
+        }
+
+        public static int CalculateElement(int attackDmg, int armorDef)
+        {
+            if (armorDef > 100)
+                return -((attackDmg) / (100 / (armorDef - 100)));
+            else if (armorDef == 100)
+                return 0;
+            else
+                return ((attackDmg) - (100 / (armorDef)));
+        }
+
+        #endregion
     }
 
     #region Base Classes
@@ -1633,6 +1687,12 @@ namespace PersonalDiscordBot.Classes
 
         #endregion
 
+        #region Enemy Weapons
+
+        public static Weapon enemySword = new Weapon() { Name = "Enemy Sword", Desc = "Sword forged from the depths of the developers dank minds, with a very unique name", Lvl = 1, MaxDurability = -1, CurrentDurability = -1, IsUnique = false, Speed = 100, PhysicalDamage = 5, FireDamage = 50, IceDamage = 50, LightningDamage = 50, MagicDamage = 50, WindDamage = 50, Rarity = RarityType.Common, Type = WeaponType.Sword, Worth = 0 };
+
+        #endregion
+
         public static List<Weapon> weaponList = new List<Weapon>()
         {
             rogueDaggers,
@@ -2433,6 +2493,12 @@ namespace PersonalDiscordBot.Classes
         public static Armor scaleArmor = new Armor { Name = "Golden Scale Armor", Type = ArmorType.Medium, Lvl = 1, MaxDurability = 18, CurrentDurability = 18, Speed = 80, Worth = 100, Physical = 85, Magic = 20, Desc = "Scaley scales to scale...scaley" };
         public static Armor blackPlateArmor = new Armor { Name = "Blackened Plate Armor", Type = ArmorType.Heavy, Lvl = 1, MaxDurability = 30, CurrentDurability = 30, Speed = 60, Worth = 100, Physical = 100, Desc = "Armor darker than your Emo phase" };
         public static Armor imperialArmor = new Armor { Name = "Imperial Armor", Type = ArmorType.Heavy, Lvl = 1, MaxDurability = 30, CurrentDurability = 30, Speed = 60, Worth = 100, Physical = 100, Desc = "Armor that tends to be weaker around the knees. Mind the arrows" };
+
+        #endregion
+        #region Enemy Armors
+
+        public static Armor basicEnemyArmor = new Armor { Name = "Enemy Armor", Desc = "Armor forged from the depths of the developers minds with a unique name", Fire = 50, Ice = 50, Lightning = 50, Magic = 50, Wind = 50, Physical = 5, Speed = 100, MaxDurability = -1, CurrentDurability = -1, IsUnique = false, Lvl = 1, Rarity = RarityType.Common, Type = ArmorType.Light, Worth = 0 };
+
         #endregion
         #region Armor Lists
         public static List<Armor> lightArmorList = new List<Armor>()
@@ -2617,6 +2683,8 @@ namespace PersonalDiscordBot.Classes
 
             return enemy;
         }
+
+        public static Enemy punchingBag = new Enemy() { Name = "PunchingBag", Desc = "I was created by our developer gods as a baseline for combat, I also pass butter", Def = 5, Dex = 5, Int = 5, Lck = 5, Lvl = 1, Mana = 5, MaxHP = 100, CurrentHP = 100, Str = 5, Spd = 100, Armor = Armors.basicEnemyArmor, Weapon = Weapons.enemySword };
     }
 
     public class Testing
@@ -2843,7 +2911,11 @@ namespace PersonalDiscordBot.Classes
             MaxHP = 12000000,
             CurrentHP = 12000000,
             Weapon = Weapons.warriorFists,
-            Exp = 0
+            Exp = 0,
+            Str = 10,
+            Def = 10,
+            Spd = 100,
+            Lck = 10
         };
 
     }
