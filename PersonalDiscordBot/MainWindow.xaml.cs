@@ -1101,7 +1101,7 @@ namespace PersonalDiscordBot
                 if (!(msg.HasCharPrefix(';', ref argPos) || msg.HasMentionPrefix(client.CurrentUser, ref argPos))) return;
                 
                 CommandContext context = new CommandContext(client, msg);
-                string cmd = string.Format("User: {0} ◥◤ Command: {1}", arg.Author.Username, arg.ToString());
+                var cmd = $"User: {arg.Author.Username} ◥◤ Command: {arg.ToString()}";
                 uStatusUpdate(cmd);
                 Toolbox.uDebugAddLog(string.Format("COMMAND: {0}", cmd));
                 var result = await commands.ExecuteAsync(context, argPos, map);

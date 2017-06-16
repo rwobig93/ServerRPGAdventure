@@ -409,9 +409,11 @@ namespace PersonalDiscordBot.Classes
                     cost = 50000;
                     break;
                 default:
-                    cost = 100000;
+                    cost = 0;
                     break;
             }
+            if (owner.CharacterList.Count > 6)
+                cost = 100000;
             return cost;
         }
 
@@ -419,7 +421,7 @@ namespace PersonalDiscordBot.Classes
 
         #region Combat Methods
 
-        public static string AttackEnemy(Character chara, Enemy enemy)
+        public static string AttackEnemy(OwnerProfile owner, Enemy enemy)
         {
             int totalDamage = 0;
             int physDamage = 0;
@@ -429,28 +431,28 @@ namespace PersonalDiscordBot.Classes
             int iceeDamage = 0;
             int windDamage = 0;
 
-            physDamage = (chara.Weapon.PhysicalDamage * chara.Str) - (enemy.Armor.Physical * enemy.Def);
-            magiDamage = CalculateElement(chara.Weapon.MagicDamage, enemy.Armor.Magic);
-            fireDamage = CalculateElement(chara.Weapon.FireDamage, enemy.Armor.Fire);
-            lighDamage = CalculateElement(chara.Weapon.LightningDamage, enemy.Armor.Lightning);
-            iceeDamage = CalculateElement(chara.Weapon.IceDamage, enemy.Armor.Ice);
-            windDamage = CalculateElement(chara.Weapon.WindDamage, enemy.Armor.Wind);
+            physDamage = (owner.CurrentCharacter.Weapon.PhysicalDamage * owner.CurrentCharacter.Str) - (enemy.Armor.Physical * enemy.Def);
+            magiDamage = CalculateElement(owner.CurrentCharacter.Weapon.MagicDamage, enemy.Armor.Magic);
+            fireDamage = CalculateElement(owner.CurrentCharacter.Weapon.FireDamage, enemy.Armor.Fire);
+            lighDamage = CalculateElement(owner.CurrentCharacter.Weapon.LightningDamage, enemy.Armor.Lightning);
+            iceeDamage = CalculateElement(owner.CurrentCharacter.Weapon.IceDamage, enemy.Armor.Ice);
+            windDamage = CalculateElement(owner.CurrentCharacter.Weapon.WindDamage, enemy.Armor.Wind);
 
             totalDamage = physDamage + magiDamage + fireDamage + lighDamage + iceeDamage + windDamage;
 
             if (totalDamage > 0)
             {
                 if (enemy.CurrentHP - totalDamage <= 0)
-                    return EnemyDied(chara, enemy);
+                    return EnemyDied(owner, enemy);
                 else
                 {
                     enemy.CurrentHP -= totalDamage;
-                    return $"{chara.Name} attacked {enemy.Name} and dealt {totalDamage} damage";
+                    return $"{owner.CurrentCharacter.Name} attacked {enemy.Name} and dealt {totalDamage} damage";
                 }
             }
             else if (totalDamage == 0)
             {
-                return $"{chara.Name} attacked {enemy.Name} and didn't deal any damage";
+                return $"{owner.CurrentCharacter.Name} attacked {enemy.Name} and didn't deal any damage";
             }
             else
             {
@@ -458,11 +460,25 @@ namespace PersonalDiscordBot.Classes
                     enemy.CurrentHP -= totalDamage;
                 else
                     enemy.CurrentHP = enemy.MaxHP;
-                return $"{chara.Name} attacked, {enemy.Name} absorbed {totalDamage} damage and was healed";
+                return $"{owner.CurrentCharacter.Name} attacked, {enemy.Name} absorbed {totalDamage} damage and was healed";
             }
         }
 
-        public static string EnemyDied(Character chara, Enemy enemy)
+        public static string EnemyDied(OwnerProfile owner, Enemy enemy)
+        {
+            RPG.MatchList.Find(x => x.Owner == owner).EnemyList.Remove(enemy);
+            if (RPG.MatchList.Find(x => x.Owner == owner).EnemyList.Count <= 0)
+                return MatchOver(owner);
+            else
+                return NextEnemy(owner, enemy);
+        }
+
+        public static string MatchOver(OwnerProfile owner)
+        {
+            return $"";
+        }
+
+        public static string NextEnemy(OwnerProfile owner, Enemy enemy)
         {
             return $"";
         }
@@ -474,7 +490,7 @@ namespace PersonalDiscordBot.Classes
             else if (armorDef == 100)
                 return 0;
             else
-                return ((attackDmg) - (100 / (armorDef)));
+                return ((attackDmg) / (100 / (armorDef)));
         }
 
         #endregion
@@ -520,11 +536,14 @@ namespace PersonalDiscordBot.Classes
 
     public class Match
     {
-        public Character Player { get; set; }
+        public OwnerProfile Owner { get; set; }
+        public DateTime MatchStart { get; set; }
         public List<Enemy> EnemyList { get; set; }
+        public List<Enemy> DefeatedEnemies { get; set; }
         public Enemy CurrentEnemy { get; set; }
         public Turn CurrentTurn { get; set; }
         public int TurnTimeLimit { get; set; }
+        public int ExperienceEarned { get; set; }
     }
 
     public class PlayerMatch
@@ -609,7 +628,7 @@ namespace PersonalDiscordBot.Classes
     public class Item : IBackPackItem
     {
         public string Name { get; set; }
-        public string Desc { get; set; } = "A helpful item";
+        public string Desc { get; set; }
         public ItemType Type { get; set; }
         public int Lvl { get; set; } = 0; //used to calculate amount of Repair
         public int Count { get; set; } = 1;

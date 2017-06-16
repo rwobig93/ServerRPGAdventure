@@ -91,6 +91,22 @@ namespace PersonalDiscordBot.Classes
         public string Content { get { return content; } }
     }
 
+    public class MatchArgs : EventArgs
+    {
+        private string enemyCount;
+        private int experienceEarned;
+        private TimeSpan matchTime;
+        public MatchArgs(string enemies, int exp, TimeSpan time)
+        {
+            this.enemyCount = enemies;
+            this.experienceEarned = exp;
+            this.matchTime = time;
+        }
+        public string EnemyCount { get { return enemyCount; } }
+        public int ExperienceEarned { get { return experienceEarned; } }
+        public TimeSpan MatchTime { get { return matchTime; } }
+    }
+
     public static class Toolbox
     {
         public static StringBuilder debugLog = new StringBuilder();

@@ -8,12 +8,14 @@ using System.ComponentModel;
 using System.Reflection;
 using System.IO;
 using Newtonsoft.Json;
+using Discord.Commands;
 
 namespace PersonalDiscordBot.Classes
 {
     class Permissions
     {
         public static List<ulong> Administrators = new List<ulong>();
+        public static List<ulong> AllowedChannels = new List<ulong>();
 
         public static void SerializePermissions()
         {
@@ -33,6 +35,9 @@ namespace PersonalDiscordBot.Classes
                 var json = JsonConvert.SerializeObject(Administrators, Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
                 File.WriteAllText($@"{permPath}\Administrators.perm", json);
                 Toolbox.uDebugAddLog($"Serialized Administrators.perm");
+                var json2 = JsonConvert.SerializeObject(AllowedChannels, Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+                File.WriteAllText($@"{permPath}\RPGChannels.perm", json2);
+                Toolbox.uDebugAddLog($"Serialized RPGChannels.perm");
             };
             worker.RunWorkerAsync();
         }
@@ -44,8 +49,9 @@ namespace PersonalDiscordBot.Classes
             worker.DoWork += (sender, e) =>
             {
                 Toolbox.uStatusUpdateExt("Deserializing Permission Data");
-                string loadPath = $@"{Assembly.GetExecutingAssembly().Location}\Permissions";
+                string loadPath = $@"{Directory.GetCurrentDirectory()}\Permissions";
                 string adminPerm = $@"{loadPath}\Administrators.perm";
+                string rpgPerm = $@"{loadPath}\RPGChannels.perm";
                 if (!Directory.Exists(loadPath))
                 {
                     Toolbox.uDebugAddLog($"Permissions folder doesn't exist, stopping deserialization: {loadPath}");
@@ -57,13 +63,27 @@ namespace PersonalDiscordBot.Classes
                     using (StreamReader sr = File.OpenText(adminPerm))
                     {
                         Administrators = JsonConvert.DeserializeObject<List<ulong>>(sr.ReadToEnd());
-                        Toolbox.uDebugAddLog($"Deserialized Administrators.perm");
+                        Toolbox.uDebugAddLog("Deserialized Administrators.perm");
                     }
                 }
                 else
                     Toolbox.uDebugAddLog($"Administrators.perm doesn't exist: {adminPerm}");
+                if (File.Exists(rpgPerm))
+                {
+                    Toolbox.uDebugAddLog($"Found RPGChannels.perm file: {rpgPerm}");
+                    using (StreamReader sr = File.OpenText(rpgPerm))
+                    {
+                        AllowedChannels = JsonConvert.DeserializeObject<List<ulong>>(sr.ReadToEnd());
+                        Toolbox.uDebugAddLog("Deserialized RPGChannels.perm");
+                    }
+                }
             };
             worker.RunWorkerAsync();
+        }
+
+        public static bool AdminPermissions(CommandContext context)
+        {
+            return Administrators.Contains(context.Message.Author.Id);
         }
     }
 }
