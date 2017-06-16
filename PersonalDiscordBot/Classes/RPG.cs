@@ -2557,7 +2557,18 @@ namespace PersonalDiscordBot.Classes
 
         public static Armor ArmorUniqueGen(Armor armor, RarityType rarity, int rarityValue, int charLevel)
         {
-            //armor.Unique = true;
+            armor.IsUnique = true;
+            rarityValue += 2;
+
+            switch (armor.Type)
+            {
+                case ArmorType.Light:
+                    var armorLightName = ArmorUniqueLightNames(rarity);
+                    int lNameIndex = armorLightName.ToArrayLength();
+                    armor.Name = armorLightName[lNameIndex];
+                    ArmorUniqueLightAddition(armor, rarityValue, charLevel, lNameIndex);
+                    break;
+            }
 
             return armor;
         }
@@ -2568,7 +2579,7 @@ namespace PersonalDiscordBot.Classes
             armor.Lvl = LootDrop.ChooseLevel(charLevel);
             armor.MaxDurability = (10 * armor.Lvl) + (rarityValue * 4);
             armor.CurrentDurability = armor.MaxDurability;
-            armor.Worth = (rng.Next(0, 100) * armor.Lvl) * (typeCount);
+            armor.Worth = (rng.Next(1, 100) * armor.Lvl) * (typeCount);
             switch (armor.Type)
             {
                 case ArmorType.Light:
@@ -2576,18 +2587,21 @@ namespace PersonalDiscordBot.Classes
                     armor.Name = $"{rarity} {armorBasicLightNames[lightNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 80;
+                    armor.Physical = ((rng.Next(0, 3) + typeCount + armor.Lvl));
                     break;
                 case ArmorType.Medium:
                     int mediumNum = rng.Next(0, armorBasicMediumNames.ToArrayLength());
                     armor.Name = $"{rarity} {armorBasicLightNames[mediumNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 60;
+                    armor.Physical = ((rng.Next(9, 12) + typeCount + armor.Lvl));
                     break;
                 case ArmorType.Heavy:
                     int heavyNum = rng.Next(0, armorBasicHeavyNames.ToArrayLength());
                     armor.Name = $"{rarity} {armorBasicLightNames[heavyNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 40;
+                    armor.Physical = ((rng.Next(18, 21) + typeCount + armor.Lvl));
                     break;
             }
             ArmorAddElement(armor, typeCount, rarityValue);
