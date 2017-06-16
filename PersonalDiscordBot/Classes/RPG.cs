@@ -178,14 +178,12 @@ namespace PersonalDiscordBot.Classes
 
         public static void SerializeData()
         {
-            BackgroundWorker worker = new BackgroundWorker() { WorkerReportsProgress = true };
-            worker.ProgressChanged += (sender, e) => { Toolbox.uStatusUpdateExt($"Serialize Progress: {e.ProgressPercentage}%"); };
-            worker.RunWorkerCompleted += (sender, e) => { worker.ReportProgress(100); };
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.RunWorkerCompleted += (sender, e) => { Toolbox.uStatusUpdateExt($"Owner Serializing Complete"); };
             worker.DoWork += (sender, e) =>
             {
                 Toolbox.uStatusUpdateExt("Serializing Save Data");
-                int progress = 0;
-                string savePath = $@"{Assembly.GetExecutingAssembly().Location}\SaveData";
+                string savePath = $@"{Directory.GetCurrentDirectory()}\SaveData";
                 if (!Directory.Exists(savePath))
                 {
                     Directory.CreateDirectory(savePath);
@@ -194,15 +192,10 @@ namespace PersonalDiscordBot.Classes
                 else
                     Toolbox.uDebugAddLog($"SaveData already exists: {savePath}");
                 foreach (OwnerProfile owner in Owners)
-                    progress++;
-                progress = 100 / progress;
-                foreach (OwnerProfile owner in Owners)
                 {
-                    var json = JsonConvert.SerializeObject(owner, Formatting.Indented);
+                    var json = JsonConvert.SerializeObject(owner, Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
                     File.WriteAllText($@"{savePath}\{owner.OwnerID}.owner", json);
                     Toolbox.uDebugAddLog($"Serialized Owner: {owner.OwnerID}");
-                    progress = progress + progress;
-                    worker.ReportProgress(progress);
                 }
             };
             worker.RunWorkerAsync();
@@ -210,22 +203,17 @@ namespace PersonalDiscordBot.Classes
 
         public static void DeSerializeData()
         {
-            int progress = 0;
-            BackgroundWorker worker = new BackgroundWorker() { WorkerReportsProgress = true };
-            worker.ProgressChanged += (sender, e) => { Toolbox.uStatusUpdateExt($"Deserialize Progress: {e.ProgressPercentage}%"); };
-            worker.RunWorkerCompleted += (sender, e) => { worker.ReportProgress(100); };
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.RunWorkerCompleted += (sender, e) => { Toolbox.uStatusUpdateExt($"Owner Deserialization Complete"); };
             worker.DoWork += (sender, e) =>
             {
                 Toolbox.uStatusUpdateExt("Deserializing Sava Data");
-                string loadPath = $@"{Assembly.GetExecutingAssembly().Location}\SaveData";
+                string loadPath = $@"{Directory.GetCurrentDirectory()}\SaveData";
                 if (!Directory.Exists(loadPath))
                 {
                     Toolbox.uDebugAddLog($"SaveData folder doesn't exist, stopping deserialization: {loadPath}");
                     return;
                 }
-                foreach (var file in Directory.EnumerateFiles(loadPath))
-                    progress++;
-                progress = 100 / progress;
                 foreach (var file in Directory.EnumerateFiles(loadPath))
                 {
                     var info = new FileInfo(file);
@@ -241,8 +229,6 @@ namespace PersonalDiscordBot.Classes
                     }
                     else
                         Toolbox.uDebugAddLog($"Skipped file for not being .owner: {file} || {info.Extension.ToLower()}");
-                    progress = progress + progress;
-                    worker.ReportProgress(progress);
                 }
             };
             worker.RunWorkerAsync();

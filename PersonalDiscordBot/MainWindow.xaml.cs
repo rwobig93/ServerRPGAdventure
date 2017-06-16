@@ -47,6 +47,7 @@ namespace PersonalDiscordBot
             SetupConfig();
             txtLogDirectory.Text = _paths.LogLocation;
             Toolbox.MessagePromptShown += (e) => { uStatusUpdate(e.Content); };
+            
         }
 
         #region Global Variables
@@ -1123,8 +1124,19 @@ namespace PersonalDiscordBot
 
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
-            int[] testArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            uStatusUpdate($"rng would be 0 to {testArray.Length}");
+            Permissions.SerializePermissions();
+            Management.SerializeData();
+        }
+
+        private void SetupTest()
+        {
+            RPG.Owners.Add(Testing.testiculeesProfile);
+            var owner = RPG.Owners.Find(x => x.OwnerID == 12345678910111213);
+            var chara = Testing.testiculeesCharacter;
+            owner.CharacterList.Add(chara);
+            owner.CurrentCharacter = chara;
+            Permissions.Administrators.Add(127561010893553664);
+            uStatusUpdate("Testing setup");
         }
 
         #endregion

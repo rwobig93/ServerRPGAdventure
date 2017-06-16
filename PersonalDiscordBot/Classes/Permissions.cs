@@ -17,14 +17,12 @@ namespace PersonalDiscordBot.Classes
 
         public static void SerializePermissions()
         {
-            BackgroundWorker worker = new BackgroundWorker() { WorkerReportsProgress = true };
-            worker.ProgressChanged += (sender, e) => { Toolbox.uStatusUpdateExt($"Serialize Progress: {e.ProgressPercentage}%"); };
-            worker.RunWorkerCompleted += (sender, e) => { worker.ReportProgress(100); };
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.RunWorkerCompleted += (sender, e) => { Toolbox.uStatusUpdateExt($"Admin Serialization Complete"); };
             worker.DoWork += (sender, e) =>
             {
-                worker.ReportProgress(0);
                 Toolbox.uStatusUpdateExt("Serializing Permission Data");
-                string permPath = $@"{Assembly.GetExecutingAssembly().Location}\Permissions";
+                string permPath = $@"{Directory.GetCurrentDirectory()}\Permissions";
                 if (!Directory.Exists(permPath))
                 {
                     Directory.CreateDirectory(permPath);
@@ -32,22 +30,19 @@ namespace PersonalDiscordBot.Classes
                 }
                 else
                     Toolbox.uDebugAddLog($"Permissions already exists: {permPath}");
-                var json = JsonConvert.SerializeObject(Administrators, Formatting.Indented);
+                var json = JsonConvert.SerializeObject(Administrators, Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
                 File.WriteAllText($@"{permPath}\Administrators.perm", json);
                 Toolbox.uDebugAddLog($"Serialized Administrators.perm");
-                worker.ReportProgress(25);
             };
             worker.RunWorkerAsync();
         }
 
         public static void DeSerializePermissions()
         {
-            BackgroundWorker worker = new BackgroundWorker() { WorkerReportsProgress = true };
-            worker.ProgressChanged += (sender, e) => { Toolbox.uStatusUpdateExt($"Deserialize Progress: {e.ProgressPercentage}%"); };
-            worker.RunWorkerCompleted += (sender, e) => { worker.ReportProgress(100); };
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.RunWorkerCompleted += (sender, e) => { Toolbox.uStatusUpdateExt($"Admin Deserialization Complete"); };
             worker.DoWork += (sender, e) =>
             {
-                worker.ReportProgress(0);
                 Toolbox.uStatusUpdateExt("Deserializing Permission Data");
                 string loadPath = $@"{Assembly.GetExecutingAssembly().Location}\Permissions";
                 string adminPerm = $@"{loadPath}\Administrators.perm";
@@ -67,7 +62,6 @@ namespace PersonalDiscordBot.Classes
                 }
                 else
                     Toolbox.uDebugAddLog($"Administrators.perm doesn't exist: {adminPerm}");
-                worker.ReportProgress(25);
             };
             worker.RunWorkerAsync();
         }
