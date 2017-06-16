@@ -46,7 +46,7 @@ namespace PersonalDiscordBot
             Toolbox.uDebugAddLog(string.Format("{0}########################## Application Start ##########################{0}", Environment.NewLine));
             SetupConfig();
             txtLogDirectory.Text = _paths.LogLocation;
-            Toolbox.MessagePromptShown += (e) => { uStatusUpdate(e.Content); };
+            Events.MessagePromptShown += (e) => { uStatusUpdate(e.Content); };
             
         }
 
@@ -455,7 +455,7 @@ namespace PersonalDiscordBot
                 return;
             }
             Permissions.Administrators.Add(adminID);
-            Toolbox.uStatusUpdateExt($"Added admin ID: {adminID}");
+            Events.uStatusUpdateExt($"Added admin ID: {adminID}");
             RefreshAdminList();
         }
 
@@ -894,7 +894,7 @@ namespace PersonalDiscordBot
                 count++;
                 comboAdmins.Items.Add(admin);
             }
-            Toolbox.uStatusUpdateExt($"Refreshed admin list, total admins: {count}");
+            Events.uStatusUpdateExt($"Refreshed admin list, total admins: {count}");
         }
 
         #endregion

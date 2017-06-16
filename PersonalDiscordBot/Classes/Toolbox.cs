@@ -81,32 +81,6 @@ namespace PersonalDiscordBot.Classes
         }
     }
 
-    public class PromptArgs : EventArgs
-    {
-        private string content;
-        public PromptArgs(string msgContent)
-        {
-            this.content = msgContent;
-        }
-        public string Content { get { return content; } }
-    }
-
-    public class MatchArgs : EventArgs
-    {
-        private string enemyCount;
-        private int experienceEarned;
-        private TimeSpan matchTime;
-        public MatchArgs(string enemies, int exp, TimeSpan time)
-        {
-            this.enemyCount = enemies;
-            this.experienceEarned = exp;
-            this.matchTime = time;
-        }
-        public string EnemyCount { get { return enemyCount; } }
-        public int ExperienceEarned { get { return experienceEarned; } }
-        public TimeSpan MatchTime { get { return matchTime; } }
-    }
-
     public static class Toolbox
     {
         public static StringBuilder debugLog = new StringBuilder();
@@ -222,17 +196,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        #region UpdateStatus Event
 
-        public delegate void MessageShown(PromptArgs args);
-        public static event MessageShown MessagePromptShown;
-        public static void uStatusUpdateExt(string status)
-        {
-            PromptArgs args = new PromptArgs(status);
-            MessagePromptShown(args);
-        }
-
-        #endregion
     }
 
 }

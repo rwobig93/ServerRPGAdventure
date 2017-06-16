@@ -195,6 +195,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\Events.cs" />
     <Compile Include="Classes\GameServer.cs" />
     <Compile Include="Classes\Leet.cs" />
     <Compile Include="Classes\Permissions.cs" />
