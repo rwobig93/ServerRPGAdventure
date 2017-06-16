@@ -2413,24 +2413,40 @@ namespace PersonalDiscordBot.Classes
     public static class Armors
     {
         #region Armor Names and Descriptions
-        public static string[] armorBasicLightNames = 
+
+        public static string[] armorBasicLightNames =
         {
             "Robe",
             "Fur Armor",
             "Glass Armor"
         };
 
-        public static string[] armorUniqueLightNames =
-{
-            "Grand Wizard Robes",
-            "Basically Paper Garments"
-        };
-
-        public static string[] armorUniqueLightDesc =
+        public static string[] ArmorUniqueLightNames(RarityType rarity)
         {
-            "Grand white robes fit for a wizard. Just don't wear a white hood as well..",
-            "It's amazing how powerful you become when you aren't weighed down by 'protection'."
-        };
+            return new string[]
+            {
+                $"{rarity} Grand Wizard Robes",
+                $"{rarity} Paper Garments"
+            };
+        }
+        public static void ArmorUniqueLightAddition(Armor armor, int rarityValue, int level, int index)
+        {
+            switch (index)
+            {
+                case 0:
+                    armor.Desc = "Grand white robes fit for a wizard. Just don't wear a white hood as well..";
+                    armor.Physical = (level + rng.Next(2, 14) + rarityValue);
+                    armor.Speed = (level + 100 + rng.Next(20, 80));
+                    armor.Worth = (((level + rarityValue) * rarityValue) + (armor.Speed / armor.Physical));
+                    break;
+                case 1:
+                    armor.Desc = "It's amazing how powerful you become when you aren't weighed down by 'protection'.";
+                    armor.Physical = (level + rng.Next(5, 12) + rarityValue);
+                    armor.Speed = (level + 120 + rng.Next(30, 60));
+                    armor.Worth = (((level + rarityValue) * rarityValue) + (armor.Speed / armor.Physical));
+                    break;
+            }
+        }
 
         public static string[] armorBasicMediumNames = 
         {
