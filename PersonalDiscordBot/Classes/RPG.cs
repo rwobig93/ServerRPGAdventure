@@ -2420,7 +2420,6 @@ namespace PersonalDiscordBot.Classes
             "Fur Armor",
             "Glass Armor"
         };
-
         public static string[] ArmorUniqueLightNames(RarityType rarity)
         {
             return new string[]
@@ -2453,18 +2452,32 @@ namespace PersonalDiscordBot.Classes
             "Leather Armor",
             "Scale Armor"
         };
-
-        public static string[] armorUniqueMediumNames =
+        public static string[] ArmorUniqueMediumNames(RarityType rarity)
         {
-            "Hide Armor",
-            "Furry Armor"
-        };
-
-        public static string[] armorUniqueMediumDesc =
+            return new string[]
+            {
+                $"{rarity} Hide Armor",
+                $"{rarity} Furry Armor"
+            };
+        }
+        public static void ArmorUniqueMediumAddition(Armor armor, int rarityValue, int level, int index)
         {
-            "Why do Rogues wear hide armor? Because it's made of leather. Wait..",
-            "Diaper not included"
-        };
+            switch (index)
+            {
+                case 0:
+                    armor.Desc = "Why do Rogues wear hide armor? Because it's made of leather. Wait..";
+                    armor.Physical = (level + rng.Next(2, 14) + rarityValue);
+                    armor.Speed = (level + 100 + rng.Next(20, 80));
+                    armor.Worth = (((level + rarityValue) * rarityValue) + (armor.Speed / armor.Physical));
+                    break;
+                case 1:
+                    armor.Desc = "Diaper not included.";
+                    armor.Physical = (level + rng.Next(5, 12) + rarityValue);
+                    armor.Speed = (level + 120 + rng.Next(30, 60));
+                    armor.Worth = (((level + rarityValue) * rarityValue) + (armor.Speed / armor.Physical));
+                    break;
+            }
+        }
 
         public static string[] armorBasicHeavyNames = 
         {
@@ -2474,19 +2487,32 @@ namespace PersonalDiscordBot.Classes
             "Mythril Armor",
             "Obsidian Armor"
         };
-
-        public static string[] armorUniqueHeavyNames =
+        public static string[] ArmorUniqueHeavyNames(RarityType rarity)
         {
-            "Diamond Armor",
-            "Titanforged Steel"
-        };
-
-        public static string[] armorUniqueHeavyDesc =
+            return new string[]
+            {
+                $"{rarity} Diamond Armor",
+                $"{rarity} Titanforged Steel"
+            };
+        }
+        public static void ArmorUniqueHeavyAddition(Armor armor, int rarityValue, int level, int index)
         {
-            "Protects your body, not your pride.",
-            "\"What is this? Armor for ants?\" - Titans, probably"
-        };
-
+            switch (index)
+            {
+                case 0:
+                    armor.Desc = "Protects your body, not your pride.";
+                    armor.Physical = (level + rng.Next(2, 14) + rarityValue);
+                    armor.Speed = (level + 100 + rng.Next(20, 80));
+                    armor.Worth = (((level + rarityValue) * rarityValue) + (armor.Speed / armor.Physical));
+                    break;
+                case 1:
+                    armor.Desc = "\"What is this? Armor for ants?\" - Titans, probably";
+                    armor.Physical = (level + rng.Next(5, 12) + rarityValue);
+                    armor.Speed = (level + 120 + rng.Next(30, 60));
+                    armor.Worth = (((level + rarityValue) * rarityValue) + (armor.Speed / armor.Physical));
+                    break;
+            }
+        }
 
         #endregion
         #region Static Armors
