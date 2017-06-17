@@ -12,7 +12,7 @@ namespace PersonalDiscordBot.Settings {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.1.0.0")]
     internal sealed partial class sGeneral : global::System.Configuration.ApplicationSettingsBase {
         
         private static sGeneral defaultInstance = ((sGeneral)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new sGeneral())));
@@ -44,6 +44,18 @@ namespace PersonalDiscordBot.Settings {
             }
             set {
                 this["Snooping"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0,0,0,0")]
+        public global::System.Windows.Thickness WindowLocation {
+            get {
+                return ((global::System.Windows.Thickness)(this["WindowLocation"]));
+            }
+            set {
+                this["WindowLocation"] = value;
             }
         }
     }

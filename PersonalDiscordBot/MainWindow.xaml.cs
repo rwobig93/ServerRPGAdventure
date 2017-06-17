@@ -88,6 +88,7 @@ namespace PersonalDiscordBot
 
         private void winMain_Loaded(object sender, RoutedEventArgs e)
         {
+            LoadWindowLocation();
             HideGrids();
             UpdateVerison();
             Management.DeSerializeData();
@@ -102,6 +103,7 @@ namespace PersonalDiscordBot
             Permissions.SerializePermissions();
             Toolbox.uDebugAddLog(string.Format("{0}########################## Application Stop ##########################{0}", Environment.NewLine));
             Toolbox.DumpDebugLog();
+            SaveWindowLocation();
         }
 
         private void winMain_Closed(object sender, EventArgs e)
@@ -895,6 +897,26 @@ namespace PersonalDiscordBot
                 comboAdmins.Items.Add(admin);
             }
             Events.uStatusUpdateExt($"Refreshed admin list, total admins: {count}");
+        }
+
+        private void SaveWindowLocation()
+        {
+            Toolbox.uDebugAddLog("Saving window location");
+            Thickness winLocation = new Thickness(this.Left, this.Top, this.Width, this.Height);
+            sGeneral.Default.WindowLocation = winLocation;
+            sGeneral.Default.Save();
+            Toolbox.uDebugAddLog($"Window Location Saved: [L]{winLocation.Left} [T]{winLocation.Top} [R]{winLocation.Right} [B]{winLocation.Bottom}");
+        }
+
+        private void LoadWindowLocation()
+        {
+            Toolbox.uDebugAddLog("Loading window location");
+            Thickness savedLocation = sGeneral.Default.WindowLocation;
+            this.Left = savedLocation.Left;
+            this.Top = savedLocation.Top;
+            this.Width = savedLocation.Right;
+            this.Height = savedLocation.Bottom;
+            Toolbox.uDebugAddLog($"Window Location Loaded and applied: [L]{savedLocation.Left} [T]{savedLocation.Top} [R]{savedLocation.Right} [B]{savedLocation.Bottom}");
         }
 
         #endregion

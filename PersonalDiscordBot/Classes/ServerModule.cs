@@ -1138,7 +1138,7 @@ namespace PersonalDiscordBot.Classes
                 var isANum = int.TryParse(times, out intTimes);
                 if (isANum)
                 {
-                    if (intTimes >= 100000)
+                    if (intTimes > 100000)
                     {
                         await Context.Channel.SendMessageAsync("The highest integer allowed is 100,000. I'm generating that for you now, don't do that again!");
                         await Context.Channel.SendMessageAsync($"Generated {100000} Weapons:{Environment.NewLine}{Testing.RandomMassTestWeap(1000)}");
@@ -1164,7 +1164,7 @@ namespace PersonalDiscordBot.Classes
                 var isANum = int.TryParse(times, out intTimes);
                 if (isANum)
                 {
-                    if (intTimes >= 100000)
+                    if (intTimes > 100000)
                     {
                         await Context.Channel.SendMessageAsync("The highest integer allowed is 100,000. I'm generating that for you now, don't do that again!");
                         await Context.Channel.SendMessageAsync($"Generated {1000} Spells:{Environment.NewLine}{Testing.RandomMassTestSpell(100000)}");
@@ -1199,18 +1199,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                var hasCharacters = await VerifyOwnerProfileAndIfHasCharacters();
                 OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
-                if (ownerProfile == null)
-                {
-                    OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id };
-                    RPG.Owners.Add(owner);
-                    Toolbox.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
-                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you didn't have a profile yet so I made you one");
-                    ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
-                }
-                else
-                    Toolbox.uDebugAddLog($"Owner profile was found for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
-                bool hasCharacters = ownerProfile.CharacterList.Count == 0 ? false : true;
                 int cost = Management.DetermineCharacterCost(ownerProfile);
                 if (hasCharacters)
                 {
@@ -1468,7 +1458,7 @@ namespace PersonalDiscordBot.Classes
                     if (userFound.Id == owner.OwnerID)
                     {
                         owner.Currency += currency;
-                        Toolbox.uStatusUpdateExt($"Added {currency} currency to {userFound.Username} | {userFound.Id}");
+                        Events.uStatusUpdateExt($"Added {currency} currency to {userFound.Username} | {userFound.Id}");
                         await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} Added {currency} currency to {userFound.Mention}'s profile");
                         foundUsers++;
                     }
@@ -1491,17 +1481,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                bool hasCharacters = await VerifyOwnerProfileAndIfHasCharacters();
                 OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
-                if (ownerProfile == null)
-                {
-                    OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id };
-                    RPG.Owners.Add(owner);
-                    Toolbox.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
-                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you didn't have a profile yet so I made you one");
-                }
-                else
-                    Toolbox.uDebugAddLog($"Owner profile was found for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
-                bool hasCharacters = ownerProfile.CharacterList.Count == 0 ? false : true;
                 if (!hasCharacters)
                 {
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't have a character yet, try creating one... pleb");
@@ -1569,7 +1550,7 @@ namespace PersonalDiscordBot.Classes
                 {
                     OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id };
                     RPG.Owners.Add(owner);
-                    Toolbox.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
+                    Events.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you didn't have a profile yet so I made you one");
                 }
                 else
@@ -1602,7 +1583,7 @@ namespace PersonalDiscordBot.Classes
                 {
                     OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id };
                     RPG.Owners.Add(owner);
-                    Toolbox.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
+                    Events.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you didn't have a profile yet so I made you one");
                 }
                 else
@@ -1701,14 +1682,14 @@ namespace PersonalDiscordBot.Classes
                 {
                     Toolbox.uDebugAddLog($"Channel isn't an RPG channel, attempting to add RPG Channel: {Context.Channel.Name} | {Context.Channel.Id}");
                     Permissions.AllowedChannels.Add(Context.Channel.Id);
-                    Toolbox.uStatusUpdateExt($"RPG Channel Added: {Context.Channel.Name} | {Context.Channel.Id}");
+                    Events.uStatusUpdateExt($"RPG Channel Added: {Context.Channel.Name} | {Context.Channel.Id}");
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} Successfully added RPG Channel **{Context.Channel.Name}**");
                 }
                 else
                 {
                     Toolbox.uDebugAddLog($"Channel is already an RPG channel, attempting to remove RPG Channel: {Context.Channel.Name} | {Context.Channel.Id}");
                     Permissions.AllowedChannels.Remove(Context.Channel.Id);
-                    Toolbox.uStatusUpdateExt($"RPG Channel Removed: {Context.Channel.Name} | {Context.Channel.Id}");
+                    Events.uStatusUpdateExt($"RPG Channel Removed: {Context.Channel.Name} | {Context.Channel.Id}");
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} Successfully removed RPG Channel **{Context.Channel.Name}**");
                 }
             }
@@ -1716,6 +1697,85 @@ namespace PersonalDiscordBot.Classes
             {
                 ServerModule.FullExceptionLog(ex);
             }
+        }
+        
+        [Command("permission"), Summary("Testicules Permission Test")]
+        public async Task Testacules12()
+        {
+            try
+            {
+                if (Permissions.RPGChannelPermission(Context))
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} this channel is an RPG channel, go nuts!");
+                else
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} this channel hasn't been enabled as an RPG channel");
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("match"), Summary("Testicules Match Test")]
+        public async Task Testacules13()
+        {
+            try
+            {
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have any characters, please create one before trying to start a match");
+                    return;
+                }
+                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+                await Context.Channel.SendMessageAsync(Management.CreateMatch(owner));
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("attack"), Summary("Testicules Attack Test")]
+        public async Task Testacules14()
+        {
+            try
+            {
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have any characters, please create one before trying to attack something");
+                    return;
+                }
+                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+                Match match = RPG.MatchList.Find(x => x.Owner == owner);
+                if (match == null)
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have an active match, please start a match before trying to attack nothing");
+                    return; 
+                }
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} {Management.AttackEnemy(owner, match.CurrentEnemy)}");
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} {Management.CalculateTurn(owner)}");
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        public async Task<bool> VerifyOwnerProfileAndIfHasCharacters()
+        {
+            OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+            if (ownerProfile == null)
+            {
+                OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id };
+                RPG.Owners.Add(owner);
+                Events.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you didn't have a profile yet so I made you one");
+                ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+            }
+            else
+                Toolbox.uDebugAddLog($"Owner profile was found for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
+            return ownerProfile.CharacterList.Count == 0 ? false : true;
         }
     }
 }

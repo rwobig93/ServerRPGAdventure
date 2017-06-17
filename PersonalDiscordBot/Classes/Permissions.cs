@@ -20,10 +20,10 @@ namespace PersonalDiscordBot.Classes
         public static void SerializePermissions()
         {
             BackgroundWorker worker = new BackgroundWorker();
-            worker.RunWorkerCompleted += (sender, e) => { Toolbox.uStatusUpdateExt($"Admin Serialization Complete"); };
+            worker.RunWorkerCompleted += (sender, e) => { Events.uStatusUpdateExt($"Admin Serialization Complete"); };
             worker.DoWork += (sender, e) =>
             {
-                Toolbox.uStatusUpdateExt("Serializing Permission Data");
+                Events.uStatusUpdateExt("Serializing Permission Data");
                 string permPath = $@"{Directory.GetCurrentDirectory()}\Permissions";
                 if (!Directory.Exists(permPath))
                 {
@@ -45,10 +45,10 @@ namespace PersonalDiscordBot.Classes
         public static void DeSerializePermissions()
         {
             BackgroundWorker worker = new BackgroundWorker();
-            worker.RunWorkerCompleted += (sender, e) => { Toolbox.uStatusUpdateExt($"Admin Deserialization Complete"); };
+            worker.RunWorkerCompleted += (sender, e) => { Events.uStatusUpdateExt($"Admin Deserialization Complete"); };
             worker.DoWork += (sender, e) =>
             {
-                Toolbox.uStatusUpdateExt("Deserializing Permission Data");
+                Events.uStatusUpdateExt("Deserializing Permission Data");
                 string loadPath = $@"{Directory.GetCurrentDirectory()}\Permissions";
                 string adminPerm = $@"{loadPath}\Administrators.perm";
                 string rpgPerm = $@"{loadPath}\RPGChannels.perm";
@@ -84,6 +84,11 @@ namespace PersonalDiscordBot.Classes
         public static bool AdminPermissions(CommandContext context)
         {
             return Administrators.Contains(context.Message.Author.Id);
+        }
+
+        public static bool RPGChannelPermission(CommandContext context)
+        {
+            return AllowedChannels.Contains(context.Channel.Id);
         }
     }
 }

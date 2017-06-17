@@ -24,11 +24,11 @@ namespace PersonalDiscordBot.Classes
 
         public delegate void MatchComplete(MatchArgs args);
         public static event MatchComplete MatchCompleted;
-        public static void CompleteMatch(int enemyCount, int experienceEarned, TimeSpan matchTime, OwnerProfile owner)
+        public static void CompleteMatch(int enemyCount, int experienceEarned, TimeSpan matchTime, OwnerProfile owner, RPG.MatchCompleteResult result)
         {
-            MatchArgs args = new MatchArgs(enemyCount, experienceEarned, matchTime, owner);
+            MatchArgs args = new MatchArgs(enemyCount, experienceEarned, matchTime, owner, result);
             MatchCompleted(args);
-            Toolbox.uDebugAddLog($"MatchCompleted Event Triggered: [EC]{enemyCount} [EXP]{experienceEarned} [T]{matchTime.Days}D {matchTime.Hours}H {matchTime.Seconds}S [O]{owner.OwnerID}");
+            Toolbox.uDebugAddLog($"MatchCompleted Event Triggered: [R]{result} [EC]{enemyCount} [EXP]{experienceEarned} [T]{matchTime.Days}D {matchTime.Hours}H {matchTime.Seconds}S [O]{owner.OwnerID}");
         }
 
         #endregion
@@ -63,17 +63,20 @@ namespace PersonalDiscordBot.Classes
         private int enemyCount;
         private int experienceEarned;
         private TimeSpan matchTime;
-        public MatchArgs(int enemies, int exp, TimeSpan time, OwnerProfile owner)
+        private RPG.MatchCompleteResult result;
+        public MatchArgs(int enemies, int exp, TimeSpan time, OwnerProfile owner, RPG.MatchCompleteResult result)
         {
             this.owner = owner;
             this.enemyCount = enemies;
             this.experienceEarned = exp;
             this.matchTime = time;
+            this.result = result;
         }
         public OwnerProfile Owner { get { return owner; } }
         public int EnemyCount { get { return enemyCount; } }
         public int ExperienceEarned { get { return experienceEarned; } }
         public TimeSpan MatchTime { get { return matchTime; } }
+        public RPG.MatchCompleteResult Result { get { return result; } }
     }
 
     public class TurnArgs : EventArgs

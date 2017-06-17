@@ -170,6 +170,13 @@ namespace PersonalDiscordBot.Classes
             MattPegler
         }
 
+        public enum MatchCompleteResult
+        {
+            Won,
+            Lost,
+            Forfeit
+        }
+
         #endregion
     }
 
@@ -427,18 +434,29 @@ namespace PersonalDiscordBot.Classes
             var match = RPG.MatchList.Find(x => x.Owner == owner);
             if (match == null)
             {
+                Toolbox.uDebugAddLog($"Generating new match for {owner.OwnerID}");
                 Match newMatch = new Match() { Owner = owner, MatchStart = DateTime.Now };
+                Enemy newEnemy = Enemies.CopyNewEnemy(Enemies.punchingBag);
+                newMatch.CurrentEnemy = newEnemy;
+                newMatch.EnemyList.Add(newEnemy);
+                Toolbox.uDebugAddLog($"Generated enemy {newEnemy.Name}, set as current enemy and added to the enemy list for {owner.OwnerID}");
+                RPG.MatchList.Add(newMatch);
+                Toolbox.uDebugAddLog($"Successfully generated new match with {newMatch.EnemyList.Count} enemies");
+                CalculateTurn(owner);
             }
             else
             {
+                Toolbox.uDebugAddLog($"Attempt to generate new match, existing match found for {owner.OwnerID}");
                 TimeSpan time = DateTime.Now - match.MatchStart;
-                return $"You currently have an active match with {match.CurrentEnemy.Name} that was started {time.Days}D {time.Hours}H {time.Minutes}M {time.Seconds}Secs ago, please attack your current enemy";
+                TimeSpan timeLeft = (match.LastPlayerTurn + match.TurnTimeLimit) - DateTime.Now;
+                return $"You currently have an active match with {match.CurrentEnemy.Name} that was started {time.Days}D {time.Hours}H {time.Minutes}M {time.Seconds}Secs ago, please attack your current enemy, you have {timeLeft.Days}D {timeLeft.Hours}H {timeLeft.Minutes}M {timeLeft.Seconds}Secs left before you forfeit";
             }
             return $"";
         }
 
         public static string AttackEnemy(OwnerProfile owner, Enemy enemy)
         {
+            Toolbox.uDebugAddLog($"Attacking enemy [C]{owner.CurrentCharacter.Name} [E]{enemy.Name} [ID]{owner.OwnerID}");
             int totalDamage = 0;
             int physDamage = 0;
             int magiDamage = 0;
@@ -453,8 +471,11 @@ namespace PersonalDiscordBot.Classes
             lighDamage = CalculateElement(owner.CurrentCharacter.Weapon.LightningDamage, enemy.Armor.Lightning);
             iceeDamage = CalculateElement(owner.CurrentCharacter.Weapon.IceDamage, enemy.Armor.Ice);
             windDamage = CalculateElement(owner.CurrentCharacter.Weapon.WindDamage, enemy.Armor.Wind);
+            Toolbox.uDebugAddLog($"Calculated Damage Types: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage} [ID]{owner.OwnerID}");
 
             totalDamage = physDamage + magiDamage + fireDamage + lighDamage + iceeDamage + windDamage;
+            Toolbox.uDebugAddLog($"Calculated Total Damage: {totalDamage} [ID]{owner.OwnerID}");
+            RPG.MatchList.Find(x => x.Owner == owner).LastPlayerTurn = DateTime.Now;
 
             if (totalDamage > 0)
             {
@@ -463,11 +484,13 @@ namespace PersonalDiscordBot.Classes
                 else
                 {
                     enemy.CurrentHP -= totalDamage;
+                    Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} attacked {enemy.Name} [D]{totalDamage} [ID]{owner.OwnerID}");
                     return $"{owner.CurrentCharacter.Name} attacked {enemy.Name} and dealt {totalDamage} damage";
                 }
             }
             else if (totalDamage == 0)
             {
+                Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} attacked {enemy.Name}, didn't deal damage [D]{totalDamage} [ID]{owner.OwnerID}");
                 return $"{owner.CurrentCharacter.Name} attacked {enemy.Name} and didn't deal any damage";
             }
             else
@@ -476,29 +499,118 @@ namespace PersonalDiscordBot.Classes
                     enemy.CurrentHP -= totalDamage;
                 else
                     enemy.CurrentHP = enemy.MaxHP;
+                Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} attacked {enemy.Name}, absorbed {totalDamage} [ID]{owner.OwnerID}");
                 return $"{owner.CurrentCharacter.Name} attacked, {enemy.Name} absorbed {totalDamage} damage and was healed";
+            }
+        }
+
+        public static string AttackCharacter(Enemy enemy, OwnerProfile owner)
+        {
+            Toolbox.uDebugAddLog($"Enemy {enemy.Name} attacked Character {owner.CurrentCharacter.Name} [ID]{owner.OwnerID}");
+            int totalDamage = 0;
+            int physDamage = 0;
+            int magiDamage = 0;
+            int fireDamage = 0;
+            int lighDamage = 0;
+            int iceeDamage = 0;
+            int windDamage = 0;
+
+            physDamage = (enemy.Weapon.PhysicalDamage * enemy.Str) - (owner.CurrentCharacter.Armor.Physical * owner.CurrentCharacter.Def);
+            magiDamage = CalculateElement(enemy.Weapon.MagicDamage, owner.CurrentCharacter.Armor.Magic);
+            fireDamage = CalculateElement(enemy.Weapon.FireDamage, owner.CurrentCharacter.Armor.Fire);
+            lighDamage = CalculateElement(enemy.Weapon.LightningDamage, owner.CurrentCharacter.Armor.Lightning);
+            iceeDamage = CalculateElement(enemy.Weapon.IceDamage, owner.CurrentCharacter.Armor.Ice);
+            windDamage = CalculateElement(enemy.Weapon.WindDamage, owner.CurrentCharacter.Armor.Wind);
+            Toolbox.uDebugAddLog($"Calculated Damage Types: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage} [ID]{owner.OwnerID}");
+
+            totalDamage = physDamage + magiDamage + fireDamage + lighDamage + iceeDamage + windDamage;
+            Toolbox.uDebugAddLog($"Calculated Total Damage: {totalDamage} [ID]{owner.OwnerID}");
+
+            if (totalDamage > 0)
+            {
+                if (owner.CurrentCharacter.CurrentHP - totalDamage <= 0)
+                    return CharacterDied(enemy, owner);
+                else
+                {
+                    owner.CurrentCharacter.CurrentHP -= totalDamage;
+                    Toolbox.uDebugAddLog($"{enemy.Name} attacked {owner.CurrentCharacter.Name} and dealt {totalDamage} [ID]{owner.OwnerID}");
+                    return $"{enemy.Name} attacked {owner.CurrentCharacter.Name} and dealt {totalDamage} damage";
+                }
+            }
+            else if (totalDamage == 0)
+            {
+                Toolbox.uDebugAddLog($"{enemy.Name} attacked {owner.CurrentCharacter.Name} and didn't deal any damage [D]{totalDamage} [ID]{owner.OwnerID}");
+                return $"{enemy.Name} attacked {owner.CurrentCharacter.Name} and didn't deal any damage";
+            }
+            else
+            {
+                if (owner.CurrentCharacter.CurrentHP + totalDamage < owner.CurrentCharacter.MaxHP)
+                    owner.CurrentCharacter.CurrentHP -= totalDamage;
+                else
+                    owner.CurrentCharacter.CurrentHP = owner.CurrentCharacter.MaxHP;
+                Toolbox.uDebugAddLog($"{enemy.Name} attacked, {owner.CurrentCharacter.Name} absorbed {totalDamage} damage and was healed");
+                return $"{enemy.Name} attacked, {owner.CurrentCharacter.Name} absorbed {totalDamage} damage and was healed";
             }
         }
 
         public static string EnemyDied(OwnerProfile owner, Enemy enemy)
         {
             Toolbox.uDebugAddLog($"{owner.OwnerID} defeated {enemy.Name}");
-            RPG.MatchList.Find(x => x.Owner == owner).EnemyList.Remove(enemy);
-            Toolbox.uDebugAddLog($"Removed {enemy.Name} from the enemy list");
+            var match = RPG.MatchList.Find(x => x.Owner == owner);
+            match.EnemyList.Remove(enemy);
+            match.DefeatedEnemies.Add(enemy);
+            match.ExperienceEarned += enemy.ExpLoot;
+            Toolbox.uDebugAddLog($"Removed {enemy.Name} from the enemy list, added to the defeated enemy list and added ExpLoot");
             if (RPG.MatchList.Find(x => x.Owner == owner).EnemyList.Count <= 0)
-                return MatchOver(owner, enemy);
+                return MatchOver(owner, enemy, MatchCompleteResult.Won);
             else
                 return NextEnemy(owner, enemy);
         }
 
-        public static string MatchOver(OwnerProfile owner, Enemy enemy)
+        public static string CharacterDied(Enemy enemy, OwnerProfile owner)
         {
-            Toolbox.uDebugAddLog($"{owner.OwnerID} finished the match after defeating {enemy.Name}");
-            var match = RPG.MatchList.Find(x => x.Owner == owner);
-            TimeSpan time = (DateTime.Now - match.MatchStart);
-            Toolbox.uDebugAddLog($"Triggering MatchCompleted Event: [EC]{match.DefeatedEnemies.Count} [EXP]{match.ExperienceEarned} [T]{time.Days}D {time.Hours}H {time.Seconds}S [O]{owner.OwnerID}");
-            Events.CompleteMatch(match.DefeatedEnemies.Count, match.ExperienceEarned, time, owner);
-            return $"You have defeated {enemy.Name} and completed the match! Total Enemies: {match.DefeatedEnemies.Count}";
+            Toolbox.uDebugAddLog($"{enemy.Name} defeated {owner.OwnerID}");
+            return MatchOver(owner, enemy, MatchCompleteResult.Lost);
+        }
+
+        public static string MatchOver(OwnerProfile owner, Enemy enemy, MatchCompleteResult result)
+        {
+            switch (result)
+            {
+                case MatchCompleteResult.Won:
+                    var match = RPG.MatchList.Find(x => x.Owner == owner);
+                    var defEnemies = match.DefeatedEnemies.Count;
+                    TimeSpan time = (DateTime.Now - match.MatchStart);
+                    Toolbox.uDebugAddLog($"{owner.OwnerID} finished the match after defeating {enemy.Name}");
+                    Toolbox.uDebugAddLog($"Triggering MatchCompleted Event: [R]{result} [EC]{match.DefeatedEnemies.Count} [EXP]{match.ExperienceEarned} [T]{time.Days}D {time.Hours}H {time.Seconds}S [O]{owner.OwnerID}");
+                    Events.CompleteMatch(match.DefeatedEnemies.Count, match.ExperienceEarned, time, owner, result);
+                    RPG.MatchList.Remove(match);
+                    Toolbox.uDebugAddLog($"Removed match from match list for {owner.OwnerID}");
+                    return $"You have defeated {enemy.Name} and completed the match! Total Enemies Defeated: {defEnemies}";
+                case MatchCompleteResult.Lost:
+                    var match2 = RPG.MatchList.Find(x => x.Owner == owner);
+                    var defEnemies2 = match2.DefeatedEnemies.Count;
+                    TimeSpan time2 = (DateTime.Now - match2.MatchStart);
+                    Toolbox.uDebugAddLog($"{owner.OwnerID} was defeated by {enemy.Name}");
+                    Toolbox.uDebugAddLog($"Triggering MatchCompleted Event: [R]{result} [EC]{match2.DefeatedEnemies.Count} [EXP]{match2.ExperienceEarned} [T]{time2.Days}D {time2.Hours}H {time2.Seconds}S [O]{owner.OwnerID}");
+                    Events.CompleteMatch(match2.DefeatedEnemies.Count, match2.ExperienceEarned, time2, owner, result);
+                    RPG.MatchList.Remove(match2);
+                    Toolbox.uDebugAddLog($"Removed match from match list for {owner.OwnerID}");
+                    return $"You were defeated by {enemy.Name}... Total Enemies Defeated: {defEnemies2}";
+                case MatchCompleteResult.Forfeit:
+                    var match3 = RPG.MatchList.Find(x => x.Owner == owner);
+                    var timeSpan = match3.TurnTimeLimit;
+                    var exp = match3.ExperienceEarned;
+                    Toolbox.uDebugAddLog($"{owner.OwnerID} forfeited the match agains {enemy.Name}");
+                    Toolbox.uDebugAddLog($"Triggering MatchCompleted Event: [R]{result} [EC]{match3.DefeatedEnemies.Count} [EXP]{match3.ExperienceEarned} [T]{match3.TurnTimeLimit.Days}D {match3.TurnTimeLimit.Hours}H {match3.TurnTimeLimit.Seconds}S [O]{owner.OwnerID}");
+                    Events.CompleteMatch(match3.DefeatedEnemies.Count, match3.ExperienceEarned, match3.TurnTimeLimit, owner, result);
+                    RPG.MatchList.Remove(match3);
+                    Toolbox.uDebugAddLog($"Removed match from match list for {owner.OwnerID}");
+                    return $"You have forfeited the match against {enemy.Name} for going beyond the match time limit of [T]{timeSpan.Days}D {timeSpan.Hours}H {timeSpan.Seconds}Secs, you lost {exp} experience";
+            }
+            Toolbox.uDebugAddLog($"MATCHOVER UNREACHABLE WAS REACHED");
+            Events.uStatusUpdateExt($"MATCHOVER UNREACHABLE WAS REACHED, PLEASE LET THE DEVELOPER KNOW!!!!");
+            return $"MATCHOVER UNREACHABLE WAS REACHED, PLEASE LET THE DEVELOPER KNOW!!!!";
         }
 
         public static string NextEnemy(OwnerProfile owner, Enemy enemy)
@@ -509,17 +621,54 @@ namespace PersonalDiscordBot.Classes
             Toolbox.uDebugAddLog($"Removed {enemy.Name} from the enemy list");
             Enemy newEnemy = match.EnemyList[0];
             RPG.MatchList.Find(x => x.Owner == owner).CurrentEnemy = newEnemy;
+            RPG.MatchList.Find(x => x.Owner == owner).CurrentTurn = Turn.NotChosen;
+            CalculateTurn(owner);
             Toolbox.uDebugAddLog($"Changed {enemy.Name} to the current enemy");
             return $"You have defeated {enemy.Name} and are now fighting {newEnemy.Name}. Enemies left: {match.EnemyList.Count}";
         }
 
-        public static void CalculateTurn(OwnerProfile owner)
+        public static string CalculateTurn(OwnerProfile owner)
         {
+            string result = string.Empty;
             var match = RPG.MatchList.Find(x => x.Owner == owner);
             if (match.CurrentTurn == Turn.NotChosen)
             {
-
+                Toolbox.uDebugAddLog($"Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+                match.PlayerSpeedTime = owner.CurrentCharacter.CalculateSpeed();
+                match.EnemySpeedTime = match.CurrentEnemy.CalculateSpeed();
+                match.PlayerTurnTime = match.PlayerSpeedTime;
+                match.EnemyTurnTime = match.EnemySpeedTime;
+                Toolbox.uDebugAddLog($"Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
             }
+            if (match.PlayerTurnTime > match.EnemyTurnTime)
+            {
+                Toolbox.uDebugAddLog($"Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+                match.CurrentTurn = Turn.Enemy;
+                match.PlayerTurnTime = match.PlayerTurnTime - match.EnemyTurnTime;
+                match.EnemyTurnTime = match.EnemySpeedTime;
+                Toolbox.uDebugAddLog($"Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+                result = AttackCharacter(match.CurrentEnemy, owner);
+            }
+            else
+            {
+                Toolbox.uDebugAddLog($"Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+                match.CurrentTurn = Turn.Player;
+                match.EnemyTurnTime = match.EnemyTurnTime - match.PlayerTurnTime;
+                match.PlayerTurnTime = match.PlayerSpeedTime;
+                Toolbox.uDebugAddLog($"Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+                result = $"It is {owner.CurrentCharacter.Name}'s turn";
+            }
+            return result;
+        }
+
+        public static int CalculateSpeed(this Character character)
+        {
+            return (10000 - (character.Spd + character.Armor.Speed + character.Weapon.Speed));
+        }
+
+        public static int CalculateSpeed(this Enemy enemy)
+        {
+            return (10000 - (enemy.Spd + enemy.Armor.Speed + enemy.Weapon.Speed));
         }
 
         public static int CalculateElement(int attackDmg, int armorDef)
@@ -605,6 +754,7 @@ namespace PersonalDiscordBot.Classes
         public Weapon Weapon { get; set; }
         public Armor Armor { get; set; }
         public int Lvl { get; set; }
+        public int ExpLoot { get; set; }
         public int MaxHP { get; set; }
         public int CurrentHP { get; set; }
         public int Mana { get; set; }
@@ -2794,6 +2944,13 @@ namespace PersonalDiscordBot.Classes
             Enemy enemy = new Enemy();
 
             return enemy;
+        }
+
+        public static Enemy CopyNewEnemy(Enemy enemyToCopy)
+        {
+            Enemy newEnemy = new Enemy();
+            PropertyCopy.Copy(enemyToCopy, newEnemy);
+            return newEnemy;
         }
 
         public static Enemy punchingBag = new Enemy() { Name = "PunchingBag", Desc = "I was created by our developer gods as a baseline for combat, I also pass butter", Def = 5, Dex = 5, Int = 5, Lck = 5, Lvl = 1, Mana = 5, MaxHP = 100, CurrentHP = 100, Str = 5, Spd = 100, Armor = Armors.basicEnemyArmor, Weapon = Weapons.enemySword };
