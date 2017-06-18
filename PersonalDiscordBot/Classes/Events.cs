@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Discord.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,11 +25,17 @@ namespace PersonalDiscordBot.Classes
 
         public delegate void MatchComplete(MatchArgs args);
         public static event MatchComplete MatchCompleted;
-        public static void CompleteMatch(int enemyCount, int experienceEarned, TimeSpan matchTime, OwnerProfile owner, RPG.MatchCompleteResult result)
+        public static void CompleteMatch(CommandContext context, OwnerProfile owner, Match match, TimeSpan matchTime, RPG.MatchCompleteResult result)
         {
-            MatchArgs args = new MatchArgs(enemyCount, experienceEarned, matchTime, owner, result);
+            MatchArgs args = new MatchArgs(context, owner, match, matchTime, result);
             MatchCompleted(args);
-            Toolbox.uDebugAddLog($"MatchCompleted Event Triggered: [R]{result} [EC]{enemyCount} [EXP]{experienceEarned} [T]{matchTime.Days}D {matchTime.Hours}H {matchTime.Seconds}S [O]{owner.OwnerID}");
+            Toolbox.uDebugAddLog($"MatchCompleted Event Triggered: [R]{result} [EC]{match.DefeatedEnemies.Count} [EXP]{match.ExperienceEarned} [T]{matchTime.Days}D {matchTime.Hours}H {matchTime.Seconds}S [O]{owner.OwnerID}");
+        }
+        public static void CompleteMatch(OwnerProfile owner, Match match, TimeSpan matchTime, RPG.MatchCompleteResult result)
+        {
+            MatchArgs args = new MatchArgs(owner, match, matchTime, result);
+            MatchCompleted(args);
+            Toolbox.uDebugAddLog($"MatchCompleted Event Triggered: [R]{result} [EC]{match.DefeatedEnemies.Count} [EXP]{match.ExperienceEarned} [T]{matchTime.Days}D {matchTime.Hours}H {matchTime.Seconds}S [O]{owner.OwnerID}");
         }
 
         #endregion
@@ -59,22 +66,29 @@ namespace PersonalDiscordBot.Classes
 
     public class MatchArgs : EventArgs
     {
+        private CommandContext context;
         private OwnerProfile owner;
-        private int enemyCount;
-        private int experienceEarned;
+        private Match match;
         private TimeSpan matchTime;
         private RPG.MatchCompleteResult result;
-        public MatchArgs(int enemies, int exp, TimeSpan time, OwnerProfile owner, RPG.MatchCompleteResult result)
+        public MatchArgs(OwnerProfile owner, Match match, TimeSpan time, RPG.MatchCompleteResult result)
         {
             this.owner = owner;
-            this.enemyCount = enemies;
-            this.experienceEarned = exp;
+            this.match = match;
             this.matchTime = time;
             this.result = result;
         }
+        public MatchArgs(CommandContext context, OwnerProfile owner, Match match, TimeSpan time, RPG.MatchCompleteResult result)
+        {
+            this.context = context;
+            this.owner = owner;
+            this.match = match;
+            this.matchTime = time;
+            this.result = result;
+        }
+        public CommandContext Context { get { return context; } }
         public OwnerProfile Owner { get { return owner; } }
-        public int EnemyCount { get { return enemyCount; } }
-        public int ExperienceEarned { get { return experienceEarned; } }
+        public Match Match { get { return match; } }
         public TimeSpan MatchTime { get { return matchTime; } }
         public RPG.MatchCompleteResult Result { get { return result; } }
     }

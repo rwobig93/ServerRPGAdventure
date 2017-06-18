@@ -1540,34 +1540,6 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        [Command("fight"), Summary("Testicules Enemy Gen")]
-        public async Task Testacules8()
-        {
-            try
-            {
-                OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
-                if (ownerProfile == null)
-                {
-                    OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id };
-                    RPG.Owners.Add(owner);
-                    Events.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
-                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you didn't have a profile yet so I made you one");
-                }
-                else
-                    Toolbox.uDebugAddLog($"Owner profile was found for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
-                bool hasCharacter = ownerProfile.CurrentCharacter != null ? false : true;
-                if (!hasCharacter)
-                {
-                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't currently have a character, please create one");
-                    return;
-                }
-            }
-            catch (Exception ex)
-            {
-                ServerModule.FullExceptionLog(ex);
-            }
-        }
-
         [Command("testiculees"), Summary("Testicules Add Testiculees")]
         public async Task Testacules9()
         {
@@ -1726,8 +1698,11 @@ namespace PersonalDiscordBot.Classes
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have any characters, please create one before trying to start a match");
                     return;
                 }
+                Toolbox.uDebugAddLog($"Starting match command");
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
-                await Context.Channel.SendMessageAsync(Management.CreateMatch(owner));
+                string response = Management.CreateMatch(owner);
+                Toolbox.uDebugAddLog($"Match method response: {response}");
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} {response}");
             }
             catch (Exception ex)
             {
@@ -1753,7 +1728,7 @@ namespace PersonalDiscordBot.Classes
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have an active match, please start a match before trying to attack nothing");
                     return; 
                 }
-                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} {Management.AttackEnemy(owner, match.CurrentEnemy)}");
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} {Management.AttackEnemy(Context, owner, match.CurrentEnemy)}");
                 await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} {Management.CalculateTurn(owner)}");
             }
             catch (Exception ex)
