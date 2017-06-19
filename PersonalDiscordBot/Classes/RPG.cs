@@ -1397,19 +1397,19 @@ namespace PersonalDiscordBot.Classes
             switch (charClass)
             {
                 case CharacterClass.Warrior:
-                    armorArray = new int[] { 100, 400, MaxProbability}; // Light(10%), Medium(30%), Heavy(60%)
+                    armorArray = new int[] { 200, 400, MaxProbability}; // Light(20%), Medium(20%), Heavy(60%)
                     break;
                 case CharacterClass.Dragoon:
-                    armorArray = new int[] { 100, 600, MaxProbability }; // Light(10%), Medium(50%), Heavy(40%)
+                    armorArray = new int[] { 200, 600, MaxProbability }; // Light(40%), Medium(40%), Heavy(20%)
                     break;
                 case CharacterClass.Mage:
-                    armorArray = new int[] { 800, 900, MaxProbability }; // Light(80%), Medium(10%), Heavy(10%)
+                    armorArray = new int[] { 600, 800, MaxProbability }; // Light(60%), Medium(20%), Heavy(20%)
                     break;
                 case CharacterClass.Necromancer:
-                    armorArray = new int[] { 100, 800, MaxProbability }; // Light(10%), Medium(80%), Heavy(10%)
+                    armorArray = new int[] { 400, 800, MaxProbability }; // Light(40%), Medium(40%), Heavy(20%)
                     break;
                 case CharacterClass.Rogue:
-                    armorArray = new int[] { 100, 900, MaxProbability }; // Light(10%), Medium(80%), Heavy(10%)
+                    armorArray = new int[] { 200, 800, MaxProbability }; // Light(20%), Medium(60%), Heavy(20%)
                     break;
             }
             return armorArray;
@@ -1418,6 +1418,7 @@ namespace PersonalDiscordBot.Classes
         public static Armor ArmorPicker(RarityType rarityType, Character chara)
         {
             Armor armor = new Armor();
+            armor.Rarity = rarityType;
             int rarityValue = LootDrop.GetRarityValue(rarityType);
             bool isUnique = ChanceRoll(30);
             armor.Type = ChooseArmorType(chara);
@@ -3337,6 +3338,58 @@ namespace PersonalDiscordBot.Classes
                 if (spell.IsUnique) unique++;
             }
             return $"{line}Attack: {attack}{line}Defense: {defense}{line}Restorative: {restorative}{line}Starter: {starter}{line}--------------------------------------------{line}Physical: {physical}{line}Magic: {magic}{line}Fire: {fire}{line}Lightning: {lightning}{line}Ice: {ice}{line}Wind: {wind}{line}--------------------------------------------{line}Unique: {unique}{line}--------------------------------------------{line}Common: {common}{line}UnCommon: {uncommon}{line}Rare: {rare}{line}Epic: {epic}{line}Legendary: {legendary}{line}";
+        }
+
+        public static string RandomMassTestArmor(int num)
+        {
+            int isUnique = 0;
+            int light = 0;
+            int medium = 0;
+            int heavy = 0;
+            int common = 0;
+            int uncommon = 0;
+            int rare = 0;
+            int epic = 0;
+            int legendary = 0;
+
+            for (int i = 0; i <= num; i++)
+            {
+                RarityType rarity = LootDrop.ChooseRarity();
+                var loot = LootDrop.ArmorPicker(rarity, testiculeesCharacter);
+                switch (loot.Type)
+                {
+                    case ArmorType.Light:
+                        light++;
+                        break;
+                    case ArmorType.Medium:
+                        medium++;
+                        break;
+                    case ArmorType.Heavy:
+                        heavy++;
+                        break;
+                }
+                switch (loot.Rarity)
+                {
+                    case RarityType.Common:
+                        common++;
+                        break;
+                    case RarityType.Epic:
+                        epic++;
+                        break;
+                    case RarityType.Legendary:
+                        legendary++;
+                        break;
+                    case RarityType.Rare:
+                        rare++;
+                        break;
+                    case RarityType.Uncommon:
+                        uncommon++;
+                        break;
+                }
+                if (loot.IsUnique) isUnique++;
+            }
+            return $"{line}--------------------------{line}Light: {light}{line}Medium: {medium}{line}Heavy: {heavy}{line}--------------------------{line}Common: {common}{line}Uncommon: {uncommon}{line}Rare: {rare}{line}Epic: {epic}{line}Legendary: {legendary}{line}--------------------------{line}Unique: {isUnique}{line}";
+
         }
 
         public static string LootDropGen()
