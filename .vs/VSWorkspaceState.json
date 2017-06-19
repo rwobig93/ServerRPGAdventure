@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\PersonalDiscordBot"
+    "\\PersonalDiscordBot",
+    "\\PersonalDiscordBot\\Classes"
   ],
-  "SelectedNode": "\\PersonalDiscordBot\\MainWindow.xaml",
+  "SelectedNode": "\\PersonalDiscordBot\\Classes\\RPG.cs",
   "PreviewInSolutionExplorer": false
 }
