@@ -3177,11 +3177,12 @@ namespace PersonalDiscordBot.Classes
             return $"{line}Name: {spell.Name}{line}Description: {spell.Desc}{line}Type: {spell.Type}{line}Unique: {spell.IsUnique}{line}Rarity: {spell.Rarity}{line}ManaCost: {spell.ManaCost}{line}Level: {spell.Lvl}{line}Speed: {spell.Speed}{line}Worth: {spell.Worth}{line}Physical: {spell.PhysicalDamage}{line}Fire: {spell.FireDamage}{line}Ice: {spell.IceDamage}{line}Lightning: {spell.LightningDamage}{line}Magic: {spell.MagicDamage}{line}Wind: {spell.WindDamage}";
         }
 
-        public static string RandomArmor()
+        public static string RandomArmor(out string namer)
         {
             string result = string.Empty;
             RarityType rarity = LootDrop.ChooseRarity();
             var armor = LootDrop.ArmorPicker(rarity, testiculeesCharacter);
+            namer = armor.Name;
             foreach (var prop in armor.GetType().GetProperties())
             {
                 result = $"{result}{line}{prop.Name}: {prop.GetValue(armor)}";
@@ -3427,10 +3428,10 @@ namespace PersonalDiscordBot.Classes
 
         public static string GetMarried()
         {
-            string namer = "";
-            var weapon = RandomWeap(out namer);
+            var weapon = RandomWeap(out string wNamer);
+            var armor = RandomArmor(out string aNamer);
             var time = rng.Next(100000, 382947828);
-            var whatchaSay = weapon != null ? ($"{line}Hello Richard.{line}You have {time} seconds(s) of safety remaining until Heather uses {namer} on yo ass. You know why.{line}Hint: Marriage.{line}Good Luck!{line}**************************{weapon}") : ($"{line}Hello Richard.{line}You have {time} seconds(s) of safety remaining until Heather uses [[ExceptionUnhandled]] on yo ass. You know why.{line}Hint: Marriage.{line}Good Luck!{line}***********************{line}This was supposed to be a weapon but the code blew it.{line}Thankfully I handled the unhandled exception exceptionally.");
+            var whatchaSay = weapon != null ? ($"{line}Hello Richard.{line}You have {time} seconds(s) of safety remaining until Heather uses {wNamer} on yo ass. You know why.{line}Hint: Marriage.{line}And don't think your {aNamer} will protect you.{line}Good Luck!{line}**************************{weapon}") : ($"{line}Hello Richard.{line}You have {time} seconds(s) of safety remaining until Heather uses [[ExceptionUnhandled]] on yo ass. You know why.{line}Hint: Marriage.{line}Good Luck!{line}***********************{line}This was supposed to be a weapon but the code blew it.{line}Thankfully I handled the unhandled exception exceptionally.");
             return whatchaSay;
         }
 
