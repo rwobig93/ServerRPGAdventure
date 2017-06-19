@@ -2952,6 +2952,20 @@ namespace PersonalDiscordBot.Classes
                     armor.Name = armorLightName[lNameIndex];
                     ArmorUniqueLightAddition(armor, rarityValue, charLevel, lNameIndex);
                     break;
+
+                case ArmorType.Medium:
+                    var armorMediumName = ArmorUniqueMediumNames(rarity);
+                    int mNameIndex = armorMediumName.ToArrayLength();
+                    armor.Name = armorMediumName[mNameIndex];
+                    ArmorUniqueMediumAddition(armor, rarityValue, charLevel, mNameIndex);
+                    break;
+
+                case ArmorType.Heavy:
+                    var armorHeavyName = ArmorUniqueHeavyNames(rarity);
+                    int hNameIndex = armorHeavyName.ToArrayLength();
+                    armor.Name = armorHeavyName[hNameIndex];
+                    ArmorUniqueHeavyAddition(armor, rarityValue, charLevel, hNameIndex);
+                    break;
             }
 
             return armor;
@@ -2975,14 +2989,14 @@ namespace PersonalDiscordBot.Classes
                     break;
                 case ArmorType.Medium:
                     int mediumNum = rng.Next(0, armorBasicMediumNames.ToArrayLength());
-                    armor.Name = $"{rarity} {armorBasicLightNames[mediumNum]}";
+                    armor.Name = $"{rarity} {armorBasicMediumNames[mediumNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 60;
                     armor.Physical = ((rng.Next(9, 12) + typeCount + armor.Lvl));
                     break;
                 case ArmorType.Heavy:
                     int heavyNum = rng.Next(0, armorBasicHeavyNames.ToArrayLength());
-                    armor.Name = $"{rarity} {armorBasicLightNames[heavyNum]}";
+                    armor.Name = $"{rarity} {armorBasicHeavyNames[heavyNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 40;
                     armor.Physical = ((rng.Next(18, 21) + typeCount + armor.Lvl));
@@ -3144,6 +3158,18 @@ namespace PersonalDiscordBot.Classes
             RarityType rarity = LootDrop.ChooseRarity();
             var spell = LootDrop.SpellPicker(rarity, testiculeesCharacter);
             return $"{line}Name: {spell.Name}{line}Description: {spell.Desc}{line}Type: {spell.Type}{line}Unique: {spell.IsUnique}{line}Rarity: {spell.Rarity}{line}ManaCost: {spell.ManaCost}{line}Level: {spell.Lvl}{line}Speed: {spell.Speed}{line}Worth: {spell.Worth}{line}Physical: {spell.PhysicalDamage}{line}Fire: {spell.FireDamage}{line}Ice: {spell.IceDamage}{line}Lightning: {spell.LightningDamage}{line}Magic: {spell.MagicDamage}{line}Wind: {spell.WindDamage}";
+        }
+
+        public static string RandomArmor()
+        {
+            string result = string.Empty;
+            RarityType rarity = LootDrop.ChooseRarity();
+            var armor = LootDrop.ArmorPicker(rarity, testiculeesCharacter);
+            foreach (var prop in armor.GetType().GetProperties())
+            {
+                result = $"{result}{line}{prop.Name}: {prop.GetValue(armor)}";
+            }
+            return $"Your Loot is: {result}";
         }
 
         public static string RandomMassTestWeap(int num)
