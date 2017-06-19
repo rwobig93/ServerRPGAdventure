@@ -21,6 +21,19 @@ namespace PersonalDiscordBot.Classes
 
         #endregion
 
+        #region DiscordMessage Event
+
+        public delegate void DiscordMessage(MessageArgs args);
+        public static event DiscordMessage DiscordMessageSend;
+        public static void SendDiscordMessage(CommandContext context, string message)
+        {
+            MessageArgs args = new MessageArgs(context, message);
+            DiscordMessageSend(args);
+            Toolbox.uDebugAddLog($"Sent Discord Message via Event: [UN]{context.Message.Author.Username} [MSG]{message} [ID]{context.Message.Author.Id}");
+        }
+
+        #endregion
+
         #region MatchComplete Event
 
         public delegate void MatchComplete(MatchArgs args);
@@ -91,6 +104,19 @@ namespace PersonalDiscordBot.Classes
         public Match Match { get { return match; } }
         public TimeSpan MatchTime { get { return matchTime; } }
         public RPG.MatchCompleteResult Result { get { return result; } }
+    }
+
+    public class MessageArgs : EventArgs
+    {
+        private CommandContext context;
+        private string message;
+        public MessageArgs(CommandContext context, string message)
+        {
+            this.context = context;
+            this.message = message;
+        }
+        public CommandContext Context { get { return context; } }
+        public string Message { get { return message; } }
     }
 
     public class TurnArgs : EventArgs

@@ -48,6 +48,7 @@ namespace PersonalDiscordBot
             txtLogDirectory.Text = _paths.LogLocation;
             Events.MessagePromptShown += (e) => { uStatusUpdate(e.Content); };
             Events.MatchCompleted += async (e) => { await Management.EndOfMatchLootAsync(e); };
+            Events.DiscordMessageSend += async (e) => { string resp = $"{e.Context.Message.Author.Mention} {e.Message}"; await e.Context.Channel.SendMessageAsync(resp); Toolbox.uDebugAddLog($"DCRDMSGSNT: {resp}"); };
         }
 
         #region Global Variables
@@ -88,6 +89,7 @@ namespace PersonalDiscordBot
 
         private void winMain_Loaded(object sender, RoutedEventArgs e)
         {
+            VerifyDebug();
             LoadWindowLocation();
             HideGrids();
             UpdateVerison();
@@ -448,43 +450,71 @@ namespace PersonalDiscordBot
 
         private void btnDumpDebug_Click(object sender, RoutedEventArgs e)
         {
-            Toolbox.DumpDebugLog();
-            uStatusUpdate("Manually Dumped Debug Log");
+            try
+            {
+                Toolbox.DumpDebugLog();
+                uStatusUpdate("Manually Dumped Debug Log");
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
         }
 
         private void btnAddAdmin_Click(object sender, RoutedEventArgs e)
         {
-            ulong adminID = 0;
-            var isUlong = ulong.TryParse(txtAdminUlong.Text, out adminID);
-            if (!isUlong)
+            try
             {
-                ShowNotification("Admin Id entered was invalid, please try again", 5);
-                return;
+                ulong adminID = 0;
+                var isUlong = ulong.TryParse(txtAdminUlong.Text, out adminID);
+                if (!isUlong)
+                {
+                    ShowNotification("Admin Id entered was invalid, please try again", 5);
+                    return;
+                }
+                Permissions.Administrators.Add(adminID);
+                Events.uStatusUpdateExt($"Added admin ID: {adminID}");
+                RefreshAdminList();
             }
-            Permissions.Administrators.Add(adminID);
-            Events.uStatusUpdateExt($"Added admin ID: {adminID}");
-            RefreshAdminList();
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
         }
 
         private void btnRemoveAdmin_Click(object sender, RoutedEventArgs e)
         {
-            ulong adminID = 0;
-            var isUlong = ulong.TryParse(comboAdmins.SelectedItem.ToString(), out adminID);
-            if (!isUlong)
+            try
             {
-                ShowNotification("Admin ID selected from combobox is invalid", 5);
-                uStatusUpdate($"Combobox Admin ID invalid: {adminID}");
-                return;
+                ulong adminID = 0;
+                var isUlong = ulong.TryParse(comboAdmins.SelectedItem.ToString(), out adminID);
+                if (!isUlong)
+                {
+                    ShowNotification("Admin ID selected from combobox is invalid", 5);
+                    uStatusUpdate($"Combobox Admin ID invalid: {adminID}");
+                    return;
+                }
+                Permissions.Administrators.Remove(adminID);
+                uStatusUpdate($"Removed admin ID: {adminID}");
+                RefreshAdminList();
             }
-            Permissions.Administrators.Remove(adminID);
-            uStatusUpdate($"Removed admin ID: {adminID}");
-            RefreshAdminList();
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
         }
 
         private void btnSaveRPG_Click(object sender, RoutedEventArgs e)
         {
-            Management.SerializeData();
-            Permissions.SerializePermissions();
+            try
+            {
+                Management.SerializeData();
+                Permissions.SerializePermissions();
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
         }
 
         #endregion
@@ -972,6 +1002,16 @@ namespace PersonalDiscordBot
             uStatusUpdate($"Dumped status log to: {_logLocation}");
         }
 
+        private void VerifyDebug()
+        {
+#if DEBUG
+            uStatusUpdate("Running DEBUG Mode");
+            btnTest.Visibility = Visibility.Visible;
+#else
+            btnTest.Visibility = Visibility.Hidden;   
+#endif
+        }
+
         #endregion
 
         #region Threaded Methods
@@ -1069,7 +1109,7 @@ namespace PersonalDiscordBot
             });
             save.Start();
         }
-        #endregion
+#endregion
 
         #region Async Methods
 
@@ -1195,7 +1235,7 @@ namespace PersonalDiscordBot
             }
         }
 
-        #endregion
+#endregion
 
         #region WIP
 
@@ -1216,7 +1256,7 @@ namespace PersonalDiscordBot
             uStatusUpdate("Testing setup");
         }
 
-        #endregion
+#endregion
     }
 
     public class Notification

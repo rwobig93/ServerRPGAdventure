@@ -1700,9 +1700,7 @@ namespace PersonalDiscordBot.Classes
                 }
                 Toolbox.uDebugAddLog($"Starting match command");
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
-                string response = Management.CreateMatch(owner);
-                Toolbox.uDebugAddLog($"Match method response: {response}");
-                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} {response}");
+                Management.CreateMatch(Context, owner);
             }
             catch (Exception ex)
             {
@@ -1728,8 +1726,27 @@ namespace PersonalDiscordBot.Classes
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have an active match, please start a match before trying to attack nothing");
                     return; 
                 }
-                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} {Management.AttackEnemy(Context, owner, match.CurrentEnemy)}");
-                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} {Management.CalculateTurn(owner)}");
+                Management.AttackEnemy(Context, owner, match.CurrentEnemy);
+                Management.CalculateTurn(Context, owner);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("loot"), Summary("Testicules Loot Test")]
+        public async Task Testacules15()
+        {
+            try
+            {
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have any characters, please create one before trying to get some of that dank loot");
+                    return;
+                }
+                await Management.EmptyLoot(Context);
             }
             catch (Exception ex)
             {
