@@ -47,7 +47,7 @@ namespace PersonalDiscordBot
             SetupConfig();
             txtLogDirectory.Text = _paths.LogLocation;
             Events.MessagePromptShown += (e) => { uStatusUpdate(e.Content); };
-            
+            Events.MatchCompleted += async (e) => { await Management.EndOfMatchLootAsync(e); };
         }
 
         #region Global Variables
@@ -88,6 +88,7 @@ namespace PersonalDiscordBot
 
         private void winMain_Loaded(object sender, RoutedEventArgs e)
         {
+            LoadWindowLocation();
             HideGrids();
             UpdateVerison();
             Management.DeSerializeData();
@@ -102,6 +103,8 @@ namespace PersonalDiscordBot
             Permissions.SerializePermissions();
             Toolbox.uDebugAddLog(string.Format("{0}########################## Application Stop ##########################{0}", Environment.NewLine));
             Toolbox.DumpDebugLog();
+            DumpStatusLog();
+            SaveWindowLocation();
         }
 
         private void winMain_Closed(object sender, EventArgs e)
@@ -144,11 +147,14 @@ namespace PersonalDiscordBot
         {
             try
             {
+                var botName = client.CurrentUser.Username;
                 await client.DisconnectAsync();
                 Toolbox.uDebugAddLog("Disconnected Client");
                 await client.LogoutAsync();
                 Toolbox.uDebugAddLog("Logged out");
                 _activeSession = false;
+                uStatusUpdate("Bot Client has disconnected and logged out");
+                ShowNotification($"Bot {botName} has disconnected and logged out", 5);
             }
             catch (Exception ex)
             {
@@ -443,6 +449,7 @@ namespace PersonalDiscordBot
         private void btnDumpDebug_Click(object sender, RoutedEventArgs e)
         {
             Toolbox.DumpDebugLog();
+            uStatusUpdate("Manually Dumped Debug Log");
         }
 
         private void btnAddAdmin_Click(object sender, RoutedEventArgs e)
@@ -474,6 +481,12 @@ namespace PersonalDiscordBot
             RefreshAdminList();
         }
 
+        private void btnSaveRPG_Click(object sender, RoutedEventArgs e)
+        {
+            Management.SerializeData();
+            Permissions.SerializePermissions();
+        }
+
         #endregion
 
         #region Methods
@@ -485,9 +498,12 @@ namespace PersonalDiscordBot
                 string _timeNow = $"{DateTime.Now.ToLocalTime().ToShortDateString()}_{DateTime.Now.ToLocalTime().ToShortTimeString()}";
                 string _statusString = string.Format("{0} :: {1}{2}", _timeNow, _status, Environment.NewLine);
                 bool isFocused = true;
-                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { txtStatusValue.AppendText(_statusString); });
+                int lineCount = 0;
+                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { txtStatusValue.AppendText(_statusString); lineCount = txtStatusValue.LineCount; });
                 Toolbox.uDebugAddLog(string.Format("STATUS: {0}", _status));
                 Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { isFocused = txtStatusValue.IsFocused; });
+                if (lineCount > 300)
+                    DumpStatusLog();
                 if (!isFocused)
                 {
                     Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { txtStatusValue.ScrollToEnd(); });
@@ -722,13 +738,13 @@ namespace PersonalDiscordBot
                     _sw.WriteLine(exString + Environment.NewLine);
         }
 
-        private void ResultLog(IResult ex)
+        private void ResultLog(IResult ex, [CallerLineNumber] int lineNumber = 0, [CallerMemberName] string caller = null, [CallerFilePath] string filePath = null)
         {
             if (ex.ErrorReason.ToLower() == "unknown command.") return;
-            string exString = string.Format("ErrorReason[{0}] ErrorValue[{1}]", ex.ErrorReason, ex.Error.Value);
+            string exString = $"TimeStamp: {$"{DateTime.Now.ToLocalTime().ToString("MM-dd-yy")} {DateTime.Now.ToLocalTime().ToLongTimeString()}"}{line}Exception Type: {ex.GetType().Name}{line}Caller: {caller} at {lineNumber}{line}Error: {ex.Error}{line}Error Reason: {ex.ErrorReason}{line}StackTrace: {line}{ex.Error.Value}{line}";
             Toolbox.uDebugAddLog(string.Format("RSLTFAIL: {0}", exString));
             uStatusUpdate(string.Format("A result failed: {0}", exString));
-            string _logLocation = string.Format(@"{0}\Exceptions.txt", _paths.LogLocation);
+            string _logLocation = string.Format(@"{0}\Exceptions.log", _paths.LogLocation);
             if (!File.Exists(_logLocation))
                 using (StreamWriter _sw = new StreamWriter(_logLocation))
                     _sw.WriteLine(exString);
@@ -853,8 +869,24 @@ namespace PersonalDiscordBot
 
         private void UpdateVerison()
         {
-            lblVersionNumber.Text = $"Version {GetVersionNumber()}";
-            uStatusUpdate($"Current Version: {GetVersionNumber()}");
+            string verNum = GetVersionNumber();
+            if (verNum != sGeneral.Default.CurrentVersion)
+            {
+                string prevVersion = sGeneral.Default.CurrentVersion;
+                string dateUpdate = $"{DateTime.Now.ToLocalTime().ToString("MM-dd-yyyy")} {DateTime.Now.ToLocalTime().ToLongTimeString()}";
+                sGeneral.Default.LastUpdate = dateUpdate;
+                sGeneral.Default.CurrentVersion = verNum;
+                sGeneral.Default.Save();
+                lblUpdateTime.Text = sGeneral.Default.LastUpdate;
+                lblVersionNumber.Text = $"Version {sGeneral.Default.CurrentVersion}";
+                uStatusUpdate($"Version updated from {sGeneral.Default.CurrentVersion} from {prevVersion}");
+            }
+            else
+            {
+                lblUpdateTime.Text = sGeneral.Default.LastUpdate;
+                lblVersionNumber.Text = $"Version {verNum}";
+                uStatusUpdate($"Current Version: {sGeneral.Default.CurrentVersion}");
+            }
         }
 
         private string GetVersionNumber()
@@ -895,6 +927,49 @@ namespace PersonalDiscordBot
                 comboAdmins.Items.Add(admin);
             }
             Events.uStatusUpdateExt($"Refreshed admin list, total admins: {count}");
+        }
+
+        private void SaveWindowLocation()
+        {
+            Toolbox.uDebugAddLog("Saving window location");
+            Thickness winLocation = new Thickness(this.Left, this.Top, this.Width, this.Height);
+            sGeneral.Default.WindowLocation = winLocation;
+            sGeneral.Default.Save();
+            Toolbox.uDebugAddLog($"Window Location Saved: [L]{winLocation.Left} [T]{winLocation.Top} [R]{winLocation.Right} [B]{winLocation.Bottom}");
+        }
+
+        private void LoadWindowLocation()
+        {
+            Toolbox.uDebugAddLog("Loading window location");
+            Thickness savedLocation = sGeneral.Default.WindowLocation;
+            this.Left = savedLocation.Left;
+            this.Top = savedLocation.Top;
+            this.Width = savedLocation.Right;
+            this.Height = savedLocation.Bottom;
+            Toolbox.uDebugAddLog($"Window Location Loaded and applied: [L]{savedLocation.Left} [T]{savedLocation.Top} [R]{savedLocation.Right} [B]{savedLocation.Bottom}");
+        }
+
+        private void DumpStatusLog()
+        {
+            string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
+            string _logLocation = string.Format(@"{0}\StatusLog_{1}.txt", _paths.LogLocation, _dateNow);
+            string textDump = string.Empty;
+            Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { textDump = txtStatusValue.Text; txtStatusValue.Text = string.Empty; });
+            if (!File.Exists(_logLocation))
+                using (StreamWriter _sw = new StreamWriter(_logLocation))
+                    _sw.WriteLine(textDump);
+            else
+                using (StreamWriter _sw = File.AppendText(_logLocation))
+                    _sw.WriteLine(textDump);
+            DirectoryInfo _dI = new DirectoryInfo(_paths.LogLocation);
+            foreach (FileInfo _fI in _dI.GetFiles())
+            {
+                if (_fI.Name.StartsWith("StatusLog") && _fI.CreationTime.ToLocalTime() <= DateTime.Now.AddDays(-14).ToLocalTime())
+                {
+                    _fI.Delete(); Toolbox.uDebugAddLog(string.Format("Deleted old StatusLog: {0}", _fI.Name));
+                }
+            }
+            uStatusUpdate($"Dumped status log to: {_logLocation}");
         }
 
         #endregion
@@ -1026,6 +1101,8 @@ namespace PersonalDiscordBot
                 // Login and connect to Discord.
                 await client.LoginAsync(TokenType.Bot, token);
                 await client.ConnectAsync();
+
+                ShowNotification($"Bot {client.CurrentUser.Username} Successfully Sonnected", 4);
             }
             catch (Exception ex)
             {
