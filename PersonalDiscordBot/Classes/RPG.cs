@@ -3335,6 +3335,18 @@ namespace PersonalDiscordBot.Classes
             return $"Your Loot is: {result}";
         }
 
+        public static string LootDropGen()
+        {
+            string result = string.Empty;
+            IBackPackItem loot = LootDrop.PickLoot(testiculeesCharacter);
+            foreach (var prop in loot.GetType().GetProperties())
+            {
+                result = $"{result}{line}{prop.Name}: {prop.GetValue(loot)}";
+            }
+            var lootReturn = loot.BPItem().ToString();
+            return $"Your Loot is: {lootReturn}{result}";
+        }
+
         public static string RandomMassTestWeap(int num)
         {
             int sword = 0;
@@ -3559,16 +3571,28 @@ namespace PersonalDiscordBot.Classes
 
         }
 
-        public static string LootDropGen()
+        public static string RandomMassTestLoot(int num)
         {
-            string result = string.Empty;
-            IBackPackItem loot = LootDrop.PickLoot(testiculeesCharacter);
-            foreach (var prop in loot.GetType().GetProperties())
-            {
-                result = $"{result}{line}{prop.Name}: {prop.GetValue(loot)}";
-            }
-            var lootReturn = loot.BPItem().ToString();
-            return $"Your Loot is: {lootReturn}{result}";
+            int weap = 0;
+            //int sword = 0;
+            //int dagger = 0;
+            //int greatsword = 0;
+            //int katana = 0;
+            //int staff = 0;
+            //int focusStone = 0;
+            //int spear = 0;
+            //int dragonSpear = 0;
+            //int twinSwords = 0;
+            //int other = 0;
+            //int starter = 0;
+            //int unique = 0;
+            //int common = 0;
+            //int uncommon = 0;
+            //int rare = 0;
+            //int epic = 0;
+            //int legendary = 0;
+
+            return weap.ToString();
         }
 
         public static string GetMarried()

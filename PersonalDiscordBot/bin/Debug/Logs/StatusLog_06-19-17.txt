@@ -1025,3 +1025,140 @@ Physical Damage: 31
 
 06/19/2017_3:20 PM :: Dumped status log to: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs\StatusLog_06-19-17.txt
 
+06/19/2017_4:50 PM :: Running DEBUG Mode
+06/19/2017_4:50 PM :: Version updated from 1.0.6379.30324 from 
+06/19/2017_4:50 PM :: Deserializing Sava Data
+06/19/2017_4:50 PM :: Refreshed admin list, total admins: 0
+06/19/2017_4:50 PM :: Deserializing Permission Data
+06/19/2017_4:50 PM :: Owner Deserialization Complete
+06/19/2017_4:50 PM :: Admin Deserialization Complete
+06/19/2017_4:51 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Medium Health Potion Pack
+Desc: 5 medium health potions!? Is it christmas already? Get those f**kin socks away from me!
+Type: Restorative
+Lvl: 2
+Count: 1
+Worth: 25
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_4:51 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Repair Powder
+Desc: Powder that repairs stuff, I hear it also gives you a wicked high if snorted... don't ask me how I know
+Type: Repair
+Lvl: 1
+Count: 5
+Worth: 50
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_4:51 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Medium Mana Potion Pack
+Desc: 5 medium mana potions!? Hot damn this pack radiates awesomeness... or is that radiation?
+Type: Restorative
+Lvl: 2
+Count: 1
+Worth: 35
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_4:51 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: 
+Desc: 
+Type: Currency
+Lvl: 0
+Count: 1
+Worth: 23
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_4:51 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: 
+Desc: 
+Type: Currency
+Lvl: 0
+Count: 1
+Worth: 74
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_4:51 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Football Jacket
+Desc: A football jacket that helps prevent wind, it's not soccer, it's FOOTBALL!!!
+Type: Buff
+Lvl: 1
+Count: 1
+Worth: 10
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 10
+06/19/2017_4:52 PM :: Serializing Save Data
+06/19/2017_4:52 PM :: Serializing Permission Data
+
+06/19/2017_4:52 PM :: Running DEBUG Mode
+06/19/2017_4:52 PM :: Current Version: 1.0.6379.30324
+06/19/2017_4:52 PM :: Deserializing Permission Data
+06/19/2017_4:52 PM :: Deserializing Sava Data
+06/19/2017_4:52 PM :: Refreshed admin list, total admins: 0
+06/19/2017_4:52 PM :: Owner Deserialization Complete
+06/19/2017_4:52 PM :: Admin Deserialization Complete
+06/19/2017_4:52 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Medium Mana Potion Pack
+Desc: 5 medium mana potions!? Hot damn this pack radiates awesomeness... or is that radiation?
+Type: Restorative
+Lvl: 2
+Count: 1
+Worth: 35
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_4:52 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: 
+Desc: 
+Type: Currency
+Lvl: 0
+Count: 1
+Worth: 29
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_4:52 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Small Mana Potion
+Desc: A brew that fills your body with Magic energy, the health information sticker wore off long ago, don't worry about what is inside.
+Type: Restorative
+Lvl: 1
+Count: 1
+Worth: 5
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_4:52 PM :: Serializing Save Data
+06/19/2017_4:52 PM :: Serializing Permission Data
+

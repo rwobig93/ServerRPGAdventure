@@ -1488,3 +1488,207 @@ Physical Damage: 31
 ########################## Application Stop ##########################
 
 
+06-19-17_4:50:51 PM :: 
+########################## Application Start ##########################
+
+06-19-17_4:50:51 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-19-17_4:50:51 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-19-17_4:50:51 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-19-17_4:50:51 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-19-17_4:50:52 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-19-17_4:50:52 PM :: Finished reading config
+06-19-17_4:50:52 PM :: STATUS: Running DEBUG Mode
+06-19-17_4:50:52 PM :: Loading window location
+06-19-17_4:50:52 PM :: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+06-19-17_4:50:52 PM :: Set Grid grdStatus to Hidden on launch
+06-19-17_4:50:52 PM :: Set Grid grdSettings to Hidden on launch
+06-19-17_4:50:52 PM :: Set Grid grdServers to Hidden on launch
+06-19-17_4:50:52 PM :: Set Grid grdBotInfo to Hidden on launch
+06-19-17_4:50:52 PM :: STATUS: Version updated from 1.0.6379.30324 from 
+06-19-17_4:50:52 PM :: Refreshing admin list
+06-19-17_4:50:52 PM :: STATUS: Deserializing Sava Data
+06-19-17_4:50:52 PM :: STATUS: Refreshed admin list, total admins: 0
+06-19-17_4:50:52 PM :: STATUS: Deserializing Permission Data
+06-19-17_4:50:52 PM :: STATUS: Owner Deserialization Complete
+06-19-17_4:50:52 PM :: Found Administrators.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\Administrators.perm
+06-19-17_4:50:52 PM :: Deserialized Administrators.perm
+06-19-17_4:50:52 PM :: Found RPGChannels.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\RPGChannels.perm
+06-19-17_4:50:52 PM :: Deserialized RPGChannels.perm
+06-19-17_4:50:52 PM :: STATUS: Admin Deserialization Complete
+06-19-17_4:51:10 PM :: Revealed Grid grdStatus
+06-19-17_4:51:10 PM :: Hid Grid grdSettings
+06-19-17_4:51:10 PM :: Hid Grid grdServers
+06-19-17_4:51:10 PM :: Hid Grid grdBotInfo
+06-19-17_4:51:10 PM :: Slid Main Menu out of view
+06-19-17_4:51:48 PM :: Hid Grid grdStatus
+06-19-17_4:51:48 PM :: Slid Main Menu into view
+06-19-17_4:51:50 PM :: Revealed Grid grdStatus
+06-19-17_4:51:50 PM :: Hid Grid grdSettings
+06-19-17_4:51:50 PM :: Hid Grid grdServers
+06-19-17_4:51:50 PM :: Hid Grid grdBotInfo
+06-19-17_4:51:50 PM :: Slid Main Menu out of view
+06-19-17_4:51:51 PM :: STATUS: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Medium Health Potion Pack
+Desc: 5 medium health potions!? Is it christmas already? Get those f**kin socks away from me!
+Type: Restorative
+Lvl: 2
+Count: 1
+Worth: 25
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-19-17_4:51:55 PM :: STATUS: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Repair Powder
+Desc: Powder that repairs stuff, I hear it also gives you a wicked high if snorted... don't ask me how I know
+Type: Repair
+Lvl: 1
+Count: 5
+Worth: 50
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-19-17_4:51:57 PM :: STATUS: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Medium Mana Potion Pack
+Desc: 5 medium mana potions!? Hot damn this pack radiates awesomeness... or is that radiation?
+Type: Restorative
+Lvl: 2
+Count: 1
+Worth: 35
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-19-17_4:51:58 PM :: STATUS: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: 
+Desc: 
+Type: Currency
+Lvl: 0
+Count: 1
+Worth: 23
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-19-17_4:51:59 PM :: STATUS: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: 
+Desc: 
+Type: Currency
+Lvl: 0
+Count: 1
+Worth: 74
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-19-17_4:51:59 PM :: STATUS: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Football Jacket
+Desc: A football jacket that helps prevent wind, it's not soccer, it's FOOTBALL!!!
+Type: Buff
+Lvl: 1
+Count: 1
+Worth: 10
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 10
+06-19-17_4:52:33 PM :: 
+########################## Application Stop ##########################
+
+
+06-19-17_4:52:37 PM :: 
+########################## Application Start ##########################
+
+06-19-17_4:52:37 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-19-17_4:52:37 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-19-17_4:52:37 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-19-17_4:52:37 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-19-17_4:52:37 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-19-17_4:52:37 PM :: Finished reading config
+06-19-17_4:52:38 PM :: STATUS: Running DEBUG Mode
+06-19-17_4:52:38 PM :: Loading window location
+06-19-17_4:52:38 PM :: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+06-19-17_4:52:38 PM :: Set Grid grdStatus to Hidden on launch
+06-19-17_4:52:38 PM :: Set Grid grdSettings to Hidden on launch
+06-19-17_4:52:38 PM :: Set Grid grdServers to Hidden on launch
+06-19-17_4:52:38 PM :: Set Grid grdBotInfo to Hidden on launch
+06-19-17_4:52:38 PM :: STATUS: Current Version: 1.0.6379.30324
+06-19-17_4:52:38 PM :: Refreshing admin list
+06-19-17_4:52:38 PM :: STATUS: Deserializing Sava Data
+06-19-17_4:52:38 PM :: STATUS: Refreshed admin list, total admins: 0
+06-19-17_4:52:38 PM :: STATUS: Deserializing Permission Data
+06-19-17_4:52:38 PM :: STATUS: Owner Deserialization Complete
+06-19-17_4:52:38 PM :: Found Administrators.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\Administrators.perm
+06-19-17_4:52:38 PM :: Deserialized Administrators.perm
+06-19-17_4:52:38 PM :: Found RPGChannels.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\RPGChannels.perm
+06-19-17_4:52:38 PM :: Deserialized RPGChannels.perm
+06-19-17_4:52:38 PM :: STATUS: Admin Deserialization Complete
+06-19-17_4:52:45 PM :: Revealed Grid grdStatus
+06-19-17_4:52:45 PM :: Hid Grid grdSettings
+06-19-17_4:52:45 PM :: Hid Grid grdServers
+06-19-17_4:52:45 PM :: Hid Grid grdBotInfo
+06-19-17_4:52:45 PM :: Slid Main Menu out of view
+06-19-17_4:52:46 PM :: STATUS: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Medium Mana Potion Pack
+Desc: 5 medium mana potions!? Hot damn this pack radiates awesomeness... or is that radiation?
+Type: Restorative
+Lvl: 2
+Count: 1
+Worth: 35
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-19-17_4:52:48 PM :: STATUS: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: 
+Desc: 
+Type: Currency
+Lvl: 0
+Count: 1
+Worth: 29
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-19-17_4:52:50 PM :: STATUS: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Small Mana Potion
+Desc: A brew that fills your body with Magic energy, the health information sticker wore off long ago, don't worry about what is inside.
+Type: Restorative
+Lvl: 1
+Count: 1
+Worth: 5
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-19-17_4:52:52 PM :: 
+########################## Application Stop ##########################
+
+
