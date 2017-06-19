@@ -1139,3 +1139,352 @@ legendary = 14132
 ########################## Application Stop ##########################
 
 
+06-19-17_3:17:46 PM :: 
+########################## Application Start ##########################
+
+06-19-17_3:17:46 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-19-17_3:17:46 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-19-17_3:17:46 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-19-17_3:17:46 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-19-17_3:17:47 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-19-17_3:17:47 PM :: Finished reading config
+06-19-17_3:17:48 PM :: STATUS: Running DEBUG Mode
+06-19-17_3:17:48 PM :: Loading window location
+06-19-17_3:17:48 PM :: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+06-19-17_3:17:48 PM :: Set Grid grdStatus to Hidden on launch
+06-19-17_3:17:48 PM :: Set Grid grdSettings to Hidden on launch
+06-19-17_3:17:48 PM :: Set Grid grdServers to Hidden on launch
+06-19-17_3:17:48 PM :: Set Grid grdBotInfo to Hidden on launch
+06-19-17_3:17:48 PM :: STATUS: Version updated from 1.0.6379.27531 from 
+06-19-17_3:17:48 PM :: Refreshing admin list
+06-19-17_3:17:48 PM :: STATUS: Deserializing Permission Data
+06-19-17_3:17:48 PM :: STATUS: Refreshed admin list, total admins: 0
+06-19-17_3:17:48 PM :: STATUS: Deserializing Sava Data
+06-19-17_3:17:48 PM :: Found Administrators.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\Administrators.perm
+06-19-17_3:17:48 PM :: Deserialized Administrators.perm
+06-19-17_3:17:48 PM :: Found RPGChannels.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\RPGChannels.perm
+06-19-17_3:17:48 PM :: Deserialized RPGChannels.perm
+06-19-17_3:17:48 PM :: STATUS: Admin Deserialization Complete
+06-19-17_3:17:48 PM :: STATUS: Owner Deserialization Complete
+06-19-17_3:17:50 PM :: Revealed Grid grdStatus
+06-19-17_3:17:50 PM :: Hid Grid grdSettings
+06-19-17_3:17:50 PM :: Hid Grid grdServers
+06-19-17_3:17:50 PM :: Hid Grid grdBotInfo
+06-19-17_3:17:50 PM :: Slid Main Menu out of view
+06-19-17_3:17:52 PM :: STATUS: 
+Hello Richard.
+You have 357156954 seconds(s) of safety remaining until Heather uses Epic Sword on yo ass. You know why.
+Hint: Marriage.
+And don't think your Uncommon Titanforged Steel will protect you.
+Good Luck!
+**************************
+Name: Epic Sword
+Description: A Epic Sword
+Type: Sword
+Unique: False
+Rarity: Epic
+Level: 2
+Max Durability: 70
+Current Durability: 70
+Worth: 246
+Speed: 143
+Physical Damage: 21
+06-19-17_3:20:10 PM :: STATUS: 
+Hello Richard.
+You have 86790682 seconds(s) of safety remaining until Heather uses Uncommon Butterknife on yo ass. You know why.
+Hint: Marriage.
+And don't think your Uncommon Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Uncommon Butterknife
+Description: Used to butter that toast, or butter your bread. Mmmmm bread
+Type: Sword
+Unique: True
+Rarity: Common
+Level: 0
+Max Durability: 0
+Current Durability: 0
+Worth: 84
+Speed: 206
+Physical Damage: 16
+06-19-17_3:20:13 PM :: STATUS: 
+Hello Richard.
+You have 108160594 seconds(s) of safety remaining until Heather uses Common Dagger on yo ass. You know why.
+Hint: Marriage.
+And don't think your Common Furry Armor will protect you.
+Good Luck!
+**************************
+Name: Common Dagger
+Description: A Common Dagger
+Type: Dagger
+Unique: False
+Rarity: Common
+Level: 2
+Max Durability: 32
+Current Durability: 32
+Worth: 39
+Speed: 196
+Physical Damage: 8
+06-19-17_3:20:19 PM :: STATUS: 
+Hello Richard.
+You have 188986595 seconds(s) of safety remaining until Heather uses Common DragonSpear on yo ass. You know why.
+Hint: Marriage.
+And don't think your Common Plate Armor will protect you.
+Good Luck!
+**************************
+Name: Common DragonSpear
+Description: A Common DragonSpear
+Type: DragonSpear
+Unique: False
+Rarity: Common
+Level: 2
+Max Durability: 32
+Current Durability: 32
+Worth: 172
+Speed: 157
+Physical Damage: 10
+06-19-17_3:20:20 PM :: STATUS: 
+Hello Richard.
+You have 114727948 seconds(s) of safety remaining until Heather uses Rare DragonSpear on yo ass. You know why.
+Hint: Marriage.
+And don't think your Common Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Rare DragonSpear
+Description: A Rare DragonSpear
+Type: DragonSpear
+Unique: False
+Rarity: Rare
+Level: 3
+Max Durability: 60
+Current Durability: 60
+Worth: 229
+Speed: 109
+Physical Damage: 15
+
+06-19-17_3:20:20 PM :: STATUS: 
+Hello Richard.
+You have 159538992 seconds(s) of safety remaining until Heather uses Common Not a weapon on yo ass. You know why.
+Hint: Marriage.
+And don't think your Uncommon Titanforged Steel will protect you.
+Good Luck!
+**************************
+Name: Common Not a weapon
+Description: This isn't a weapon.... at least I don't think it is
+Type: Sword
+Unique: True
+Rarity: Common
+Level: 0
+Max Durability: 0
+Current Durability: 0
+Worth: 201
+Speed: 171
+Physical Damage: 15
+06-19-17_3:20:21 PM :: STATUS: 
+Hello Richard.
+You have 178931311 seconds(s) of safety remaining until Heather uses Common Pokes' you in the eye on yo ass. You know why.
+Hint: Marriage.
+And don't think your Common Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Common Pokes' you in the eye
+Description: Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard
+Type: Sword
+Unique: True
+Rarity: Common
+Level: 0
+Max Durability: 0
+Current Durability: 0
+Worth: 44
+Speed: 154
+Physical Damage: 17
+06-19-17_3:20:21 PM :: STATUS: 
+Hello Richard.
+You have 232573450 seconds(s) of safety remaining until Heather uses Epic Cut you real bad on yo ass. You know why.
+Hint: Marriage.
+And don't think your Common Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Epic Cut you real bad
+Description: I'm gonna cut you so bad, you gonna wish I never cut you so bad
+Type: Sword
+Unique: True
+Rarity: Common
+Level: 0
+Max Durability: 0
+Current Durability: 0
+Worth: 310
+Speed: 136
+Physical Damage: 32
+06-19-17_3:20:22 PM :: STATUS: 
+Hello Richard.
+You have 272958789 seconds(s) of safety remaining until Heather uses Uncommon Not a weapon on yo ass. You know why.
+Hint: Marriage.
+And don't think your Common Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Uncommon Not a weapon
+Description: This isn't a weapon.... at least I don't think it is
+Type: Sword
+Unique: True
+Rarity: Common
+Level: 0
+Max Durability: 0
+Current Durability: 0
+Worth: 185
+Speed: 113
+Physical Damage: 14
+06-19-17_3:20:22 PM :: STATUS: 
+Hello Richard.
+You have 66229595 seconds(s) of safety remaining until Heather uses Uncommon Spear on yo ass. You know why.
+Hint: Marriage.
+And don't think your Uncommon Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Uncommon Spear
+Description: A Uncommon Spear
+Type: Spear
+Unique: False
+Rarity: Uncommon
+Level: 3
+Max Durability: 44
+Current Durability: 44
+Worth: 56
+Speed: 114
+Physical Damage: 13
+06-19-17_3:20:23 PM :: STATUS: 
+Hello Richard.
+You have 207642367 seconds(s) of safety remaining until Heather uses Rare TwinSwords on yo ass. You know why.
+Hint: Marriage.
+And don't think your Common Plate Armor will protect you.
+Good Luck!
+**************************
+Name: Rare TwinSwords
+Description: Rare TwinSwords
+Type: TwinSwords
+Unique: False
+Rarity: Rare
+Level: 2
+Max Durability: 50
+Current Durability: 50
+Worth: 117
+Speed: 142
+Physical Damage: 19
+06-19-17_3:20:23 PM :: STATUS: 
+Hello Richard.
+You have 189229401 seconds(s) of safety remaining until Heather uses Rare Not a weapon on yo ass. You know why.
+Hint: Marriage.
+And don't think your Uncommon Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Rare Not a weapon
+Description: This isn't a weapon.... at least I don't think it is
+Type: Sword
+Unique: True
+Rarity: Common
+Level: 0
+Max Durability: 0
+Current Durability: 0
+Worth: 173
+Speed: 141
+Physical Damage: 24
+06-19-17_3:20:23 PM :: STATUS: 
+Hello Richard.
+You have 358683275 seconds(s) of safety remaining until Heather uses Common Sword on yo ass. You know why.
+Hint: Marriage.
+And don't think your Rare Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Common Sword
+Description: A Common Sword
+Type: Sword
+Unique: False
+Rarity: Common
+Level: 1
+Max Durability: 22
+Current Durability: 22
+Worth: 25
+Speed: 123
+Physical Damage: 9
+06-19-17_3:20:24 PM :: STATUS: 
+Hello Richard.
+You have 364125363 seconds(s) of safety remaining until Heather uses Common TwinSwords on yo ass. You know why.
+Hint: Marriage.
+And don't think your Common Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Common TwinSwords
+Description: Common TwinSwords
+Type: TwinSwords
+Unique: False
+Rarity: Common
+Level: 3
+Max Durability: 32
+Current Durability: 32
+Worth: 29
+Speed: 104
+Physical Damage: 7
+06-19-17_3:20:24 PM :: STATUS: 
+Hello Richard.
+You have 23779371 seconds(s) of safety remaining until Heather uses Common Pokes' you in the eye on yo ass. You know why.
+Hint: Marriage.
+And don't think your Uncommon Furry Armor will protect you.
+Good Luck!
+**************************
+Name: Common Pokes' you in the eye
+Description: Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard
+Type: Sword
+Unique: True
+Rarity: Common
+Level: 0
+Max Durability: 0
+Current Durability: 0
+Worth: 38
+Speed: 136
+Physical Damage: 16
+
+06-19-17_3:20:25 PM :: STATUS: 
+Hello Richard.
+You have 160164968 seconds(s) of safety remaining until Heather uses Uncommon TwinSwords on yo ass. You know why.
+Hint: Marriage.
+And don't think your Uncommon Steel Armor will protect you.
+Good Luck!
+**************************
+Name: Uncommon TwinSwords
+Description: Uncommon TwinSwords
+Type: TwinSwords
+Unique: False
+Rarity: Uncommon
+Level: 2
+Max Durability: 34
+Current Durability: 34
+Worth: 54
+Speed: 141
+Physical Damage: 11
+06-19-17_3:20:26 PM :: STATUS: 
+Hello Richard.
+You have 357145654 seconds(s) of safety remaining until Heather uses Legendary Spear on yo ass. You know why.
+Hint: Marriage.
+And don't think your Rare Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Legendary Spear
+Description: A Legendary Spear
+Type: Spear
+Unique: False
+Rarity: Legendary
+Level: 3
+Max Durability: 104
+Current Durability: 104
+Worth: 488
+Speed: 161
+Physical Damage: 31
+06-19-17_3:20:26 PM :: STATUS: Dumped status log to: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs\StatusLog_06-19-17.txt
+06-19-17_3:26:15 PM :: 
+########################## Application Stop ##########################
+
+
