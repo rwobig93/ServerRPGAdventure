@@ -1,5 +1,4 @@
-﻿using Discord;
-using Discord.Commands;
+﻿using Discord.Commands;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,300 +13,6 @@ using static PersonalDiscordBot.Classes.RPG;
 
 namespace PersonalDiscordBot.Classes
 {
-    #region Base Classes
-
-    public class OwnerProfile
-    {
-        public ulong OwnerID { get; set; }
-        public int Currency { get; set; } = 100;
-        public int TotalPebbles { get; set; } = 0;
-        public List<Character> CharacterList = new List<Character>();
-        public Character CurrentCharacter { get; set; }
-        public IDidTheThingOwner ThingsDone = new IDidTheThingOwner();
-    }
-
-    public class Character
-    {
-        public ulong OwnerID { get; set; }
-        public string Name { get; set; }
-        public string Desc { get; set; } = "A new adventurer set out to..... Adventure?";
-        public CharacterClass Class { get; set; }
-        public Weapon Weapon { get; set; }
-        public Armor Armor { get; set; }
-        public BackPack Backpack { get; set; }
-        public List<Spell> SpellBook = new List<Spell>();
-        public List<IBackPackItem> Loot = new List<IBackPackItem>();
-        public IDidTheThingPlayer ThingsDone = new IDidTheThingPlayer();
-        public int Pebbles { get; set; } = 0;
-        public int Lvl { get; set; }
-        public int Exp { get; set; }
-        public int MaxHP { get; set; }
-        public int CurrentHP { get; set; }
-        public int MaxMana { get; set; }
-        public int CurrentMana { get; set; }
-        public int Str { get; set; }
-        public int Def { get; set; }
-        public int Dex { get; set; }
-        public int Int { get; set; }
-        public int Spd { get; set; }
-        public int Lck { get; set; }
-    }
-
-    public class Match
-    {
-        public OwnerProfile Owner { get; set; }
-        public DateTime MatchStart { get; set; }
-        public DateTime LastPlayerTurn { get; set; }
-        public TimeSpan TurnTimeLimit { get; set; } = TimeSpan.FromDays(3);
-        public List<Enemy> EnemyList { get; set; } = new List<Enemy>();
-        public List<Enemy> DefeatedEnemies { get; set; } = new List<Enemy>();
-        public Enemy CurrentEnemy { get; set; }
-        public Turn CurrentTurn { get; set; } = Turn.NotChosen;
-        public int EnemyTurnTime { get; set; }
-        public int PlayerTurnTime { get; set; }
-        public int EnemySpeedTime { get; set; }
-        public int PlayerSpeedTime { get; set; }
-        public int ExperienceEarned { get; set; }
-    }
-
-    public class PlayerMatch
-    {
-        public Character Player1 { get; set; }
-        public Character Player2 { get; set; }
-        public Turn CurrentTurn { get; set; }
-        public TimeSpan TurnTimeLimit { get; set; } = TimeSpan.FromDays(1);
-    }
-
-    public class Enemy
-    {
-        public string Name { get; set; }
-        public string Desc { get; set; } = "I want your bod, not in a sexual or romantic way. But more of a dead and ragdoll kinda way";
-        public Weapon Weapon { get; set; }
-        public Armor Armor { get; set; }
-        public int Lvl { get; set; }
-        public int ExpLoot { get; set; }
-        public int MaxHP { get; set; }
-        public int CurrentHP { get; set; }
-        public int Mana { get; set; }
-        public int Str { get; set; }
-        public int Def { get; set; }
-        public int Dex { get; set; }
-        public int Int { get; set; }
-        public int Spd { get; set; }
-        public int Lck { get; set; }
-    }
-
-    public class Boss : Enemy
-    {
-        public List<IBackPackItem> Loot { get; set; } = new List<IBackPackItem>();
-    }
-
-    public class BackPack
-    {
-        public string Name { get; set; } = "BackPack";
-        public string Desc { get; set; } = "Your trusty friend you shove shit into";
-        public int Capacity { get; set; } = 10;
-        public int Weight { get; set; } = 10;
-        public List<IBackPackItem> Stored = new List<IBackPackItem>();
-    }
-
-    public class Weapon : IBackPackItem
-    {
-        public string Name { get; set; }
-        public string Desc { get; set; } = "A weapon like any other";
-        public WeaponType Type { get; set; }
-        public RarityType Rarity { get; set; } = RarityType.Common;
-        public bool IsUnique { get; set; } = false;
-        public int Lvl { get; set; } = 0;
-        public int MaxDurability { get; set; } = 0;
-        public int CurrentDurability { get; set; } = 0;
-        public int Worth { get; set; } = 0;
-        public int Speed { get; set; } = 100;
-        public int PhysicalDamage { get; set; } = 0;
-        public int MagicDamage { get; set; } = 0;
-        public int FireDamage { get; set; } = 0;
-        public int LightningDamage { get; set; } = 0;
-        public int IceDamage { get; set; } = 0;
-        public int WindDamage { get; set; } = 0;
-        public IBackPackItem BPItem()
-        {
-            //Name = this.Name;
-            //Desc = this.Desc;
-            //Type = this.Type;
-            //Rarity = this.Rarity;
-            //IsUnique = this.IsUnique;
-            //Lvl = this.Lvl;
-            //MaxDurability = this.MaxDurability;
-            //CurrentDurability = this.CurrentDurability;
-            //Worth = this.Worth;
-            //Speed = this.Speed;
-            //PhysicalDamage = this.PhysicalDamage;
-            //MagicDamage = this.MagicDamage;
-            //FireDamage = this.FireDamage;
-            //LightningDamage = this.LightningDamage;
-            //IceDamage = this.IceDamage;
-            //WindDamage = this.WindDamage;
-            return this;
-        }
-    }
-
-    public class Spell : IBackPackItem
-    {
-        public string Name { get; set; }
-        public string Desc { get; set; } = "What is this? Magic or something?";
-        public int Lvl { get; set; } = 0;
-        public int Worth { get; set; } = 0;
-        public SpellType Type { get; set; } = SpellType.Attack;
-        public RarityType Rarity { get; set; } = RarityType.Common;
-        public bool IsUnique { get; set; } = false;
-        public int ManaCost { get; set; } = 1;
-        public int Speed { get; set; } = 100;
-        public int PhysicalDamage { get; set; } = 0;
-        public int MagicDamage { get; set; } = 0;
-        public int FireDamage { get; set; } = 0;
-        public int LightningDamage { get; set; } = 0;
-        public int IceDamage { get; set; } = 0;
-        public int WindDamage { get; set; } = 0;
-        public IBackPackItem BPItem()
-        {
-            //Name = this.Name;
-            //Desc = this.Desc;
-            //Lvl = this.Lvl;
-            //Worth = this.Worth;
-            //Type = this.Type;
-            //Rarity = this.Rarity;
-            //IsUnique = this.IsUnique;
-            //ManaCost = this.ManaCost;
-            //Speed = this.Speed;
-            //PhysicalDamage = this.PhysicalDamage;
-            //MagicDamage = this.MagicDamage;
-            //FireDamage = this.FireDamage;
-            //LightningDamage = this.LightningDamage;
-            //IceDamage = this.IceDamage;
-            //WindDamage = this.WindDamage;
-            return this;
-        }
-    }
-
-    public class Item : IBackPackItem
-    {
-        public string Name { get; set; }
-        public string Desc { get; set; }
-        public ItemType Type { get; set; }
-        public int Lvl { get; set; } = 0; //used to calculate amount of Repair
-        public int Count { get; set; } = 1;
-        public int Worth { get; set; } = 0;
-        public int Physical { get; set; } = 0;
-        public int Magic { get; set; } = 0;
-        public int Fire { get; set; } = 0;
-        public int Lightning { get; set; } = 0;
-        public int Ice { get; set; } = 0;
-        public int Wind { get; set; } = 0;
-        public IBackPackItem BPItem()
-        {
-            //Name = this.Name;
-            //Desc = this.Desc;
-            //Type = this.Type;
-            //Lvl = this.Lvl;
-            //Count = this.Count;
-            //Worth = this.Worth;
-            //Physical = this.Physical;
-            //Magic = this.Magic;
-            //Fire = this.Magic;
-            //Lightning = this.Lightning;
-            //Ice = this.Ice;
-            //Wind = this.Wind;
-            return this;
-        }
-    }
-
-    public class Armor : IBackPackItem
-    {
-        public string Name { get; set; }
-        public string Desc { get; set; } = "An armor like any other";
-        public ArmorType Type { get; set; }
-        public RarityType Rarity { get; set; }
-        public bool IsUnique { get; set; } = false;
-        public int Lvl { get; set; } = 0;
-        public int MaxDurability { get; set; } = 0;
-        public int CurrentDurability { get; set; } = 0;
-        public int Worth { get; set; } = 0;
-        public int Speed { get; set; } = 100;
-        public int Physical { get; set; } = 0;
-        public int Magic { get; set; } = 0;
-        public int Fire { get; set; } = 0;
-        public int Lightning { get; set; } = 0;
-        public int Ice { get; set; } = 0;
-        public int Wind { get; set; } = 0;
-        public IBackPackItem BPItem()
-        {
-            //Name = this.Name;
-            //Desc = this.Desc;
-            //Type = this.Type;
-            //Rarity = this.Rarity;
-            //IsUnique = this.IsUnique;
-            //Lvl = this.Lvl;
-            //MaxDurability = this.MaxDurability;
-            //CurrentDurability = this.CurrentDurability;
-            //Worth = this.Worth;
-            //Speed = this.Speed;
-            //Physical = this.Physical;
-            //Magic = this.Magic;
-            //Fire = this.Fire;
-            //Lightning = this.Lightning;
-            //Ice = this.Ice;
-            //Wind = this.Wind;
-            return this;
-        }
-    }
-
-    public class Pebble : IBackPackItem
-    {
-        public int Count { get; set; }
-        public IBackPackItem BPItem()
-        {
-            //Count = this.Count;
-            return this;
-        }
-    }
-
-    public class IDidTheThingOwner
-    {
-        // General Stats
-        public int FightsTotal { get; set; } = 0;
-        public int FightsWon { get; set; } = 0;
-        public int FigthsLost { get; set; } = 0;
-        public int PlayerFightsTotal { get; set; } = 0;
-        public int PlayerFightsWon { get; set; } = 0;
-        public int PlayerFightsLost { get; set; } = 0;
-        public int BossesBeat { get; set; } = 0;
-        public int TotalCharactersMade { get; set; } = 0;
-
-        // Things that have been done (cheevos)
-        public bool FirstFight { get; set; } = false;
-        public bool FirstBoss { get; set; } = false;
-        public bool FirstPlayerFight { get; set; } = false;
-    }
-
-    public class IDidTheThingPlayer
-    {
-        // General Stats
-        public int FightsTotal { get; set; } = 0;
-        public int FightsWon { get; set; } = 0;
-        public int FigthsLost { get; set; } = 0;
-        public int PlayerFightsTotal { get; set; } = 0;
-        public int PlayerFightsWon { get; set; } = 0;
-        public int PlayerFightsLost { get; set; } = 0;
-        public int BossesBeat { get; set; } = 0;
-
-        // Things that have been done (cheevos)
-        public bool FirstFight { get; set; } = false;
-        public bool FirstBoss { get; set; } = false;
-        public bool FirstPlayerFight { get; set; } = false;
-    }
-
-    #endregion
-
     public static class RPG
     {
         #region Variables
@@ -732,16 +437,11 @@ namespace PersonalDiscordBot.Classes
 
         #region Combat Methods
 
-        public static void CreateMatch(CommandContext context, OwnerProfile owner)
+        public static string CreateMatch(OwnerProfile owner)
         {
             var match = RPG.MatchList.Find(x => x.Owner == owner);
             if (match == null)
             {
-                if (owner.CurrentCharacter.Loot.Count > 0)
-                {
-                    Events.SendDiscordMessage(context, $"You still have {owner.CurrentCharacter.Loot.Count} pieces of loot to go through before you can start another match");
-                    return;
-                }
                 Toolbox.uDebugAddLog($"Generating new match for {owner.OwnerID}");
                 Match newMatch = new Match() { Owner = owner, MatchStart = DateTime.Now };
                 Enemy newEnemy = Enemies.CopyNewEnemy(Enemies.punchingBag);
@@ -750,26 +450,23 @@ namespace PersonalDiscordBot.Classes
                 Toolbox.uDebugAddLog($"Generated enemy {newEnemy.Name}, set as current enemy and added to the enemy list for {owner.OwnerID}");
                 RPG.MatchList.Add(newMatch);
                 Toolbox.uDebugAddLog($"Successfully generated new match with {newMatch.EnemyList.Count} enemies");
-                CalculateTurn(context, owner);
-                return;
+                return CalculateTurn(owner);
             }
             else
             {
                 Toolbox.uDebugAddLog($"Attempt to generate new match, existing match found for {owner.OwnerID}");
                 TimeSpan time = DateTime.Now - match.MatchStart;
                 TimeSpan timeLeft = (match.LastPlayerTurn + match.TurnTimeLimit) - match.LastPlayerTurn;
-                Events.SendDiscordMessage(context, $"You currently have an active match with {match.CurrentEnemy.Name} that was started {time.Days}D {time.Hours}H {time.Minutes}M {time.Seconds}Secs ago, please attack your current enemy, you have {timeLeft.Days}D {timeLeft.Hours}H {timeLeft.Minutes}M {timeLeft.Seconds}Secs left before you forfeit");
-                return;
+                return $"You currently have an active match with {match.CurrentEnemy.Name} that was started {time.Days}D {time.Hours}H {time.Minutes}M {time.Seconds}Secs ago, please attack your current enemy, you have {timeLeft.Days}D {timeLeft.Hours}H {timeLeft.Minutes}M {timeLeft.Seconds}Secs left before you forfeit";
             }
         }
 
-        public static void AttackEnemy(CommandContext context, OwnerProfile owner, Enemy enemy)
+        public static string AttackEnemy(CommandContext context, OwnerProfile owner, Enemy enemy)
         {
             var turn = RPG.MatchList.Find(x => x.Owner == owner).CurrentTurn;
             if (turn != Turn.Player)
             {
-                Events.SendDiscordMessage(context, $"It isn't {owner.CurrentCharacter.Name}'s turn, it's {enemy.Name}'s turn");
-                return ;
+                return $"It isn't {owner.CurrentCharacter.Name}'s turn, it's {enemy.Name}'s turn";
             }
             Toolbox.uDebugAddLog($"Attacking enemy [C]{owner.CurrentCharacter.Name} [E]{enemy.Name} [ID]{owner.OwnerID}");
             int totalDamage = 0;
@@ -780,18 +477,11 @@ namespace PersonalDiscordBot.Classes
             int iceeDamage = 0;
             int windDamage = 0;
 
-            Toolbox.uDebugAddLog($"physDamage = ({enemy.Weapon.PhysicalDamage} * {enemy.Str}) - ({owner.CurrentCharacter.Armor.Physical} * {owner.CurrentCharacter.Def})");
             physDamage = (owner.CurrentCharacter.Weapon.PhysicalDamage * owner.CurrentCharacter.Str) - (enemy.Armor.Physical * enemy.Def);
-            if (physDamage <= 0) physDamage = 0;
-            Toolbox.uDebugAddLog("Calculating magiDamage");
             magiDamage = CalculateElement(owner.CurrentCharacter.Weapon.MagicDamage, enemy.Armor.Magic);
-            Toolbox.uDebugAddLog("Calculating fireDamage");
             fireDamage = CalculateElement(owner.CurrentCharacter.Weapon.FireDamage, enemy.Armor.Fire);
-            Toolbox.uDebugAddLog("Calculating lighDamage");
             lighDamage = CalculateElement(owner.CurrentCharacter.Weapon.LightningDamage, enemy.Armor.Lightning);
-            Toolbox.uDebugAddLog("Calculating iceeDamage");
             iceeDamage = CalculateElement(owner.CurrentCharacter.Weapon.IceDamage, enemy.Armor.Ice);
-            Toolbox.uDebugAddLog("Calculating windDamage");
             windDamage = CalculateElement(owner.CurrentCharacter.Weapon.WindDamage, enemy.Armor.Wind);
             Toolbox.uDebugAddLog($"Calculated Damage Types: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage} [ID]{owner.OwnerID}");
 
@@ -802,23 +492,18 @@ namespace PersonalDiscordBot.Classes
             if (totalDamage > 0)
             {
                 if (enemy.CurrentHP - totalDamage <= 0)
-                {
-                    EnemyDied(context, owner, enemy);
-                    return;
-                }
+                    return EnemyDied(context, owner, enemy);
                 else
                 {
                     enemy.CurrentHP -= totalDamage;
                     Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} attacked {enemy.Name} [D]{totalDamage} [ID]{owner.OwnerID}");
-                    Events.SendDiscordMessage(context, $"{owner.CurrentCharacter.Name} attacked {enemy.Name} and dealt {totalDamage} damage");
-                    return;
+                    return $"{owner.CurrentCharacter.Name} attacked {enemy.Name} and dealt {totalDamage} damage";
                 }
             }
             else if (totalDamage == 0)
             {
                 Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} attacked {enemy.Name}, didn't deal damage [D]{totalDamage} [ID]{owner.OwnerID}");
-                Events.SendDiscordMessage(context, $"{owner.CurrentCharacter.Name} attacked {enemy.Name} and didn't deal any damage");
-                return;
+                return $"{owner.CurrentCharacter.Name} attacked {enemy.Name} and didn't deal any damage";
             }
             else
             {
@@ -827,12 +512,11 @@ namespace PersonalDiscordBot.Classes
                 else
                     enemy.CurrentHP = enemy.MaxHP;
                 Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} attacked {enemy.Name}, absorbed {totalDamage} [ID]{owner.OwnerID}");
-                Events.SendDiscordMessage(context, $"{owner.CurrentCharacter.Name} attacked, {enemy.Name} absorbed {totalDamage} damage and was healed");
-                return;
+                return $"{owner.CurrentCharacter.Name} attacked, {enemy.Name} absorbed {totalDamage} damage and was healed";
             }
         }
 
-        public static void AttackCharacter(CommandContext context, Enemy enemy, OwnerProfile owner)
+        public static string AttackCharacter(Enemy enemy, OwnerProfile owner)
         {
             Toolbox.uDebugAddLog($"Enemy {enemy.Name} attacking Character {owner.CurrentCharacter.Name} [ID]{owner.OwnerID}");
             int totalDamage = 0;
@@ -845,7 +529,6 @@ namespace PersonalDiscordBot.Classes
 
             Toolbox.uDebugAddLog($"physDamage = ({enemy.Weapon.PhysicalDamage} * {enemy.Str}) - ({owner.CurrentCharacter.Armor.Physical} * {owner.CurrentCharacter.Def})");
             physDamage = (enemy.Weapon.PhysicalDamage * enemy.Str) - (owner.CurrentCharacter.Armor.Physical * owner.CurrentCharacter.Def);
-            if (physDamage <= 0) physDamage = 0;
             Toolbox.uDebugAddLog("Calculating magiDamage");
             magiDamage = CalculateElement(enemy.Weapon.MagicDamage, owner.CurrentCharacter.Armor.Magic);
             Toolbox.uDebugAddLog("Calculating fireDamage");
@@ -864,23 +547,18 @@ namespace PersonalDiscordBot.Classes
             if (totalDamage > 0)
             {
                 if (owner.CurrentCharacter.CurrentHP - totalDamage <= 0)
-                {
-                    CharacterDied(enemy, owner);
-                    return;
-                }
+                    return CharacterDied(enemy, owner);
                 else
                 {
                     owner.CurrentCharacter.CurrentHP -= totalDamage;
                     Toolbox.uDebugAddLog($"{enemy.Name} attacked {owner.CurrentCharacter.Name} and dealt {totalDamage} [ID]{owner.OwnerID}");
-                    Events.SendDiscordMessage(context, $"{enemy.Name} attacked {owner.CurrentCharacter.Name} and dealt {totalDamage} damage");
-                    return;
+                    return $"{enemy.Name} attacked {owner.CurrentCharacter.Name} and dealt {totalDamage} damage";
                 }
             }
             else if (totalDamage == 0)
             {
                 Toolbox.uDebugAddLog($"{enemy.Name} attacked {owner.CurrentCharacter.Name} and didn't deal any damage [D]{totalDamage} [ID]{owner.OwnerID}");
-                Events.SendDiscordMessage(context, $"{enemy.Name} attacked {owner.CurrentCharacter.Name} and didn't deal any damage");
-                return;
+                return $"{enemy.Name} attacked {owner.CurrentCharacter.Name} and didn't deal any damage";
             }
             else
             {
@@ -889,12 +567,11 @@ namespace PersonalDiscordBot.Classes
                 else
                     owner.CurrentCharacter.CurrentHP = owner.CurrentCharacter.MaxHP;
                 Toolbox.uDebugAddLog($"{enemy.Name} attacked, {owner.CurrentCharacter.Name} absorbed {totalDamage} damage and was healed");
-                Events.SendDiscordMessage(context, $"{enemy.Name} attacked, {owner.CurrentCharacter.Name} absorbed {totalDamage} damage and was healed");
-                return;
+                return $"{enemy.Name} attacked, {owner.CurrentCharacter.Name} absorbed {totalDamage} damage and was healed";
             }
         }
 
-        public static void EnemyDied(CommandContext context, OwnerProfile owner, Enemy enemy)
+        public static string EnemyDied(CommandContext context, OwnerProfile owner, Enemy enemy)
         {
             Toolbox.uDebugAddLog($"{owner.OwnerID} defeated {enemy.Name}");
             var match = RPG.MatchList.Find(x => x.Owner == owner);
@@ -903,31 +580,24 @@ namespace PersonalDiscordBot.Classes
             match.ExperienceEarned += enemy.ExpLoot;
             Toolbox.uDebugAddLog($"Removed {enemy.Name} from the enemy list, added to the defeated enemy list and added ExpLoot");
             if (RPG.MatchList.Find(x => x.Owner == owner).EnemyList.Count <= 0)
-            {
-                Events.SendDiscordMessage(context, $"You have defeated {enemy.Name} and earned {enemy.ExpLoot} EXP!");
-                MatchOver(context, owner, enemy, MatchCompleteResult.Won);
-                return;
-            }
+                return MatchOver(context, owner, enemy, MatchCompleteResult.Won);
             else
-            {
-                NextEnemy(context, owner, enemy);
-                return;
-            }
+                return NextEnemy(owner, enemy);
         }
 
-        public static void CharacterDied(Enemy enemy, OwnerProfile owner)
+        public static string CharacterDied(Enemy enemy, OwnerProfile owner)
         {
             Toolbox.uDebugAddLog($"{enemy.Name} defeated {owner.OwnerID}");
-            MatchOver(owner, enemy, MatchCompleteResult.Lost);
+            return MatchOver(owner, enemy, MatchCompleteResult.Lost);
         }
 
-        public static void CharacterDied(CommandContext context, Enemy enemy, OwnerProfile owner)
+        public static string CharacterDied(CommandContext context, Enemy enemy, OwnerProfile owner)
         {
             Toolbox.uDebugAddLog($"{enemy.Name} defeated {owner.OwnerID}");
-            MatchOver(owner, enemy, MatchCompleteResult.Lost);
+            return MatchOver(owner, enemy, MatchCompleteResult.Lost);
         }
 
-        public static void MatchOver(OwnerProfile owner, Enemy enemy, MatchCompleteResult result)
+        public static string MatchOver(OwnerProfile owner, Enemy enemy, MatchCompleteResult result)
         {
             owner.CurrentCharacter.CurrentHP = owner.CurrentCharacter.MaxHP;
             Toolbox.uDebugAddLog($"Match complete, healed {owner.CurrentCharacter.Name} to full health [CHP]{owner.CurrentCharacter.CurrentHP} [MHP]{owner.CurrentCharacter.MaxHP} [ID]{owner.OwnerID}");
@@ -942,7 +612,7 @@ namespace PersonalDiscordBot.Classes
                     Events.CompleteMatch(owner, match, time, result);
                     RPG.MatchList.Remove(match);
                     Toolbox.uDebugAddLog($"Removed match from match list for {owner.OwnerID}");
-                    return;
+                    return string.Empty;
                 case MatchCompleteResult.Lost:
                     var match2 = RPG.MatchList.Find(x => x.Owner == owner);
                     var defEnemies2 = match2.DefeatedEnemies.Count;
@@ -952,7 +622,7 @@ namespace PersonalDiscordBot.Classes
                     Events.CompleteMatch(owner, match2, time2, result);
                     RPG.MatchList.Remove(match2);
                     Toolbox.uDebugAddLog($"Removed match from match list for {owner.OwnerID}");
-                    return;
+                    return string.Empty;
                 case MatchCompleteResult.Forfeit:
                     var match3 = RPG.MatchList.Find(x => x.Owner == owner);
                     var timeSpan = match3.TurnTimeLimit;
@@ -962,13 +632,14 @@ namespace PersonalDiscordBot.Classes
                     Events.CompleteMatch(owner, match3, timeSpan, result);
                     RPG.MatchList.Remove(match3);
                     Toolbox.uDebugAddLog($"Removed match from match list for {owner.OwnerID}");
-                    return;
+                    return string.Empty;
             }
             Toolbox.uDebugAddLog($"MATCHOVER UNREACHABLE WAS REACHED");
             Events.uStatusUpdateExt($"MATCHOVER UNREACHABLE WAS REACHED, PLEASE LET THE DEVELOPER KNOW!!!!");
+            return $"MATCHOVER UNREACHABLE WAS REACHED, PLEASE LET THE DEVELOPER KNOW!!!!";
         }
 
-        public static void MatchOver(CommandContext context, OwnerProfile owner, Enemy enemy, MatchCompleteResult result)
+        public static string MatchOver(CommandContext context, OwnerProfile owner, Enemy enemy, MatchCompleteResult result)
         {
             owner.CurrentCharacter.CurrentHP = owner.CurrentCharacter.MaxHP;
             Toolbox.uDebugAddLog($"Match complete, healed {owner.CurrentCharacter.Name} to full health [CHP]{owner.CurrentCharacter.CurrentHP} [MHP]{owner.CurrentCharacter.MaxHP} [ID]{owner.OwnerID}");
@@ -984,7 +655,7 @@ namespace PersonalDiscordBot.Classes
                     Events.CompleteMatch(context, owner, copyMatch, time, result);
                     RPG.MatchList.Remove(match);
                     Toolbox.uDebugAddLog($"Removed match from match list for {owner.OwnerID}");
-                    return;
+                    return string.Empty;
                 case MatchCompleteResult.Lost:
                     var match2 = RPG.MatchList.Find(x => x.Owner == owner);
                     var defEnemies2 = match2.DefeatedEnemies.Count;
@@ -995,7 +666,7 @@ namespace PersonalDiscordBot.Classes
                     Events.CompleteMatch(context, owner, copyMatch2, time2, result);
                     RPG.MatchList.Remove(match2);
                     Toolbox.uDebugAddLog($"Removed match from match list for {owner.OwnerID}");
-                    return;
+                    return string.Empty;
                 case MatchCompleteResult.Forfeit:
                     var match3 = RPG.MatchList.Find(x => x.Owner == owner);
                     var timeSpan = match3.TurnTimeLimit;
@@ -1006,10 +677,11 @@ namespace PersonalDiscordBot.Classes
                     Events.CompleteMatch(context, owner, copyMatch3, timeSpan, result);
                     RPG.MatchList.Remove(match3);
                     Toolbox.uDebugAddLog($"Removed match from match list for {owner.OwnerID}");
-                    return;
+                    return string.Empty;
             }
             Toolbox.uDebugAddLog($"MATCHOVER UNREACHABLE WAS REACHED");
             Events.uStatusUpdateExt($"MATCHOVER UNREACHABLE WAS REACHED, PLEASE LET THE DEVELOPER KNOW!!!!");
+            return $"MATCHOVER UNREACHABLE WAS REACHED, PLEASE LET THE DEVELOPER KNOW!!!!";
         }
 
         public static async Task EndOfMatchLootAsync(MatchArgs args)
@@ -1018,13 +690,7 @@ namespace PersonalDiscordBot.Classes
             {
                 case MatchCompleteResult.Won:
                     await args.Context.Channel.SendMessageAsync($"{args.Context.Message.Author.Mention} You have defeated {args.Match.DefeatedEnemies.Count} enemies and completed the match!");
-                    int lootCount = rng.Next(rng.Next(0, 2), 3 + (rng.Next(0, args.Match.DefeatedEnemies.Count)));
-                    for (int i = lootCount; i <= 0; i--)
-                    {
-                        var loot = LootDrop.PickLoot(args.Owner.CurrentCharacter);
-                        args.Owner.CurrentCharacter.Loot.Add(loot);
-                    }
-                    await EmptyLoot(args.Context);
+                    await args.Context.Channel.SendMessageAsync($"{args.Context.Message.Author.Mention} Here is where you would get your loot! {args.Owner.OwnerID} {args.Match.DefeatedEnemies.Count}");
                     break;
                 case MatchCompleteResult.Lost:
                     await args.Context.Channel.SendMessageAsync($"You were defeated in combat after defeating {args.Match.DefeatedEnemies.Count} enemies");
@@ -1035,67 +701,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static async Task EmptyLoot(CommandContext context)
-        {
-            var owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
-            var timeStamp = DateTime.Now;
-            bool emptiedLoot = owner.CurrentCharacter.Loot.Count > 0 ? false : true;
-            while (!emptiedLoot)
-            {
-                owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
-                var loot = owner.CurrentCharacter.Loot[0];
-                var lootMsg = await context.Channel.SendMessageAsync($"{LootDrop.GetLootInfo(loot)}{Environment.NewLine} What would you like to do with this loot? (trash, keep, sell, cancel)");
-                bool lootResp = false;
-                while (!lootResp)
-                {
-                    var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
-                    foreach (var msg in msgList)
-                    {
-                        if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > lootMsg.Timestamp.DateTime))
-                        {
-                            string answer = msg.Content.ToString().ToLower();
-                            switch (answer)
-                            {
-                                case "trash":
-                                    owner.CurrentCharacter.Loot.Remove(loot);
-                                    lootResp = true;
-                                    await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {loot.BPItem().ToString().Replace("PersonalDiscordBot.Classes.", "")} was trashed");
-                                    break;
-                                case "keep":
-                                    owner.CurrentCharacter.Backpack.Stored.Add(loot);
-                                    lootResp = true;
-                                    await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {loot.BPItem().ToString().Replace("PersonalDiscordBot.Classes.", "")} was placed in your trusty backpack");
-                                    break;
-                                case "sell":
-                                    dynamic retLoot = loot.BPItem();
-                                    owner.Currency += retLoot.Worth;
-                                    owner.CurrentCharacter.Loot.Remove(loot);
-                                    await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {loot.BPItem().ToString().Replace("PersonalDiscordBot.Classes.", "")} was sold for {retLoot.Worth} currency");
-                                    break;
-                                case "cancel":
-                                    lootResp = true;
-                                    emptiedLoot = true;
-                                    await context.Channel.SendMessageAsync($"Canceled, you still have {owner.CurrentCharacter.Loot.Count} loot to go through before you can start another match, you can go through your loot later by using ;test loot");
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                    await Task.Delay(1000);
-                }
-                if (owner.CurrentCharacter.Loot.Count <= 0)
-                    emptiedLoot = true;
-                if (timeStamp + TimeSpan.FromMinutes(5) <= DateTime.Now)
-                {
-                    await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} A response hasn't been received in 5 minutes, you can go through your loot later by using ;test loot");
-                    return;
-                }
-            }
-            await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} You don't have any loot to go through currently");
-        }
-
-        public static void NextEnemy(CommandContext context, OwnerProfile owner, Enemy enemy)
+        public static string NextEnemy(OwnerProfile owner, Enemy enemy)
         {
             Toolbox.uDebugAddLog($"{owner.OwnerID} defeated {enemy.Name}, switching enemies");
             Match match = RPG.MatchList.Find(x => x.Owner == owner);
@@ -1104,12 +710,12 @@ namespace PersonalDiscordBot.Classes
             Enemy newEnemy = match.EnemyList[0];
             RPG.MatchList.Find(x => x.Owner == owner).CurrentEnemy = newEnemy;
             RPG.MatchList.Find(x => x.Owner == owner).CurrentTurn = Turn.NotChosen;
-            CalculateTurn(context, owner);
+            CalculateTurn(owner);
             Toolbox.uDebugAddLog($"Changed {enemy.Name} to the current enemy");
-            Events.SendDiscordMessage(context, $"You have defeated {enemy.Name} and are now fighting {newEnemy.Name}. Enemies left: {match.EnemyList.Count}");
+            return $"You have defeated {enemy.Name} and are now fighting {newEnemy.Name}. Enemies left: {match.EnemyList.Count}";
         }
 
-        public static void CalculateTurn(CommandContext context, OwnerProfile owner)
+        public static string CalculateTurn(OwnerProfile owner)
         {
             string result = string.Empty;
             var match = RPG.MatchList.Find(x => x.Owner == owner);
@@ -1121,7 +727,6 @@ namespace PersonalDiscordBot.Classes
                 match.PlayerTurnTime = match.PlayerSpeedTime;
                 match.EnemyTurnTime = match.EnemySpeedTime;
                 Toolbox.uDebugAddLog($"Initial Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
-                return;
             }
             if (match.PlayerTurnTime > match.EnemyTurnTime)
             {
@@ -1130,9 +735,7 @@ namespace PersonalDiscordBot.Classes
                 match.PlayerTurnTime = match.PlayerTurnTime - match.EnemyTurnTime;
                 match.EnemyTurnTime = match.EnemySpeedTime;
                 Toolbox.uDebugAddLog($"Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
-                AttackCharacter(context, match.CurrentEnemy, owner);
-                CalculateTurn(context, owner);
-                return;
+                result = $"{AttackCharacter(match.CurrentEnemy, owner)}{Environment.NewLine}{CalculateTurn(owner)}";
             }
             else
             {
@@ -1142,8 +745,8 @@ namespace PersonalDiscordBot.Classes
                 match.PlayerTurnTime = match.PlayerSpeedTime;
                 Toolbox.uDebugAddLog($"Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
                 result = $"It is {owner.CurrentCharacter.Name}'s turn";
-                return;
             }
+            return result;
         }
 
         public static int CalculateSpeed(this Character character)
@@ -1172,14 +775,308 @@ namespace PersonalDiscordBot.Classes
         #endregion
     }
 
+    #region Base Classes
+
+    public class OwnerProfile
+    {
+        public ulong OwnerID { get; set; }
+        public int Currency { get; set; } = 100;
+        public int TotalPebbles { get; set; } = 0;
+        public List<Character> CharacterList = new List<Character>();
+        public Character CurrentCharacter { get; set; }
+        public IDidTheThingOwner ThingsDone = new IDidTheThingOwner();
+    }
+
+    public class Character
+    {
+        public ulong OwnerID { get; set; }
+        public string Name { get; set; }
+        public string Desc { get; set; } = "A new adventurer set out to..... Adventure?";
+        public CharacterClass Class { get; set; }
+        public Weapon Weapon { get; set; }
+        public Armor Armor { get; set; }
+        public BackPack Backpack { get; set; }
+        public List<Spell> SpellBook = new List<Spell>();
+        public IDidTheThingPlayer ThingsDone = new IDidTheThingPlayer();
+        public int Pebbles { get; set; } = 0;
+        public int Lvl { get; set; }
+        public int Exp { get; set; }
+        public int MaxHP { get; set; }
+        public int CurrentHP { get; set; }
+        public int MaxMana { get; set; }
+        public int CurrentMana { get; set; }
+        public int Str { get; set; }
+        public int Def { get; set; }
+        public int Dex { get; set; }
+        public int Int { get; set; }
+        public int Spd { get; set; }
+        public int Lck { get; set; }
+    }
+
+    public class Match
+    {
+        public OwnerProfile Owner { get; set; }
+        public DateTime MatchStart { get; set; }
+        public DateTime LastPlayerTurn { get; set; }
+        public TimeSpan TurnTimeLimit { get; set; } = TimeSpan.FromDays(3);
+        public List<Enemy> EnemyList { get; set; } = new List<Enemy>();
+        public List<Enemy> DefeatedEnemies { get; set; } = new List<Enemy>();
+        public Enemy CurrentEnemy { get; set; }
+        public Turn CurrentTurn { get; set; } = Turn.NotChosen;
+        public int EnemyTurnTime { get; set; }
+        public int PlayerTurnTime { get; set; }
+        public int EnemySpeedTime { get; set; }
+        public int PlayerSpeedTime { get; set; }
+        public int ExperienceEarned { get; set; }
+    }
+
+    public class PlayerMatch
+    {
+        public Character Player1 { get; set; }
+        public Character Player2 { get; set; }
+        public Turn CurrentTurn { get; set; }
+        public TimeSpan TurnTimeLimit { get; set; } = TimeSpan.FromDays(1);
+    }
+
+    public class Enemy
+    {
+        public string Name { get; set; }
+        public string Desc { get; set; } = "I want your bod, not in a sexual or romantic way. But more of a dead and ragdoll kinda way";
+        public Weapon Weapon { get; set; }
+        public Armor Armor { get; set; }
+        public int Lvl { get; set; }
+        public int ExpLoot { get; set; }
+        public int MaxHP { get; set; }
+        public int CurrentHP { get; set; }
+        public int Mana { get; set; }
+        public int Str { get; set; }
+        public int Def { get; set; }
+        public int Dex { get; set; }
+        public int Int { get; set; }
+        public int Spd { get; set; }
+        public int Lck { get; set; }
+    }
+
+    public class Boss : Enemy
+    {
+        public List<IBackPackItem> Loot { get; set; } = new List<IBackPackItem>();
+    }
+
+    public class BackPack
+    {
+        public string Name { get; set; } = "BackPack";
+        public string Desc { get; set; } = "Your trusty friend you shove shit into";
+        public int Capacity { get; set; } = 10;
+        public int Weight { get; set; } = 10;
+        public List<IBackPackItem> Stored = new List<IBackPackItem>();
+    }
+
+    public class Weapon : IBackPackItem
+    {
+        public string Name { get; set; }
+        public string Desc { get; set; } = "A weapon like any other";
+        public WeaponType Type { get; set; }
+        public RarityType Rarity { get; set; } = RarityType.Common;
+        public bool IsUnique { get; set; } = false;
+        public int Lvl { get; set; } = 0;
+        public int MaxDurability { get; set; } = 0;
+        public int CurrentDurability { get; set; } = 0;
+        public int Worth { get; set; } = 0;
+        public int Speed { get; set; } = 100;
+        public int PhysicalDamage { get; set; } = 0;
+        public int MagicDamage { get; set; } = 0;
+        public int FireDamage { get; set; } = 0;
+        public int LightningDamage { get; set; } = 0;
+        public int IceDamage { get; set; } = 0;
+        public int WindDamage { get; set; } = 0;
+        public IBackPackItem BPItem()
+        {
+            //Name = this.Name;
+            //Desc = this.Desc;
+            //Type = this.Type;
+            //Rarity = this.Rarity;
+            //IsUnique = this.IsUnique;
+            //Lvl = this.Lvl;
+            //MaxDurability = this.MaxDurability;
+            //CurrentDurability = this.CurrentDurability;
+            //Worth = this.Worth;
+            //Speed = this.Speed;
+            //PhysicalDamage = this.PhysicalDamage;
+            //MagicDamage = this.MagicDamage;
+            //FireDamage = this.FireDamage;
+            //LightningDamage = this.LightningDamage;
+            //IceDamage = this.IceDamage;
+            //WindDamage = this.WindDamage;
+            return this;
+        }
+    }
+
+    public class Spell : IBackPackItem
+    {
+        public string Name { get; set; }
+        public string Desc { get; set; } = "What is this? Magic or something?";
+        public int Lvl { get; set; } = 0;
+        public int Worth { get; set; } = 0;
+        public SpellType Type { get; set; } = SpellType.Attack;
+        public RarityType Rarity { get; set; } = RarityType.Common;
+        public bool IsUnique { get; set; } = false;
+        public int ManaCost { get; set; } = 1;
+        public int Speed { get; set; } = 100;
+        public int PhysicalDamage { get; set; } = 0;
+        public int MagicDamage { get; set; } = 0;
+        public int FireDamage { get; set; } = 0;
+        public int LightningDamage { get; set; } = 0;
+        public int IceDamage { get; set; } = 0;
+        public int WindDamage { get; set; } = 0;
+        public IBackPackItem BPItem()
+        {
+            //Name = this.Name;
+            //Desc = this.Desc;
+            //Lvl = this.Lvl;
+            //Worth = this.Worth;
+            //Type = this.Type;
+            //Rarity = this.Rarity;
+            //IsUnique = this.IsUnique;
+            //ManaCost = this.ManaCost;
+            //Speed = this.Speed;
+            //PhysicalDamage = this.PhysicalDamage;
+            //MagicDamage = this.MagicDamage;
+            //FireDamage = this.FireDamage;
+            //LightningDamage = this.LightningDamage;
+            //IceDamage = this.IceDamage;
+            //WindDamage = this.WindDamage;
+            return this;
+        }
+    }
+
+    public class Item : IBackPackItem
+    {
+        public string Name { get; set; }
+        public string Desc { get; set; }
+        public ItemType Type { get; set; }
+        public int Lvl { get; set; } = 0; //used to calculate amount of Repair
+        public int Count { get; set; } = 1;
+        public int Worth { get; set; } = 0;
+        public int Physical { get; set; } = 0;
+        public int Magic { get; set; } = 0;
+        public int Fire { get; set; } = 0;
+        public int Lightning { get; set; } = 0;
+        public int Ice { get; set; } = 0;
+        public int Wind { get; set; } = 0;
+        public IBackPackItem BPItem()
+        {
+            //Name = this.Name;
+            //Desc = this.Desc;
+            //Type = this.Type;
+            //Lvl = this.Lvl;
+            //Count = this.Count;
+            //Worth = this.Worth;
+            //Physical = this.Physical;
+            //Magic = this.Magic;
+            //Fire = this.Magic;
+            //Lightning = this.Lightning;
+            //Ice = this.Ice;
+            //Wind = this.Wind;
+            return this;
+        }
+    }
+
+    public class Armor : IBackPackItem
+    {
+        public string Name { get; set; }
+        public string Desc { get; set; } = "An armor like any other";
+        public ArmorType Type { get; set; }
+        public RarityType Rarity { get; set; }
+        public bool IsUnique { get; set; } = false;
+        public int Lvl { get; set; } = 0;
+        public int MaxDurability { get; set; } = 0;
+        public int CurrentDurability { get; set; } = 0;
+        public int Worth { get; set; } = 0;
+        public int Speed { get; set; } = 100;
+        public int Physical { get; set; } = 0;
+        public int Magic { get; set; } = 0;
+        public int Fire { get; set; } = 0;
+        public int Lightning { get; set; } = 0;
+        public int Ice { get; set; } = 0;
+        public int Wind { get; set; } = 0;
+        public IBackPackItem BPItem()
+        {
+            //Name = this.Name;
+            //Desc = this.Desc;
+            //Type = this.Type;
+            //Rarity = this.Rarity;
+            //IsUnique = this.IsUnique;
+            //Lvl = this.Lvl;
+            //MaxDurability = this.MaxDurability;
+            //CurrentDurability = this.CurrentDurability;
+            //Worth = this.Worth;
+            //Speed = this.Speed;
+            //Physical = this.Physical;
+            //Magic = this.Magic;
+            //Fire = this.Fire;
+            //Lightning = this.Lightning;
+            //Ice = this.Ice;
+            //Wind = this.Wind;
+            return this;
+        }
+    }
+    
+    public class Pebble : IBackPackItem
+    {
+        public int Count { get; set; }
+        public IBackPackItem BPItem()
+        {
+            //Count = this.Count;
+            return this;    
+        }
+    }
+
+    public class IDidTheThingOwner
+    {
+        // General Stats
+        public int FightsTotal { get; set; } = 0;
+        public int FightsWon { get; set; } = 0;
+        public int FigthsLost { get; set; } = 0;
+        public int PlayerFightsTotal { get; set; } = 0;
+        public int PlayerFightsWon { get; set; } = 0;
+        public int PlayerFightsLost { get; set; } = 0;
+        public int BossesBeat { get; set; } = 0;
+        public int TotalCharactersMade { get; set; } = 0;
+
+        // Things that have been done (cheevos)
+        public bool FirstFight { get; set; } = false;
+        public bool FirstBoss { get; set; } = false;
+        public bool FirstPlayerFight { get; set; } = false; 
+    }
+
+    public class IDidTheThingPlayer
+    {
+        // General Stats
+        public int FightsTotal { get; set; } = 0;
+        public int FightsWon { get; set; } = 0;
+        public int FigthsLost { get; set; } = 0;
+        public int PlayerFightsTotal { get; set; } = 0;
+        public int PlayerFightsWon { get; set; } = 0;
+        public int PlayerFightsLost { get; set; } = 0;
+        public int BossesBeat { get; set; } = 0;
+
+        // Things that have been done (cheevos)
+        public bool FirstFight { get; set; } = false;
+        public bool FirstBoss { get; set; } = false;
+        public bool FirstPlayerFight { get; set; } = false;
+    }
+
+    #endregion
+
     public class LootDrop
     {
-        #region LootDrop General
-
+       
         /// <summary>
         /// The range of the probability values (dividing a value in _lootProbabilites by this would give a probability in the range 0..1).
         /// </summary>
         protected const int MaxProbability = 1000;
+
+        #region LootDrop General
 
         /// <summary>
         /// The loot types.
@@ -1345,16 +1242,6 @@ namespace PersonalDiscordBot.Classes
                 return LootType.Nothing;
         }
 
-        public static string GetLootInfo(IBackPackItem loot)
-        {
-            string result = $"Loot Type: {loot.BPItem().ToString().Replace("PersonalDiscordBot.Classes.", "")}";
-            foreach (var prop in loot.GetType().GetProperties())
-            {
-                result = $"{result}{Environment.NewLine}{prop.Name}: {prop.GetValue(loot)}";
-            }
-            return result;
-        }
-
         #endregion
 
         #region LootDrop Items
@@ -1390,9 +1277,9 @@ namespace PersonalDiscordBot.Classes
         {
             var chance = ChanceRoll(5);
             if (chance)
-                return Items.CopyNewItem(Items.repairPowderPack);
+                return Items.repairPowderPack;
             else
-                return Items.CopyNewItem(Items.repairPowder);
+                return Items.repairPowder;
         }
 
         public static Item ItemPicker(RarityType rarity, Character character)
@@ -1406,13 +1293,13 @@ namespace PersonalDiscordBot.Classes
                     _item = new Item { Worth = CurrencyPicker(character.Lvl, rarityValue), Type = type};
                     break;
                 case ItemType.Restorative:
-                    _item = Items.CopyNewItem(Items.itemRestorativeList[rng.Next(0, Items.itemRestorativeList.Count)]);
+                    _item = Items.itemRestorativeList[rng.Next(0, Items.itemRestorativeList.Count)];
                     break;
                 case ItemType.Buff:
-                    _item = Items.CopyNewItem(Items.itemBuffList[rng.Next(0, Items.itemBuffList.Count)]);
+                    _item = Items.itemBuffList[rng.Next(0, Items.itemBuffList.Count)];
                     break;
                 case ItemType.Damaging:
-                    _item = Items.CopyNewItem(Items.itemDamagingList[rng.Next(0, Items.itemDamagingList.Count)]);
+                    _item = Items.itemDamagingList[rng.Next(0, Items.itemDamagingList.Count)];
                     break;
                 case ItemType.Repair:
                     _item = RepairPicker();
@@ -1510,19 +1397,19 @@ namespace PersonalDiscordBot.Classes
             switch (charClass)
             {
                 case CharacterClass.Warrior:
-                    armorArray = new int[] { 100, 400, MaxProbability}; // Light(10%), Medium(30%), Heavy(60%)
+                    armorArray = new int[] { 200, 400, MaxProbability}; // Light(20%), Medium(20%), Heavy(60%)
                     break;
                 case CharacterClass.Dragoon:
-                    armorArray = new int[] { 100, 600, MaxProbability }; // Light(10%), Medium(50%), Heavy(40%)
+                    armorArray = new int[] { 200, 600, MaxProbability }; // Light(40%), Medium(40%), Heavy(20%)
                     break;
                 case CharacterClass.Mage:
-                    armorArray = new int[] { 800, 900, MaxProbability }; // Light(80%), Medium(10%), Heavy(10%)
+                    armorArray = new int[] { 600, 800, MaxProbability }; // Light(60%), Medium(20%), Heavy(20%)
                     break;
                 case CharacterClass.Necromancer:
-                    armorArray = new int[] { 100, 800, MaxProbability }; // Light(10%), Medium(80%), Heavy(10%)
+                    armorArray = new int[] { 400, 800, MaxProbability }; // Light(40%), Medium(40%), Heavy(20%)
                     break;
                 case CharacterClass.Rogue:
-                    armorArray = new int[] { 100, 900, MaxProbability }; // Light(10%), Medium(80%), Heavy(10%)
+                    armorArray = new int[] { 200, 800, MaxProbability }; // Light(20%), Medium(60%), Heavy(20%)
                     break;
             }
             return armorArray;
@@ -1531,6 +1418,7 @@ namespace PersonalDiscordBot.Classes
         public static Armor ArmorPicker(RarityType rarityType, Character chara)
         {
             Armor armor = new Armor();
+            armor.Rarity = rarityType;
             int rarityValue = LootDrop.GetRarityValue(rarityType);
             bool isUnique = ChanceRoll(30);
             armor.Type = ChooseArmorType(chara);
@@ -2165,13 +2053,6 @@ namespace PersonalDiscordBot.Classes
             return weap;
         }
 
-        public static Weapon CopyNewWeapon(Weapon weaponToCopy)
-        {
-            Weapon newWeap = new Weapon();
-            PropertyCopy.Copy(weaponToCopy, newWeap);
-            return newWeap;
-        }
-
         #endregion
 
         #region Static Weapons
@@ -2190,16 +2071,12 @@ namespace PersonalDiscordBot.Classes
 
         #endregion
 
-        #region Weapon Lists
-
         public static List<Weapon> weaponList = new List<Weapon>()
         {
             rogueDaggers,
             dragonSpear,
             stick
         };
-
-        #endregion
     }
 
     public static class Spells
@@ -2905,13 +2782,6 @@ namespace PersonalDiscordBot.Classes
                     }
                 }
         }
-
-        public static Spell CopyNewSpell(Spell spellToCopy)
-        {
-            Spell newSpell = new Spell();
-            PropertyCopy.Copy(spellToCopy, newSpell);
-            return newSpell;
-        }
         
         #endregion
 
@@ -3030,14 +2900,13 @@ namespace PersonalDiscordBot.Classes
         }
 
         #endregion
-
         #region Static Armors
 
         public static Armor knightArmor = new Armor { Name = "Novice Knight Armor", Type = ArmorType.Heavy, Lvl = 1, Speed = 50, Worth = 100, MaxDurability = 20, CurrentDurability = 20, Physical = 100, Desc = "Some beatup old armor you found in the old shed out back, next to the bones of an old dog... what was it's name again?" };
         public static Armor mageRobe = new Armor { Name = "Novice Mages' Robe", Type = ArmorType.Light, CurrentDurability = 10, MaxDurability = 10, Speed = 150, Worth = 100, Magic = 100, Lvl = 1, Physical = 10, Desc = "These might be 'Robes' if you believe hard enough, go on, believe... I can wait" };
         public static Armor theiveGarb = new Armor { Name = "Novice Theives Garb", Type = ArmorType.Light, CurrentDurability = 15, Lvl = 1, MaxDurability = 15, Speed = 130, Worth = 100, Physical = 70, Magic = 30, Desc = "What better way to rock your first gear then to steal it, even if it was from old miss bitchface who is a blind amputee" };
         public static Armor undeadArmor = new Armor { Name = "Undead Armor", Type = ArmorType.Medium, CurrentDurability = 18, MaxDurability = 18, Lvl = 1, Speed = 80, Worth = 100, Physical = 85, Magic = 30, Desc = "Nothing weird here, you just picked up the bones from some dead people and strapped it to your body... they weren't using it anyway" };
-        public static Armor dragonArmor = new Armor { Name = "Novice Dragon Hunter Armor", Type = ArmorType.Medium, Lvl = 1, MaxDurability = 20, CurrentDurability = 20, Speed = 100, Worth = 100, Physical = 4, Fire = 10, Ice = 10, Lightning = 10, Wind = 10, Desc = "Bad. Ass. Bad. Ass. Bad. Ass. Bad. Ass. - Naive thoughts running in your mind" };
+        public static Armor dragonArmor = new Armor { Name = "Novice Dragon Hunter Armor", Type = ArmorType.Medium, Lvl = 1, MaxDurability = 20, CurrentDurability = 20, Speed = 100, Worth = 100, Physical = 80, Fire = 10, Ice = 10, Lightning = 10, Wind = 10, Desc = "Bad. Ass. Bad. Ass. Bad. Ass. Bad. Ass. - Naive thoughts running in your mind" };
         public static Armor royalRobeArmor = new Armor { Name = "Royal Robes", Type = ArmorType.Light, Lvl = 1, MaxDurability = 10, CurrentDurability = 10, Speed = 150, Worth = 100, Magic = 100, Physical = 10, Desc = "Yer a hairy Wizard!" };
         public static Armor glassArmor = new Armor { Name = "Glass Armor", Type = ArmorType.Light, Lvl = 1, MaxDurability = 10, CurrentDurability = 10, Speed = 150, Worth = 100, Magic = 100, Physical = 10, Desc = "The Emperor's new armor" };
         public static Armor leatheryArmor = new Armor { Name = "Skin Tight Leather Armor", Type = ArmorType.Medium, Lvl = 1, MaxDurability = 18, CurrentDurability = 18, Speed = 80, Worth = 100, Physical = 85, Magic = 20, Desc = "Why do Rogues wear leather? It's made of hide" };
@@ -3046,13 +2915,11 @@ namespace PersonalDiscordBot.Classes
         public static Armor imperialArmor = new Armor { Name = "Imperial Armor", Type = ArmorType.Heavy, Lvl = 1, MaxDurability = 30, CurrentDurability = 30, Speed = 60, Worth = 100, Physical = 100, Desc = "Armor that tends to be weaker around the knees. Mind the arrows" };
 
         #endregion
-
         #region Enemy Armors
 
         public static Armor basicEnemyArmor = new Armor { Name = "Enemy Armor", Desc = "Armor forged from the depths of the developers minds with a unique name", Fire = 50, Ice = 50, Lightning = 50, Magic = 50, Wind = 50, Physical = 5, Speed = 100, MaxDurability = -1, CurrentDurability = -1, IsUnique = false, Lvl = 1, Rarity = RarityType.Common, Type = ArmorType.Light, Worth = 0 };
 
         #endregion
-
         #region Armor Lists
         public static List<Armor> lightArmorList = new List<Armor>()
         {
@@ -3073,8 +2940,6 @@ namespace PersonalDiscordBot.Classes
         };
         #endregion
 
-        #region Armor Methods
-
         public static Armor ArmorUniqueGen(Armor armor, RarityType rarity, int rarityValue, int charLevel)
         {
             armor.IsUnique = true;
@@ -3087,6 +2952,20 @@ namespace PersonalDiscordBot.Classes
                     int lNameIndex = armorLightName.ToArrayLength();
                     armor.Name = armorLightName[lNameIndex];
                     ArmorUniqueLightAddition(armor, rarityValue, charLevel, lNameIndex);
+                    break;
+
+                case ArmorType.Medium:
+                    var armorMediumName = ArmorUniqueMediumNames(rarity);
+                    int mNameIndex = armorMediumName.ToArrayLength();
+                    armor.Name = armorMediumName[mNameIndex];
+                    ArmorUniqueMediumAddition(armor, rarityValue, charLevel, mNameIndex);
+                    break;
+
+                case ArmorType.Heavy:
+                    var armorHeavyName = ArmorUniqueHeavyNames(rarity);
+                    int hNameIndex = armorHeavyName.ToArrayLength();
+                    armor.Name = armorHeavyName[hNameIndex];
+                    ArmorUniqueHeavyAddition(armor, rarityValue, charLevel, hNameIndex);
                     break;
             }
 
@@ -3111,14 +2990,14 @@ namespace PersonalDiscordBot.Classes
                     break;
                 case ArmorType.Medium:
                     int mediumNum = rng.Next(0, armorBasicMediumNames.ToArrayLength());
-                    armor.Name = $"{rarity} {armorBasicLightNames[mediumNum]}";
+                    armor.Name = $"{rarity} {armorBasicMediumNames[mediumNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 60;
                     armor.Physical = ((rng.Next(9, 12) + typeCount + armor.Lvl));
                     break;
                 case ArmorType.Heavy:
                     int heavyNum = rng.Next(0, armorBasicHeavyNames.ToArrayLength());
-                    armor.Name = $"{rarity} {armorBasicLightNames[heavyNum]}";
+                    armor.Name = $"{rarity} {armorBasicHeavyNames[heavyNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 40;
                     armor.Physical = ((rng.Next(18, 21) + typeCount + armor.Lvl));
@@ -3160,15 +3039,6 @@ namespace PersonalDiscordBot.Classes
                 }
 
         }
-
-        public static Armor CopyNewArmor(Armor armorToCopy)
-        {
-            Armor newArmor = new Armor();
-            PropertyCopy.Copy(armorToCopy, newArmor);
-            return newArmor;
-        }
-
-        #endregion
     }
 
     public static class Items
@@ -3199,17 +3069,6 @@ namespace PersonalDiscordBot.Classes
         public static Item scrollWind = new Item { Name = "Wind Scroll", Type = ItemType.Damaging, Lvl = 1, Worth = 20, Wind = 10, Count = 1, Desc = "A scroll that imbues the power of reaally powerfull flatulence, strong winds approach, your beef is strong!" };
         public static Item repairPowder = new Item { Name = "Repair Powder", Type = ItemType.Repair, Lvl = 1, Worth = 50, Count = 1, Desc = "Powder that repairs stuff, I hear it also gives you a wicked high if snorted... don't ask me how I know" };
         public static Item repairPowderPack = new Item { Name = "Repair Powder", Type = ItemType.Repair, Lvl = 1, Worth = 50, Count = 5, Desc = "Powder that repairs stuff, I hear it also gives you a wicked high if snorted... don't ask me how I know" };
-
-        #endregion
-
-        #region Item Methods
-
-        public static Item CopyNewItem(Item itemToCopy)
-        {
-            Item newItem = new Item();
-            PropertyCopy.Copy(itemToCopy, newItem);
-            return newItem;
-        }
 
         #endregion
 
@@ -3260,8 +3119,6 @@ namespace PersonalDiscordBot.Classes
 
     public static class Enemies
     {
-        #region Enemy Methods
-
         public static EnemyType ChooseEnemyType()
         {
             EnemyType type = EnemyType.Goblin;
@@ -3282,24 +3139,12 @@ namespace PersonalDiscordBot.Classes
             return newEnemy;
         }
 
-        #endregion
-
-        #region Static Enemies
-
         public static Enemy punchingBag = new Enemy() { Name = "PunchingBag", Desc = "I was created by our developer gods as a baseline for combat, I also pass butter", Def = 5, Dex = 5, Int = 5, Lck = 5, Lvl = 1, Mana = 5, MaxHP = 100, CurrentHP = 100, Str = 5, Spd = 100, ExpLoot = 50, Armor = Armors.basicEnemyArmor, Weapon = Weapons.enemySword };
-
-        #endregion
     }
 
     public class Testing
     {
-        #region Testing Variables
-
         public static string line = Environment.NewLine;
-
-        #endregion
-
-        #region Testing Methods
 
         public static string RandomWeap(out string namer)
         {
@@ -3314,6 +3159,18 @@ namespace PersonalDiscordBot.Classes
             RarityType rarity = LootDrop.ChooseRarity();
             var spell = LootDrop.SpellPicker(rarity, testiculeesCharacter);
             return $"{line}Name: {spell.Name}{line}Description: {spell.Desc}{line}Type: {spell.Type}{line}Unique: {spell.IsUnique}{line}Rarity: {spell.Rarity}{line}ManaCost: {spell.ManaCost}{line}Level: {spell.Lvl}{line}Speed: {spell.Speed}{line}Worth: {spell.Worth}{line}Physical: {spell.PhysicalDamage}{line}Fire: {spell.FireDamage}{line}Ice: {spell.IceDamage}{line}Lightning: {spell.LightningDamage}{line}Magic: {spell.MagicDamage}{line}Wind: {spell.WindDamage}";
+        }
+
+        public static string RandomArmor()
+        {
+            string result = string.Empty;
+            RarityType rarity = LootDrop.ChooseRarity();
+            var armor = LootDrop.ArmorPicker(rarity, testiculeesCharacter);
+            foreach (var prop in armor.GetType().GetProperties())
+            {
+                result = $"{result}{line}{prop.Name}: {prop.GetValue(armor)}";
+            }
+            return $"Your Loot is: {result}";
         }
 
         public static string RandomMassTestWeap(int num)
@@ -3335,7 +3192,9 @@ namespace PersonalDiscordBot.Classes
             int rare = 0;
             int epic = 0;
             int legendary = 0;
+            var sw = new System.Diagnostics.Stopwatch();
 
+            sw.Start();
             for (int i = 0; i <= num; i++)
             {
                 RarityType rarity = LootDrop.ChooseRarity();
@@ -3396,8 +3255,8 @@ namespace PersonalDiscordBot.Classes
                 }
                 if (pickedLoot.IsUnique) unique++;
             }
-
-            return ($"{line}sword = {sword}{line}dagger = {dagger}{line}greatsword = {greatsword}{line}katana = {katana}{line}staff = {staff}{line}focusStone = {focusStone}{line}spear = {spear}{line}dragonSpear = {dragonSpear}{line}twinSwords = {twinSwords}{line}other = {other}{line}starter = {starter}{line}unique = {unique}{line}------------------------------------------------{line}common = {common}{line}uncommon = {uncommon}{line}rare = {rare}{line}epic = {epic}{line}legendary = {legendary}{line}");
+            sw.Stop();
+               return ($"{line}--------------------------{line}It took {sw.Elapsed} seconds to run {num} times.{line}--------------------------{line}sword = {sword}{line}dagger = {dagger}{line}greatsword = {greatsword}{line}katana = {katana}{line}staff = {staff}{line}focusStone = {focusStone}{line}spear = {spear}{line}dragonSpear = {dragonSpear}{line}twinSwords = {twinSwords}{line}other = {other}{line}starter = {starter}{line}unique = {unique}{line}------------------------------------------------{line}common = {common}{line}uncommon = {uncommon}{line}rare = {rare}{line}epic = {epic}{line}legendary = {legendary}{line}");
         }
 
         public static string RandomMassTestSpell(int num)
@@ -3483,6 +3342,61 @@ namespace PersonalDiscordBot.Classes
             return $"{line}Attack: {attack}{line}Defense: {defense}{line}Restorative: {restorative}{line}Starter: {starter}{line}--------------------------------------------{line}Physical: {physical}{line}Magic: {magic}{line}Fire: {fire}{line}Lightning: {lightning}{line}Ice: {ice}{line}Wind: {wind}{line}--------------------------------------------{line}Unique: {unique}{line}--------------------------------------------{line}Common: {common}{line}UnCommon: {uncommon}{line}Rare: {rare}{line}Epic: {epic}{line}Legendary: {legendary}{line}";
         }
 
+        public static string RandomMassTestArmor(int num)
+        {
+            int isUnique = 0;
+            int light = 0;
+            int medium = 0;
+            int heavy = 0;
+            int common = 0;
+            int uncommon = 0;
+            int rare = 0;
+            int epic = 0;
+            int legendary = 0;
+            var sw = new System.Diagnostics.Stopwatch();
+
+            sw.Start();
+            for (int i = 0; i <= num; i++)
+            {
+                RarityType rarity = LootDrop.ChooseRarity();
+                var loot = LootDrop.ArmorPicker(rarity, testiculeesCharacter);
+                switch (loot.Type)
+                {
+                    case ArmorType.Light:
+                        light++;
+                        break;
+                    case ArmorType.Medium:
+                        medium++;
+                        break;
+                    case ArmorType.Heavy:
+                        heavy++;
+                        break;
+                }
+                switch (loot.Rarity)
+                {
+                    case RarityType.Common:
+                        common++;
+                        break;
+                    case RarityType.Epic:
+                        epic++;
+                        break;
+                    case RarityType.Legendary:
+                        legendary++;
+                        break;
+                    case RarityType.Rare:
+                        rare++;
+                        break;
+                    case RarityType.Uncommon:
+                        uncommon++;
+                        break;
+                }
+                if (loot.IsUnique) isUnique++;
+            }
+            sw.Stop();
+            return $"{line}--------------------------{line}It took {sw.Elapsed} seconds to run {num} times.{line}--------------------------{line}Light: {light}{line}Medium: {medium}{line}Heavy: {heavy}{line}--------------------------{line}Common: {common}{line}Uncommon: {uncommon}{line}Rare: {rare}{line}Epic: {epic}{line}Legendary: {legendary}{line}--------------------------{line}Unique: {isUnique}{line}";
+
+        }
+
         public static string LootDropGen()
         {
             string result = string.Empty;
@@ -3504,10 +3418,6 @@ namespace PersonalDiscordBot.Classes
             return whatchaSay;
         }
 
-        #endregion
-
-        #region Testing Assets
-
         public static OwnerProfile testiculeesProfile = new OwnerProfile()
         {
             CurrentCharacter = testiculeesCharacter,
@@ -3519,7 +3429,7 @@ namespace PersonalDiscordBot.Classes
         public static Character testiculeesCharacter = new Character()
         {
             Name = "Testiculees teh Great",
-            Class = CharacterClass.Warrior,
+            Class = CharacterClass.Dragoon,
             Lvl = 1,
             OwnerID = testiculeesProfile.OwnerID,
             Armor = Armors.knightArmor,
@@ -3533,7 +3443,6 @@ namespace PersonalDiscordBot.Classes
             Lck = 10
         };
 
-        #endregion
     }
 
 }

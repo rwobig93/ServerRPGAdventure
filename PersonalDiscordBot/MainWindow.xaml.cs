@@ -1241,8 +1241,9 @@ namespace PersonalDiscordBot
 
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
-            Permissions.SerializePermissions();
-            Management.SerializeData();
+            //Permissions.SerializePermissions();
+            //Management.SerializeData();
+            uStatusUpdate(Testing.RandomMassTestWeap(1000));
         }
 
         private void SetupTest()
