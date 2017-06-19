@@ -1,0 +1,1164 @@
+06/19/2017_8:55 AM :: Version updated from 1.0.6379.16058 from 
+06/19/2017_8:55 AM :: Refreshed admin list, total admins: 0
+06/19/2017_8:55 AM :: Deserializing Sava Data
+06/19/2017_8:55 AM :: Deserializing Permission Data
+06/19/2017_8:55 AM :: Admin Deserialization Complete
+06/19/2017_8:55 AM :: Owner Deserialization Complete
+06/19/2017_8:55 AM :: Serializing Permission Data
+06/19/2017_8:55 AM :: Serializing Save Data
+06/19/2017_8:55 AM :: Your Loot is: 
+Name: Uncommon Plate Armor
+Desc: Heavy Uncommon Plate Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 34
+CurrentDurability: 34
+Worth: 11
+Speed: 60
+Physical: 20
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_8:55 AM :: Owner Serializing Complete
+06/19/2017_8:55 AM :: Admin Serialization Complete
+06/19/2017_8:55 AM :: Serializing Permission Data
+06/19/2017_8:55 AM :: Your Loot is: 
+Name: Uncommon Paper Garments
+Desc: It's amazing how powerful you become when you aren't weighed down by 'protection'.
+Type: Light
+Rarity: Common
+IsUnique: True
+Lvl: 0
+MaxDurability: 0
+CurrentDurability: 0
+Worth: 80
+Speed: 168
+Physical: 20
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_8:55 AM :: Serializing Save Data
+06/19/2017_8:55 AM :: Owner Serializing Complete
+06/19/2017_8:55 AM :: Admin Serialization Complete
+06/19/2017_8:56 AM :: Serializing Save Data
+06/19/2017_8:56 AM :: Serializing Permission Data
+
+06/19/2017_11:09 AM :: Version updated from 1.0.6379.20071 from 
+06/19/2017_11:09 AM :: Deserializing Sava Data
+06/19/2017_11:09 AM :: Refreshed admin list, total admins: 0
+06/19/2017_11:09 AM :: Deserializing Permission Data
+06/19/2017_11:09 AM :: Owner Deserialization Complete
+06/19/2017_11:09 AM :: Admin Deserialization Complete
+06/19/2017_11:09 AM :: 
+--------------------------
+Light: 105
+Medium: 87
+Heavy: 809
+--------------------------
+Common: 1001
+Uncommon: 0
+Rare: 0
+Epic: 0
+Legendary: 0
+--------------------------
+Unique: 333
+
+06/19/2017_11:09 AM :: Serializing Save Data
+06/19/2017_11:09 AM :: Serializing Permission Data
+
+06/19/2017_11:16 AM :: Version updated from 1.0.6379.20282 from 
+06/19/2017_11:16 AM :: Refreshed admin list, total admins: 0
+06/19/2017_11:16 AM :: Deserializing Sava Data
+06/19/2017_11:16 AM :: Deserializing Permission Data
+06/19/2017_11:16 AM :: Owner Deserialization Complete
+06/19/2017_11:16 AM :: Admin Deserialization Complete
+06/19/2017_11:18 AM :: Your Loot is: 
+Name: Common Titanforged Steel
+Desc: "What is this? Armor for ants?" - Titans, probably
+Type: Heavy
+Rarity: Common
+IsUnique: True
+Lvl: 0
+MaxDurability: 0
+CurrentDurability: 0
+Worth: 43
+Speed: 175
+Physical: 13
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_11:18 AM :: Your Loot is: 
+Name: Rare Diamond Armor
+Desc: Heavy Rare Diamond Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 60
+CurrentDurability: 60
+Worth: 4
+Speed: 90
+Physical: 23
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_11:18 AM :: Your Loot is: 
+Name: Uncommon Leather Armor
+Desc: Medium Uncommon Leather Armor
+Type: Medium
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 44
+CurrentDurability: 44
+Worth: 96
+Speed: 90
+Physical: 13
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_11:18 AM :: Your Loot is: 
+Name: Uncommon Plate Armor
+Desc: Heavy Uncommon Plate Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 34
+CurrentDurability: 34
+Worth: 29
+Speed: 60
+Physical: 21
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_11:18 AM :: Your Loot is: 
+Name: Common Mythril Armor
+Desc: Heavy Common Mythril Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 22
+CurrentDurability: 22
+Worth: 21
+Speed: 60
+Physical: 20
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_11:18 AM :: Your Loot is: 
+Name: Rare Robe
+Desc: Light Rare Robe
+Type: Light
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 60
+CurrentDurability: 60
+Worth: 388
+Speed: 130
+Physical: 6
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_11:18 AM :: Your Loot is: 
+Name: Rare Steel Armor
+Desc: Heavy Rare Steel Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 50
+CurrentDurability: 50
+Worth: 142
+Speed: 80
+Physical: 21
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_11:18 AM :: Your Loot is: 
+Name: Uncommon Titanforged Steel
+Desc: "What is this? Armor for ants?" - Titans, probably
+Type: Heavy
+Rarity: Common
+IsUnique: True
+Lvl: 0
+MaxDurability: 0
+CurrentDurability: 0
+Worth: 83
+Speed: 155
+Physical: 14
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_11:18 AM :: Your Loot is: 
+Name: Common Diamond Armor
+Desc: Heavy Common Diamond Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 32
+CurrentDurability: 32
+Worth: 186
+Speed: 80
+Physical: 23
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_11:18 AM :: Your Loot is: 
+Name: Uncommon Steel Armor
+Desc: Heavy Uncommon Steel Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 34
+CurrentDurability: 34
+Worth: 11
+Speed: 60
+Physical: 21
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_11:18 AM :: Your Loot is: 
+Name: Uncommon Plate Armor
+Desc: Heavy Uncommon Plate Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 34
+CurrentDurability: 34
+Worth: 59
+Speed: 60
+Physical: 20
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_11:18 AM :: Serializing Save Data
+06/19/2017_11:18 AM :: Serializing Permission Data
+
+06/19/2017_11:32 AM :: Current Version: 1.0.6379.20282
+06/19/2017_11:32 AM :: Refreshed admin list, total admins: 0
+06/19/2017_11:32 AM :: Deserializing Sava Data
+06/19/2017_11:32 AM :: Deserializing Permission Data
+06/19/2017_11:32 AM :: Owner Deserialization Complete
+06/19/2017_11:32 AM :: Admin Deserialization Complete
+06/19/2017_11:42 AM :: Serializing Save Data
+06/19/2017_11:42 AM :: Your Loot is: 
+Name: Epic Fur Armor
+Desc: Light Epic Fur Armor
+Type: Light
+Rarity: Common
+IsUnique: False
+Lvl: 2
+MaxDurability: 80
+CurrentDurability: 80
+Worth: 360
+Speed: 140
+Physical: 7
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_11:42 AM :: Owner Serializing Complete
+06/19/2017_11:47 AM :: Serializing Save Data
+06/19/2017_11:47 AM :: Serializing Permission Data
+
+06/19/2017_11:51 AM :: Version updated from 1.0.6379.21339 from 
+06/19/2017_11:51 AM :: Refreshed admin list, total admins: 0
+06/19/2017_11:51 AM :: Deserializing Permission Data
+06/19/2017_11:51 AM :: Deserializing Sava Data
+06/19/2017_11:51 AM :: Owner Deserialization Complete
+06/19/2017_11:51 AM :: Admin Deserialization Complete
+06/19/2017_11:51 AM :: Your Loot is: 
+Name: Uncommon Plate Armor
+Desc: Heavy Uncommon Plate Armor
+Type: Heavy
+Rarity: Uncommon
+IsUnique: False
+Lvl: 2
+MaxDurability: 44
+CurrentDurability: 44
+Worth: 132
+Speed: 80
+Physical: 21
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_11:51 AM :: Your Loot is: 
+Name: Legendary Diamond Armor
+Desc: Heavy Legendary Diamond Armor
+Type: Heavy
+Rarity: Legendary
+IsUnique: False
+Lvl: 2
+MaxDurability: 104
+CurrentDurability: 104
+Worth: 64
+Speed: 100
+Physical: 25
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_11:51 AM :: Your Loot is: 
+Name: Uncommon Plate Armor
+Desc: Heavy Uncommon Plate Armor
+Type: Heavy
+Rarity: Uncommon
+IsUnique: False
+Lvl: 2
+MaxDurability: 44
+CurrentDurability: 44
+Worth: 100
+Speed: 80
+Physical: 23
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_11:51 AM :: Your Loot is: 
+Name: Uncommon Paper Garments
+Desc: It's amazing how powerful you become when you aren't weighed down by 'protection'.
+Type: Light
+Rarity: Uncommon
+IsUnique: True
+Lvl: 0
+MaxDurability: 0
+CurrentDurability: 0
+Worth: 82
+Speed: 163
+Physical: 15
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_11:51 AM :: Your Loot is: 
+Name: Uncommon Steel Armor
+Desc: Heavy Uncommon Steel Armor
+Type: Heavy
+Rarity: Uncommon
+IsUnique: False
+Lvl: 1
+MaxDurability: 34
+CurrentDurability: 34
+Worth: 29
+Speed: 70
+Physical: 21
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_11:51 AM :: Serializing Save Data
+06/19/2017_11:51 AM :: Serializing Permission Data
+
+06/19/2017_11:54 AM :: Version updated from 1.0.6379.21419 from 
+06/19/2017_11:54 AM :: Deserializing Permission Data
+06/19/2017_11:54 AM :: Deserializing Sava Data
+06/19/2017_11:54 AM :: Refreshed admin list, total admins: 0
+06/19/2017_11:54 AM :: Admin Deserialization Complete
+06/19/2017_11:54 AM :: Owner Deserialization Complete
+06/19/2017_11:54 AM :: 
+--------------------------
+Light: 1029
+Medium: 972
+Heavy: 8000
+--------------------------
+Common: 4369
+Uncommon: 3031
+Rare: 1458
+Epic: 947
+Legendary: 196
+--------------------------
+Unique: 2946
+
+06/19/2017_11:54 AM :: Serializing Save Data
+06/19/2017_11:54 AM :: Serializing Permission Data
+
+06/19/2017_12:26 PM :: Version updated from 1.0.6379.22388 from 
+06/19/2017_12:26 PM :: Deserializing Permission Data
+06/19/2017_12:26 PM :: Refreshed admin list, total admins: 0
+06/19/2017_12:26 PM :: Deserializing Sava Data
+06/19/2017_12:26 PM :: Owner Deserialization Complete
+06/19/2017_12:26 PM :: Admin Deserialization Complete
+06/19/2017_12:26 PM :: 
+--------------------------
+Light: 2070
+Medium: 2000
+Heavy: 5931
+--------------------------
+Common: 4293
+Uncommon: 2993
+Rare: 1518
+Epic: 996
+Legendary: 201
+--------------------------
+Unique: 3002
+
+06/19/2017_12:26 PM :: 
+--------------------------
+Light: 1993
+Medium: 1972
+Heavy: 6036
+--------------------------
+Common: 4376
+Uncommon: 3060
+Rare: 1415
+Epic: 953
+Legendary: 197
+--------------------------
+Unique: 2999
+
+06/19/2017_12:26 PM :: 
+--------------------------
+Light: 2009
+Medium: 1939
+Heavy: 6053
+--------------------------
+Common: 4284
+Uncommon: 2988
+Rare: 1516
+Epic: 1017
+Legendary: 196
+--------------------------
+Unique: 3018
+
+06/19/2017_12:26 PM :: 
+--------------------------
+Light: 2066
+Medium: 1961
+Heavy: 5974
+--------------------------
+Common: 4265
+Uncommon: 3065
+Rare: 1450
+Epic: 1016
+Legendary: 205
+--------------------------
+Unique: 3057
+
+06/19/2017_12:26 PM :: 
+--------------------------
+Light: 1921
+Medium: 2011
+Heavy: 6069
+--------------------------
+Common: 4358
+Uncommon: 3003
+Rare: 1471
+Epic: 974
+Legendary: 195
+--------------------------
+Unique: 3005
+
+06/19/2017_12:26 PM :: 
+--------------------------
+Light: 2075
+Medium: 2041
+Heavy: 5885
+--------------------------
+Common: 4307
+Uncommon: 2993
+Rare: 1524
+Epic: 973
+Legendary: 204
+--------------------------
+Unique: 3030
+
+06/19/2017_12:26 PM :: 
+--------------------------
+Light: 2057
+Medium: 1948
+Heavy: 5996
+--------------------------
+Common: 4260
+Uncommon: 2957
+Rare: 1557
+Epic: 998
+Legendary: 229
+--------------------------
+Unique: 2972
+
+06/19/2017_12:26 PM :: Serializing Save Data
+06/19/2017_12:26 PM :: Serializing Permission Data
+
+06/19/2017_12:37 PM :: Version updated from 1.0.6379.22709 from 
+06/19/2017_12:37 PM :: Refreshed admin list, total admins: 0
+06/19/2017_12:37 PM :: Deserializing Sava Data
+06/19/2017_12:37 PM :: Deserializing Permission Data
+06/19/2017_12:37 PM :: Owner Deserialization Complete
+06/19/2017_12:37 PM :: Admin Deserialization Complete
+06/19/2017_12:37 PM :: 
+--------------------------
+Light: 20025
+Medium: 40050
+Heavy: 39926
+--------------------------
+Common: 43027
+Uncommon: 29914
+Rare: 15076
+Epic: 9987
+Legendary: 1997
+--------------------------
+Unique: 30045
+
+06/19/2017_12:39 PM :: 
+--------------------------
+Light: 19868
+Medium: 39967
+Heavy: 40166
+--------------------------
+Common: 43313
+Uncommon: 29683
+Rare: 14993
+Epic: 9948
+Legendary: 2064
+--------------------------
+Unique: 30249
+
+06/19/2017_12:39 PM :: Serializing Permission Data
+06/19/2017_12:39 PM :: Serializing Save Data
+
+06/19/2017_12:40 PM :: Version updated from 1.0.6379.22816 from 
+06/19/2017_12:40 PM :: Deserializing Permission Data
+06/19/2017_12:40 PM :: Deserializing Sava Data
+06/19/2017_12:40 PM :: Refreshed admin list, total admins: 0
+06/19/2017_12:40 PM :: Owner Deserialization Complete
+06/19/2017_12:40 PM :: Admin Deserialization Complete
+06/19/2017_12:40 PM :: 
+--------------------------
+Light: 199718
+Medium: 400279
+Heavy: 400004
+--------------------------
+Common: 430926
+Uncommon: 299669
+Rare: 149509
+Epic: 99812
+Legendary: 20085
+--------------------------
+Unique: 300286
+
+06/19/2017_12:42 PM :: Serializing Save Data
+06/19/2017_12:42 PM :: Serializing Permission Data
+
+06/19/2017_12:47 PM :: Version updated from 1.0.6379.23018 from 
+06/19/2017_12:47 PM :: Deserializing Sava Data
+06/19/2017_12:47 PM :: Deserializing Permission Data
+06/19/2017_12:47 PM :: Refreshed admin list, total admins: 0
+06/19/2017_12:47 PM :: Owner Deserialization Complete
+06/19/2017_12:47 PM :: Admin Deserialization Complete
+06/19/2017_12:47 PM :: 
+--------------------------This took System.Diagnostics.Stopwatch long to finish.
+--------------------------
+Light: 199792
+Medium: 400390
+Heavy: 399819
+--------------------------
+Common: 430748
+Uncommon: 299429
+Rare: 149909
+Epic: 100104
+Legendary: 19811
+--------------------------
+Unique: 300866
+
+06/19/2017_12:47 PM :: Serializing Permission Data
+06/19/2017_12:47 PM :: Serializing Save Data
+
+06/19/2017_12:47 PM :: Version updated from 1.0.6379.23032 from 
+06/19/2017_12:47 PM :: Deserializing Permission Data
+06/19/2017_12:47 PM :: Deserializing Sava Data
+06/19/2017_12:47 PM :: Refreshed admin list, total admins: 0
+06/19/2017_12:47 PM :: Owner Deserialization Complete
+06/19/2017_12:47 PM :: Admin Deserialization Complete
+06/19/2017_12:48 PM :: 
+--------------------------This took System.Diagnostics.Stopwatch long to finish.
+--------------------------
+Light: 200448
+Medium: 399750
+Heavy: 399803
+--------------------------
+Common: 429758
+Uncommon: 299872
+Rare: 150139
+Epic: 100115
+Legendary: 20117
+--------------------------
+Unique: 299899
+
+06/19/2017_12:48 PM :: Serializing Save Data
+06/19/2017_12:48 PM :: Serializing Permission Data
+
+06/19/2017_12:50 PM :: Version updated from 1.0.6379.23102 from 
+06/19/2017_12:50 PM :: Refreshed admin list, total admins: 0
+06/19/2017_12:50 PM :: Deserializing Sava Data
+06/19/2017_12:50 PM :: Deserializing Permission Data
+06/19/2017_12:50 PM :: Owner Deserialization Complete
+06/19/2017_12:50 PM :: Admin Deserialization Complete
+06/19/2017_12:51 PM :: 
+--------------------------This took 00:00:02.9013511 long to finish.
+--------------------------
+Light: 199789
+Medium: 400304
+Heavy: 399908
+--------------------------
+Common: 430666
+Uncommon: 300292
+Rare: 149791
+Epic: 99444
+Legendary: 19808
+--------------------------
+Unique: 300496
+
+06/19/2017_12:51 PM :: Serializing Save Data
+06/19/2017_12:51 PM :: Serializing Permission Data
+
+06/19/2017_12:52 PM :: Version updated from 1.0.6379.23166 from 
+06/19/2017_12:52 PM :: Refreshed admin list, total admins: 0
+06/19/2017_12:52 PM :: Deserializing Sava Data
+06/19/2017_12:52 PM :: Deserializing Permission Data
+06/19/2017_12:52 PM :: Owner Deserialization Complete
+06/19/2017_12:52 PM :: Admin Deserialization Complete
+06/19/2017_12:52 PM :: 
+--------------------------
+It took 00:00:03.1605540 seconds to run 1000000 times.
+--------------------------
+Light: 200476
+Medium: 399542
+Heavy: 399983
+--------------------------
+Common: 430678
+Uncommon: 299438
+Rare: 149485
+Epic: 100181
+Legendary: 20219
+--------------------------
+Unique: 298990
+
+06/19/2017_12:52 PM :: Serializing Save Data
+06/19/2017_12:52 PM :: Serializing Permission Data
+
+06/19/2017_12:56 PM :: Version updated from 1.0.6379.23294 from 
+06/19/2017_12:56 PM :: Deserializing Sava Data
+06/19/2017_12:56 PM :: Refreshed admin list, total admins: 0
+06/19/2017_12:56 PM :: Deserializing Permission Data
+06/19/2017_12:56 PM :: Owner Deserialization Complete
+06/19/2017_12:56 PM :: Admin Deserialization Complete
+06/19/2017_12:57 PM :: 
+--------------------------
+It took 00:00:05.1925218 seconds to run 1000000 times.
+--------------------------
+sword = 369854
+dagger = 69818
+greatsword = 35078
+katana = 34889
+staff = 35122
+focusStone = 34889
+spear = 140271
+dragonSpear = 139752
+twinSwords = 140328
+other = 0
+starter = 0
+unique = 300297
+------------------------------------------------
+common = 600010
+uncommon = 211025
+rare = 104920
+epic = 69914
+legendary = 14132
+
+06/19/2017_1:03 PM :: Serializing Save Data
+06/19/2017_1:03 PM :: Serializing Permission Data
+
+06/19/2017_3:17 PM :: Running DEBUG Mode
+06/19/2017_3:17 PM :: Version updated from 1.0.6379.27531 from 
+06/19/2017_3:17 PM :: Deserializing Permission Data
+06/19/2017_3:17 PM :: Refreshed admin list, total admins: 0
+06/19/2017_3:17 PM :: Deserializing Sava Data
+06/19/2017_3:17 PM :: Owner Deserialization Complete
+06/19/2017_3:17 PM :: Admin Deserialization Complete
+06/19/2017_3:17 PM :: 
+Hello Richard.
+You have 357156954 seconds(s) of safety remaining until Heather uses Epic Sword on yo ass. You know why.
+Hint: Marriage.
+And don't think your Uncommon Titanforged Steel will protect you.
+Good Luck!
+**************************
+Name: Epic Sword
+Description: A Epic Sword
+Type: Sword
+Unique: False
+Rarity: Epic
+Level: 2
+Max Durability: 70
+Current Durability: 70
+Worth: 246
+Speed: 143
+Physical Damage: 21
+06/19/2017_3:20 PM :: 
+Hello Richard.
+You have 86790682 seconds(s) of safety remaining until Heather uses Uncommon Butterknife on yo ass. You know why.
+Hint: Marriage.
+And don't think your Uncommon Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Uncommon Butterknife
+Description: Used to butter that toast, or butter your bread. Mmmmm bread
+Type: Sword
+Unique: True
+Rarity: Common
+Level: 0
+Max Durability: 0
+Current Durability: 0
+Worth: 84
+Speed: 206
+Physical Damage: 16
+06/19/2017_3:20 PM :: 
+Hello Richard.
+You have 108160594 seconds(s) of safety remaining until Heather uses Common Dagger on yo ass. You know why.
+Hint: Marriage.
+And don't think your Common Furry Armor will protect you.
+Good Luck!
+**************************
+Name: Common Dagger
+Description: A Common Dagger
+Type: Dagger
+Unique: False
+Rarity: Common
+Level: 2
+Max Durability: 32
+Current Durability: 32
+Worth: 39
+Speed: 196
+Physical Damage: 8
+06/19/2017_3:20 PM :: 
+Hello Richard.
+You have 188986595 seconds(s) of safety remaining until Heather uses Common DragonSpear on yo ass. You know why.
+Hint: Marriage.
+And don't think your Common Plate Armor will protect you.
+Good Luck!
+**************************
+Name: Common DragonSpear
+Description: A Common DragonSpear
+Type: DragonSpear
+Unique: False
+Rarity: Common
+Level: 2
+Max Durability: 32
+Current Durability: 32
+Worth: 172
+Speed: 157
+Physical Damage: 10
+06/19/2017_3:20 PM :: 
+Hello Richard.
+You have 114727948 seconds(s) of safety remaining until Heather uses Rare DragonSpear on yo ass. You know why.
+Hint: Marriage.
+And don't think your Common Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Rare DragonSpear
+Description: A Rare DragonSpear
+Type: DragonSpear
+Unique: False
+Rarity: Rare
+Level: 3
+Max Durability: 60
+Current Durability: 60
+Worth: 229
+Speed: 109
+Physical Damage: 15
+06/19/2017_3:20 PM :: 
+Hello Richard.
+You have 159538992 seconds(s) of safety remaining until Heather uses Common Not a weapon on yo ass. You know why.
+Hint: Marriage.
+And don't think your Uncommon Titanforged Steel will protect you.
+Good Luck!
+**************************
+Name: Common Not a weapon
+Description: This isn't a weapon.... at least I don't think it is
+Type: Sword
+Unique: True
+Rarity: Common
+Level: 0
+Max Durability: 0
+Current Durability: 0
+Worth: 201
+Speed: 171
+Physical Damage: 15
+06/19/2017_3:20 PM :: 
+Hello Richard.
+You have 178931311 seconds(s) of safety remaining until Heather uses Common Pokes' you in the eye on yo ass. You know why.
+Hint: Marriage.
+And don't think your Common Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Common Pokes' you in the eye
+Description: Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard
+Type: Sword
+Unique: True
+Rarity: Common
+Level: 0
+Max Durability: 0
+Current Durability: 0
+Worth: 44
+Speed: 154
+Physical Damage: 17
+06/19/2017_3:20 PM :: 
+Hello Richard.
+You have 232573450 seconds(s) of safety remaining until Heather uses Epic Cut you real bad on yo ass. You know why.
+Hint: Marriage.
+And don't think your Common Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Epic Cut you real bad
+Description: I'm gonna cut you so bad, you gonna wish I never cut you so bad
+Type: Sword
+Unique: True
+Rarity: Common
+Level: 0
+Max Durability: 0
+Current Durability: 0
+Worth: 310
+Speed: 136
+Physical Damage: 32
+06/19/2017_3:20 PM :: 
+Hello Richard.
+You have 272958789 seconds(s) of safety remaining until Heather uses Uncommon Not a weapon on yo ass. You know why.
+Hint: Marriage.
+And don't think your Common Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Uncommon Not a weapon
+Description: This isn't a weapon.... at least I don't think it is
+Type: Sword
+Unique: True
+Rarity: Common
+Level: 0
+Max Durability: 0
+Current Durability: 0
+Worth: 185
+Speed: 113
+Physical Damage: 14
+06/19/2017_3:20 PM :: 
+Hello Richard.
+You have 66229595 seconds(s) of safety remaining until Heather uses Uncommon Spear on yo ass. You know why.
+Hint: Marriage.
+And don't think your Uncommon Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Uncommon Spear
+Description: A Uncommon Spear
+Type: Spear
+Unique: False
+Rarity: Uncommon
+Level: 3
+Max Durability: 44
+Current Durability: 44
+Worth: 56
+Speed: 114
+Physical Damage: 13
+06/19/2017_3:20 PM :: 
+Hello Richard.
+You have 207642367 seconds(s) of safety remaining until Heather uses Rare TwinSwords on yo ass. You know why.
+Hint: Marriage.
+And don't think your Common Plate Armor will protect you.
+Good Luck!
+**************************
+Name: Rare TwinSwords
+Description: Rare TwinSwords
+Type: TwinSwords
+Unique: False
+Rarity: Rare
+Level: 2
+Max Durability: 50
+Current Durability: 50
+Worth: 117
+Speed: 142
+Physical Damage: 19
+06/19/2017_3:20 PM :: 
+Hello Richard.
+You have 189229401 seconds(s) of safety remaining until Heather uses Rare Not a weapon on yo ass. You know why.
+Hint: Marriage.
+And don't think your Uncommon Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Rare Not a weapon
+Description: This isn't a weapon.... at least I don't think it is
+Type: Sword
+Unique: True
+Rarity: Common
+Level: 0
+Max Durability: 0
+Current Durability: 0
+Worth: 173
+Speed: 141
+Physical Damage: 24
+06/19/2017_3:20 PM :: 
+Hello Richard.
+You have 358683275 seconds(s) of safety remaining until Heather uses Common Sword on yo ass. You know why.
+Hint: Marriage.
+And don't think your Rare Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Common Sword
+Description: A Common Sword
+Type: Sword
+Unique: False
+Rarity: Common
+Level: 1
+Max Durability: 22
+Current Durability: 22
+Worth: 25
+Speed: 123
+Physical Damage: 9
+06/19/2017_3:20 PM :: 
+Hello Richard.
+You have 364125363 seconds(s) of safety remaining until Heather uses Common TwinSwords on yo ass. You know why.
+Hint: Marriage.
+And don't think your Common Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Common TwinSwords
+Description: Common TwinSwords
+Type: TwinSwords
+Unique: False
+Rarity: Common
+Level: 3
+Max Durability: 32
+Current Durability: 32
+Worth: 29
+Speed: 104
+Physical Damage: 7
+06/19/2017_3:20 PM :: 
+Hello Richard.
+You have 23779371 seconds(s) of safety remaining until Heather uses Common Pokes' you in the eye on yo ass. You know why.
+Hint: Marriage.
+And don't think your Uncommon Furry Armor will protect you.
+Good Luck!
+**************************
+Name: Common Pokes' you in the eye
+Description: Everytime you attack this weapon makes an attempt to poke you in the eye... like really hard
+Type: Sword
+Unique: True
+Rarity: Common
+Level: 0
+Max Durability: 0
+Current Durability: 0
+Worth: 38
+Speed: 136
+Physical Damage: 16
+06/19/2017_3:20 PM :: 
+Hello Richard.
+You have 160164968 seconds(s) of safety remaining until Heather uses Uncommon TwinSwords on yo ass. You know why.
+Hint: Marriage.
+And don't think your Uncommon Steel Armor will protect you.
+Good Luck!
+**************************
+Name: Uncommon TwinSwords
+Description: Uncommon TwinSwords
+Type: TwinSwords
+Unique: False
+Rarity: Uncommon
+Level: 2
+Max Durability: 34
+Current Durability: 34
+Worth: 54
+Speed: 141
+Physical Damage: 11
+06/19/2017_3:20 PM :: 
+Hello Richard.
+You have 357145654 seconds(s) of safety remaining until Heather uses Legendary Spear on yo ass. You know why.
+Hint: Marriage.
+And don't think your Rare Leather Armor will protect you.
+Good Luck!
+**************************
+Name: Legendary Spear
+Description: A Legendary Spear
+Type: Spear
+Unique: False
+Rarity: Legendary
+Level: 3
+Max Durability: 104
+Current Durability: 104
+Worth: 488
+Speed: 161
+Physical Damage: 31
+
+06/19/2017_3:20 PM :: Dumped status log to: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs\StatusLog_06-19-17.txt
+
+06/19/2017_4:50 PM :: Running DEBUG Mode
+06/19/2017_4:50 PM :: Version updated from 1.0.6379.30324 from 
+06/19/2017_4:50 PM :: Deserializing Sava Data
+06/19/2017_4:50 PM :: Refreshed admin list, total admins: 0
+06/19/2017_4:50 PM :: Deserializing Permission Data
+06/19/2017_4:50 PM :: Owner Deserialization Complete
+06/19/2017_4:50 PM :: Admin Deserialization Complete
+06/19/2017_4:51 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Medium Health Potion Pack
+Desc: 5 medium health potions!? Is it christmas already? Get those f**kin socks away from me!
+Type: Restorative
+Lvl: 2
+Count: 1
+Worth: 25
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_4:51 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Repair Powder
+Desc: Powder that repairs stuff, I hear it also gives you a wicked high if snorted... don't ask me how I know
+Type: Repair
+Lvl: 1
+Count: 5
+Worth: 50
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_4:51 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Medium Mana Potion Pack
+Desc: 5 medium mana potions!? Hot damn this pack radiates awesomeness... or is that radiation?
+Type: Restorative
+Lvl: 2
+Count: 1
+Worth: 35
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_4:51 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: 
+Desc: 
+Type: Currency
+Lvl: 0
+Count: 1
+Worth: 23
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_4:51 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: 
+Desc: 
+Type: Currency
+Lvl: 0
+Count: 1
+Worth: 74
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_4:51 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Football Jacket
+Desc: A football jacket that helps prevent wind, it's not soccer, it's FOOTBALL!!!
+Type: Buff
+Lvl: 1
+Count: 1
+Worth: 10
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 10
+06/19/2017_4:52 PM :: Serializing Save Data
+06/19/2017_4:52 PM :: Serializing Permission Data
+
+06/19/2017_4:52 PM :: Running DEBUG Mode
+06/19/2017_4:52 PM :: Current Version: 1.0.6379.30324
+06/19/2017_4:52 PM :: Deserializing Permission Data
+06/19/2017_4:52 PM :: Deserializing Sava Data
+06/19/2017_4:52 PM :: Refreshed admin list, total admins: 0
+06/19/2017_4:52 PM :: Owner Deserialization Complete
+06/19/2017_4:52 PM :: Admin Deserialization Complete
+06/19/2017_4:52 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Medium Mana Potion Pack
+Desc: 5 medium mana potions!? Hot damn this pack radiates awesomeness... or is that radiation?
+Type: Restorative
+Lvl: 2
+Count: 1
+Worth: 35
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_4:52 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: 
+Desc: 
+Type: Currency
+Lvl: 0
+Count: 1
+Worth: 29
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_4:52 PM :: Your Loot is: PersonalDiscordBot.Classes.Item
+Name: Small Mana Potion
+Desc: A brew that fills your body with Magic energy, the health information sticker wore off long ago, don't worry about what is inside.
+Type: Restorative
+Lvl: 1
+Count: 1
+Worth: 5
+Physical: 0
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06/19/2017_4:52 PM :: Serializing Save Data
+06/19/2017_4:52 PM :: Serializing Permission Data
+
