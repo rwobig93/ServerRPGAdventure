@@ -13,6 +13,300 @@ using static PersonalDiscordBot.Classes.RPG;
 
 namespace PersonalDiscordBot.Classes
 {
+
+    #region Base Classes
+
+    public class OwnerProfile
+    {
+        public ulong OwnerID { get; set; }
+        public int Currency { get; set; } = 100;
+        public int TotalPebbles { get; set; } = 0;
+        public List<Character> CharacterList = new List<Character>();
+        public Character CurrentCharacter { get; set; }
+        public IDidTheThingOwner ThingsDone = new IDidTheThingOwner();
+    }
+
+    public class Character
+    {
+        public ulong OwnerID { get; set; }
+        public string Name { get; set; }
+        public string Desc { get; set; } = "A new adventurer set out to..... Adventure?";
+        public CharacterClass Class { get; set; }
+        public Weapon Weapon { get; set; }
+        public Armor Armor { get; set; }
+        public BackPack Backpack { get; set; }
+        public List<Spell> SpellBook = new List<Spell>();
+        public IDidTheThingPlayer ThingsDone = new IDidTheThingPlayer();
+        public int Pebbles { get; set; } = 0;
+        public int Lvl { get; set; }
+        public int Exp { get; set; }
+        public int MaxHP { get; set; }
+        public int CurrentHP { get; set; }
+        public int MaxMana { get; set; }
+        public int CurrentMana { get; set; }
+        public int Str { get; set; }
+        public int Def { get; set; }
+        public int Dex { get; set; }
+        public int Int { get; set; }
+        public int Spd { get; set; }
+        public int Lck { get; set; }
+    }
+
+    public class Match
+    {
+        public OwnerProfile Owner { get; set; }
+        public DateTime MatchStart { get; set; }
+        public DateTime LastPlayerTurn { get; set; }
+        public TimeSpan TurnTimeLimit { get; set; } = TimeSpan.FromDays(3);
+        public List<Enemy> EnemyList { get; set; } = new List<Enemy>();
+        public List<Enemy> DefeatedEnemies { get; set; } = new List<Enemy>();
+        public Enemy CurrentEnemy { get; set; }
+        public Turn CurrentTurn { get; set; } = Turn.NotChosen;
+        public int EnemyTurnTime { get; set; }
+        public int PlayerTurnTime { get; set; }
+        public int EnemySpeedTime { get; set; }
+        public int PlayerSpeedTime { get; set; }
+        public int ExperienceEarned { get; set; }
+    }
+
+    public class PlayerMatch
+    {
+        public Character Player1 { get; set; }
+        public Character Player2 { get; set; }
+        public Turn CurrentTurn { get; set; }
+        public TimeSpan TurnTimeLimit { get; set; } = TimeSpan.FromDays(1);
+    }
+
+    public class Enemy
+    {
+        public string Name { get; set; }
+        public string Desc { get; set; } = "I want your bod, not in a sexual or romantic way. But more of a dead and ragdoll kinda way";
+        public Weapon Weapon { get; set; }
+        public Armor Armor { get; set; }
+        public int Lvl { get; set; }
+        public int ExpLoot { get; set; }
+        public int MaxHP { get; set; }
+        public int CurrentHP { get; set; }
+        public int Mana { get; set; }
+        public int Str { get; set; }
+        public int Def { get; set; }
+        public int Dex { get; set; }
+        public int Int { get; set; }
+        public int Spd { get; set; }
+        public int Lck { get; set; }
+    }
+
+    public class Boss : Enemy
+    {
+        public List<IBackPackItem> Loot { get; set; } = new List<IBackPackItem>();
+    }
+
+    public class BackPack
+    {
+        public string Name { get; set; } = "BackPack";
+        public string Desc { get; set; } = "Your trusty friend you shove shit into";
+        public int Capacity { get; set; } = 10;
+        public int Weight { get; set; } = 10;
+        public List<IBackPackItem> Stored = new List<IBackPackItem>();
+    }
+
+    public class Weapon : IBackPackItem
+    {
+        public string Name { get; set; }
+        public string Desc { get; set; } = "A weapon like any other";
+        public WeaponType Type { get; set; }
+        public RarityType Rarity { get; set; } = RarityType.Common;
+        public bool IsUnique { get; set; } = false;
+        public int Lvl { get; set; } = 0;
+        public int MaxDurability { get; set; } = 0;
+        public int CurrentDurability { get; set; } = 0;
+        public int Worth { get; set; } = 0;
+        public int Speed { get; set; } = 100;
+        public int PhysicalDamage { get; set; } = 0;
+        public int MagicDamage { get; set; } = 0;
+        public int FireDamage { get; set; } = 0;
+        public int LightningDamage { get; set; } = 0;
+        public int IceDamage { get; set; } = 0;
+        public int WindDamage { get; set; } = 0;
+        public IBackPackItem BPItem()
+        {
+            //Name = this.Name;
+            //Desc = this.Desc;
+            //Type = this.Type;
+            //Rarity = this.Rarity;
+            //IsUnique = this.IsUnique;
+            //Lvl = this.Lvl;
+            //MaxDurability = this.MaxDurability;
+            //CurrentDurability = this.CurrentDurability;
+            //Worth = this.Worth;
+            //Speed = this.Speed;
+            //PhysicalDamage = this.PhysicalDamage;
+            //MagicDamage = this.MagicDamage;
+            //FireDamage = this.FireDamage;
+            //LightningDamage = this.LightningDamage;
+            //IceDamage = this.IceDamage;
+            //WindDamage = this.WindDamage;
+            return this;
+        }
+    }
+
+    public class Spell : IBackPackItem
+    {
+        public string Name { get; set; }
+        public string Desc { get; set; } = "What is this? Magic or something?";
+        public int Lvl { get; set; } = 0;
+        public int Worth { get; set; } = 0;
+        public SpellType Type { get; set; } = SpellType.Attack;
+        public RarityType Rarity { get; set; } = RarityType.Common;
+        public bool IsUnique { get; set; } = false;
+        public int ManaCost { get; set; } = 1;
+        public int Speed { get; set; } = 100;
+        public int PhysicalDamage { get; set; } = 0;
+        public int MagicDamage { get; set; } = 0;
+        public int FireDamage { get; set; } = 0;
+        public int LightningDamage { get; set; } = 0;
+        public int IceDamage { get; set; } = 0;
+        public int WindDamage { get; set; } = 0;
+        public IBackPackItem BPItem()
+        {
+            //Name = this.Name;
+            //Desc = this.Desc;
+            //Lvl = this.Lvl;
+            //Worth = this.Worth;
+            //Type = this.Type;
+            //Rarity = this.Rarity;
+            //IsUnique = this.IsUnique;
+            //ManaCost = this.ManaCost;
+            //Speed = this.Speed;
+            //PhysicalDamage = this.PhysicalDamage;
+            //MagicDamage = this.MagicDamage;
+            //FireDamage = this.FireDamage;
+            //LightningDamage = this.LightningDamage;
+            //IceDamage = this.IceDamage;
+            //WindDamage = this.WindDamage;
+            return this;
+        }
+    }
+
+    public class Item : IBackPackItem
+    {
+        public string Name { get; set; }
+        public string Desc { get; set; }
+        public ItemType Type { get; set; }
+        public int Lvl { get; set; } = 0; //used to calculate amount of Repair
+        public int Count { get; set; } = 1;
+        public int Worth { get; set; } = 0;
+        public int Physical { get; set; } = 0;
+        public int Magic { get; set; } = 0;
+        public int Fire { get; set; } = 0;
+        public int Lightning { get; set; } = 0;
+        public int Ice { get; set; } = 0;
+        public int Wind { get; set; } = 0;
+        public IBackPackItem BPItem()
+        {
+            //Name = this.Name;
+            //Desc = this.Desc;
+            //Type = this.Type;
+            //Lvl = this.Lvl;
+            //Count = this.Count;
+            //Worth = this.Worth;
+            //Physical = this.Physical;
+            //Magic = this.Magic;
+            //Fire = this.Magic;
+            //Lightning = this.Lightning;
+            //Ice = this.Ice;
+            //Wind = this.Wind;
+            return this;
+        }
+    }
+
+    public class Armor : IBackPackItem
+    {
+        public string Name { get; set; }
+        public string Desc { get; set; } = "An armor like any other";
+        public ArmorType Type { get; set; }
+        public RarityType Rarity { get; set; }
+        public bool IsUnique { get; set; } = false;
+        public int Lvl { get; set; } = 0;
+        public int MaxDurability { get; set; } = 0;
+        public int CurrentDurability { get; set; } = 0;
+        public int Worth { get; set; } = 0;
+        public int Speed { get; set; } = 100;
+        public int Physical { get; set; } = 0;
+        public int Magic { get; set; } = 0;
+        public int Fire { get; set; } = 0;
+        public int Lightning { get; set; } = 0;
+        public int Ice { get; set; } = 0;
+        public int Wind { get; set; } = 0;
+        public IBackPackItem BPItem()
+        {
+            //Name = this.Name;
+            //Desc = this.Desc;
+            //Type = this.Type;
+            //Rarity = this.Rarity;
+            //IsUnique = this.IsUnique;
+            //Lvl = this.Lvl;
+            //MaxDurability = this.MaxDurability;
+            //CurrentDurability = this.CurrentDurability;
+            //Worth = this.Worth;
+            //Speed = this.Speed;
+            //Physical = this.Physical;
+            //Magic = this.Magic;
+            //Fire = this.Fire;
+            //Lightning = this.Lightning;
+            //Ice = this.Ice;
+            //Wind = this.Wind;
+            return this;
+        }
+    }
+
+    public class Pebble : IBackPackItem
+    {
+        public int Count { get; set; }
+        public IBackPackItem BPItem()
+        {
+            //Count = this.Count;
+            return this;
+        }
+    }
+
+    public class IDidTheThingOwner
+    {
+        // General Stats
+        public int FightsTotal { get; set; } = 0;
+        public int FightsWon { get; set; } = 0;
+        public int FigthsLost { get; set; } = 0;
+        public int PlayerFightsTotal { get; set; } = 0;
+        public int PlayerFightsWon { get; set; } = 0;
+        public int PlayerFightsLost { get; set; } = 0;
+        public int BossesBeat { get; set; } = 0;
+        public int TotalCharactersMade { get; set; } = 0;
+
+        // Things that have been done (cheevos)
+        public bool FirstFight { get; set; } = false;
+        public bool FirstBoss { get; set; } = false;
+        public bool FirstPlayerFight { get; set; } = false;
+    }
+
+    public class IDidTheThingPlayer
+    {
+        // General Stats
+        public int FightsTotal { get; set; } = 0;
+        public int FightsWon { get; set; } = 0;
+        public int FigthsLost { get; set; } = 0;
+        public int PlayerFightsTotal { get; set; } = 0;
+        public int PlayerFightsWon { get; set; } = 0;
+        public int PlayerFightsLost { get; set; } = 0;
+        public int BossesBeat { get; set; } = 0;
+
+        // Things that have been done (cheevos)
+        public bool FirstFight { get; set; } = false;
+        public bool FirstBoss { get; set; } = false;
+        public bool FirstPlayerFight { get; set; } = false;
+    }
+
+    #endregion
+
     public static class RPG
     {
         #region Variables
@@ -775,308 +1069,14 @@ namespace PersonalDiscordBot.Classes
         #endregion
     }
 
-    #region Base Classes
-
-    public class OwnerProfile
-    {
-        public ulong OwnerID { get; set; }
-        public int Currency { get; set; } = 100;
-        public int TotalPebbles { get; set; } = 0;
-        public List<Character> CharacterList = new List<Character>();
-        public Character CurrentCharacter { get; set; }
-        public IDidTheThingOwner ThingsDone = new IDidTheThingOwner();
-    }
-
-    public class Character
-    {
-        public ulong OwnerID { get; set; }
-        public string Name { get; set; }
-        public string Desc { get; set; } = "A new adventurer set out to..... Adventure?";
-        public CharacterClass Class { get; set; }
-        public Weapon Weapon { get; set; }
-        public Armor Armor { get; set; }
-        public BackPack Backpack { get; set; }
-        public List<Spell> SpellBook = new List<Spell>();
-        public IDidTheThingPlayer ThingsDone = new IDidTheThingPlayer();
-        public int Pebbles { get; set; } = 0;
-        public int Lvl { get; set; }
-        public int Exp { get; set; }
-        public int MaxHP { get; set; }
-        public int CurrentHP { get; set; }
-        public int MaxMana { get; set; }
-        public int CurrentMana { get; set; }
-        public int Str { get; set; }
-        public int Def { get; set; }
-        public int Dex { get; set; }
-        public int Int { get; set; }
-        public int Spd { get; set; }
-        public int Lck { get; set; }
-    }
-
-    public class Match
-    {
-        public OwnerProfile Owner { get; set; }
-        public DateTime MatchStart { get; set; }
-        public DateTime LastPlayerTurn { get; set; }
-        public TimeSpan TurnTimeLimit { get; set; } = TimeSpan.FromDays(3);
-        public List<Enemy> EnemyList { get; set; } = new List<Enemy>();
-        public List<Enemy> DefeatedEnemies { get; set; } = new List<Enemy>();
-        public Enemy CurrentEnemy { get; set; }
-        public Turn CurrentTurn { get; set; } = Turn.NotChosen;
-        public int EnemyTurnTime { get; set; }
-        public int PlayerTurnTime { get; set; }
-        public int EnemySpeedTime { get; set; }
-        public int PlayerSpeedTime { get; set; }
-        public int ExperienceEarned { get; set; }
-    }
-
-    public class PlayerMatch
-    {
-        public Character Player1 { get; set; }
-        public Character Player2 { get; set; }
-        public Turn CurrentTurn { get; set; }
-        public TimeSpan TurnTimeLimit { get; set; } = TimeSpan.FromDays(1);
-    }
-
-    public class Enemy
-    {
-        public string Name { get; set; }
-        public string Desc { get; set; } = "I want your bod, not in a sexual or romantic way. But more of a dead and ragdoll kinda way";
-        public Weapon Weapon { get; set; }
-        public Armor Armor { get; set; }
-        public int Lvl { get; set; }
-        public int ExpLoot { get; set; }
-        public int MaxHP { get; set; }
-        public int CurrentHP { get; set; }
-        public int Mana { get; set; }
-        public int Str { get; set; }
-        public int Def { get; set; }
-        public int Dex { get; set; }
-        public int Int { get; set; }
-        public int Spd { get; set; }
-        public int Lck { get; set; }
-    }
-
-    public class Boss : Enemy
-    {
-        public List<IBackPackItem> Loot { get; set; } = new List<IBackPackItem>();
-    }
-
-    public class BackPack
-    {
-        public string Name { get; set; } = "BackPack";
-        public string Desc { get; set; } = "Your trusty friend you shove shit into";
-        public int Capacity { get; set; } = 10;
-        public int Weight { get; set; } = 10;
-        public List<IBackPackItem> Stored = new List<IBackPackItem>();
-    }
-
-    public class Weapon : IBackPackItem
-    {
-        public string Name { get; set; }
-        public string Desc { get; set; } = "A weapon like any other";
-        public WeaponType Type { get; set; }
-        public RarityType Rarity { get; set; } = RarityType.Common;
-        public bool IsUnique { get; set; } = false;
-        public int Lvl { get; set; } = 0;
-        public int MaxDurability { get; set; } = 0;
-        public int CurrentDurability { get; set; } = 0;
-        public int Worth { get; set; } = 0;
-        public int Speed { get; set; } = 100;
-        public int PhysicalDamage { get; set; } = 0;
-        public int MagicDamage { get; set; } = 0;
-        public int FireDamage { get; set; } = 0;
-        public int LightningDamage { get; set; } = 0;
-        public int IceDamage { get; set; } = 0;
-        public int WindDamage { get; set; } = 0;
-        public IBackPackItem BPItem()
-        {
-            //Name = this.Name;
-            //Desc = this.Desc;
-            //Type = this.Type;
-            //Rarity = this.Rarity;
-            //IsUnique = this.IsUnique;
-            //Lvl = this.Lvl;
-            //MaxDurability = this.MaxDurability;
-            //CurrentDurability = this.CurrentDurability;
-            //Worth = this.Worth;
-            //Speed = this.Speed;
-            //PhysicalDamage = this.PhysicalDamage;
-            //MagicDamage = this.MagicDamage;
-            //FireDamage = this.FireDamage;
-            //LightningDamage = this.LightningDamage;
-            //IceDamage = this.IceDamage;
-            //WindDamage = this.WindDamage;
-            return this;
-        }
-    }
-
-    public class Spell : IBackPackItem
-    {
-        public string Name { get; set; }
-        public string Desc { get; set; } = "What is this? Magic or something?";
-        public int Lvl { get; set; } = 0;
-        public int Worth { get; set; } = 0;
-        public SpellType Type { get; set; } = SpellType.Attack;
-        public RarityType Rarity { get; set; } = RarityType.Common;
-        public bool IsUnique { get; set; } = false;
-        public int ManaCost { get; set; } = 1;
-        public int Speed { get; set; } = 100;
-        public int PhysicalDamage { get; set; } = 0;
-        public int MagicDamage { get; set; } = 0;
-        public int FireDamage { get; set; } = 0;
-        public int LightningDamage { get; set; } = 0;
-        public int IceDamage { get; set; } = 0;
-        public int WindDamage { get; set; } = 0;
-        public IBackPackItem BPItem()
-        {
-            //Name = this.Name;
-            //Desc = this.Desc;
-            //Lvl = this.Lvl;
-            //Worth = this.Worth;
-            //Type = this.Type;
-            //Rarity = this.Rarity;
-            //IsUnique = this.IsUnique;
-            //ManaCost = this.ManaCost;
-            //Speed = this.Speed;
-            //PhysicalDamage = this.PhysicalDamage;
-            //MagicDamage = this.MagicDamage;
-            //FireDamage = this.FireDamage;
-            //LightningDamage = this.LightningDamage;
-            //IceDamage = this.IceDamage;
-            //WindDamage = this.WindDamage;
-            return this;
-        }
-    }
-
-    public class Item : IBackPackItem
-    {
-        public string Name { get; set; }
-        public string Desc { get; set; }
-        public ItemType Type { get; set; }
-        public int Lvl { get; set; } = 0; //used to calculate amount of Repair
-        public int Count { get; set; } = 1;
-        public int Worth { get; set; } = 0;
-        public int Physical { get; set; } = 0;
-        public int Magic { get; set; } = 0;
-        public int Fire { get; set; } = 0;
-        public int Lightning { get; set; } = 0;
-        public int Ice { get; set; } = 0;
-        public int Wind { get; set; } = 0;
-        public IBackPackItem BPItem()
-        {
-            //Name = this.Name;
-            //Desc = this.Desc;
-            //Type = this.Type;
-            //Lvl = this.Lvl;
-            //Count = this.Count;
-            //Worth = this.Worth;
-            //Physical = this.Physical;
-            //Magic = this.Magic;
-            //Fire = this.Magic;
-            //Lightning = this.Lightning;
-            //Ice = this.Ice;
-            //Wind = this.Wind;
-            return this;
-        }
-    }
-
-    public class Armor : IBackPackItem
-    {
-        public string Name { get; set; }
-        public string Desc { get; set; } = "An armor like any other";
-        public ArmorType Type { get; set; }
-        public RarityType Rarity { get; set; }
-        public bool IsUnique { get; set; } = false;
-        public int Lvl { get; set; } = 0;
-        public int MaxDurability { get; set; } = 0;
-        public int CurrentDurability { get; set; } = 0;
-        public int Worth { get; set; } = 0;
-        public int Speed { get; set; } = 100;
-        public int Physical { get; set; } = 0;
-        public int Magic { get; set; } = 0;
-        public int Fire { get; set; } = 0;
-        public int Lightning { get; set; } = 0;
-        public int Ice { get; set; } = 0;
-        public int Wind { get; set; } = 0;
-        public IBackPackItem BPItem()
-        {
-            //Name = this.Name;
-            //Desc = this.Desc;
-            //Type = this.Type;
-            //Rarity = this.Rarity;
-            //IsUnique = this.IsUnique;
-            //Lvl = this.Lvl;
-            //MaxDurability = this.MaxDurability;
-            //CurrentDurability = this.CurrentDurability;
-            //Worth = this.Worth;
-            //Speed = this.Speed;
-            //Physical = this.Physical;
-            //Magic = this.Magic;
-            //Fire = this.Fire;
-            //Lightning = this.Lightning;
-            //Ice = this.Ice;
-            //Wind = this.Wind;
-            return this;
-        }
-    }
-    
-    public class Pebble : IBackPackItem
-    {
-        public int Count { get; set; }
-        public IBackPackItem BPItem()
-        {
-            //Count = this.Count;
-            return this;    
-        }
-    }
-
-    public class IDidTheThingOwner
-    {
-        // General Stats
-        public int FightsTotal { get; set; } = 0;
-        public int FightsWon { get; set; } = 0;
-        public int FigthsLost { get; set; } = 0;
-        public int PlayerFightsTotal { get; set; } = 0;
-        public int PlayerFightsWon { get; set; } = 0;
-        public int PlayerFightsLost { get; set; } = 0;
-        public int BossesBeat { get; set; } = 0;
-        public int TotalCharactersMade { get; set; } = 0;
-
-        // Things that have been done (cheevos)
-        public bool FirstFight { get; set; } = false;
-        public bool FirstBoss { get; set; } = false;
-        public bool FirstPlayerFight { get; set; } = false; 
-    }
-
-    public class IDidTheThingPlayer
-    {
-        // General Stats
-        public int FightsTotal { get; set; } = 0;
-        public int FightsWon { get; set; } = 0;
-        public int FigthsLost { get; set; } = 0;
-        public int PlayerFightsTotal { get; set; } = 0;
-        public int PlayerFightsWon { get; set; } = 0;
-        public int PlayerFightsLost { get; set; } = 0;
-        public int BossesBeat { get; set; } = 0;
-
-        // Things that have been done (cheevos)
-        public bool FirstFight { get; set; } = false;
-        public bool FirstBoss { get; set; } = false;
-        public bool FirstPlayerFight { get; set; } = false;
-    }
-
-    #endregion
-
     public class LootDrop
     {
-       
+        #region LootDrop General
+
         /// <summary>
         /// The range of the probability values (dividing a value in _lootProbabilites by this would give a probability in the range 0..1).
         /// </summary>
         protected const int MaxProbability = 1000;
-
-        #region LootDrop General
 
         /// <summary>
         /// The loot types.
@@ -1497,7 +1497,6 @@ namespace PersonalDiscordBot.Classes
 
     public static class Weapons
     {
-
         #region Weapon Names and Descriptions
 
         public static string[] weaponNamesSword(RarityType rarity)
@@ -2062,6 +2061,13 @@ namespace PersonalDiscordBot.Classes
         public static Weapon dragonSpear = new Weapon { Name = "Novice Dragon Hunter Spear", Speed = 80, Type = WeaponType.Starter, CurrentDurability = -1, MaxDurability = -1, PhysicalDamage = 5, FireDamage = 1, LightningDamage = 1, IceDamage = 1, WindDamage = 1, Desc = "Nothing is more bad ass then a Dragon Hunter, thats why you are here, doesn't matter that there aren't any dragons around... Remember: Bad. Ass." };
         public static Weapon stick = new Weapon { Name = "A Stick", Speed = 500, Lvl = 0, Type = WeaponType.Other, Worth = 0, CurrentDurability = -1, MaxDurability = -1, PhysicalDamage = 1, Desc = "The mighty stick, it doesn't have good damage, level, or worth. But you can hit shit reeeally fast and that can be annoying as hell" };
         public static Weapon glowyOrb = new Weapon { Name = "Glowing Orb", Speed = 300, Lvl = 0, Type = WeaponType.Other, Worth = 0, CurrentDurability = -1, MaxDurability = -1, MagicDamage = 1, Desc = "You found this glowing orb in an abandoned chocolate factory, it glows a tremendous light when you hold it up and... That's it, it was probably a discontinued toy off the line" };
+        
+        public static List<Weapon> weaponList = new List<Weapon>()
+        {
+            rogueDaggers,
+            dragonSpear,
+            stick
+        };
 
         #endregion
 
@@ -2070,13 +2076,6 @@ namespace PersonalDiscordBot.Classes
         public static Weapon enemySword = new Weapon() { Name = "Enemy Sword", Desc = "Sword forged from the depths of the developers dank minds, with a very unique name", Lvl = 1, MaxDurability = -1, CurrentDurability = -1, IsUnique = false, Speed = 100, PhysicalDamage = 5, FireDamage = 50, IceDamage = 50, LightningDamage = 50, MagicDamage = 50, WindDamage = 50, Rarity = RarityType.Common, Type = WeaponType.Sword, Worth = 0 };
 
         #endregion
-
-        public static List<Weapon> weaponList = new List<Weapon>()
-        {
-            rogueDaggers,
-            dragonSpear,
-            stick
-        };
     }
 
     public static class Spells
@@ -2900,6 +2899,7 @@ namespace PersonalDiscordBot.Classes
         }
 
         #endregion
+
         #region Static Armors
 
         public static Armor knightArmor = new Armor { Name = "Novice Knight Armor", Type = ArmorType.Heavy, Lvl = 1, Speed = 50, Worth = 100, MaxDurability = 20, CurrentDurability = 20, Physical = 100, Desc = "Some beatup old armor you found in the old shed out back, next to the bones of an old dog... what was it's name again?" };
@@ -2915,11 +2915,13 @@ namespace PersonalDiscordBot.Classes
         public static Armor imperialArmor = new Armor { Name = "Imperial Armor", Type = ArmorType.Heavy, Lvl = 1, MaxDurability = 30, CurrentDurability = 30, Speed = 60, Worth = 100, Physical = 100, Desc = "Armor that tends to be weaker around the knees. Mind the arrows" };
 
         #endregion
+
         #region Enemy Armors
 
         public static Armor basicEnemyArmor = new Armor { Name = "Enemy Armor", Desc = "Armor forged from the depths of the developers minds with a unique name", Fire = 50, Ice = 50, Lightning = 50, Magic = 50, Wind = 50, Physical = 5, Speed = 100, MaxDurability = -1, CurrentDurability = -1, IsUnique = false, Lvl = 1, Rarity = RarityType.Common, Type = ArmorType.Light, Worth = 0 };
 
         #endregion
+
         #region Armor Lists
         public static List<Armor> lightArmorList = new List<Armor>()
         {
@@ -2939,6 +2941,8 @@ namespace PersonalDiscordBot.Classes
             imperialArmor
         };
         #endregion
+
+        #region Armor Methods
 
         public static Armor ArmorUniqueGen(Armor armor, RarityType rarity, int rarityValue, int charLevel)
         {
@@ -3039,6 +3043,8 @@ namespace PersonalDiscordBot.Classes
                 }
 
         }
+
+        #endregion
     }
 
     public static class Items
@@ -3119,6 +3125,8 @@ namespace PersonalDiscordBot.Classes
 
     public static class Enemies
     {
+        #region Enemy Methods
+
         public static EnemyType ChooseEnemyType()
         {
             EnemyType type = EnemyType.Goblin;
@@ -3139,11 +3147,19 @@ namespace PersonalDiscordBot.Classes
             return newEnemy;
         }
 
+        #endregion
+
+        #region Static Enemies
+
         public static Enemy punchingBag = new Enemy() { Name = "PunchingBag", Desc = "I was created by our developer gods as a baseline for combat, I also pass butter", Def = 5, Dex = 5, Int = 5, Lck = 5, Lvl = 1, Mana = 5, MaxHP = 100, CurrentHP = 100, Str = 5, Spd = 100, ExpLoot = 50, Armor = Armors.basicEnemyArmor, Weapon = Weapons.enemySword };
+
+        #endregion
     }
 
     public class Testing
     {
+        #region Testing Methods
+
         public static string line = Environment.NewLine;
 
         public static string RandomWeap(out string namer)
@@ -3256,7 +3272,7 @@ namespace PersonalDiscordBot.Classes
                 if (pickedLoot.IsUnique) unique++;
             }
             sw.Stop();
-               return ($"{line}--------------------------{line}It took {sw.Elapsed} seconds to run {num} times.{line}--------------------------{line}sword = {sword}{line}dagger = {dagger}{line}greatsword = {greatsword}{line}katana = {katana}{line}staff = {staff}{line}focusStone = {focusStone}{line}spear = {spear}{line}dragonSpear = {dragonSpear}{line}twinSwords = {twinSwords}{line}other = {other}{line}starter = {starter}{line}unique = {unique}{line}------------------------------------------------{line}common = {common}{line}uncommon = {uncommon}{line}rare = {rare}{line}epic = {epic}{line}legendary = {legendary}{line}");
+            return ($"{line}--------------------------{line}It took {sw.Elapsed} seconds to run {num} times.{line}--------------------------{line}sword = {sword}{line}dagger = {dagger}{line}greatsword = {greatsword}{line}katana = {katana}{line}staff = {staff}{line}focusStone = {focusStone}{line}spear = {spear}{line}dragonSpear = {dragonSpear}{line}twinSwords = {twinSwords}{line}other = {other}{line}starter = {starter}{line}unique = {unique}{line}------------------------------------------------{line}common = {common}{line}uncommon = {uncommon}{line}rare = {rare}{line}epic = {epic}{line}legendary = {legendary}{line}");
         }
 
         public static string RandomMassTestSpell(int num)
@@ -3418,6 +3434,10 @@ namespace PersonalDiscordBot.Classes
             return whatchaSay;
         }
 
+        #endregion
+
+        #region Testing Assets
+
         public static OwnerProfile testiculeesProfile = new OwnerProfile()
         {
             CurrentCharacter = testiculeesCharacter,
@@ -3443,6 +3463,7 @@ namespace PersonalDiscordBot.Classes
             Lck = 10
         };
 
+        #endregion
     }
 
 }
