@@ -520,3 +520,192 @@ Unique: 2972
 06/19/2017_12:26 PM :: Serializing Save Data
 06/19/2017_12:26 PM :: Serializing Permission Data
 
+06/19/2017_12:37 PM :: Version updated from 1.0.6379.22709 from 
+06/19/2017_12:37 PM :: Refreshed admin list, total admins: 0
+06/19/2017_12:37 PM :: Deserializing Sava Data
+06/19/2017_12:37 PM :: Deserializing Permission Data
+06/19/2017_12:37 PM :: Owner Deserialization Complete
+06/19/2017_12:37 PM :: Admin Deserialization Complete
+06/19/2017_12:37 PM :: 
+--------------------------
+Light: 20025
+Medium: 40050
+Heavy: 39926
+--------------------------
+Common: 43027
+Uncommon: 29914
+Rare: 15076
+Epic: 9987
+Legendary: 1997
+--------------------------
+Unique: 30045
+
+06/19/2017_12:39 PM :: 
+--------------------------
+Light: 19868
+Medium: 39967
+Heavy: 40166
+--------------------------
+Common: 43313
+Uncommon: 29683
+Rare: 14993
+Epic: 9948
+Legendary: 2064
+--------------------------
+Unique: 30249
+
+06/19/2017_12:39 PM :: Serializing Permission Data
+06/19/2017_12:39 PM :: Serializing Save Data
+
+06/19/2017_12:40 PM :: Version updated from 1.0.6379.22816 from 
+06/19/2017_12:40 PM :: Deserializing Permission Data
+06/19/2017_12:40 PM :: Deserializing Sava Data
+06/19/2017_12:40 PM :: Refreshed admin list, total admins: 0
+06/19/2017_12:40 PM :: Owner Deserialization Complete
+06/19/2017_12:40 PM :: Admin Deserialization Complete
+06/19/2017_12:40 PM :: 
+--------------------------
+Light: 199718
+Medium: 400279
+Heavy: 400004
+--------------------------
+Common: 430926
+Uncommon: 299669
+Rare: 149509
+Epic: 99812
+Legendary: 20085
+--------------------------
+Unique: 300286
+
+06/19/2017_12:42 PM :: Serializing Save Data
+06/19/2017_12:42 PM :: Serializing Permission Data
+
+06/19/2017_12:47 PM :: Version updated from 1.0.6379.23018 from 
+06/19/2017_12:47 PM :: Deserializing Sava Data
+06/19/2017_12:47 PM :: Deserializing Permission Data
+06/19/2017_12:47 PM :: Refreshed admin list, total admins: 0
+06/19/2017_12:47 PM :: Owner Deserialization Complete
+06/19/2017_12:47 PM :: Admin Deserialization Complete
+06/19/2017_12:47 PM :: 
+--------------------------This took System.Diagnostics.Stopwatch long to finish.
+--------------------------
+Light: 199792
+Medium: 400390
+Heavy: 399819
+--------------------------
+Common: 430748
+Uncommon: 299429
+Rare: 149909
+Epic: 100104
+Legendary: 19811
+--------------------------
+Unique: 300866
+
+06/19/2017_12:47 PM :: Serializing Permission Data
+06/19/2017_12:47 PM :: Serializing Save Data
+
+06/19/2017_12:47 PM :: Version updated from 1.0.6379.23032 from 
+06/19/2017_12:47 PM :: Deserializing Permission Data
+06/19/2017_12:47 PM :: Deserializing Sava Data
+06/19/2017_12:47 PM :: Refreshed admin list, total admins: 0
+06/19/2017_12:47 PM :: Owner Deserialization Complete
+06/19/2017_12:47 PM :: Admin Deserialization Complete
+06/19/2017_12:48 PM :: 
+--------------------------This took System.Diagnostics.Stopwatch long to finish.
+--------------------------
+Light: 200448
+Medium: 399750
+Heavy: 399803
+--------------------------
+Common: 429758
+Uncommon: 299872
+Rare: 150139
+Epic: 100115
+Legendary: 20117
+--------------------------
+Unique: 299899
+
+06/19/2017_12:48 PM :: Serializing Save Data
+06/19/2017_12:48 PM :: Serializing Permission Data
+
+06/19/2017_12:50 PM :: Version updated from 1.0.6379.23102 from 
+06/19/2017_12:50 PM :: Refreshed admin list, total admins: 0
+06/19/2017_12:50 PM :: Deserializing Sava Data
+06/19/2017_12:50 PM :: Deserializing Permission Data
+06/19/2017_12:50 PM :: Owner Deserialization Complete
+06/19/2017_12:50 PM :: Admin Deserialization Complete
+06/19/2017_12:51 PM :: 
+--------------------------This took 00:00:02.9013511 long to finish.
+--------------------------
+Light: 199789
+Medium: 400304
+Heavy: 399908
+--------------------------
+Common: 430666
+Uncommon: 300292
+Rare: 149791
+Epic: 99444
+Legendary: 19808
+--------------------------
+Unique: 300496
+
+06/19/2017_12:51 PM :: Serializing Save Data
+06/19/2017_12:51 PM :: Serializing Permission Data
+
+06/19/2017_12:52 PM :: Version updated from 1.0.6379.23166 from 
+06/19/2017_12:52 PM :: Refreshed admin list, total admins: 0
+06/19/2017_12:52 PM :: Deserializing Sava Data
+06/19/2017_12:52 PM :: Deserializing Permission Data
+06/19/2017_12:52 PM :: Owner Deserialization Complete
+06/19/2017_12:52 PM :: Admin Deserialization Complete
+06/19/2017_12:52 PM :: 
+--------------------------
+It took 00:00:03.1605540 seconds to run 1000000 times.
+--------------------------
+Light: 200476
+Medium: 399542
+Heavy: 399983
+--------------------------
+Common: 430678
+Uncommon: 299438
+Rare: 149485
+Epic: 100181
+Legendary: 20219
+--------------------------
+Unique: 298990
+
+06/19/2017_12:52 PM :: Serializing Save Data
+06/19/2017_12:52 PM :: Serializing Permission Data
+
+06/19/2017_12:56 PM :: Version updated from 1.0.6379.23294 from 
+06/19/2017_12:56 PM :: Deserializing Sava Data
+06/19/2017_12:56 PM :: Refreshed admin list, total admins: 0
+06/19/2017_12:56 PM :: Deserializing Permission Data
+06/19/2017_12:56 PM :: Owner Deserialization Complete
+06/19/2017_12:56 PM :: Admin Deserialization Complete
+06/19/2017_12:57 PM :: 
+--------------------------
+It took 00:00:05.1925218 seconds to run 1000000 times.
+--------------------------
+sword = 369854
+dagger = 69818
+greatsword = 35078
+katana = 34889
+staff = 35122
+focusStone = 34889
+spear = 140271
+dragonSpear = 139752
+twinSwords = 140328
+other = 0
+starter = 0
+unique = 300297
+------------------------------------------------
+common = 600010
+uncommon = 211025
+rare = 104920
+epic = 69914
+legendary = 14132
+
+06/19/2017_1:03 PM :: Serializing Save Data
+06/19/2017_1:03 PM :: Serializing Permission Data
+

@@ -740,3 +740,402 @@ Unique: 2972
 ########################## Application Stop ##########################
 
 
+06-19-17_12:37:01 PM :: 
+########################## Application Start ##########################
+
+06-19-17_12:37:01 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-19-17_12:37:01 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-19-17_12:37:01 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-19-17_12:37:01 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-19-17_12:37:01 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-19-17_12:37:01 PM :: Finished reading config
+06-19-17_12:37:02 PM :: Loading window location
+06-19-17_12:37:02 PM :: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+06-19-17_12:37:02 PM :: Set Grid grdStatus to Hidden on launch
+06-19-17_12:37:02 PM :: Set Grid grdSettings to Hidden on launch
+06-19-17_12:37:02 PM :: Set Grid grdServers to Hidden on launch
+06-19-17_12:37:02 PM :: Set Grid grdBotInfo to Hidden on launch
+06-19-17_12:37:02 PM :: STATUS: Version updated from 1.0.6379.22709 from 
+06-19-17_12:37:02 PM :: Refreshing admin list
+06-19-17_12:37:02 PM :: STATUS: Refreshed admin list, total admins: 0
+06-19-17_12:37:02 PM :: STATUS: Deserializing Sava Data
+06-19-17_12:37:02 PM :: STATUS: Deserializing Permission Data
+06-19-17_12:37:02 PM :: Found Administrators.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\Administrators.perm
+06-19-17_12:37:02 PM :: Deserialized Administrators.perm
+06-19-17_12:37:02 PM :: Found RPGChannels.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\RPGChannels.perm
+06-19-17_12:37:02 PM :: Deserialized RPGChannels.perm
+06-19-17_12:37:02 PM :: STATUS: Admin Deserialization Complete
+06-19-17_12:37:02 PM :: STATUS: Owner Deserialization Complete
+06-19-17_12:37:03 PM :: Revealed Grid grdStatus
+06-19-17_12:37:03 PM :: Hid Grid grdSettings
+06-19-17_12:37:03 PM :: Hid Grid grdServers
+06-19-17_12:37:03 PM :: Hid Grid grdBotInfo
+06-19-17_12:37:03 PM :: Slid Main Menu out of view
+06-19-17_12:37:04 PM :: STATUS: 
+--------------------------
+Light: 20025
+Medium: 40050
+Heavy: 39926
+--------------------------
+Common: 43027
+Uncommon: 29914
+Rare: 15076
+Epic: 9987
+Legendary: 1997
+--------------------------
+Unique: 30045
+
+06-19-17_12:39:02 PM :: STATUS: 
+--------------------------
+Light: 19868
+Medium: 39967
+Heavy: 40166
+--------------------------
+Common: 43313
+Uncommon: 29683
+Rare: 14993
+Epic: 9948
+Legendary: 2064
+--------------------------
+Unique: 30249
+
+06-19-17_12:39:05 PM :: 
+########################## Application Stop ##########################
+
+
+06-19-17_12:40:34 PM :: 
+########################## Application Start ##########################
+
+06-19-17_12:40:34 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-19-17_12:40:34 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-19-17_12:40:34 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-19-17_12:40:34 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-19-17_12:40:35 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-19-17_12:40:35 PM :: Finished reading config
+06-19-17_12:40:35 PM :: Loading window location
+06-19-17_12:40:35 PM :: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+06-19-17_12:40:35 PM :: Set Grid grdStatus to Hidden on launch
+06-19-17_12:40:35 PM :: Set Grid grdSettings to Hidden on launch
+06-19-17_12:40:35 PM :: Set Grid grdServers to Hidden on launch
+06-19-17_12:40:35 PM :: Set Grid grdBotInfo to Hidden on launch
+06-19-17_12:40:36 PM :: STATUS: Version updated from 1.0.6379.22816 from 
+06-19-17_12:40:36 PM :: Refreshing admin list
+06-19-17_12:40:36 PM :: STATUS: Deserializing Permission Data
+06-19-17_12:40:36 PM :: STATUS: Deserializing Sava Data
+06-19-17_12:40:36 PM :: STATUS: Refreshed admin list, total admins: 0
+06-19-17_12:40:36 PM :: Found Administrators.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\Administrators.perm
+06-19-17_12:40:36 PM :: Deserialized Administrators.perm
+06-19-17_12:40:36 PM :: Found RPGChannels.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\RPGChannels.perm
+06-19-17_12:40:36 PM :: Deserialized RPGChannels.perm
+06-19-17_12:40:36 PM :: STATUS: Admin Deserialization Complete
+06-19-17_12:40:36 PM :: STATUS: Owner Deserialization Complete
+06-19-17_12:40:37 PM :: Revealed Grid grdStatus
+06-19-17_12:40:37 PM :: Hid Grid grdSettings
+06-19-17_12:40:37 PM :: Hid Grid grdServers
+06-19-17_12:40:37 PM :: Hid Grid grdBotInfo
+06-19-17_12:40:37 PM :: Slid Main Menu out of view
+06-19-17_12:40:41 PM :: STATUS: 
+--------------------------
+Light: 199718
+Medium: 400279
+Heavy: 400004
+--------------------------
+Common: 430926
+Uncommon: 299669
+Rare: 149509
+Epic: 99812
+Legendary: 20085
+--------------------------
+Unique: 300286
+
+06-19-17_12:42:07 PM :: 
+########################## Application Stop ##########################
+
+
+06-19-17_12:47:17 PM :: 
+########################## Application Start ##########################
+
+06-19-17_12:47:17 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-19-17_12:47:17 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-19-17_12:47:17 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-19-17_12:47:17 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-19-17_12:47:18 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-19-17_12:47:18 PM :: Finished reading config
+06-19-17_12:47:19 PM :: Loading window location
+06-19-17_12:47:19 PM :: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+06-19-17_12:47:19 PM :: Set Grid grdStatus to Hidden on launch
+06-19-17_12:47:19 PM :: Set Grid grdSettings to Hidden on launch
+06-19-17_12:47:19 PM :: Set Grid grdServers to Hidden on launch
+06-19-17_12:47:19 PM :: Set Grid grdBotInfo to Hidden on launch
+06-19-17_12:47:19 PM :: STATUS: Version updated from 1.0.6379.23018 from 
+06-19-17_12:47:19 PM :: Refreshing admin list
+06-19-17_12:47:19 PM :: STATUS: Deserializing Sava Data
+06-19-17_12:47:19 PM :: STATUS: Deserializing Permission Data
+06-19-17_12:47:19 PM :: STATUS: Refreshed admin list, total admins: 0
+06-19-17_12:47:19 PM :: Found Administrators.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\Administrators.perm
+06-19-17_12:47:19 PM :: Deserialized Administrators.perm
+06-19-17_12:47:19 PM :: Found RPGChannels.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\RPGChannels.perm
+06-19-17_12:47:19 PM :: Deserialized RPGChannels.perm
+06-19-17_12:47:19 PM :: STATUS: Admin Deserialization Complete
+06-19-17_12:47:19 PM :: STATUS: Owner Deserialization Complete
+06-19-17_12:47:24 PM :: STATUS: 
+--------------------------This took System.Diagnostics.Stopwatch long to finish.
+--------------------------
+Light: 199792
+Medium: 400390
+Heavy: 399819
+--------------------------
+Common: 430748
+Uncommon: 299429
+Rare: 149909
+Epic: 100104
+Legendary: 19811
+--------------------------
+Unique: 300866
+
+06-19-17_12:47:24 PM :: Revealed Grid grdStatus
+06-19-17_12:47:24 PM :: Hid Grid grdSettings
+06-19-17_12:47:24 PM :: Hid Grid grdServers
+06-19-17_12:47:24 PM :: Hid Grid grdBotInfo
+06-19-17_12:47:24 PM :: Slid Main Menu out of view
+06-19-17_12:47:33 PM :: 
+########################## Application Stop ##########################
+
+
+06-19-17_12:47:45 PM :: 
+########################## Application Start ##########################
+
+06-19-17_12:47:45 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-19-17_12:47:45 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-19-17_12:47:45 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-19-17_12:47:45 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-19-17_12:47:45 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-19-17_12:47:45 PM :: Finished reading config
+06-19-17_12:47:46 PM :: Loading window location
+06-19-17_12:47:46 PM :: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+06-19-17_12:47:46 PM :: Set Grid grdStatus to Hidden on launch
+06-19-17_12:47:46 PM :: Set Grid grdSettings to Hidden on launch
+06-19-17_12:47:46 PM :: Set Grid grdServers to Hidden on launch
+06-19-17_12:47:46 PM :: Set Grid grdBotInfo to Hidden on launch
+06-19-17_12:47:46 PM :: STATUS: Version updated from 1.0.6379.23032 from 
+06-19-17_12:47:46 PM :: Refreshing admin list
+06-19-17_12:47:46 PM :: STATUS: Deserializing Permission Data
+06-19-17_12:47:46 PM :: STATUS: Deserializing Sava Data
+06-19-17_12:47:46 PM :: STATUS: Refreshed admin list, total admins: 0
+06-19-17_12:47:46 PM :: Found Administrators.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\Administrators.perm
+06-19-17_12:47:46 PM :: STATUS: Owner Deserialization Complete
+06-19-17_12:47:46 PM :: Deserialized Administrators.perm
+06-19-17_12:47:46 PM :: Found RPGChannels.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\RPGChannels.perm
+06-19-17_12:47:46 PM :: Deserialized RPGChannels.perm
+06-19-17_12:47:46 PM :: STATUS: Admin Deserialization Complete
+06-19-17_12:48:15 PM :: Revealed Grid grdStatus
+06-19-17_12:48:15 PM :: Hid Grid grdSettings
+06-19-17_12:48:15 PM :: Hid Grid grdServers
+06-19-17_12:48:15 PM :: Hid Grid grdBotInfo
+06-19-17_12:48:15 PM :: Slid Main Menu out of view
+06-19-17_12:48:19 PM :: STATUS: 
+--------------------------This took System.Diagnostics.Stopwatch long to finish.
+--------------------------
+Light: 200448
+Medium: 399750
+Heavy: 399803
+--------------------------
+Common: 429758
+Uncommon: 299872
+Rare: 150139
+Epic: 100115
+Legendary: 20117
+--------------------------
+Unique: 299899
+
+06-19-17_12:48:21 PM :: 
+########################## Application Stop ##########################
+
+
+06-19-17_12:50:05 PM :: 
+########################## Application Start ##########################
+
+06-19-17_12:50:05 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-19-17_12:50:05 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-19-17_12:50:05 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-19-17_12:50:05 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-19-17_12:50:06 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-19-17_12:50:06 PM :: Finished reading config
+06-19-17_12:50:07 PM :: Loading window location
+06-19-17_12:50:07 PM :: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+06-19-17_12:50:07 PM :: Set Grid grdStatus to Hidden on launch
+06-19-17_12:50:07 PM :: Set Grid grdSettings to Hidden on launch
+06-19-17_12:50:07 PM :: Set Grid grdServers to Hidden on launch
+06-19-17_12:50:07 PM :: Set Grid grdBotInfo to Hidden on launch
+06-19-17_12:50:07 PM :: STATUS: Version updated from 1.0.6379.23102 from 
+06-19-17_12:50:07 PM :: Refreshing admin list
+06-19-17_12:50:07 PM :: STATUS: Refreshed admin list, total admins: 0
+06-19-17_12:50:07 PM :: STATUS: Deserializing Sava Data
+06-19-17_12:50:07 PM :: STATUS: Deserializing Permission Data
+06-19-17_12:50:07 PM :: Found Administrators.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\Administrators.perm
+06-19-17_12:50:07 PM :: Deserialized Administrators.perm
+06-19-17_12:50:07 PM :: Found RPGChannels.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\RPGChannels.perm
+06-19-17_12:50:07 PM :: STATUS: Owner Deserialization Complete
+06-19-17_12:50:07 PM :: Deserialized RPGChannels.perm
+06-19-17_12:50:07 PM :: STATUS: Admin Deserialization Complete
+06-19-17_12:51:11 PM :: Revealed Grid grdStatus
+06-19-17_12:51:11 PM :: Hid Grid grdSettings
+06-19-17_12:51:11 PM :: Hid Grid grdServers
+06-19-17_12:51:11 PM :: Hid Grid grdBotInfo
+06-19-17_12:51:11 PM :: Slid Main Menu out of view
+06-19-17_12:51:15 PM :: STATUS: 
+--------------------------This took 00:00:02.9013511 long to finish.
+--------------------------
+Light: 199789
+Medium: 400304
+Heavy: 399908
+--------------------------
+Common: 430666
+Uncommon: 300292
+Rare: 149791
+Epic: 99444
+Legendary: 19808
+--------------------------
+Unique: 300496
+
+06-19-17_12:51:27 PM :: 
+########################## Application Stop ##########################
+
+
+06-19-17_12:52:13 PM :: 
+########################## Application Start ##########################
+
+06-19-17_12:52:13 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-19-17_12:52:13 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-19-17_12:52:13 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-19-17_12:52:13 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-19-17_12:52:14 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-19-17_12:52:14 PM :: Finished reading config
+06-19-17_12:52:15 PM :: Loading window location
+06-19-17_12:52:15 PM :: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+06-19-17_12:52:15 PM :: Set Grid grdStatus to Hidden on launch
+06-19-17_12:52:15 PM :: Set Grid grdSettings to Hidden on launch
+06-19-17_12:52:15 PM :: Set Grid grdServers to Hidden on launch
+06-19-17_12:52:15 PM :: Set Grid grdBotInfo to Hidden on launch
+06-19-17_12:52:15 PM :: STATUS: Version updated from 1.0.6379.23166 from 
+06-19-17_12:52:15 PM :: Refreshing admin list
+06-19-17_12:52:15 PM :: STATUS: Refreshed admin list, total admins: 0
+06-19-17_12:52:15 PM :: STATUS: Deserializing Sava Data
+06-19-17_12:52:15 PM :: STATUS: Deserializing Permission Data
+06-19-17_12:52:15 PM :: Found Administrators.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\Administrators.perm
+06-19-17_12:52:15 PM :: STATUS: Owner Deserialization Complete
+06-19-17_12:52:15 PM :: Deserialized Administrators.perm
+06-19-17_12:52:15 PM :: Found RPGChannels.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\RPGChannels.perm
+06-19-17_12:52:15 PM :: Deserialized RPGChannels.perm
+06-19-17_12:52:15 PM :: STATUS: Admin Deserialization Complete
+06-19-17_12:52:16 PM :: Revealed Grid grdStatus
+06-19-17_12:52:16 PM :: Hid Grid grdSettings
+06-19-17_12:52:16 PM :: Hid Grid grdServers
+06-19-17_12:52:16 PM :: Hid Grid grdBotInfo
+06-19-17_12:52:16 PM :: Slid Main Menu out of view
+06-19-17_12:52:20 PM :: STATUS: 
+--------------------------
+It took 00:00:03.1605540 seconds to run 1000000 times.
+--------------------------
+Light: 200476
+Medium: 399542
+Heavy: 399983
+--------------------------
+Common: 430678
+Uncommon: 299438
+Rare: 149485
+Epic: 100181
+Legendary: 20219
+--------------------------
+Unique: 298990
+
+06-19-17_12:52:40 PM :: 
+########################## Application Stop ##########################
+
+
+06-19-17_12:56:30 PM :: 
+########################## Application Start ##########################
+
+06-19-17_12:56:30 PM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-19-17_12:56:30 PM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-19-17_12:56:30 PM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-19-17_12:56:30 PM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-19-17_12:56:30 PM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-19-17_12:56:30 PM :: Finished reading config
+06-19-17_12:56:31 PM :: Loading window location
+06-19-17_12:56:31 PM :: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+06-19-17_12:56:31 PM :: Set Grid grdStatus to Hidden on launch
+06-19-17_12:56:31 PM :: Set Grid grdSettings to Hidden on launch
+06-19-17_12:56:31 PM :: Set Grid grdServers to Hidden on launch
+06-19-17_12:56:31 PM :: Set Grid grdBotInfo to Hidden on launch
+06-19-17_12:56:31 PM :: STATUS: Version updated from 1.0.6379.23294 from 
+06-19-17_12:56:31 PM :: Refreshing admin list
+06-19-17_12:56:31 PM :: STATUS: Deserializing Sava Data
+06-19-17_12:56:31 PM :: STATUS: Refreshed admin list, total admins: 0
+06-19-17_12:56:31 PM :: STATUS: Deserializing Permission Data
+06-19-17_12:56:31 PM :: Found Administrators.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\Administrators.perm
+06-19-17_12:56:31 PM :: STATUS: Owner Deserialization Complete
+06-19-17_12:56:31 PM :: Deserialized Administrators.perm
+06-19-17_12:56:31 PM :: Found RPGChannels.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\RPGChannels.perm
+06-19-17_12:56:31 PM :: Deserialized RPGChannels.perm
+06-19-17_12:56:31 PM :: STATUS: Admin Deserialization Complete
+06-19-17_12:56:56 PM :: Revealed Grid grdStatus
+06-19-17_12:56:56 PM :: Hid Grid grdSettings
+06-19-17_12:56:56 PM :: Hid Grid grdServers
+06-19-17_12:56:56 PM :: Hid Grid grdBotInfo
+06-19-17_12:56:56 PM :: Slid Main Menu out of view
+06-19-17_12:57:02 PM :: STATUS: 
+--------------------------
+It took 00:00:05.1925218 seconds to run 1000000 times.
+--------------------------
+sword = 369854
+dagger = 69818
+greatsword = 35078
+katana = 34889
+staff = 35122
+focusStone = 34889
+spear = 140271
+dragonSpear = 139752
+twinSwords = 140328
+other = 0
+starter = 0
+unique = 300297
+------------------------------------------------
+common = 600010
+uncommon = 211025
+rare = 104920
+epic = 69914
+legendary = 14132
+
+06-19-17_1:03:38 PM :: 
+########################## Application Stop ##########################
+
+

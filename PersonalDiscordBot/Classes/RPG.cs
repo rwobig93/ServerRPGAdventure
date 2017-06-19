@@ -3192,7 +3192,9 @@ namespace PersonalDiscordBot.Classes
             int rare = 0;
             int epic = 0;
             int legendary = 0;
+            var sw = new System.Diagnostics.Stopwatch();
 
+            sw.Start();
             for (int i = 0; i <= num; i++)
             {
                 RarityType rarity = LootDrop.ChooseRarity();
@@ -3253,8 +3255,8 @@ namespace PersonalDiscordBot.Classes
                 }
                 if (pickedLoot.IsUnique) unique++;
             }
-
-               return ($"{line}sword = {sword}{line}dagger = {dagger}{line}greatsword = {greatsword}{line}katana = {katana}{line}staff = {staff}{line}focusStone = {focusStone}{line}spear = {spear}{line}dragonSpear = {dragonSpear}{line}twinSwords = {twinSwords}{line}other = {other}{line}starter = {starter}{line}unique = {unique}{line}------------------------------------------------{line}common = {common}{line}uncommon = {uncommon}{line}rare = {rare}{line}epic = {epic}{line}legendary = {legendary}{line}");
+            sw.Stop();
+               return ($"{line}--------------------------{line}It took {sw.Elapsed} seconds to run {num} times.{line}--------------------------{line}sword = {sword}{line}dagger = {dagger}{line}greatsword = {greatsword}{line}katana = {katana}{line}staff = {staff}{line}focusStone = {focusStone}{line}spear = {spear}{line}dragonSpear = {dragonSpear}{line}twinSwords = {twinSwords}{line}other = {other}{line}starter = {starter}{line}unique = {unique}{line}------------------------------------------------{line}common = {common}{line}uncommon = {uncommon}{line}rare = {rare}{line}epic = {epic}{line}legendary = {legendary}{line}");
         }
 
         public static string RandomMassTestSpell(int num)
@@ -3351,7 +3353,9 @@ namespace PersonalDiscordBot.Classes
             int rare = 0;
             int epic = 0;
             int legendary = 0;
+            var sw = new System.Diagnostics.Stopwatch();
 
+            sw.Start();
             for (int i = 0; i <= num; i++)
             {
                 RarityType rarity = LootDrop.ChooseRarity();
@@ -3388,7 +3392,8 @@ namespace PersonalDiscordBot.Classes
                 }
                 if (loot.IsUnique) isUnique++;
             }
-            return $"{line}--------------------------{line}Light: {light}{line}Medium: {medium}{line}Heavy: {heavy}{line}--------------------------{line}Common: {common}{line}Uncommon: {uncommon}{line}Rare: {rare}{line}Epic: {epic}{line}Legendary: {legendary}{line}--------------------------{line}Unique: {isUnique}{line}";
+            sw.Stop();
+            return $"{line}--------------------------{line}It took {sw.Elapsed} seconds to run {num} times.{line}--------------------------{line}Light: {light}{line}Medium: {medium}{line}Heavy: {heavy}{line}--------------------------{line}Common: {common}{line}Uncommon: {uncommon}{line}Rare: {rare}{line}Epic: {epic}{line}Legendary: {legendary}{line}--------------------------{line}Unique: {isUnique}{line}";
 
         }
 
@@ -3424,7 +3429,7 @@ namespace PersonalDiscordBot.Classes
         public static Character testiculeesCharacter = new Character()
         {
             Name = "Testiculees teh Great",
-            Class = CharacterClass.Warrior,
+            Class = CharacterClass.Dragoon,
             Lvl = 1,
             OwnerID = testiculeesProfile.OwnerID,
             Armor = Armors.knightArmor,
