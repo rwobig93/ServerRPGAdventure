@@ -815,7 +815,8 @@ namespace PersonalDiscordBot.Classes
                  "{0}```╬▧۩ Help Articles ۩▨╬```{0}" +
                  "```;help server{0}Shows game server commands, now you have the powah```" +
                  "```;help general{0}General commands regarding the bot or misc functions, remember I'm your buddy friend pal```" +
-                 "```;help translate{0}Text/Message translation methods, leetify your snoop game yo```",
+                 "```;help translate{0}Text/Message translation methods, leetify your snoop game yo```"+
+                 "```;help test{0}Show commands to test RPG stuff```",
                  Environment.NewLine
                 );
                 await Context.Channel.SendMessageAsync(_helpArticle);
@@ -890,6 +891,42 @@ namespace PersonalDiscordBot.Classes
                  "```;snoop dogg{0}Toggles every message being snoopified```" +
                  "```;leet{0}Turns whatever you say into a string that of a 1337 hackaman```" +
                  "```;leet 100{0}Does the same thing as leet but the number you put in front of your sentence defines what level of leet you want the sentence to be translated to```",
+                 Environment.NewLine
+                );
+                await Context.Channel.SendMessageAsync(_helpArticle);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("test"), Summary("RPG Testing Commands")]
+        public async Task DefHelpTest()
+        {
+            try
+            {
+                string _helpArticle = string.Format
+                (
+                 "_{0}" +
+                 "{0}```╬ RPG Testing Commands ╬```{0}" +
+                 "```;test{0}Testicules Engages in...something?```" +
+                 "```;test weap{0}Creates a random weapon.```" +
+                 "```;test spell{0}Creates a random spell.```" +
+                 "```;test rng weap %Number%{0}Creates %Number% of random weapons.```"+
+                 "```;test rng spell %Number%{0}Creates %Number% of random spells.```"+
+                 "```;test lootdrop{0}Simulates that lootdrop that you don't actually get for winning a fight (yet).```" +
+                 "```;test create{0}Khajiit creates character, if you have coin.```" +
+                 "```;test give %Character% %Amount%{0}(Requires Admin) Gives %Character% %Amount% of coins.```" +
+                 "```;test swtich{0}Displays a list of your characters and allows you to choose which one to Activate. You may only have 1 character active at a time.```" +
+                 "```;test testiculees{0}(Requires Admin) Summons the mighty Testiculees, Champion of Unhandled Exceptions, and adds him to your list of characters.```" +
+                 "```;test delete{0}(Requires Admin) Deletes your profile. No one liked you anyway.```" +
+                 "```;test delete %USER%{0}(Requires Admin) Deletes %USER%'s profile. No one like them anyway.```" +
+                 "```;test rpg{0}(Requires Admin) Allows or Denies a channel to use RPG commands.```" +
+                 "```;test permission{0}Checks to see if channel can or can't use RPG commands.```" +
+                 "```;test match{0}Start a match against AI.```" +
+                 "```;test attack{0}Attacks your oppoenent in your current match.```" +
+                 "```;test loot{0}Displays all the phat loot you have.```",
                  Environment.NewLine
                 );
                 await Context.Channel.SendMessageAsync(_helpArticle);
@@ -1134,20 +1171,21 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                var intTimes = 1000;
+                var intTimes = 0;
                 var isANum = int.TryParse(times, out intTimes);
                 if (isANum)
                 {
                     if (intTimes > 100000)
                     {
                         await Context.Channel.SendMessageAsync("The highest integer allowed is 100,000. I'm generating that for you now, don't do that again!");
-                        await Context.Channel.SendMessageAsync($"Generated {100000} Weapons:{Environment.NewLine}{Testing.RandomMassTestWeap(1000)}");
+                        intTimes = 100000;
+                        await Context.Channel.SendMessageAsync($"Generated {intTimes} Weapons:{Environment.NewLine}{Testing.RandomMassTestWeap(intTimes)}");
                     }
                     else
                         await Context.Channel.SendMessageAsync($"Generated {intTimes} Weapons:{Environment.NewLine}{Testing.RandomMassTestWeap(intTimes)}");
                 }
                 else
-                    await Context.Channel.SendMessageAsync($"Generated {1000} Weapons:{Environment.NewLine}{Testing.RandomMassTestWeap(1000)}");
+                    await Context.Channel.SendMessageAsync($"{intTimes} is not a valid number. Rethink your life choices and try again.");
             }
             catch (Exception ex)
             {
@@ -1160,20 +1198,21 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                var intTimes = 1000;
+                var intTimes = 0;
                 var isANum = int.TryParse(times, out intTimes);
                 if (isANum)
                 {
                     if (intTimes > 100000)
                     {
                         await Context.Channel.SendMessageAsync("The highest integer allowed is 100,000. I'm generating that for you now, don't do that again!");
-                        await Context.Channel.SendMessageAsync($"Generated {1000} Spells:{Environment.NewLine}{Testing.RandomMassTestSpell(100000)}");
+                        intTimes = 100000;
+                        await Context.Channel.SendMessageAsync($"Generated {intTimes} Spells:{Environment.NewLine}{Testing.RandomMassTestSpell(intTimes)}");
                     }
                     else
                         await Context.Channel.SendMessageAsync($"Generated {intTimes} Spells:{Environment.NewLine}{Testing.RandomMassTestSpell(intTimes)}");
                 }
                 else
-                    await Context.Channel.SendMessageAsync($"Generated {1000} Spells:{Environment.NewLine}{Testing.RandomMassTestSpell(1000)}");
+                    await Context.Channel.SendMessageAsync($"{intTimes} is not a valid number. Rethink your life choices and try again.");
             }
             catch (Exception ex)
             {

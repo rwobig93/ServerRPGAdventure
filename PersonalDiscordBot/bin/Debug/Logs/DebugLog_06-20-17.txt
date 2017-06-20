@@ -775,3 +775,90 @@ Unique Items: 74588
 ########################## Application Stop ##########################
 
 
+06-20-17_7:58:24 AM :: 
+########################## Application Start ##########################
+
+06-20-17_7:58:24 AM :: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-20-17_7:58:24 AM :: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-20-17_7:58:24 AM :: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-20-17_7:58:24 AM :: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-20-17_7:58:24 AM :: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-20-17_7:58:24 AM :: Finished reading config
+06-20-17_7:58:25 AM :: STATUS: Running DEBUG Mode
+06-20-17_7:58:25 AM :: Loading window location
+06-20-17_7:58:25 AM :: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+06-20-17_7:58:25 AM :: Set Grid grdStatus to Hidden on launch
+06-20-17_7:58:25 AM :: Set Grid grdSettings to Hidden on launch
+06-20-17_7:58:25 AM :: Set Grid grdServers to Hidden on launch
+06-20-17_7:58:25 AM :: Set Grid grdBotInfo to Hidden on launch
+06-20-17_7:58:25 AM :: STATUS: Version updated from 1.0.6380.14351 from 
+06-20-17_7:58:25 AM :: Refreshing admin list
+06-20-17_7:58:25 AM :: STATUS: Deserializing Sava Data
+06-20-17_7:58:25 AM :: STATUS: Deserializing Permission Data
+06-20-17_7:58:25 AM :: STATUS: Refreshed admin list, total admins: 0
+06-20-17_7:58:25 AM :: Found Administrators.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\Administrators.perm
+06-20-17_7:58:25 AM :: Deserialized Administrators.perm
+06-20-17_7:58:25 AM :: Found RPGChannels.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\RPGChannels.perm
+06-20-17_7:58:25 AM :: Deserialized RPGChannels.perm
+06-20-17_7:58:25 AM :: STATUS: Admin Deserialization Complete
+06-20-17_7:58:25 AM :: STATUS: Owner Deserialization Complete
+06-20-17_7:58:26 AM :: Revealed Grid grdStatus
+06-20-17_7:58:26 AM :: Hid Grid grdSettings
+06-20-17_7:58:26 AM :: Hid Grid grdServers
+06-20-17_7:58:26 AM :: Hid Grid grdBotInfo
+06-20-17_7:58:26 AM :: Slid Main Menu out of view
+06-20-17_7:58:34 AM :: STATUS: The max number was 1,000,000 you fool! Rerunning your result with the maxium number. Which is 1,000,000. 1,000,000. In case you forgot.
+
+You simulated 1000000 loot drops.
+It took 7.3886162 seconds to run.
+Here are your results:
+---------------------------
+Armor: 100362
+     Light: 9909
+     Medium: 50366
+     Heavy: 40087
+---------------------------
+Item: 599943
+     Restore: 180247
+     Buff: 89990
+     Damage: 90269
+     Money: 9909
+     Repair: 59548
+---------------------------
+Nothing: 150439
+---------------------------
+Spell: 49605
+     Attack: 16651
+     Defense: 16394
+     Restorative: 16560
+     Starter Spell: 0
+---------------------------
+Weapon: 99651
+     Sword: 36697
+     Dagger: 6929
+     GreatSword: 3480
+     Katana: 3445
+     Staff: 3521
+     Focus Stone: 3469
+     Spear: 13891
+     Dragon Spear:  13905
+     Twin Swords: 14314
+     Other:  0
+     Starter Weapon: 0
+---------------------------
+Rarity:
+     Common:  960182
+     Uncommon: 20996
+     Rare: 10550
+     Epic: 6895
+     Legendary: 1377
+---------------------------
+Unique Items: 74715
+06-20-17_8:01:03 AM :: 
+########################## Application Stop ##########################
+
+
