@@ -67,6 +67,8 @@ namespace PersonalDiscordBot.Classes
         #endregion
     }
 
+    #region Event Args
+
     public class PromptArgs : EventArgs
     {
         private string content;
@@ -134,4 +136,6 @@ namespace PersonalDiscordBot.Classes
         public RPG.Turn OldTurn { get { return oldTurn; } }
         public ulong OwnerID { get { return ownerID; } }
     }
+
+    #endregion
 }
