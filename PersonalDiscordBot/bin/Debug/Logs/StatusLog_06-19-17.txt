@@ -1162,3 +1162,203 @@ Wind: 0
 06/19/2017_4:52 PM :: Serializing Save Data
 06/19/2017_4:52 PM :: Serializing Permission Data
 
+6/19/2017_7:02 PM :: Running DEBUG Mode
+6/19/2017_7:02 PM :: Version updated from 1.0.6379.34277 from 
+6/19/2017_7:02 PM :: Deserializing Permission Data
+6/19/2017_7:02 PM :: Deserializing Sava Data
+6/19/2017_7:02 PM :: Refreshed admin list, total admins: 0
+6/19/2017_7:02 PM :: Owner Deserialization Complete
+6/19/2017_7:02 PM :: Admin Deserialization Complete
+6/19/2017_7:02 PM :: Your Loot is: PersonalDiscordBot.Classes.Armor
+Name: Rare Mythril Armor
+Desc: Heavy Rare Mythril Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 50
+CurrentDurability: 50
+Worth: 164
+Speed: 80
+Physical: 21
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+6/19/2017_7:04 PM :: Serializing Permission Data
+6/19/2017_7:04 PM :: Serializing Save Data
+
+6/19/2017_9:06 PM :: Running DEBUG Mode
+6/19/2017_9:06 PM :: Version updated from 1.0.6379.37988 from 
+6/19/2017_9:06 PM :: Deserializing Permission Data
+6/19/2017_9:06 PM :: Deserializing Sava Data
+6/19/2017_9:06 PM :: Refreshed admin list, total admins: 0
+6/19/2017_9:06 PM :: Owner Deserialization Complete
+6/19/2017_9:06 PM :: Admin Deserialization Complete
+6/19/2017_9:06 PM :: Serializing Save Data
+6/19/2017_9:06 PM :: Serializing Permission Data
+
+6/19/2017_9:06 PM :: Running DEBUG Mode
+6/19/2017_9:06 PM :: Version updated from 1.0.6379.38004 from 
+6/19/2017_9:06 PM :: Deserializing Permission Data
+6/19/2017_9:06 PM :: Deserializing Sava Data
+6/19/2017_9:06 PM :: Refreshed admin list, total admins: 0
+6/19/2017_9:06 PM :: Owner Deserialization Complete
+6/19/2017_9:06 PM :: Admin Deserialization Complete
+6/19/2017_9:06 PM :: 
+You simulated 100000 loot drops. Here are your results:
+---------------------------
+Armor: 10137
+     Light: 1072
+     Medium: 5049
+      Heavey: 4016
+---------------------------
+Item: 59959
+     Restore: 17933
+     Buff: 9079
+     Damage: 9045
+      Money: 1072
+     Repair: 5933
+---------------------------
+Nothing: 14785
+---------------------------
+Spell: 5144
+     Attack: 1689
+     Defense: 1742
+     Restorative: 1713
+     Starter Spell: 0
+---------------------------
+Weapon: 9976
+     Sword: 3670
+     Dagger: 733
+     GreatSword: 335
+     Katana: 337
+     Staff: 352
+     Focus Stone: 393
+     Spear: 1370
+     Dragon Spear:  1359
+     Twin Swords: 1427
+     Other:  0
+     Starter Weapon: 0
+---------------------------
+Rarity:
+     Common:  96006
+     Uncommon: 2057
+     Rare: 1065
+     Epic: 731
+     Legendary: 142
+---------------------------
+Unique Items: 7573
+6/19/2017_9:07 PM :: Serializing Permission Data
+6/19/2017_9:07 PM :: Serializing Save Data
+
+6/19/2017_9:08 PM :: Running DEBUG Mode
+6/19/2017_9:08 PM :: Version updated from 1.0.6379.38054 from 
+6/19/2017_9:08 PM :: Deserializing Permission Data
+6/19/2017_9:08 PM :: Refreshed admin list, total admins: 0
+6/19/2017_9:08 PM :: Deserializing Sava Data
+6/19/2017_9:08 PM :: Owner Deserialization Complete
+6/19/2017_9:08 PM :: Admin Deserialization Complete
+6/19/2017_9:08 PM :: 
+You simulated 100000 loot drops. Here are your results:
+---------------------------
+Armor: 10055
+     Light: 999
+     Medium: 5064
+     Heavy: 3992
+---------------------------
+Item: 60021
+     Restore: 18060
+     Buff: 9048
+     Damage: 8932
+     Money: 999
+     Repair: 5931
+---------------------------
+Nothing: 15003
+---------------------------
+Spell: 4872
+     Attack: 1587
+     Defense: 1647
+     Restorative: 1638
+     Starter Spell: 0
+---------------------------
+Weapon: 10050
+     Sword: 3757
+     Dagger: 727
+     GreatSword: 317
+     Katana: 336
+     Staff: 350
+     Focus Stone: 366
+     Spear: 1348
+     Dragon Spear:  1372
+     Twin Swords: 1477
+     Other:  0
+     Starter Weapon: 0
+---------------------------
+Rarity:
+     Common:  95928
+     Uncommon: 2157
+     Rare: 1046
+     Epic: 738
+     Legendary: 132
+---------------------------
+Unique Items: 7489
+6/19/2017_9:09 PM :: Serializing Save Data
+6/19/2017_9:09 PM :: Serializing Permission Data
+
+6/19/2017_9:09 PM :: Running DEBUG Mode
+6/19/2017_9:09 PM :: Version updated from 1.0.6379.38078 from 
+6/19/2017_9:09 PM :: Deserializing Sava Data
+6/19/2017_9:09 PM :: Deserializing Permission Data
+6/19/2017_9:09 PM :: Refreshed admin list, total admins: 0
+6/19/2017_9:09 PM :: Owner Deserialization Complete
+6/19/2017_9:09 PM :: Admin Deserialization Complete
+6/19/2017_9:09 PM :: The max number was 100,000 you fool! Rerunning your result with the maxium number. Which is 100,000. 100,000. In case you forgot.
+
+You simulated 100000 loot drops. Here are your results:
+---------------------------
+Armor: 9950
+     Light: 957
+     Medium: 4930
+     Heavy: 4063
+---------------------------
+Item: 60006
+     Restore: 17892
+     Buff: 9095
+     Damage: 9118
+     Money: 957
+     Repair: 5933
+---------------------------
+Nothing: 14947
+---------------------------
+Spell: 5081
+     Attack: 1606
+     Defense: 1734
+     Restorative: 1741
+     Starter Spell: 0
+---------------------------
+Weapon: 10017
+     Sword: 3645
+     Dagger: 724
+     GreatSword: 362
+     Katana: 387
+     Staff: 333
+     Focus Stone: 334
+     Spear: 1424
+     Dragon Spear:  1410
+     Twin Swords: 1398
+     Other:  0
+     Starter Weapon: 0
+---------------------------
+Rarity:
+     Common:  96012
+     Uncommon: 2106
+     Rare: 1035
+     Epic: 726
+     Legendary: 122
+---------------------------
+Unique Items: 7458
+6/19/2017_9:10 PM :: Serializing Save Data
+6/19/2017_9:10 PM :: Serializing Permission Data
+

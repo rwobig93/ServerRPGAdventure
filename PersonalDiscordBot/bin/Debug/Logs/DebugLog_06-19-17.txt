@@ -1692,3 +1692,354 @@ Wind: 0
 ########################## Application Stop ##########################
 
 
+06-19-17_7:02:37 PM :: 
+########################## Application Start ##########################
+
+06-19-17_7:02:37 PM :: Found Log Directory at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-19-17_7:02:37 PM :: Found Config Directory at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-19-17_7:02:37 PM :: Found Paths.json at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-19-17_7:02:37 PM :: Found ServerConfig.xml at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-19-17_7:02:37 PM :: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-19-17_7:02:37 PM :: Finished reading config
+06-19-17_7:02:38 PM :: STATUS: Running DEBUG Mode
+06-19-17_7:02:38 PM :: Loading window location
+06-19-17_7:02:38 PM :: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+06-19-17_7:02:38 PM :: Set Grid grdStatus to Hidden on launch
+06-19-17_7:02:38 PM :: Set Grid grdSettings to Hidden on launch
+06-19-17_7:02:38 PM :: Set Grid grdServers to Hidden on launch
+06-19-17_7:02:38 PM :: Set Grid grdBotInfo to Hidden on launch
+06-19-17_7:02:38 PM :: STATUS: Version updated from 1.0.6379.34277 from 
+06-19-17_7:02:38 PM :: Refreshing admin list
+06-19-17_7:02:38 PM :: STATUS: Deserializing Permission Data
+06-19-17_7:02:38 PM :: STATUS: Deserializing Sava Data
+06-19-17_7:02:38 PM :: STATUS: Refreshed admin list, total admins: 0
+06-19-17_7:02:38 PM :: SaveData folder doesn't exist, stopping deserialization: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\SaveData
+06-19-17_7:02:38 PM :: Found Administrators.perm file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\Administrators.perm
+06-19-17_7:02:38 PM :: Deserialized Administrators.perm
+06-19-17_7:02:38 PM :: Found RPGChannels.perm file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\RPGChannels.perm
+06-19-17_7:02:38 PM :: Deserialized RPGChannels.perm
+06-19-17_7:02:38 PM :: STATUS: Owner Deserialization Complete
+06-19-17_7:02:38 PM :: STATUS: Admin Deserialization Complete
+06-19-17_7:02:49 PM :: Revealed Grid grdStatus
+06-19-17_7:02:49 PM :: Hid Grid grdSettings
+06-19-17_7:02:49 PM :: Hid Grid grdServers
+06-19-17_7:02:49 PM :: Hid Grid grdBotInfo
+06-19-17_7:02:49 PM :: Slid Main Menu out of view
+06-19-17_7:02:50 PM :: STATUS: Your Loot is: PersonalDiscordBot.Classes.Armor
+Name: Rare Mythril Armor
+Desc: Heavy Rare Mythril Armor
+Type: Heavy
+Rarity: Common
+IsUnique: False
+Lvl: 1
+MaxDurability: 50
+CurrentDurability: 50
+Worth: 164
+Speed: 80
+Physical: 21
+Magic: 0
+Fire: 0
+Lightning: 0
+Ice: 0
+Wind: 0
+06-19-17_7:04:41 PM :: 
+########################## Application Stop ##########################
+
+
+06-19-17_9:06:17 PM :: 
+########################## Application Start ##########################
+
+06-19-17_9:06:17 PM :: Found Log Directory at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-19-17_9:06:17 PM :: Found Config Directory at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-19-17_9:06:17 PM :: Found Paths.json at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-19-17_9:06:17 PM :: Found ServerConfig.xml at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-19-17_9:06:17 PM :: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-19-17_9:06:17 PM :: Finished reading config
+06-19-17_9:06:17 PM :: STATUS: Running DEBUG Mode
+06-19-17_9:06:17 PM :: Loading window location
+06-19-17_9:06:17 PM :: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+06-19-17_9:06:17 PM :: Set Grid grdStatus to Hidden on launch
+06-19-17_9:06:17 PM :: Set Grid grdSettings to Hidden on launch
+06-19-17_9:06:17 PM :: Set Grid grdServers to Hidden on launch
+06-19-17_9:06:17 PM :: Set Grid grdBotInfo to Hidden on launch
+06-19-17_9:06:18 PM :: STATUS: Version updated from 1.0.6379.37988 from 
+06-19-17_9:06:18 PM :: Refreshing admin list
+06-19-17_9:06:18 PM :: STATUS: Deserializing Permission Data
+06-19-17_9:06:18 PM :: STATUS: Deserializing Sava Data
+06-19-17_9:06:18 PM :: STATUS: Refreshed admin list, total admins: 0
+06-19-17_9:06:18 PM :: Found Administrators.perm file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\Administrators.perm
+06-19-17_9:06:18 PM :: Deserialized Administrators.perm
+06-19-17_9:06:18 PM :: Found RPGChannels.perm file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\RPGChannels.perm
+06-19-17_9:06:18 PM :: STATUS: Owner Deserialization Complete
+06-19-17_9:06:18 PM :: Deserialized RPGChannels.perm
+06-19-17_9:06:18 PM :: STATUS: Admin Deserialization Complete
+06-19-17_9:06:21 PM :: Revealed Grid grdStatus
+06-19-17_9:06:21 PM :: Hid Grid grdSettings
+06-19-17_9:06:21 PM :: Hid Grid grdServers
+06-19-17_9:06:21 PM :: Hid Grid grdBotInfo
+06-19-17_9:06:21 PM :: Slid Main Menu out of view
+06-19-17_9:06:22 PM :: 
+########################## Application Stop ##########################
+
+
+06-19-17_9:06:49 PM :: 
+########################## Application Start ##########################
+
+06-19-17_9:06:49 PM :: Found Log Directory at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-19-17_9:06:49 PM :: Found Config Directory at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-19-17_9:06:49 PM :: Found Paths.json at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-19-17_9:06:49 PM :: Found ServerConfig.xml at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-19-17_9:06:49 PM :: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-19-17_9:06:49 PM :: Finished reading config
+06-19-17_9:06:50 PM :: STATUS: Running DEBUG Mode
+06-19-17_9:06:50 PM :: Loading window location
+06-19-17_9:06:50 PM :: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+06-19-17_9:06:50 PM :: Set Grid grdStatus to Hidden on launch
+06-19-17_9:06:50 PM :: Set Grid grdSettings to Hidden on launch
+06-19-17_9:06:50 PM :: Set Grid grdServers to Hidden on launch
+06-19-17_9:06:50 PM :: Set Grid grdBotInfo to Hidden on launch
+06-19-17_9:06:50 PM :: STATUS: Version updated from 1.0.6379.38004 from 
+06-19-17_9:06:50 PM :: Refreshing admin list
+06-19-17_9:06:50 PM :: STATUS: Deserializing Permission Data
+06-19-17_9:06:50 PM :: STATUS: Deserializing Sava Data
+06-19-17_9:06:50 PM :: STATUS: Refreshed admin list, total admins: 0
+06-19-17_9:06:50 PM :: Found Administrators.perm file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\Administrators.perm
+06-19-17_9:06:50 PM :: Deserialized Administrators.perm
+06-19-17_9:06:50 PM :: Found RPGChannels.perm file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\RPGChannels.perm
+06-19-17_9:06:50 PM :: Deserialized RPGChannels.perm
+06-19-17_9:06:50 PM :: STATUS: Owner Deserialization Complete
+06-19-17_9:06:50 PM :: STATUS: Admin Deserialization Complete
+06-19-17_9:06:51 PM :: Revealed Grid grdStatus
+06-19-17_9:06:51 PM :: Hid Grid grdSettings
+06-19-17_9:06:51 PM :: Hid Grid grdServers
+06-19-17_9:06:51 PM :: Hid Grid grdBotInfo
+06-19-17_9:06:51 PM :: Slid Main Menu out of view
+06-19-17_9:06:53 PM :: STATUS: 
+You simulated 100000 loot drops. Here are your results:
+---------------------------
+Armor: 10137
+     Light: 1072
+     Medium: 5049
+      Heavey: 4016
+---------------------------
+Item: 59959
+     Restore: 17933
+     Buff: 9079
+     Damage: 9045
+      Money: 1072
+     Repair: 5933
+---------------------------
+Nothing: 14785
+---------------------------
+Spell: 5144
+     Attack: 1689
+     Defense: 1742
+     Restorative: 1713
+     Starter Spell: 0
+---------------------------
+Weapon: 9976
+     Sword: 3670
+     Dagger: 733
+     GreatSword: 335
+     Katana: 337
+     Staff: 352
+     Focus Stone: 393
+     Spear: 1370
+     Dragon Spear:  1359
+     Twin Swords: 1427
+     Other:  0
+     Starter Weapon: 0
+---------------------------
+Rarity:
+     Common:  96006
+     Uncommon: 2057
+     Rare: 1065
+     Epic: 731
+     Legendary: 142
+---------------------------
+Unique Items: 7573
+06-19-17_9:07:16 PM :: 
+########################## Application Stop ##########################
+
+
+06-19-17_9:08:30 PM :: 
+########################## Application Start ##########################
+
+06-19-17_9:08:30 PM :: Found Log Directory at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-19-17_9:08:30 PM :: Found Config Directory at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-19-17_9:08:30 PM :: Found Paths.json at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-19-17_9:08:30 PM :: Found ServerConfig.xml at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-19-17_9:08:30 PM :: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-19-17_9:08:30 PM :: Finished reading config
+06-19-17_9:08:31 PM :: STATUS: Running DEBUG Mode
+06-19-17_9:08:31 PM :: Loading window location
+06-19-17_9:08:31 PM :: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+06-19-17_9:08:31 PM :: Set Grid grdStatus to Hidden on launch
+06-19-17_9:08:31 PM :: Set Grid grdSettings to Hidden on launch
+06-19-17_9:08:31 PM :: Set Grid grdServers to Hidden on launch
+06-19-17_9:08:31 PM :: Set Grid grdBotInfo to Hidden on launch
+06-19-17_9:08:31 PM :: STATUS: Version updated from 1.0.6379.38054 from 
+06-19-17_9:08:31 PM :: Refreshing admin list
+06-19-17_9:08:31 PM :: STATUS: Deserializing Permission Data
+06-19-17_9:08:31 PM :: STATUS: Refreshed admin list, total admins: 0
+06-19-17_9:08:31 PM :: STATUS: Deserializing Sava Data
+06-19-17_9:08:31 PM :: Found Administrators.perm file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\Administrators.perm
+06-19-17_9:08:31 PM :: Deserialized Administrators.perm
+06-19-17_9:08:31 PM :: Found RPGChannels.perm file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\RPGChannels.perm
+06-19-17_9:08:31 PM :: Deserialized RPGChannels.perm
+06-19-17_9:08:31 PM :: STATUS: Admin Deserialization Complete
+06-19-17_9:08:31 PM :: STATUS: Owner Deserialization Complete
+06-19-17_9:08:33 PM :: STATUS: 
+You simulated 100000 loot drops. Here are your results:
+---------------------------
+Armor: 10055
+     Light: 999
+     Medium: 5064
+     Heavy: 3992
+---------------------------
+Item: 60021
+     Restore: 18060
+     Buff: 9048
+     Damage: 8932
+     Money: 999
+     Repair: 5931
+---------------------------
+Nothing: 15003
+---------------------------
+Spell: 4872
+     Attack: 1587
+     Defense: 1647
+     Restorative: 1638
+     Starter Spell: 0
+---------------------------
+Weapon: 10050
+     Sword: 3757
+     Dagger: 727
+     GreatSword: 317
+     Katana: 336
+     Staff: 350
+     Focus Stone: 366
+     Spear: 1348
+     Dragon Spear:  1372
+     Twin Swords: 1477
+     Other:  0
+     Starter Weapon: 0
+---------------------------
+Rarity:
+     Common:  95928
+     Uncommon: 2157
+     Rare: 1046
+     Epic: 738
+     Legendary: 132
+---------------------------
+Unique Items: 7489
+06-19-17_9:08:33 PM :: Revealed Grid grdStatus
+06-19-17_9:08:33 PM :: Hid Grid grdSettings
+06-19-17_9:08:33 PM :: Hid Grid grdServers
+06-19-17_9:08:33 PM :: Hid Grid grdBotInfo
+06-19-17_9:08:33 PM :: Slid Main Menu out of view
+06-19-17_9:09:07 PM :: 
+########################## Application Stop ##########################
+
+
+06-19-17_9:09:16 PM :: 
+########################## Application Start ##########################
+
+06-19-17_9:09:16 PM :: Found Log Directory at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs
+06-19-17_9:09:16 PM :: Found Config Directory at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config
+06-19-17_9:09:16 PM :: Found Paths.json at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json
+06-19-17_9:09:16 PM :: Found ServerConfig.xml at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml
+06-19-17_9:09:16 PM :: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json Deserialized:
+ LogLocation[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Logs]
+ ConfigLocation[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config]
+ PathsConfig[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\Paths.json]
+ ServerConfig[C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Config\ServerConfig.xml]
+06-19-17_9:09:16 PM :: Finished reading config
+06-19-17_9:09:17 PM :: STATUS: Running DEBUG Mode
+06-19-17_9:09:17 PM :: Loading window location
+06-19-17_9:09:17 PM :: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+06-19-17_9:09:17 PM :: Set Grid grdStatus to Hidden on launch
+06-19-17_9:09:17 PM :: Set Grid grdSettings to Hidden on launch
+06-19-17_9:09:17 PM :: Set Grid grdServers to Hidden on launch
+06-19-17_9:09:17 PM :: Set Grid grdBotInfo to Hidden on launch
+06-19-17_9:09:17 PM :: STATUS: Version updated from 1.0.6379.38078 from 
+06-19-17_9:09:17 PM :: Refreshing admin list
+06-19-17_9:09:17 PM :: STATUS: Deserializing Sava Data
+06-19-17_9:09:17 PM :: STATUS: Deserializing Permission Data
+06-19-17_9:09:17 PM :: STATUS: Refreshed admin list, total admins: 0
+06-19-17_9:09:17 PM :: Found Administrators.perm file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\Administrators.perm
+06-19-17_9:09:17 PM :: Deserialized Administrators.perm
+06-19-17_9:09:17 PM :: Found RPGChannels.perm file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\Debug\Permissions\RPGChannels.perm
+06-19-17_9:09:17 PM :: Deserialized RPGChannels.perm
+06-19-17_9:09:17 PM :: STATUS: Owner Deserialization Complete
+06-19-17_9:09:17 PM :: STATUS: Admin Deserialization Complete
+06-19-17_9:09:18 PM :: Revealed Grid grdStatus
+06-19-17_9:09:18 PM :: Hid Grid grdSettings
+06-19-17_9:09:18 PM :: Hid Grid grdServers
+06-19-17_9:09:18 PM :: Hid Grid grdBotInfo
+06-19-17_9:09:18 PM :: Slid Main Menu out of view
+06-19-17_9:09:20 PM :: STATUS: The max number was 100,000 you fool! Rerunning your result with the maxium number. Which is 100,000. 100,000. In case you forgot.
+
+You simulated 100000 loot drops. Here are your results:
+---------------------------
+Armor: 9950
+     Light: 957
+     Medium: 4930
+     Heavy: 4063
+---------------------------
+Item: 60006
+     Restore: 17892
+     Buff: 9095
+     Damage: 9118
+     Money: 957
+     Repair: 5933
+---------------------------
+Nothing: 14947
+---------------------------
+Spell: 5081
+     Attack: 1606
+     Defense: 1734
+     Restorative: 1741
+     Starter Spell: 0
+---------------------------
+Weapon: 10017
+     Sword: 3645
+     Dagger: 724
+     GreatSword: 362
+     Katana: 387
+     Staff: 333
+     Focus Stone: 334
+     Spear: 1424
+     Dragon Spear:  1410
+     Twin Swords: 1398
+     Other:  0
+     Starter Weapon: 0
+---------------------------
+Rarity:
+     Common:  96012
+     Uncommon: 2106
+     Rare: 1035
+     Epic: 726
+     Legendary: 122
+---------------------------
+Unique Items: 7458
+06-19-17_9:10:52 PM :: 
+########################## Application Stop ##########################
+
+

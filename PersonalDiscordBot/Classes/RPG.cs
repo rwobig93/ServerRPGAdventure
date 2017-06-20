@@ -195,6 +195,8 @@ namespace PersonalDiscordBot.Classes
         public string Name { get; set; }
         public string Desc { get; set; }
         public ItemType Type { get; set; }
+        public RarityType Rarity { get; set; } = RarityType.Common;
+        public bool IsUnique { get; set; } = false;
         public int Lvl { get; set; } = 0; //used to calculate amount of Repair
         public int Count { get; set; } = 1;
         public int Worth { get; set; } = 0;
@@ -270,6 +272,12 @@ namespace PersonalDiscordBot.Classes
             //Count = this.Count;
             return this;
         }
+        public string Name { get; set; } = "Pebble";
+        public string Desc { get; set; }
+        public RarityType Rarity { get; set; } = RarityType.Common;
+        public bool IsUnique { get; set; } = false;
+        public int Lvl { get; set; } = 0;
+        public int Worth { get; set; } = 0;
     }
 
     public class IDidTheThingOwner
@@ -312,8 +320,17 @@ namespace PersonalDiscordBot.Classes
     public static class RPG
     {
         #region Variables
-        
-        public interface IBackPackItem { IBackPackItem BPItem(); };
+
+        public interface IBackPackItem
+        {
+            IBackPackItem BPItem();
+            string Name { get; set; }
+            string Desc { get; set; }
+            RarityType Rarity { get; set; }
+            bool IsUnique { get; set; }
+            int Lvl { get; set; }
+            int Worth { get; set; }
+        };
         public static Random rng = new Random((int)(DateTime.Now.Ticks & 0x7FFFFFFF));
         public static int maxLevel = 20;
         public static List<OwnerProfile> Owners = new List<OwnerProfile>();
@@ -3573,28 +3590,178 @@ namespace PersonalDiscordBot.Classes
 
         public static string RandomMassTestLoot(int num)
         {
+            string yaBlewIt = "";
+            if (num > 100000)
+            {
+                yaBlewIt = $"The max number was 100,000 you fool! Rerunning your result with the maxium number. Which is 100,000. 100,000. In case you forgot.{line}";
+                num = 100000;
+            }
+            var sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+            int armor = 0;
+            int light = 0;
+            int medium = 0;
+            int heavy = 0;
+            int item = 0;
+            int restore = 0;
+            int buff = 0;
+            int damage = 0;
+            int money = 0;
+            int repair = 0;
+            int pebble = 0;
+            int spell = 0;
+            int attack = 0;
+            int defense = 0;
+            int restorative = 0;
+            int spellStarter = 0;
             int weap = 0;
-            //int sword = 0;
-            //int dagger = 0;
-            //int greatsword = 0;
-            //int katana = 0;
-            //int staff = 0;
-            //int focusStone = 0;
-            //int spear = 0;
-            //int dragonSpear = 0;
-            //int twinSwords = 0;
-            //int other = 0;
-            //int starter = 0;
-            //int unique = 0;
-            //int common = 0;
-            //int uncommon = 0;
-            //int rare = 0;
-            //int epic = 0;
-            //int legendary = 0;
+            int sword = 0;
+            int dagger = 0;
+            int greatsword = 0;
+            int katana = 0;
+            int staff = 0;
+            int focusStone = 0;
+            int spear = 0;
+            int dragonSpear = 0;
+            int twinSwords = 0;
+            int other = 0;
+            int weaponStarter = 0;
+            int common = 0;
+            int uncommon = 0;
+            int rare = 0;
+            int epic = 0;
+            int legendary = 0;
+            int isUnique = 0;
+            for (int i = 0; i <= num; i++)
+            {
+                IBackPackItem loot = LootDrop.PickLoot(testiculeesCharacter);
 
-            return weap.ToString();
+                switch (LootDrop.GetLootType(loot))
+                {
+                    case LootDrop.LootType.Armor:
+                        armor++;
+                        Armor arm = (Armor)loot;
+                        switch (arm.Type)
+                        {
+                            case ArmorType.Light:
+                                light++;
+                                break;
+                            case ArmorType.Medium:
+                                medium++;
+                                break;
+                            case ArmorType.Heavy:
+                                heavy++;
+                                break;
+                        }
+                        break;
+                    case LootDrop.LootType.Item:
+                        item++;
+                        Item ite = (Item)loot;
+                        switch (ite.Type)
+                        {
+                            case ItemType.Buff:
+                                buff++;
+                                break;
+                            case ItemType.Currency:
+                                money++;
+                                break;
+                            case ItemType.Damaging:
+                                damage++;
+                                break;
+                            case ItemType.Repair:
+                                repair++;
+                                break;
+                            case ItemType.Restorative:
+                                restore++;
+                                break;
+                        }
+                        break;
+                    case LootDrop.LootType.Nothing:
+                        pebble++;
+                        break;
+                    case LootDrop.LootType.Spell:
+                        spell++;
+                        Spell spe = (Spell)loot;
+                        switch (spe.Type)
+                        {
+                            case SpellType.Attack:
+                                attack++;
+                                break;
+                            case SpellType.Defense:
+                                defense++;
+                                break;
+                            case SpellType.Restorative:
+                                restorative++;
+                                break;
+                            case SpellType.Starter:
+                                spellStarter++;
+                                break;
+                        }
+                        break;
+                    case LootDrop.LootType.Weapon:
+                        weap++;
+                        Weapon wea = (Weapon)loot;
+                        switch (wea.Type)
+                        {
+                            case WeaponType.Sword:
+                                sword++;
+                                break;
+                            case WeaponType.Dagger:
+                                dagger++;
+                                break;
+                            case WeaponType.Greatsword:
+                                greatsword++;
+                                break;
+                            case WeaponType.Katana:
+                                katana++;
+                                break;
+                            case WeaponType.Staff:
+                                staff++;
+                                break;
+                            case WeaponType.FocusStone:
+                                focusStone++;
+                                break;
+                            case WeaponType.Spear:
+                                spear++;
+                                break;
+                            case WeaponType.DragonSpear:
+                                dragonSpear++;
+                                break;
+                            case WeaponType.TwinSwords:
+                                twinSwords++;
+                                break;
+                            case WeaponType.Other:
+                                other++;
+                                break;
+                            case WeaponType.Starter:
+                                weaponStarter++;
+                                break;
+                        }
+                        break;
+                }
+                switch (loot.Rarity)
+                {
+                    case RarityType.Common:
+                        common++;
+                        break;
+                    case RarityType.Epic:
+                        epic++;
+                        break;
+                    case RarityType.Legendary:
+                        legendary++;
+                        break;
+                    case RarityType.Rare:
+                        rare++;
+                        break;
+                    case RarityType.Uncommon:
+                        uncommon++;
+                        break;
+                }
+                if (loot.IsUnique) isUnique++;
+            }
+            sw.Stop();
+            return $"{yaBlewIt}{line}You simulated {num} loot drops. Here are your results:{line}---------------------------{line}Armor: {armor}{line}     Light: {light}{line}     Medium: {medium}{line}     Heavy: {heavy}{line}---------------------------{line}Item: {item}{line}     Restore: {restore}{line}     Buff: {buff}{line}     Damage: {damage}{line}     Money: {light}{line}     Repair: {repair}{line}---------------------------{line}Nothing: {pebble}{line}---------------------------{line}Spell: {spell}{line}     Attack: {attack}{line}     Defense: {defense}{line}     Restorative: {restorative}{line}     Starter Spell: {spellStarter}{line}---------------------------{line}Weapon: {weap}{line}     Sword: {sword}{line}     Dagger: {dagger}{line}     GreatSword: {greatsword}{line}     Katana: {katana}{line}     Staff: {staff}{line}     Focus Stone: {focusStone}{line}     Spear: {spear}{line}     Dragon Spear:  {dragonSpear}{line}     Twin Swords: {twinSwords}{line}     Other:  {other}{line}     Starter Weapon: {weaponStarter}{line}---------------------------{line}Rarity:{line}     Common:  {common}{line}     Uncommon: {uncommon}{line}     Rare: {rare}{line}     Epic: {epic}{line}     Legendary: {legendary}{line}---------------------------{line}Unique Items: {isUnique}";
         }
-
         public static string GetMarried()
         {
             var weapon = RandomWeap(out string wNamer);
