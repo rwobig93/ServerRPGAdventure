@@ -23,6 +23,7 @@ using Discord.WebSocket;
 
 namespace PersonalDiscordBot.Classes
 {
+    #region Server
     [Group("server")]
     public class ServerModule : ModuleBase
     {
@@ -800,7 +801,9 @@ namespace PersonalDiscordBot.Classes
                     _sw.WriteLine(exString + Environment.NewLine);
         }
     }
+    #endregion
 
+    #region Summary
     [Group("help"), Summary("Returns current help articles")]
     public class HelpModule : ModuleBase
     {
@@ -913,15 +916,17 @@ namespace PersonalDiscordBot.Classes
                  "```;test{0}Testicules Engages in...something?```" +
                  "```;test weap{0}Creates a random weapon.```" +
                  "```;test spell{0}Creates a random spell.```" +
-                 "```;test rng weap %Number%{0}Creates %Number% of random weapons.```"+
+                 "```;test armor{0}Creates a random armor.```" +
+                 "```;test rng weap %Number%{0}Creates %Number% of random weapons.```" +
                  "```;test rng spell %Number%{0}Creates %Number% of random spells.```"+
+                 "```;test rng armor %Number%{0}Creates %Number% of random armors.```" +
                  "```;test lootdrop{0}Simulates that lootdrop that you don't actually get for winning a fight (yet).```" +
                  "```;test create{0}Khajiit creates character, if you have coin.```" +
                  "```;test give %Character% %Amount%{0}(Requires Admin) Gives %Character% %Amount% of coins.```" +
                  "```;test swtich{0}Displays a list of your characters and allows you to choose which one to Activate. You may only have 1 character active at a time.```" +
                  "```;test testiculees{0}(Requires Admin) Summons the mighty Testiculees, Champion of Unhandled Exceptions, and adds him to your list of characters.```" +
                  "```;test delete{0}(Requires Admin) Deletes your profile. No one liked you anyway.```" +
-                 "```;test delete %USER%{0}(Requires Admin) Deletes %USER%'s profile. No one like them anyway.```" +
+                 "```;test delete %USER%{0}(Requires Admin) Deletes %USER%'s profile. No one liked them anyway.```" +
                  "```;test rpg{0}(Requires Admin) Allows or Denies a channel to use RPG commands.```" +
                  "```;test permission{0}Checks to see if channel can or can't use RPG commands.```" +
                  "```;test match{0}Start a match against AI.```" +
@@ -937,7 +942,9 @@ namespace PersonalDiscordBot.Classes
             }
         }
     }
+    #endregion
 
+    #region Snoop
     [Group("snoop"), Summary("Snoopifies yo text")]
     public class SnoopModule : ModuleBase
     {
@@ -971,7 +978,9 @@ namespace PersonalDiscordBot.Classes
             }
         }
     }
+    #endregion
 
+    #region 1337
     [Group("leet"), Summary("Makes your text that of a 1337 hackaman")]
     public class LeetModule : ModuleBase
     {
@@ -1005,7 +1014,9 @@ namespace PersonalDiscordBot.Classes
             }
         }
     }
+    #endregion
 
+    #region Some Stuff //Rick feel free up correct this name or add more regions for the stuff
     [Group("status"), Summary("Gets the bot status/info")]
     public class StatusModule : ModuleBase
     {
@@ -1120,7 +1131,9 @@ namespace PersonalDiscordBot.Classes
             }
         }
     }
+    #endregion
 
+    #region RPG Testing
     [Group("test"), Summary("For Testing")]
     public class TestingModule : ModuleBase
     {
@@ -1166,6 +1179,21 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
+        [Command("armor"), Summary("Testicules Armor Gen")]
+        public async Task Testacules2a()
+        {
+            try
+            {
+                string armorName = string.Empty;
+                string randGen = Testing.RandomArmor(out armorName);
+                await Context.Channel.SendMessageAsync($"Generated: {armorName}{randGen}");
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
         [Command("rng weap"), Summary("Testicules RNG Gen Weap")]
         public async Task Testacules3w(string times)
         {
@@ -1185,7 +1213,7 @@ namespace PersonalDiscordBot.Classes
                         await Context.Channel.SendMessageAsync($"Generated {intTimes} Weapons:{Environment.NewLine}{Testing.RandomMassTestWeap(intTimes)}");
                 }
                 else
-                    await Context.Channel.SendMessageAsync($"{intTimes} is not a valid number. Rethink your life choices and try again.");
+                    await Context.Channel.SendMessageAsync($"{times} is not a valid number. Rethink your life choices and try again.");
             }
             catch (Exception ex)
             {
@@ -1212,7 +1240,34 @@ namespace PersonalDiscordBot.Classes
                         await Context.Channel.SendMessageAsync($"Generated {intTimes} Spells:{Environment.NewLine}{Testing.RandomMassTestSpell(intTimes)}");
                 }
                 else
-                    await Context.Channel.SendMessageAsync($"{intTimes} is not a valid number. Rethink your life choices and try again.");
+                    await Context.Channel.SendMessageAsync($"{times} is not a valid number. Rethink your life choices and try again.");
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("rng armor"), Summary("Testicules RNG Gen Armor")]
+        public async Task Testacules3a(string times)
+        {
+            try
+            {
+                var intTimes = 0;
+                var isANum = int.TryParse(times, out intTimes);
+                if (isANum)
+                {
+                    if (intTimes > 100000)
+                    {
+                        await Context.Channel.SendMessageAsync("The highest integer allowed in 100,000. I'm generating that for your now. Don't do that again!");
+                        intTimes = 100000;
+                        await Context.Channel.SendMessageAsync($"Generated {intTimes} Armors: {Environment.NewLine}{Testing.RandomMassTestArmor(intTimes)}");
+                    }
+                    else
+                        await Context.Channel.SendMessageAsync($"Generated {intTimes} Armors: {Environment.NewLine}{Testing.RandomMassTestArmor(intTimes)}");
+                }
+                else
+                    await Context.Channel.SendMessageAsync($"{times} is not a valid number. Rethink your life choices and try again.");
             }
             catch (Exception ex)
             {
@@ -1809,4 +1864,5 @@ namespace PersonalDiscordBot.Classes
             return ownerProfile.CharacterList.Count == 0 ? false : true;
         }
     }
+    #endregion
 }
