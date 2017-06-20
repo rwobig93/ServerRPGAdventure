@@ -1243,7 +1243,7 @@ namespace PersonalDiscordBot
         {
             //Permissions.SerializePermissions();
             //Management.SerializeData();
-            uStatusUpdate(Testing.RandomMassTestLoot(1000000));
+            uStatusUpdate(Testing.RandomMassTestLoot(84654656));
         }
 
         private void SetupTest()

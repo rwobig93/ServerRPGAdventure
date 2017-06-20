@@ -3585,7 +3585,7 @@ namespace PersonalDiscordBot.Classes
                 if (pickedLoot.IsUnique) unique++;
             }
             sw.Stop();
-            return ($"{line}--------------------------{line}It took {sw.Elapsed} seconds to run {num} times.{line}--------------------------{line}sword = {sword}{line}dagger = {dagger}{line}greatsword = {greatsword}{line}katana = {katana}{line}staff = {staff}{line}focusStone = {focusStone}{line}spear = {spear}{line}dragonSpear = {dragonSpear}{line}twinSwords = {twinSwords}{line}other = {other}{line}starter = {starter}{line}unique = {unique}{line}------------------------------------------------{line}common = {common}{line}uncommon = {uncommon}{line}rare = {rare}{line}epic = {epic}{line}legendary = {legendary}{line}");
+            return ($"{line}--------------------------{line}It took {sw.Elapsed.TotalSeconds} seconds to run {num} times.{line}--------------------------{line}sword = {sword}{line}dagger = {dagger}{line}greatsword = {greatsword}{line}katana = {katana}{line}staff = {staff}{line}focusStone = {focusStone}{line}spear = {spear}{line}dragonSpear = {dragonSpear}{line}twinSwords = {twinSwords}{line}other = {other}{line}starter = {starter}{line}unique = {unique}{line}------------------------------------------------{line}common = {common}{line}uncommon = {uncommon}{line}rare = {rare}{line}epic = {epic}{line}legendary = {legendary}{line}");
         }
 
         public static string RandomMassTestSpell(int num)
@@ -3729,10 +3729,15 @@ namespace PersonalDiscordBot.Classes
         public static string RandomMassTestLoot(int num)
         {
             string yaBlewIt = "";
-            if (num > 100000)
+            if (num > 1000000)
             {
-                yaBlewIt = $"The max number was 100,000 you fool! Rerunning your result with the maxium number. Which is 100,000. 100,000. In case you forgot.{line}";
-                num = 100000;
+                yaBlewIt = $"The max number was 1,000,000 you fool! Rerunning your result with the maxium number. Which is 1,000,000. 1,000,000. In case you forgot.{line}";
+                num = 1000000;
+            }
+            else if (num < 2)
+            {
+                yaBlewIt = $"I pity the fool that tries to run the Mass Loot test less than 2 times.";
+                num = 2;
             }
             var sw = new System.Diagnostics.Stopwatch();
             sw.Start();
@@ -3770,7 +3775,7 @@ namespace PersonalDiscordBot.Classes
             int epic = 0;
             int legendary = 0;
             int isUnique = 0;
-            for (int i = 0; i <= num; i++)
+            for (int i = 1; i <= num; i++)
             {
                 IBackPackItem loot = LootDrop.PickLoot(testiculeesCharacter);
 
@@ -3898,8 +3903,9 @@ namespace PersonalDiscordBot.Classes
                 if (loot.IsUnique) isUnique++;
             }
             sw.Stop();
-            return $"{yaBlewIt}{line}You simulated {num} loot drops. Here are your results:{line}---------------------------{line}Armor: {armor}{line}     Light: {light}{line}     Medium: {medium}{line}     Heavy: {heavy}{line}---------------------------{line}Item: {item}{line}     Restore: {restore}{line}     Buff: {buff}{line}     Damage: {damage}{line}     Money: {light}{line}     Repair: {repair}{line}---------------------------{line}Nothing: {pebble}{line}---------------------------{line}Spell: {spell}{line}     Attack: {attack}{line}     Defense: {defense}{line}     Restorative: {restorative}{line}     Starter Spell: {spellStarter}{line}---------------------------{line}Weapon: {weap}{line}     Sword: {sword}{line}     Dagger: {dagger}{line}     GreatSword: {greatsword}{line}     Katana: {katana}{line}     Staff: {staff}{line}     Focus Stone: {focusStone}{line}     Spear: {spear}{line}     Dragon Spear:  {dragonSpear}{line}     Twin Swords: {twinSwords}{line}     Other:  {other}{line}     Starter Weapon: {weaponStarter}{line}---------------------------{line}Rarity:{line}     Common:  {common}{line}     Uncommon: {uncommon}{line}     Rare: {rare}{line}     Epic: {epic}{line}     Legendary: {legendary}{line}---------------------------{line}Unique Items: {isUnique}";
+            return $"{yaBlewIt}{line}You simulated {num} loot drops.{line}It took {sw.Elapsed.TotalSeconds} seconds to run.{line}Here are your results:{line}---------------------------{line}Armor: {armor}{line}     Light: {light}{line}     Medium: {medium}{line}     Heavy: {heavy}{line}---------------------------{line}Item: {item}{line}     Restore: {restore}{line}     Buff: {buff}{line}     Damage: {damage}{line}     Money: {light}{line}     Repair: {repair}{line}---------------------------{line}Nothing: {pebble}{line}---------------------------{line}Spell: {spell}{line}     Attack: {attack}{line}     Defense: {defense}{line}     Restorative: {restorative}{line}     Starter Spell: {spellStarter}{line}---------------------------{line}Weapon: {weap}{line}     Sword: {sword}{line}     Dagger: {dagger}{line}     GreatSword: {greatsword}{line}     Katana: {katana}{line}     Staff: {staff}{line}     Focus Stone: {focusStone}{line}     Spear: {spear}{line}     Dragon Spear:  {dragonSpear}{line}     Twin Swords: {twinSwords}{line}     Other:  {other}{line}     Starter Weapon: {weaponStarter}{line}---------------------------{line}Rarity:{line}     Common:  {common}{line}     Uncommon: {uncommon}{line}     Rare: {rare}{line}     Epic: {epic}{line}     Legendary: {legendary}{line}---------------------------{line}Unique Items: {isUnique}";
         }
+
         public static string GetMarried()
         {
             var weapon = RandomWeap(out string wNamer);
