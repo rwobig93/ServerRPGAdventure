@@ -562,3 +562,38 @@ Unique Items: 74715
 06/20/2017_8:01 AM :: Serializing Save Data
 06/20/2017_8:01 AM :: Serializing Permission Data
 
+06/20/2017_4:35 PM :: Running DEBUG Mode
+06/20/2017_4:35 PM :: Version updated from 1.0.6380.29868 from 
+06/20/2017_4:35 PM :: Deserializing Sava Data
+06/20/2017_4:35 PM :: Deserializing Permission Data
+06/20/2017_4:35 PM :: Refreshed admin list, total admins: 0
+06/20/2017_4:35 PM :: Owner Deserialization Complete
+06/20/2017_4:35 PM :: Admin Deserialization Complete
+06/20/2017_4:35 PM :: Serializing Save Data
+06/20/2017_4:35 PM :: Serializing Permission Data
+
+06/20/2017_4:40 PM :: Running DEBUG Mode
+06/20/2017_4:40 PM :: Version updated from 1.0.6380.30007 from 
+06/20/2017_4:40 PM :: Refreshed admin list, total admins: 0
+06/20/2017_4:40 PM :: Deserializing Sava Data
+06/20/2017_4:40 PM :: Deserializing Permission Data
+06/20/2017_4:40 PM :: Owner Deserialization Complete
+06/20/2017_4:40 PM :: Admin Deserialization Complete
+06/20/2017_4:40 PM :: 
+--------------------------
+It took 00:00:20.0135824 seconds to run 2 times.
+--------------------------
+Light: 0
+Medium: 0
+Heavy: 2
+--------------------------
+Common: 1
+Uncommon: 0
+Rare: 1
+Epic: 0
+Legendary: 0
+--------------------------
+Unique: 1
+
+06/20/2017_4:40 PM :: Serializing Save Data
+

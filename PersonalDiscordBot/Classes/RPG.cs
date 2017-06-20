@@ -1690,6 +1690,7 @@ namespace PersonalDiscordBot.Classes
             int rarityValue = LootDrop.GetRarityValue(rarityType);
             bool isUnique = ChanceRoll(30);
             armor.Type = ChooseArmorType(chara);
+            armor.Rarity = rarityType;
 
             if (isUnique)
                 return Armors.ArmorUniqueGen(armor, rarityType, rarityValue, chara.Lvl);
@@ -3524,7 +3525,7 @@ namespace PersonalDiscordBot.Classes
             var sw = new System.Diagnostics.Stopwatch();
 
             sw.Start();
-            for (int i = 0; i <= num; i++)
+            for (int i = 1; i <= num; i++)
             {
                 RarityType rarity = LootDrop.ChooseRarity();
                 var pickedLoot = LootDrop.WeaponPicker(rarity, testiculeesCharacter);
@@ -3607,7 +3608,7 @@ namespace PersonalDiscordBot.Classes
             int epic = 0;
             int legendary = 0;
 
-            for (int i = 0; i <= num; i++)
+            for (int i = 1; i <= num; i++)
             {
                 RarityType rarity = LootDrop.ChooseRarity();
                 ElementType element;
@@ -3685,7 +3686,7 @@ namespace PersonalDiscordBot.Classes
             var sw = new System.Diagnostics.Stopwatch();
 
             sw.Start();
-            for (int i = 0; i <= num; i++)
+            for (int i = 1; i <= num; i++)
             {
                 RarityType rarity = LootDrop.ChooseRarity();
                 var loot = LootDrop.ArmorPicker(rarity, testiculeesCharacter);
