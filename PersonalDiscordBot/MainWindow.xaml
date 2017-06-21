@@ -42,13 +42,24 @@
                 <TextBox x:Name="txtStatusValue" HorizontalAlignment="Left" Height="265" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="714" Background="#FF202020" Foreground="#FF13CCDE" BorderBrush="#FF6E6E6E" VerticalScrollBarVisibility="Auto"/>
             </Grid>
             <Button x:Name="btnSettings" Click="btnSettings_Click" Content="Settings" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="89" Height="25" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="14" Margin="645,0,0,0"/>
-            <Grid x:Name="grdSettings" Margin="0,25,0,0" d:IsHidden="True">
-                <TextBox x:Name="txtLogDirectory" LostFocus="txtLogDirectory_LostFocus" Margin="101,11,10,0" TextWrapping="Wrap" Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="21" VerticalAlignment="Top"/>
+            <Grid x:Name="grdSettings" Margin="0,25,0,0">
+                <TextBox x:Name="txtLogDirectory" LostFocus="txtLogDirectory_LostFocus" Margin="113,11,0,0" TextWrapping="Wrap" Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" Width="611"/>
                 <TextBlock x:Name="lblLogDirectory" Margin="10,10,0,0" TextWrapping="Wrap" Text="Log Directory:" VerticalAlignment="Top" FontSize="14" Foreground="#FF0FB3C3" HorizontalAlignment="Left" Width="91" Height="22"/>
                 <Button x:Name="btnSaveSettings" Click="btnSaveSettings_Click" Content="Save" Padding="0" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="89" Height="25" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="14" Margin="0,0,10,10"/>
+                <TextBlock x:Name="lblVersionNumber" Margin="0,233,511,0" TextWrapping="Wrap" Text="Version 1.0.xxxx.xxxx" VerticalAlignment="Top" Foreground="#FF0FB3C3" HorizontalAlignment="Right" Width="213" FontSize="16"/>
+                <Button x:Name="btnChangeToken" Click="btnChangeToken_Click" Content="Change Bot Token" Padding="0" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="123" Height="25" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="14" Margin="0,0,238,10"/>
+                <Button x:Name="btnDumpDebug" Click="btnDumpDebug_Click" Content="Dump Debug Logs" Padding="0" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="129" Height="25" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="14" Margin="0,0,104,10"/>
+                <TextBox x:Name="txtAdminUlong" LostFocus="txtLogDirectory_LostFocus" Margin="113,37,0,0" TextWrapping="Wrap" Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" Width="553"/>
+                <TextBlock x:Name="lblAdminUlong" Margin="10,37,0,0" TextWrapping="Wrap" Text="Add Admin:" VerticalAlignment="Top" FontSize="14" Foreground="#FF0FB3C3" HorizontalAlignment="Left" Width="91" Height="22"/>
+                <Button x:Name="btnAddAdmin" Click="btnAddAdmin_Click" Content="Add" Padding="0" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="53" Height="21" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="14" Margin="0,0,10,227"/>
+                <ComboBox x:Name="comboAdmins" HorizontalAlignment="Left" Margin="113,63,0,0" VerticalAlignment="Top" Width="540" BorderBrush="#FF6E6E6E" Background="#FF202020" Foreground="#FF0FB3C3"/>
+                <TextBlock x:Name="lblRemoveAdmin" Margin="10,63,0,0" TextWrapping="Wrap" Text="Remove Admin:" VerticalAlignment="Top" FontSize="14" Foreground="#FF0FB3C3" HorizontalAlignment="Left" Width="103" Height="22"/>
+                <Button x:Name="btnRemoveAdmin" Click="btnRemoveAdmin_Click" Content="Remove" Padding="0" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="66" Height="22" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="14" Margin="0,0,10,200"/>
+                <Button x:Name="btnSaveRPG" Click="btnSaveRPG_Click" Content="Save RPG Data" Padding="0" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="129" Height="25" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="14" Margin="0,0,366,10"/>
+                <TextBlock x:Name="lblUpdateTime" Margin="0,254,511,0" TextWrapping="Wrap" Text="LastUpdateDateTime" VerticalAlignment="Top" Foreground="#FF0FB3C3" HorizontalAlignment="Right" Width="213" FontSize="16"/>
             </Grid>
             <Button x:Name="btnOpenServers" Click="btnOpenServers_Click" Content="Servers" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="89" Height="25" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="14" Margin="94,0,0,0"/>
-            <Grid x:Name="grdServers" Margin="0,25,0,0" Background="#FF191919">
+            <Grid x:Name="grdServers" Margin="0,25,0,0" Background="#FF191919" d:IsLocked="True" d:IsHidden="True">
                 <ListView x:Name="lvServers" ItemsSource="{Binding Path=CurrentServerList}" SelectionMode="Single" SelectedItem="{Binding GameServer}" HorizontalAlignment="Left" Height="233" Margin="10,42,0,0" VerticalAlignment="Top" Width="714" Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E">
                     <ListView.View>
                         <GridView>
@@ -68,7 +79,7 @@
                 <Button x:Name="btnRefreshServers" Click="btnRefreshServers_Click" Content="Refresh to Current Saved List" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="201" Height="25" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="14" Margin="109,10,0,0"/>
             </Grid>
             <Button x:Name="btnOpenBotInfo" Click="btnOpenBotInfo_Click" Content="Bot Info" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="89" Height="25" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="14" Margin="188,0,0,0"/>
-            <Grid x:Name="grdBotInfo" HorizontalAlignment="Left" Height="285" Margin="0,25,0,0" VerticalAlignment="Top" Width="734" Background="#FF191919" d:IsHidden="True">
+            <Grid x:Name="grdBotInfo" HorizontalAlignment="Left" Height="285" Margin="0,25,0,0" VerticalAlignment="Top" Width="734" Background="#FF191919" d:IsHidden="True" d:IsLocked="True">
                 <TextBox x:Name="txtPlayingValue" Margin="10,68,188,0" TextWrapping="NoWrap" Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="21" VerticalAlignment="Top"/>
                 <Button x:Name="btnChangePlaying" Click="btnChangePlaying_Click" Content="Change Playing" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="89" Height="21" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" Margin="551,68,0,0"/>
                 <Button x:Name="btnStopPlaying" Click="btnStopPlaying_Click" Content="Stop Playing" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="79" Height="21" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" Margin="645,68,0,0"/>
@@ -77,7 +88,7 @@
                 <Button x:Name="btnChangeName" Click="btnChangeName_Click" Content="Change Name" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="89" Height="21" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" Margin="10,42,0,0"/>
             </Grid>
         </Grid>
-        <Grid x:Name="grdToken" Margin="-734,42,0,0" Background="#FF191919" HorizontalAlignment="Left" Width="734" Height="67" VerticalAlignment="Top">
+        <Grid x:Name="grdToken" Margin="-734,97,0,0" Background="#FF191919" HorizontalAlignment="Left" Width="734" Height="67" VerticalAlignment="Top">
             <TextBox x:Name="txtTokenValue" Margin="10,10,10,0" TextWrapping="NoWrap"  Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="21" VerticalAlignment="Top"/>
             <Button x:Name="btnSaveToken" Click="btnSaveToken_Click" Content="Save Token" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="89" Height="22" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" Margin="233,36,0,0"/>
             <Button x:Name="btnClearToken" Click="btnClearToken_Click" Content="Clear Token" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="89" Height="22" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" Margin="327,36,0,0"/>
@@ -85,7 +96,7 @@
         </Grid>
         <TextBlock x:Name="lblConnectionValue" Margin="225,2,238,0" TextWrapping="Wrap" Text="Connection: Offline" VerticalAlignment="Top" FontSize="20" Foreground="#FF0FB3C3"/>
         <Grid x:Name="grdNotification" Margin="0,42,-734,0" Background="#FF191919" HorizontalAlignment="Right" Width="734" Height="55" VerticalAlignment="Top" Panel.ZIndex="100">
-            <TextBlock x:Name="lblNotificationValue" Margin="10,0" TextWrapping="Wrap" FontSize="16" Foreground="#FF0FB3C3" TextAlignment="Center"/>
+            <TextBlock x:Name="lblNotificationValue" Margin="10,0" TextWrapping="Wrap" FontSize="16" Foreground="#FF0FB3C3" TextAlignment="Center" Panel.ZIndex="100"/>
         </Grid>
         <Button x:Name="btnTest" Click="btnTest_Click" Content="Test" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="88" Height="32" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="20" Margin="578,0,0,0" Visibility="Visible"/>
 

@@ -1,7 +1,0 @@
-C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\bin\Release\QueryMaster.XML
-C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\bin\Release\QueryMaster.dll
-C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\bin\Release\QueryMaster.pdb
-C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\bin\Release\Ionic.BZip2.dll
-C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\obj\Release\QueryMaster.csprojResolveAssemblyReference.cache
-C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\obj\Release\QueryMaster.dll
-C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\obj\Release\QueryMaster.pdb

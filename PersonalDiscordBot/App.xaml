@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:PersonalDiscordBot"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        
+        <!--#region ListView-->
         <Style TargetType="{x:Type ListViewItem}">
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="true" >
@@ -18,6 +20,9 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <!--#endregion-->
+        
+        <!--#region Button-->
         <Style TargetType="{x:Type Button}">
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="true">
@@ -25,6 +30,9 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <!--#endregion-->
+        
+        <!--#region ScrollBar-->
         <Style x:Key="ScrollThumbs" TargetType="{x:Type Thumb}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -43,8 +51,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <!--ScrollBars-->
         <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
             <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
             <Setter Property="Foreground" Value="#8C8C8C" />
@@ -104,6 +110,10 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!--#endregion-->
+
+        <!--#region ComboBox-->
+
         <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -127,7 +137,7 @@
                 <Path 
                   x:Name="Arrow"
                   Grid.Column="1"     
-                  Fill="#FF6E6E6E"
+                  Fill="White"
                   HorizontalAlignment="Center"
                   VerticalAlignment="Center"
                   Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"
@@ -159,6 +169,8 @@
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
             <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
             <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="MinWidth" Value="120"/>
+            <Setter Property="MinHeight" Value="20"/>
             <Setter Property="Foreground" Value="#FF0FB3C3"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -203,10 +215,10 @@
                               MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                     <Border 
                                 x:Name="DropDownBorder"
-                                Background="#FF202020"
+                                Background="#FF6E6E6E"
 
                                 BorderThickness="1"
-                                BorderBrush="#888888"/>
+                                BorderBrush="#FF6E6E6E"/>
                                     <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
                                         <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
                                     </ScrollViewer>
@@ -265,5 +277,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!--#endregion-->
+        
     </Application.Resources>
 </Application>
