@@ -806,12 +806,12 @@ namespace PersonalDiscordBot.Classes
             return cost;
         }
 
-        public static void CheckCharacterStats(CommandContext context, ulong ownerID)
+        public static void CheckCharacterStats(CommandContext context)
         {
             try
             {
                 var line = Environment.NewLine;
-                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == ownerID);
+                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
                 if (owner == null)
                 {
                     Events.SendDiscordMessage(context, "You don't currently have a profile, please create a character first");

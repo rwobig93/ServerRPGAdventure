@@ -803,7 +803,7 @@ namespace PersonalDiscordBot.Classes
     }
     #endregion
 
-    #region Summary
+    #region Help
     [Group("help"), Summary("Returns current help articles")]
     public class HelpModule : ModuleBase
     {
@@ -931,7 +931,9 @@ namespace PersonalDiscordBot.Classes
                  "```;test permission{0}Checks to see if channel can or can't use RPG commands.```" +
                  "```;test match{0}Start a match against AI.```" +
                  "```;test attack{0}Attacks your oppoenent in your current match.```" +
-                 "```;test loot{0}Displays all the phat loot you have.```",
+                 "```;test loot{0}Displays all the phat loot you have.```" +
+                 "```;test item{0}Shows a list of your items to use in combat and asks you to choose one to use if it is your turn```" +
+                 "```;test view{0}Displays info about your currently selected character```",
                  Environment.NewLine
                 );
                 await Context.Channel.SendMessageAsync(_helpArticle);
@@ -1016,7 +1018,7 @@ namespace PersonalDiscordBot.Classes
     }
     #endregion
 
-    #region Some Stuff //Rick feel free up correct this name or add more regions for the stuff
+    #region General Commands
     [Group("status"), Summary("Gets the bot status/info")]
     public class StatusModule : ModuleBase
     {
@@ -1841,6 +1843,44 @@ namespace PersonalDiscordBot.Classes
                     return;
                 }
                 await Management.EmptyLoot(Context);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("item"), Summary("Testicules Item Use")]
+        public async Task Testacules16()
+        {
+            try
+            {
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have any characters, please create one before trying to get some of that dank loot");
+                    return;
+                }
+                await Management.CharacterUseItem(Context);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("view"), Summary("Testicules View Character")]
+        public async Task Testacules17()
+        {
+            try
+            {
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have any characters, please create one before trying to get some of that dank loot");
+                    return;
+                }
+                Management.CheckCharacterStats(Context);
             }
             catch (Exception ex)
             {
