@@ -83,6 +83,13 @@ namespace PersonalDiscordBot.Classes
             return array.Length - 1;
         }
 
+        public static string EnumPropsLogging(this object obj)
+        {
+            string retString = string.Empty;
+            foreach (var prop in obj.GetType().GetProperties())
+                retString = $"{retString} [{prop.Name}]{prop.GetValue(obj)}";
+            return retString;
+        }
     }
 
     public static class Toolbox
@@ -90,13 +97,13 @@ namespace PersonalDiscordBot.Classes
         public static StringBuilder debugLog = new StringBuilder();
         public static Classes.LocalSettings _paths = new Classes.LocalSettings();
 
-        public static void uDebugAddLog(string _log)
+        public static void uDebugAddLog(string _log, [CallerMemberName] string caller = null)
         {
             try
             {
                 string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
                 string _timeNow = DateTime.Now.ToLocalTime().ToLongTimeString();
-                debugLog.AppendLine(string.Format("{0}_{1} :: {2}", _dateNow, _timeNow, _log));
+                debugLog.AppendLine(string.Format($"{_dateNow}_{_timeNow} :: {caller.ToUpper()}: {_log}"));
                 if (debugLog.Length >= 5000)
                     DumpDebugLog();
             }

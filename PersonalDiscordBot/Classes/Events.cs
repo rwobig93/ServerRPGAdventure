@@ -1,4 +1,5 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,13 +24,19 @@ namespace PersonalDiscordBot.Classes
 
         #region DiscordMessage Event
 
-        public delegate void DiscordMessage(MessageArgs args);
+        public delegate void DiscordMessage(MessageArgs args, bool isEmbed);
         public static event DiscordMessage DiscordMessageSend;
         public static void SendDiscordMessage(CommandContext context, string message)
         {
             MessageArgs args = new MessageArgs(context, message);
-            DiscordMessageSend(args);
+            DiscordMessageSend(args, false);
             Toolbox.uDebugAddLog($"Sent Discord Message via Event: [UN]{context.Message.Author.Username} [MSG]{message} [ID]{context.Message.Author.Id}");
+        }
+        public static void SendDiscordMessage(CommandContext context, EmbedBuilder embed)
+        {
+            MessageArgs args = new MessageArgs(context, embed);
+            DiscordMessageSend(args, true);
+            Toolbox.uDebugAddLog($"Sent Discord Message via Event with Embed: [UN]{context.Message.Author.Username} [Embed] [ID]{context.Message.Author.Id}");
         }
 
         #endregion
@@ -110,6 +117,7 @@ namespace PersonalDiscordBot.Classes
 
     public class MessageArgs : EventArgs
     {
+        private EmbedBuilder embed;
         private CommandContext context;
         private string message;
         public MessageArgs(CommandContext context, string message)
@@ -117,6 +125,12 @@ namespace PersonalDiscordBot.Classes
             this.context = context;
             this.message = message;
         }
+        public MessageArgs(CommandContext context, EmbedBuilder embed)
+        {
+            this.context = context;
+            this.embed = embed;
+        }
+        public EmbedBuilder Embed { get { return embed; } }
         public CommandContext Context { get { return context; } }
         public string Message { get { return message; } }
     }

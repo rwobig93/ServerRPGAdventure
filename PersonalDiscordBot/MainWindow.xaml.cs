@@ -48,7 +48,7 @@ namespace PersonalDiscordBot
             txtLogDirectory.Text = _paths.LogLocation;
             Events.MessagePromptShown += (e) => { uStatusUpdate(e.Content); };
             Events.MatchCompleted += async (e) => { await Management.EndOfMatchLootAsync(e); };
-            Events.DiscordMessageSend += async (e) => { string resp = $"{e.Context.Message.Author.Mention} {e.Message}"; await e.Context.Channel.SendMessageAsync(resp); Toolbox.uDebugAddLog($"DCRDMSGSNT: {resp}"); };
+            Events.DiscordMessageSend += async (e, b) => { if (b) { await e.Context.Channel.SendMessageAsync(e.Context.Message.Author.Mention, false, e.Embed); } else { string resp = $"{e.Context.Message.Author.Mention} {e.Message}"; await e.Context.Channel.SendMessageAsync(resp); Toolbox.uDebugAddLog($"DCRDMSGSNT: {resp}"); } };
         }
 
         #region Global Variables
