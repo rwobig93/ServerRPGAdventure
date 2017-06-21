@@ -344,7 +344,6 @@ namespace PersonalDiscordBot.Classes
             bool IsUnique { get; set; }
             int Lvl { get; set; }
             int Worth { get; set; }
-            int Count { get; set; }
         };
         public static Random rng = new Random((int)(DateTime.Now.Ticks & 0x7FFFFFFF));
         public static int maxLevel = 20;
@@ -1256,8 +1255,9 @@ namespace PersonalDiscordBot.Classes
                     }
                     if (item.Count > 1)
                     {
-                        owner.CurrentCharacter.Backpack.Stored.Find(x => x == item).Count -= 1;
-                        Toolbox.uDebugAddLog($"Removed 1 count from {iItem.Name}, count: {iItem.Count} [ID]{owner.OwnerID}");
+                        Item _item = (Item)owner.CurrentCharacter.Backpack.Stored.Find(x => x == item);
+                        _item.Count -= 1;
+                        Toolbox.uDebugAddLog($"Removed 1 count from {iItem.Name}, count: {_item.Count} [ID]{owner.OwnerID}");
                     }
                     else
                     {
