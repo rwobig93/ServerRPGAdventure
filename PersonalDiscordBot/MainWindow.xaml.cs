@@ -472,6 +472,11 @@ namespace PersonalDiscordBot
                     ShowNotification("Admin Id entered was invalid, please try again", 5);
                     return;
                 }
+                if (Permissions.Administrators.Contains(adminID))
+                {
+                    uStatusUpdate($"{adminID} is already in the admin list, canceling...");
+                    return;
+                }
                 Permissions.Administrators.Add(adminID);
                 Events.uStatusUpdateExt($"Added admin ID: {adminID}");
                 RefreshAdminList();

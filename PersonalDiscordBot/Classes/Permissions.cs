@@ -65,6 +65,9 @@ namespace PersonalDiscordBot.Classes
                 {
                     Events.uStatusUpdateExt("Deserializing Permission Data");
                     string loadPath = $@"{Directory.GetCurrentDirectory()}\Permissions";
+                    Administrators.Clear();
+                    AllowedChannels.Clear();
+                    Toolbox.uDebugAddLog("Cleared Administrators and AllowedChannels");
                     string adminPerm = $@"{loadPath}\Administrators.perm";
                     string rpgPerm = $@"{loadPath}\RPGChannels.perm";
                     if (!Directory.Exists(loadPath))
