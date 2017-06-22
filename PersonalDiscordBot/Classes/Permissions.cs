@@ -18,6 +18,7 @@ namespace PersonalDiscordBot.Classes
 
         public static List<ulong> Administrators = new List<ulong>();
         public static List<ulong> AllowedChannels = new List<ulong>();
+        public static GeneralPermissions GeneralPermissions = new GeneralPermissions();
 
         #endregion
 
@@ -46,6 +47,9 @@ namespace PersonalDiscordBot.Classes
                     var json2 = JsonConvert.SerializeObject(AllowedChannels, Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
                     File.WriteAllText($@"{permPath}\RPGChannels.perm", json2);
                     Toolbox.uDebugAddLog($"Serialized RPGChannels.perm");
+                    var json3 = JsonConvert.SerializeObject(GeneralPermissions, Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+                    File.WriteAllText($@"{permPath}\GeneralPermissions.perm", json3);
+                    Toolbox.uDebugAddLog($"Serialized GeneralPermissions.perm");
                 }
                 catch (Exception ex)
                 {
@@ -70,6 +74,7 @@ namespace PersonalDiscordBot.Classes
                     Toolbox.uDebugAddLog("Cleared Administrators and AllowedChannels");
                     string adminPerm = $@"{loadPath}\Administrators.perm";
                     string rpgPerm = $@"{loadPath}\RPGChannels.perm";
+                    string genPerm = $@"{loadPath}\GeneralPermissions.perm";
                     if (!Directory.Exists(loadPath))
                     {
                         Toolbox.uDebugAddLog($"Permissions folder doesn't exist, stopping deserialization: {loadPath}");
@@ -95,6 +100,19 @@ namespace PersonalDiscordBot.Classes
                             Toolbox.uDebugAddLog("Deserialized RPGChannels.perm");
                         }
                     }
+                    else
+                        Toolbox.uDebugAddLog($"RPGChannels.perm doesn't exist: {rpgPerm}");
+                    if (File.Exists(genPerm))
+                    {
+                        Toolbox.uDebugAddLog($"Found GeneralPermissions.perm file: {genPerm}");
+                        using (StreamReader sr = File.OpenText(genPerm))
+                        {
+                            GeneralPermissions = JsonConvert.DeserializeObject<GeneralPermissions>(sr.ReadToEnd());
+                            Toolbox.uDebugAddLog("Deserialized GeneralPermissions.perm");
+                        }
+                    }
+                    else
+                        Toolbox.uDebugAddLog($"GeneralPermissions.perm doesn't exist: {genPerm}");
                 }
                 catch (Exception ex)
                 {
@@ -115,5 +133,10 @@ namespace PersonalDiscordBot.Classes
         }
 
         #endregion
+    }
+
+    public class GeneralPermissions
+    {
+        public static ulong logChannel;
     }
 }

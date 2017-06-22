@@ -1078,12 +1078,12 @@ namespace PersonalDiscordBot.Classes
                 int windDamage = owner.CurrentCharacter.Armor.Wind;
 
                 int enemyTotal = 0;
-                int enemyPhys = enemy.Armor.Physical;
-                int enemyMagi = enemy.Armor.Magic;
-                int enemyFire = enemy.Armor.Fire;
-                int enemyLigh = enemy.Armor.Lightning;
-                int enemyIcee = enemy.Armor.Ice;
-                int enemyWind = enemy.Armor.Wind;
+                int enemyPhys = enemy.Weapon.PhysicalDamage;
+                int enemyMagi = enemy.Weapon.MagicDamage;
+                int enemyFire = enemy.Weapon.FireDamage;
+                int enemyLigh = enemy.Weapon.LightningDamage;
+                int enemyIcee = enemy.Weapon.IceDamage;
+                int enemyWind = enemy.Weapon.WindDamage;
 
                 Affliction buff = new Affliction();
                 foreach (var affl in owner.CurrentCharacter.StatusEffects)
@@ -1524,6 +1524,68 @@ namespace PersonalDiscordBot.Classes
                 }
                 Armor chosenArmor = armorList[chosenNum - 1];
                 ChangeArmor(context, chosenArmor);
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
+        public static async Task CharacterChangeWeapon(CommandContext context)
+        {
+            try
+            {
+                bool hasSetup = VerifyProfileAndHasCharacter(context);
+                if (!hasSetup)
+                    return;
+                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
+                List<Weapon> weapList = new List<Weapon>();
+                foreach (IBackPackItem iBPItem in owner.CurrentCharacter.Backpack.Stored)
+                {
+                    if (iBPItem.GetLootType() == LootDrop.LootType.Weapon && (Weapon)iBPItem != owner.CurrentCharacter.Weapon)
+                        weapList.Add((Weapon)iBPItem);
+                }
+                if (weapList.Count <= 0)
+                {
+                    await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {owner.CurrentCharacter.Name} doesn't currently have any weapons in their bag, nice try");
+                    return;
+                }
+                weapList.OrderBy(x => x.Name);
+                string weapString = $"{context.Message.Author.Mention}```What weapon would you like to equip? (enter the number){Environment.NewLine}";
+                int weapNum = 1;
+                foreach (var weap in weapList)
+                {
+                    weapString = $"{weapString}[{weapNum}] {weap.Name}{Environment.NewLine}";
+                }
+                weapString = $"{weapString}```";
+                var sentMsg = await context.Channel.SendMessageAsync(weapString);
+                List<IMessage> respondedList = new List<IMessage>();
+                int chosenNum = 0;
+                bool responded = false;
+                while (!responded)
+                {
+                    var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
+                    foreach (var msg in msgList)
+                        if (msg.Author == context.Message.Author && msg.Timestamp.DateTime > sentMsg.Timestamp.DateTime && !respondedList.Contains(msg))
+                        {
+                            respondedList.Add(msg);
+                            bool isNum = int.TryParse(msg.Content.ToString(), out chosenNum);
+                            if (!isNum)
+                                await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {msg.Content.ToString()} isnt' a valid number, please try again");
+                            else if (chosenNum < 1 || chosenNum > weapList.Count)
+                                await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {chosenNum} is above or below the number of weapons you have, please try again");
+                            else
+                                responded = true;
+                        }
+                    if (sentMsg.Timestamp.DateTime + TimeSpan.FromMinutes(5) <= DateTime.Now)
+                    {
+                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} A response wasn't received within 5min, canceling Weapon Change");
+                        return;
+                    }
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                }
+                Weapon chosenWeapon = weapList[weapNum - 1];
+                ChangeWeapon(context, chosenWeapon);
             }
             catch (Exception ex)
             {

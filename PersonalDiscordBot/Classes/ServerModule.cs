@@ -913,31 +913,34 @@ namespace PersonalDiscordBot.Classes
                 (
                  "_{0}" +
                  "{0}```╬ RPG Testing Commands ╬```{0}" +
-                 "```;test{0}Testicules Engages in...something?```" +
-                 "```;test add admin %USER%{0}Grants %USER% Admin powers.```" +
-                 "```;test remove admin %USER%{0}Removes %USER%'s Admin Powers.```" +
-                 "```;test weap{0}Creates a random weapon.```" +
-                 "```;test spell{0}Creates a random spell.```" +
-                 "```;test armor{0}Creates a random armor.```" +
-                 "```;test thing{0}Creates a random item.```" +
-                 "```;test rng weap %Number%{0}Creates %Number% of random weapons.```" +
-                 "```;test rng spell %Number%{0}Creates %Number% of random spells.```"+
-                 "```;test rng armor %Number%{0}Creates %Number% of random armors.```" +
-                 "```;test rng thing %Number%{0}Creates %Number% of random items.```" +
-                 "```;test lootdrop{0}Simulates that lootdrop that you don't actually get for winning a fight (yet).```" +
-                 "```;test create{0}Khajiit creates character, if you have coin.```" +
-                 "```;test give %Character% %Amount%{0}(Requires Admin) Gives %Character% %Amount% of coins.```" +
-                 "```;test swtich{0}Displays a list of your characters and allows you to choose which one to Activate. You may only have 1 character active at a time.```" +
-                 "```;test testiculees{0}(Requires Admin) Summons the mighty Testiculees, Champion of Unhandled Exceptions, and adds him to your list of characters.```" +
-                 "```;test delete{0}(Requires Admin) Deletes your profile. No one liked you anyway.```" +
-                 "```;test delete %USER%{0}(Requires Admin) Deletes %USER%'s profile. No one liked them anyway.```" +
-                 "```;test rpg{0}(Requires Admin) Allows or Denies a channel to use RPG commands.```" +
-                 "```;test permission{0}Checks to see if channel can or can't use RPG commands.```" +
-                 "```;test match{0}Start a match against AI.```" +
-                 "```;test attack{0}Attacks your oppoenent in your current match.```" +
-                 "```;test loot{0}Displays all the phat loot you have.```" +
-                 "```;test item{0}Shows a list of your items to use in combat and asks you to choose one to use if it is your turn```" +
-                 "```;test view{0}Displays info about your currently selected character```",
+                 "```;test{0}" +
+                 ";test add admin %USER%{0}" +
+                 ";test remove admin %USER%{0}" +
+                 ";test weap{0}" +
+                 ";test spell{0}" +
+                 ";test armor{0}" +
+                 ";test thing{0}" +
+                 ";test rng weap %Number%{0}" +
+                 ";test rng spell %Number%{0}"+
+                 ";test rng armor %Number%{0}" +
+                 ";test rng thing %Number%{0}" +
+                 ";test lootdrop{0}" +
+                 ";test create{0}" +
+                 ";test give %Character% %Amount%{0}" +
+                 ";test swtich{0}" +
+                 ";test testiculees{0}" +
+                 ";test delete{0}" +
+                 ";test delete %USER%{0}" +
+                 ";test rpg{0}" +
+                 ";test permission{0}" +
+                 ";test match{0}" +
+                 ";test attack{0}" +
+                 ";test loot{0}" +
+                 ";test item{0}" +
+                 ";test view{0}" +
+                 ";test change armor{0}" +
+                 ";test change weapon{0}" +
+                 ";test add loot```",
                  Environment.NewLine
                 );
                 await Context.Channel.SendMessageAsync(_helpArticle);
@@ -2047,12 +2050,64 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        [Command("armor"), Summary("Testicules Change Armor")]
-        public async Task Testacules18()
+        [Command("change armor"), Summary("Testicules Change Armor")]
+        public async Task Testacules18a()
         {
             try
             {
                 await Management.CharacterChangeArmor(Context);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("change weapon"), Summary("Testicules Change Weapon")]
+        public async Task Testacules18w()
+        {
+            try
+            {
+                await Management.CharacterChangeWeapon(Context);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("add loot"), Summary("Testicules Change Armor")]
+        public async Task Testacules19()
+        {
+            try
+            {
+                var isAdmin = Permissions.AdminPermissions(Context);
+                if (!isAdmin)
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have permission to run this command");
+                }
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} Generating loot for your character {RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id).CurrentCharacter.Name}");
+                Match lootMatch = new Match()
+                {
+                    DefeatedEnemies = new List<Enemy>()
+                    {
+                        Enemies.CopyNewEnemy(Enemies.punchingBag),
+                        Enemies.CopyNewEnemy(Enemies.punchingBag),
+                        Enemies.CopyNewEnemy(Enemies.punchingBag),
+                        Enemies.CopyNewEnemy(Enemies.punchingBag),
+                        Enemies.CopyNewEnemy(Enemies.punchingBag),
+                        Enemies.CopyNewEnemy(Enemies.punchingBag),
+                        Enemies.CopyNewEnemy(Enemies.punchingBag),
+                        Enemies.CopyNewEnemy(Enemies.punchingBag),
+                        Enemies.CopyNewEnemy(Enemies.punchingBag),
+                        Enemies.CopyNewEnemy(Enemies.punchingBag),
+                    },
+                    ExperienceEarned = 1000,
+                    MatchStart = DateTime.Now - TimeSpan.FromMinutes(20),
+                    Owner = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id),
+                    Turns = 10
+                };
+                Events.CompleteMatch(Context, lootMatch.Owner, lootMatch, DateTime.Now - lootMatch.MatchStart, RPG.MatchCompleteResult.Won);
             }
             catch (Exception ex)
             {
