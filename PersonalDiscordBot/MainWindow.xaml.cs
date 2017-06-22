@@ -89,14 +89,14 @@ namespace PersonalDiscordBot
 
         private void winMain_Loaded(object sender, RoutedEventArgs e)
         {
+            Management.DeSerializeData();
+            Permissions.DeSerializePermissions();
             VerifyDebug();
             LoadWindowLocation();
             HideGrids();
             UpdateVerison();
-            Management.DeSerializeData();
-            Permissions.DeSerializePermissions();
             tSaveRPGData();
-            RefreshAdminList();
+            tRefreshAdminList();
         }
 
         private void winMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -479,7 +479,7 @@ namespace PersonalDiscordBot
                 }
                 Permissions.Administrators.Add(adminID);
                 Events.uStatusUpdateExt($"Added admin ID: {adminID}");
-                RefreshAdminList();
+                tRefreshAdminList();
             }
             catch (Exception ex)
             {
@@ -501,7 +501,7 @@ namespace PersonalDiscordBot
                 }
                 Permissions.Administrators.Remove(adminID);
                 uStatusUpdate($"Removed admin ID: {adminID}");
-                RefreshAdminList();
+                tRefreshAdminList();
             }
             catch (Exception ex)
             {
@@ -951,19 +951,6 @@ namespace PersonalDiscordBot
             }
         }
 
-        private void RefreshAdminList()
-        {
-            Toolbox.uDebugAddLog("Refreshing admin list");
-            comboAdmins.Items.Clear();
-            int count = 0;
-            foreach (var admin in Permissions.Administrators)
-            {
-                count++;
-                comboAdmins.Items.Add(admin);
-            }
-            Events.uStatusUpdateExt($"Refreshed admin list, total admins: {count}");
-        }
-
         private void SaveWindowLocation()
         {
             Toolbox.uDebugAddLog("Saving window location");
@@ -1114,7 +1101,27 @@ namespace PersonalDiscordBot
             });
             save.Start();
         }
-#endregion
+
+        private void tRefreshAdminList()
+        {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += (s, e) =>
+            {
+                Toolbox.uDebugAddLog("Refreshing admin list");
+                Thread.Sleep(TimeSpan.FromSeconds(3));
+                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { comboAdmins.Items.Clear(); });
+                int count = 0;
+                foreach (var admin in Permissions.Administrators)
+                {
+                    count++;
+                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { comboAdmins.Items.Add(admin); });
+                }
+                Events.uStatusUpdateExt($"Refreshed admin list, total admins: {count}");
+            };
+            worker.RunWorkerAsync();
+        }
+
+        #endregion
 
         #region Async Methods
 
