@@ -301,3 +301,66 @@ StackTrace:
    at PersonalDiscordBot.MainWindow.<Start>d__59.MoveNext() in C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 984
 
 
+TimeStamp: 06-22-17_8:58:02 AM
+Exception Type: NullReferenceException
+Caller: tRefreshAdminList at 1126
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<tRefreshAdminList>b__68_0(Object s, DoWorkEventArgs e) in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1116
+
+
+TimeStamp: 06-22-17_9:00:40 AM
+Exception Type: NullReferenceException
+Caller: tRefreshAdminList at 1126
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<tRefreshAdminList>b__68_0(Object s, DoWorkEventArgs e) in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1116
+
+
+TimeStamp: 06-22-17_9:08:49 AM
+Exception Type: NullReferenceException
+Caller: tRefreshAdminList at 1130
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<tRefreshAdminList>b__68_0(Object s, DoWorkEventArgs e) in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1116
+
+
+TimeStamp: 06-22-17_9:14:57 AM
+Exception Type: NullReferenceException
+Caller: tRefreshAdminList at 1130
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<tRefreshAdminList>b__68_0(Object s, DoWorkEventArgs e) in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1116
+
+
+TimeStamp: 06-22-17_9:24:23 AM
+Exception Type: NullReferenceException
+Caller: tRefreshAdminList at 1130
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<tRefreshAdminList>b__68_0(Object s, DoWorkEventArgs e) in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1116
+
+
+TimeStamp: 06-22-17_9:25:02 AM
+Exception Type: NullReferenceException
+Caller: tRefreshAdminList at 1130
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<tRefreshAdminList>b__68_0(Object s, DoWorkEventArgs e) in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1116
+
+
+TimeStamp: 06-22-17_9:25:54 AM
+Exception Type: NullReferenceException
+Caller: tRefreshAdminList at 1130
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<tRefreshAdminList>b__68_0(Object s, DoWorkEventArgs e) in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1116
+
+

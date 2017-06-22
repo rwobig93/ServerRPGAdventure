@@ -1107,16 +1107,28 @@ namespace PersonalDiscordBot
             BackgroundWorker worker = new BackgroundWorker();
             worker.DoWork += (s, e) =>
             {
-                Toolbox.uDebugAddLog("Refreshing admin list");
-                Thread.Sleep(TimeSpan.FromSeconds(3));
-                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { comboAdmins.Items.Clear(); });
-                int count = 0;
-                foreach (var admin in Permissions.Administrators)
+                try
                 {
-                    count++;
-                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { comboAdmins.Items.Add(admin); });
+                    Toolbox.uDebugAddLog("Refreshing admin list");
+                    Thread.Sleep(TimeSpan.FromSeconds(3));
+                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { comboAdmins.Items.Clear(); });
+                    int count = 0;
+                    if (Permissions.Administrators.Count <= 0)
+                    {
+                        Events.uStatusUpdateExt($"Refreshed admin list, total admins: {count}");
+                        return;
+                    }
+                    foreach (var admin in Permissions.Administrators)
+                    {
+                        count++;
+                        Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { comboAdmins.Items.Add(admin); });
+                    }
+                    Events.uStatusUpdateExt($"Refreshed admin list, total admins: {count}");
                 }
-                Events.uStatusUpdateExt($"Refreshed admin list, total admins: {count}");
+                catch (Exception ex)
+                {
+                   FullExceptionLog(ex);
+                }
             };
             worker.RunWorkerAsync();
         }
@@ -1255,7 +1267,7 @@ namespace PersonalDiscordBot
         {
             //Permissions.SerializePermissions();
             //Management.SerializeData();
-            uStatusUpdate(Testing.RandomMassTestArmor(2));
+            uStatusUpdate(Testing.RandomItem());
         }
 
         private void SetupTest()
