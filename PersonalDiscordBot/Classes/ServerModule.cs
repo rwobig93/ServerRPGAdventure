@@ -917,9 +917,11 @@ namespace PersonalDiscordBot.Classes
                  "```;test weap{0}Creates a random weapon.```" +
                  "```;test spell{0}Creates a random spell.```" +
                  "```;test armor{0}Creates a random armor.```" +
+                 "```;test thing{0}Creates a random item.```" +
                  "```;test rng weap %Number%{0}Creates %Number% of random weapons.```" +
                  "```;test rng spell %Number%{0}Creates %Number% of random spells.```"+
                  "```;test rng armor %Number%{0}Creates %Number% of random armors.```" +
+                 "```;test rng thing %Number%{0}Creates %Number% of random items.```" +
                  "```;test lootdrop{0}Simulates that lootdrop that you don't actually get for winning a fight (yet).```" +
                  "```;test create{0}Khajiit creates character, if you have coin.```" +
                  "```;test give %Character% %Amount%{0}(Requires Admin) Gives %Character% %Amount% of coins.```" +
@@ -1196,6 +1198,20 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
+        [Command("thing"), Summary("Testicules Item Gen")]
+        public async Task Testacules2t()
+        {
+            try
+            {
+                await Context.Channel.SendMessageAsync(Testing.RandomItem());
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+
+        }
+
         [Command("rng weap"), Summary("Testicules RNG Gen Weap")]
         public async Task Testacules3w(string times)
         {
@@ -1267,6 +1283,32 @@ namespace PersonalDiscordBot.Classes
                     }
                     else
                         await Context.Channel.SendMessageAsync($"Generated {intTimes} Armors: {Environment.NewLine}{Testing.RandomMassTestArmor(intTimes)}");
+                }
+                else
+                    await Context.Channel.SendMessageAsync($"{times} is not a valid number. Rethink your life choices and try again.");
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("rng thing"), Summary("Testicules RNG Gen Item")]
+        public async Task Testacules3t(string times)
+        {
+            try
+            {
+                var intTimes = 0;
+                var isANum = int.TryParse(times, out intTimes);
+                if (isANum)
+                {
+                    if (intTimes > 100000)
+                    {
+                        await Context.Channel.SendMessageAsync("The highest integer allowed is 100,000. I'm generating that for you now, don't do that again!");
+                        intTimes = 100000;
+                        await Context.Channel.SendMessageAsync($"Generated {intTimes} Items: {Environment.NewLine}{Testing.RandomMassTestItem(intTimes)}");
+                    }
+                    await Context.Channel.SendMessageAsync($"Generated {intTimes} Items: {Environment.NewLine}{Testing.RandomMassTestItem(intTimes)}");
                 }
                 else
                     await Context.Channel.SendMessageAsync($"{times} is not a valid number. Rethink your life choices and try again.");

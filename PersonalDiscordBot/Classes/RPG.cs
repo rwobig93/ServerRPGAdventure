@@ -1867,7 +1867,7 @@ namespace PersonalDiscordBot.Classes
 
         public static Item ItemPicker(RarityType rarity, Character character)
         {
-            Item _item = null;
+            Item _item = new Item();
             int rarityValue = GetRarityValue(rarity);
             ItemType type = ChooseItemType();
             switch (type)
@@ -1888,6 +1888,7 @@ namespace PersonalDiscordBot.Classes
                     _item = RepairPicker();
                     break;
             }
+            _item.Rarity = rarity;
             return _item;
         }
 
@@ -3877,6 +3878,18 @@ namespace PersonalDiscordBot.Classes
             return $"Your Loot is: {result}";
         }
 
+        public static string RandomItem()
+        {
+            string result = string.Empty;
+            RarityType rarity = LootDrop.ChooseRarity();
+            var item = LootDrop.ItemPicker(rarity, testiculeesCharacter);
+            foreach (var prop in item.GetType().GetProperties())
+            {
+                result = $"{result}{line}{prop.Name}: {prop.GetValue(item)}";
+            }
+            return $"Your Loot is: {result}";
+        }
+
         public static string LootDropGen()
         {
             string result = string.Empty;
@@ -4111,6 +4124,88 @@ namespace PersonalDiscordBot.Classes
             sw.Stop();
             return $"{line}--------------------------{line}It took {sw.Elapsed} seconds to run {num} times.{line}--------------------------{line}Light: {light}{line}Medium: {medium}{line}Heavy: {heavy}{line}--------------------------{line}Common: {common}{line}Uncommon: {uncommon}{line}Rare: {rare}{line}Epic: {epic}{line}Legendary: {legendary}{line}--------------------------{line}Unique: {isUnique}{line}";
 
+        }
+
+        public static string RandomMassTestItem(int num)
+        {
+            int restorative = 0;
+            int buff = 0;
+            int damaging = 0;
+            int currency = 0;
+            int worth = 0;
+            int repair = 0;
+            int common = 0;
+            int uncommon = 0;
+            int rare = 0;
+            int epic = 0;
+            int legendary = 0;
+            int isUnique = 0;
+            int timesRan = 0;
+            var sw = new System.Diagnostics.Stopwatch();
+
+            sw.Start();
+            for (int i = 1; i <= num; i++)
+            {
+                RarityType rarity = LootDrop.ChooseRarity();
+                var item = LootDrop.ItemPicker(rarity, testiculeesCharacter);
+                switch (item.Type)
+                {
+                    case ItemType.Buff:
+                        buff++;
+                        break;
+                    case ItemType.Currency:
+                        currency++;
+                        worth = worth + item.Worth;
+                        break;
+                    case ItemType.Damaging:
+                        damaging++;
+                        break;
+                    case ItemType.Repair:
+                        repair++;
+                        break;
+                    case ItemType.Restorative:
+                        restorative++;
+                        break;
+                }
+                switch (item.Rarity)
+                {
+                    case RarityType.Common:
+                        common++;
+                        break;
+                    case RarityType.Epic:
+                        epic++;
+                        break;
+                    case RarityType.Legendary:
+                        legendary++;
+                        break;
+                    case RarityType.Rare:
+                        rare++;
+                        break;
+                    case RarityType.Uncommon:
+                        uncommon++;
+                        break;
+                }
+                if (item.IsUnique) isUnique++;
+                timesRan++;
+            }
+            sw.Stop();
+            return $"{line}--------------------------{line}" +
+                $"It took {sw.Elapsed.TotalSeconds} seconds to run {timesRan} times.{line}" +
+                $"--------------------------{line}" +
+                $"Restorative: {restorative}{line}" +
+                $"Buff: {buff}{line}" +
+                $"Damaging: {damaging}{line}" +
+                $"Currency: {currency}{line}" +
+                $"     Amount: {worth}{line}" +
+                $"Repair: {repair}{line}" +
+                $"--------------------------{line}" +
+                $"Common: {common}{line}" +
+                $"Uncommon: {uncommon}{line}" +
+                $"Rare: {rare}{line}" +
+                $"Epic: {epic}{line}" +
+                $"Legendary: {legendary}{line}" +
+                $"--------------------------{line}" +
+                $"Unique: {isUnique}";
         }
 
         public static string RandomMassTestLoot(int num)
