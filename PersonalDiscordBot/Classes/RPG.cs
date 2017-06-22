@@ -616,6 +616,37 @@ namespace PersonalDiscordBot.Classes
             return newMatch;
         }
 
+        public static bool VerifyProfile(CommandContext context)
+        {
+            bool hasProfile = false;
+            OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
+            if (owner == null)
+            {
+                hasProfile = false;
+                Toolbox.uDebugAddLog($"{context.Message.Author.Id} doesn't currently have a profile");
+                Events.SendDiscordMessage(context, "You don't currently have a profile, please create a character first");
+            }
+            else
+                hasProfile = true;
+            return hasProfile;
+        }
+
+        public static bool VerifyProfileAndHasCharacter(CommandContext context)
+        {
+            bool hasBoth = false;
+            hasBoth = VerifyProfile(context);
+            if (!hasBoth)
+                return hasBoth;
+            OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
+            hasBoth = owner.CharacterList.Count > 0 ? true : false;
+            if (!hasBoth)
+            {
+                Toolbox.uDebugAddLog($"{owner.OwnerID} doesn't currently have a character created");
+                Events.SendDiscordMessage(context, "You don't currently have a character created, please create a character first");
+            }
+            return hasBoth;
+        }
+
         #endregion
 
         #region Character Methods
@@ -830,13 +861,45 @@ namespace PersonalDiscordBot.Classes
                     },
                     Color = new Discord.Color(25, 113, 255),
                     Title = owner.CurrentCharacter.Desc,
-                    Description = $"Level: {owner.CurrentCharacter.Lvl}{line}Experience: {owner.CurrentCharacter.Exp}HP: {owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP}{line}Mana: {owner.CurrentCharacter.CurrentMana}/{owner.CurrentCharacter.MaxMana}{line}Strength: {owner.CurrentCharacter.Str}{line}Defense: {owner.CurrentCharacter.Def}{line}Dexterity: {owner.CurrentCharacter.Dex}{line}Intelligence: {owner.CurrentCharacter.Int}{line}Speed: {owner.CurrentCharacter.Spd}{line}Luck: {owner.CurrentCharacter.Lck}",
+                    Description = $"Level: {owner.CurrentCharacter.Lvl}{line}Experience: {owner.CurrentCharacter.Exp}{line}HP: {owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP}{line}Mana: {owner.CurrentCharacter.CurrentMana}/{owner.CurrentCharacter.MaxMana}{line}Strength: {owner.CurrentCharacter.Str}{line}Defense: {owner.CurrentCharacter.Def}{line}Dexterity: {owner.CurrentCharacter.Dex}{line}Intelligence: {owner.CurrentCharacter.Int}{line}Speed: {owner.CurrentCharacter.Spd}{line}Luck: {owner.CurrentCharacter.Lck}",
                     Footer = new EmbedFooterBuilder()
                     {
                         Text = owner.CurrentCharacter.Class.ToString()
                     }
                 };
                 Events.SendDiscordMessage(context, embed);
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
+        public static void ChangeArmor(CommandContext context, Armor armor)
+        {
+            try
+            {
+                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
+                Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} is changing armors, [Current]{owner.CurrentCharacter.Armor.Name} [ChangeTo]{armor.Name} [ID]{owner.OwnerID}");
+                owner.CurrentCharacter.Armor = armor;
+                Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} equipped {armor.Name} [ID]{owner.OwnerID}");
+                Events.SendDiscordMessage(context, $"{owner.CurrentCharacter.Name} is now wearing a(n) {armor.Name}");
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
+        public static void ChangeWeapon(CommandContext context, Weapon weapon)
+        {
+            try
+            {
+                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
+                Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} is changing weapons [Current]{owner.CurrentCharacter.Weapon.Name} [ChangeTo]{weapon.Name} [ID]{owner.OwnerID}");
+                owner.CurrentCharacter.Weapon = weapon;
+                Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} has equipped {weapon.Name} [ID]{owner.OwnerID}");
+                Events.SendDiscordMessage(context, $"{owner.CurrentCharacter.Name} has equipped a(n) {weapon.Name}");
             }
             catch (Exception ex)
             {
@@ -1157,6 +1220,8 @@ namespace PersonalDiscordBot.Classes
             {
                 owner.CurrentCharacter.CurrentHP = owner.CurrentCharacter.MaxHP;
                 Toolbox.uDebugAddLog($"Match complete, healed {owner.CurrentCharacter.Name} to full health [CHP]{owner.CurrentCharacter.CurrentHP} [MHP]{owner.CurrentCharacter.MaxHP} [ID]{owner.OwnerID}");
+                owner.CurrentCharacter.StatusEffects.Clear();
+                Toolbox.uDebugAddLog($"Removed afflictions from {owner.CurrentCharacter.Name}, new count: {owner.CurrentCharacter.StatusEffects.Count} [ID]{owner.OwnerID}");
                 switch (result)
                 {
                     case MatchCompleteResult.Won:
@@ -1337,57 +1402,133 @@ namespace PersonalDiscordBot.Classes
 
         public static async Task CharacterUseItem(CommandContext context)
         {
-            OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
-            if (owner == null)
+            try
             {
-                await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} You don't have a profile or character yet, please create one before trying to use your non-existant items");
-                return;
-            }
-            List<Item> itemList = new List<Item>();
-            foreach (IBackPackItem bpI in owner.CurrentCharacter.Backpack.Stored)
-            {
-                if (LootDrop.GetLootType(bpI) == LootDrop.LootType.Item)
-                    itemList.Add((Item)bpI);
-            }
-            if (itemList.Count <= 0)
-            {
-                await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} You don't currently have any items in **{owner.CurrentCharacter.Name}'s** backpack, nice try!");
-                return;
-            }
-            itemList.OrderBy(x => x.Name);
-            int itemCount = 1;
-            string itemsString = $"```Which item would you like to use? (which number){Environment.NewLine}";
-            foreach (Item item in itemList)
-            {
-                itemsString = $"{itemsString}[{itemCount}] Name: {item.Name} Level: {item.Lvl} Count: {item.Count}{Environment.NewLine}";
-                itemCount++;
-            }
-            itemsString = $"{itemsString}```";
-            bool itemResp = false;
-            var sendMsg = await context.Channel.SendMessageAsync(itemsString);
-            while (!itemResp)
-            {
-                var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
-                foreach (var msg in msgList)
+                bool hasSetup = VerifyProfileAndHasCharacter(context);
+                if (!hasSetup)
+                    return;
+                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
+                List<Item> itemList = new List<Item>();
+                foreach (IBackPackItem bpI in owner.CurrentCharacter.Backpack.Stored)
                 {
-                    if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > sendMsg.Timestamp.DateTime))
+                    if (bpI.GetLootType() == LootDrop.LootType.Item)
                     {
-                        int itemNum = 0;
-                        bool isNum = int.TryParse(msg.Content.ToString(), out itemNum);
-                        if (!isNum)
-                            await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {msg.Content.ToString()} isn't a valid response, try again");
-                        else if ((itemNum <= 0 || itemNum > itemList.Count))
-                            await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {msg.Content.ToString()} is above or below the number of items you have in your backpack");
-                        else
+                        itemList.Add((Item)bpI);
+                        Toolbox.uDebugAddLog($"Found Item in Backpack of type {bpI.GetLootType()} [Name]{bpI.Name} [Count]{((Item)bpI).Count} [ID]{owner.OwnerID}");
+                    }
+                }
+                Toolbox.uDebugAddLog($"Found {itemList.Count} items in backpack of type {LootDrop.LootType.Item} [ID]{owner.OwnerID}");
+                if (itemList.Count <= 0)
+                {
+                    Toolbox.uDebugAddLog($"Found no items in backpack of type {LootDrop.LootType.Item} [ID]{owner.OwnerID}");
+                    await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} You don't currently have any items in **{owner.CurrentCharacter.Name}'s** backpack, nice try!");
+                    return;
+                }
+                itemList.OrderBy(x => x.Name);
+                int itemCount = 1;
+                string itemsString = $"{context.Message.Author.Mention}```Which item would you like to use? (which number){Environment.NewLine}";
+                foreach (Item item in itemList)
+                {
+                    itemsString = $"{itemsString}[{itemCount}] Name: {item.Name} Level: {item.Lvl} Count: {item.Count}{Environment.NewLine}";
+                    itemCount++;
+                }
+                itemsString = $"{itemsString}```";
+                bool itemResp = false;
+                var sendMsg = await context.Channel.SendMessageAsync(itemsString);
+                while (!itemResp)
+                {
+                    var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
+                    foreach (var msg in msgList)
+                    {
+                        if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > sendMsg.Timestamp.DateTime))
                         {
-                            itemResp = true;
-                            Item chosenItem = itemList[itemNum - 1];
-                            UseItem(context, owner, chosenItem);
+                            int itemNum = 0;
+                            bool isNum = int.TryParse(msg.Content.ToString(), out itemNum);
+                            if (!isNum)
+                                await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {msg.Content.ToString()} isn't a valid response, try again");
+                            else if ((itemNum <= 0 || itemNum > itemList.Count))
+                                await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {msg.Content.ToString()} is above or below the number of items you have in your backpack");
+                            else
+                            {
+                                itemResp = true;
+                                Item chosenItem = itemList[itemNum - 1];
+                                UseItem(context, owner, chosenItem);
+                            }
                         }
+                    }
+                    if (sendMsg.Timestamp.DateTime + TimeSpan.FromMinutes(5) <= DateTime.Now)
+                    {
+                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Response hasn't been received within 5min, canceling Use Item");
+                        Toolbox.uDebugAddLog($"Response wasn't received within 5min, canceling [ID]{owner.OwnerID}");
                     }
                 }
             }
-        
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
+        public static async Task CharacterChangeArmor(CommandContext context)
+        {
+            try
+            {
+                bool hasSetup = VerifyProfileAndHasCharacter(context);
+                if (!hasSetup)
+                    return;
+                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
+                List<Armor> armorList = new List<Armor>();
+                foreach (IBackPackItem iBPItem in owner.CurrentCharacter.Backpack.Stored)
+                {
+                    if (iBPItem.GetLootType() == LootDrop.LootType.Armor && (Armor)iBPItem != owner.CurrentCharacter.Armor)
+                        armorList.Add((Armor)iBPItem);
+                }
+                if (armorList.Count <= 0)
+                {
+                    await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {owner.CurrentCharacter.Name} doesn't currently have any armor in their bag, nice try");
+                    return;
+                }
+                armorList.OrderBy(x => x.Name);
+                string armorString = $"{context.Message.Author.Mention}```What armor would you like to equip? (enter the number){Environment.NewLine}";
+                int armorNum = 1;
+                foreach (var arm in armorList)
+                {
+                    armorString = $"{armorString}[{armorNum}] {arm.Name}{Environment.NewLine}";
+                }
+                armorString = $"{armorString}```";
+                var sentMsg = await context.Channel.SendMessageAsync(armorString);
+                List<IMessage> respondedList = new List<IMessage>();
+                int chosenNum = 0;
+                bool responded = false;
+                while (!responded)
+                {
+                    var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
+                    foreach (var msg in msgList)
+                        if (msg.Author == context.Message.Author && msg.Timestamp.DateTime > sentMsg.Timestamp.DateTime && !respondedList.Contains(msg))
+                        {
+                            respondedList.Add(msg);
+                            bool isNum = int.TryParse(msg.Content.ToString(), out chosenNum);
+                            if (!isNum)
+                                await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {msg.Content.ToString()} isnt' a valid number, please try again");
+                            else if (chosenNum < 1 || chosenNum > armorList.Count)
+                                await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {chosenNum} is above or below the number of armors you have, please try again");
+                            else
+                                responded = true;
+                        }
+                    if (sentMsg.Timestamp.DateTime + TimeSpan.FromMinutes(5) <= DateTime.Now)
+                    {
+                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} A response wasn't received within 5min, canceling Armor Change");
+                        return;
+                    }
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                }
+                Armor chosenArmor = armorList[chosenNum - 1];
+                ChangeArmor(context, chosenArmor);
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
         }
 
         public static void UseItem(CommandContext context, OwnerProfile owner, Item item)
@@ -1400,6 +1541,12 @@ namespace PersonalDiscordBot.Classes
                 return;
             }
             var match = RPG.MatchList.Find(x => x.Owner == owner);
+            if (match == null)
+            {
+                Toolbox.uDebugAddLog($"Match wasn't found for {owner.CurrentCharacter.Name}, canceling item use [ID]{owner.OwnerID}");
+                Events.SendDiscordMessage(context, "You aren't currently in an active match, please start a match then try again");
+                return;
+            }
             Item tmpItem = (Item)iItem;
             switch (item.Type)
             {

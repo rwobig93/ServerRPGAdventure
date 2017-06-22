@@ -1910,14 +1910,14 @@ namespace PersonalDiscordBot.Classes
                     Toolbox.uDebugAddLog($"Channel isn't an RPG channel, attempting to add RPG Channel: {Context.Channel.Name} | {Context.Channel.Id}");
                     Permissions.AllowedChannels.Add(Context.Channel.Id);
                     Events.uStatusUpdateExt($"RPG Channel Added: {Context.Channel.Name} | {Context.Channel.Id}");
-                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} Successfully added RPG Channel **{Context.Channel.Name}**");
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} **Added** RPG Channel **{Context.Channel.Name}**");
                 }
                 else
                 {
                     Toolbox.uDebugAddLog($"Channel is already an RPG channel, attempting to remove RPG Channel: {Context.Channel.Name} | {Context.Channel.Id}");
                     Permissions.AllowedChannels.Remove(Context.Channel.Id);
                     Events.uStatusUpdateExt($"RPG Channel Removed: {Context.Channel.Name} | {Context.Channel.Id}");
-                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} Successfully removed RPG Channel **{Context.Channel.Name}**");
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention}  **Removed** RPG Channel **{Context.Channel.Name}**");
                 }
             }
             catch (Exception ex)
@@ -2040,6 +2040,25 @@ namespace PersonalDiscordBot.Classes
                     return;
                 }
                 Management.CheckCharacterStats(Context);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("armor"), Summary("Testicules Change Armor")]
+        public async Task Testacules18()
+        {
+            try
+            {
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have any characters, please create one before trying to get some of that dank loot");
+                    return;
+                }
+
             }
             catch (Exception ex)
             {
