@@ -914,6 +914,8 @@ namespace PersonalDiscordBot.Classes
                  "_{0}" +
                  "{0}```╬ RPG Testing Commands ╬```{0}" +
                  "```;test{0}Testicules Engages in...something?```" +
+                 "```;test add admin %USER%{0}Grants %USER% Admin powers.```" +
+                 "```;test remove admin %USER%{0}Removes %USER%'s Admin Powers.```" +
                  "```;test weap{0}Creates a random weapon.```" +
                  "```;test spell{0}Creates a random spell.```" +
                  "```;test armor{0}Creates a random armor.```" +
@@ -1148,6 +1150,121 @@ namespace PersonalDiscordBot.Classes
             try
             {
                 await Context.Channel.SendMessageAsync("No default test method is set");
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("add admin"), Summary("Add User to Admin List")]
+        public async Task Testacules1a(string mentionedUser)
+        {
+            try
+            {
+                if (!Permissions.Administrators.Contains(Context.Message.Author.Id))
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have rights to run this command");
+                    return;
+                }
+                else
+                {
+                    Toolbox.uDebugAddLog($"Before Removing '<,@,>': {mentionedUser}");
+                    mentionedUser = mentionedUser.Replace("<", string.Empty).Replace("@", string.Empty).Replace(">", string.Empty);
+                    Toolbox.uDebugAddLog($"After Removing '<,@,>': {mentionedUser}");
+                    ulong userID = 0;
+                    var isUlong = ulong.TryParse(mentionedUser, out userID);
+                    if (!isUlong)
+                    {
+                        Toolbox.uDebugAddLog($"Invalid Ulong: {userID}");
+                        await Context.Channel.SendMessageAsync($"{mentionedUser} isn't a valid discord user");
+                        return;
+                    }
+                    var userFound = await Context.Channel.GetUserAsync(userID);
+                    if (userFound == null)
+                    {
+                        Toolbox.uDebugAddLog($"Invalid User: {userFound.Username} | {userID}");
+                        await Context.Channel.SendMessageAsync($"{userID} doesn't match a discord user on your server");
+                        return;
+                    }
+                    Toolbox.uDebugAddLog($"MentionedUser: {mentionedUser}");
+                    int foundUsers = 0;
+                    foreach (var admin in Permissions.Administrators)
+                    {
+                        if (userFound.Id == admin)
+                        {
+                            Events.uStatusUpdateExt($"Found {userFound.Username} in Admin List | {userFound.Id}");
+                            await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} {userFound.Mention} is already an Admin. You can't just give them Admin power twice. That's not how you create Super Admins.");
+                            foundUsers++;
+                        }
+                    }
+                    if (foundUsers == 0)
+                    {
+                        Toolbox.uDebugAddLog($"No admins found matching ID: {userFound.Id} Admins: {foundUsers}");
+                        Permissions.Administrators.Add(userFound.Id);
+                        await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} Added {userFound.Mention} as an Admin. I hope you know what you're doing.");
+                        return;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("remove admin"), Summary("Add User to Admin List")]
+        public async Task Testacules1r(string mentionedUser)
+        {
+            try
+            {
+                if (!Permissions.Administrators.Contains(Context.Message.Author.Id))
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have rights to run this command");
+                    return;
+                }
+                else
+                {
+                    Toolbox.uDebugAddLog($"Before Removing '<,@,>': {mentionedUser}");
+                    mentionedUser = mentionedUser.Replace("<", string.Empty).Replace("@", string.Empty).Replace(">", string.Empty);
+                    Toolbox.uDebugAddLog($"After Removing '<,@,>': {mentionedUser}");
+                    ulong userID = 0;
+                    var isUlong = ulong.TryParse(mentionedUser, out userID);
+                    if (!isUlong)
+                    {
+                        Toolbox.uDebugAddLog($"Invalid Ulong: {userID}");
+                        await Context.Channel.SendMessageAsync($"{mentionedUser} isn't a valid discord user");
+                        return;
+                    }
+                    var userFound = await Context.Channel.GetUserAsync(userID);
+                    if (userFound == null)
+                    {
+                        Toolbox.uDebugAddLog($"Invalid User: {userFound.Username} | {userID}");
+                        await Context.Channel.SendMessageAsync($"{userID} doesn't match a discord user on your server");
+                        return;
+                    }
+                    Toolbox.uDebugAddLog($"MentionedUser: {mentionedUser}");
+                    int foundUsers = 0;
+                    foreach (var admin in Permissions.Administrators)
+                    {
+                        if (userFound.Id == admin)
+                        {
+                            Events.uStatusUpdateExt($"Removed {userFound.Username} from Admin List | {userFound.Id}");
+                            Permissions.Administrators.Remove(userFound.Id);
+                            await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} Removed {userFound.Mention}'s power. They are no longer an Admin.");
+                            foundUsers++;
+                        }
+                    }
+                    if (foundUsers == 0)
+                    {
+                        Toolbox.uDebugAddLog($"No admins found matching ID: {userFound.Id} Admins: {foundUsers}");
+                        Permissions.Administrators.Add(userFound.Id);
+                        await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} {userFound.Mention} is not currently an Admin. You can't take away something they don't even have.");
+                        return;
+                    }
+
+                }
             }
             catch (Exception ex)
             {
