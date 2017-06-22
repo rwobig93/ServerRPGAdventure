@@ -1935,13 +1935,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
-                if (!hasChar)
-                {
-                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have any characters, please create one before trying to get some of that dank loot");
-                    return;
-                }
-
+                await Management.CharacterChangeArmor(Context);
             }
             catch (Exception ex)
             {
