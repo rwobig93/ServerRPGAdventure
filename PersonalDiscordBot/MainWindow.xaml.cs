@@ -1166,7 +1166,7 @@ namespace PersonalDiscordBot
                 await client.LoginAsync(TokenType.Bot, token);
                 await client.ConnectAsync();
 
-                ShowNotification($"Bot {client.CurrentUser.Username} Successfully Sonnected", 4);
+                ShowNotification($"Bot {client.CurrentUser.Username} Successfully Connected", 4);
             }
             catch (Exception ex)
             {

@@ -18,6 +18,7 @@ namespace PersonalDiscordBot.Classes
 
         public static List<ulong> Administrators = new List<ulong>();
         public static List<ulong> AllowedChannels = new List<ulong>();
+        public static List<ulong> TestingGroups = new List<ulong>();
         public static GeneralPermissions GeneralPermissions = new GeneralPermissions();
 
         #endregion

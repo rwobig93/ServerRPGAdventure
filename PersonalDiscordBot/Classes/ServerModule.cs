@@ -926,7 +926,7 @@ namespace PersonalDiscordBot.Classes
                  ";test rng thing %Number%{0}" +
                  ";test lootdrop{0}" +
                  ";test create{0}" +
-                 ";test give %Character% %Amount%{0}" +
+                 ";test give %Character% %CurrencyAmount%{0}" +
                  ";test swtich{0}" +
                  ";test testiculees{0}" +
                  ";test delete{0}" +
@@ -940,7 +940,8 @@ namespace PersonalDiscordBot.Classes
                  ";test view{0}" +
                  ";test change armor{0}" +
                  ";test change weapon{0}" +
-                 ";test add loot```",
+                 ";test add loot" +
+                 ";test testing %Role/Group%```",
                  Environment.NewLine
                 );
                 await Context.Channel.SendMessageAsync(_helpArticle);
@@ -1189,7 +1190,7 @@ namespace PersonalDiscordBot.Classes
                         Toolbox.uDebugAddLog($"Invalid User: {userFound.Username} | {userID}");
                         await Context.Channel.SendMessageAsync($"{userID} doesn't match a discord user on your server");
                         return;
-                    }
+                    } 
                     Toolbox.uDebugAddLog($"MentionedUser: {mentionedUser}");
                     int foundUsers = 0;
                     foreach (var admin in Permissions.Administrators)
@@ -2113,6 +2114,90 @@ namespace PersonalDiscordBot.Classes
             {
                 ServerModule.FullExceptionLog(ex);
             }
+        }
+
+        [Command("testing"), Summary("Testicules Add Testing Group")]
+        public async Task Testacules20(string testingRoleString)
+        {
+            try
+            {
+                var isAdmin = Permissions.AdminPermissions(Context);
+                if (!isAdmin)
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have permission to run this command");
+                }
+                var testingRole = await GetDiscordRole(testingRoleString);
+                if (testingRole == null)
+                    return;
+                if (!Permissions.TestingGroups.Contains(testingRole.Id))
+                {
+                    Permissions.TestingGroups.Add(testingRole.Id);
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} **Added** testing permission to **{testingRole.Name}**");
+                    Toolbox.uDebugAddLog($"Added role as a testing group: {testingRole.Name} | {testingRole.Id} [ID]{Context.Message.Author.Id}");
+                }
+                else
+                {
+                    Permissions.TestingGroups.Remove(testingRole.Id);
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} **Removed** testing permission from **{testingRole.Name}**");
+                    Toolbox.uDebugAddLog($"Removed role as a testing group: {testingRole.Name} | {testingRole.Id} [ID]{Context.Message.Author.Id}");
+                }
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        public async Task<IUser> GetDiscordUser(string user)
+        {
+            IUser userFound = null;
+            Toolbox.uDebugAddLog($"Before Removing '<,@,>': {user}");
+            user = user.Replace("<", string.Empty).Replace("@", string.Empty).Replace(">", string.Empty);
+            Toolbox.uDebugAddLog($"After Removing '<,@,>': {user}");
+            ulong userID = 0;
+            var isUlong = ulong.TryParse(user, out userID);
+            if (!isUlong)
+            {
+                Toolbox.uDebugAddLog($"Invalid Ulong: {userID}");
+                await Context.Channel.SendMessageAsync($"{user} isn't a valid discord user");
+                userID = 0;
+                return userFound;
+            }
+            userFound = await Context.Channel.GetUserAsync(userID);
+            if (userFound == null)
+            {
+                Toolbox.uDebugAddLog($"Invalid User: {userFound.Username} | {userID}");
+                await Context.Channel.SendMessageAsync($"{userID} doesn't match a discord user on your server");
+                userID = 0;
+                return userFound;
+            }
+            return userFound;
+        }
+
+        public async Task<IRole> GetDiscordRole(string role)
+        {
+            IRole roleFound = null;
+            Toolbox.uDebugAddLog($"Before Removing '<,@,>': {role}");
+            role = role.Replace("<", string.Empty).Replace("@", string.Empty).Replace(">", string.Empty);
+            Toolbox.uDebugAddLog($"After Removing '<,@,>': {role}");
+            ulong roleID = 0;
+            var isUlong = ulong.TryParse(role, out roleID);
+            if (!isUlong)
+            {
+                Toolbox.uDebugAddLog($"Invalid Ulong: {roleID}");
+                await Context.Channel.SendMessageAsync($"{role} isn't a valid discord role");
+                roleID = 0;
+                return roleFound;
+            }
+            roleFound = Context.Guild.GetRole(roleID);
+            if (roleFound == null)
+            {
+                Toolbox.uDebugAddLog($"Invalid Role: {roleFound.Name} | {roleID}");
+                await Context.Channel.SendMessageAsync($"{roleID} doesn't match a discord role on your server");
+                roleID = 0;
+                return roleFound;
+            }
+            return roleFound;
         }
 
         public async Task<bool> VerifyOwnerProfileAndIfHasCharacters()

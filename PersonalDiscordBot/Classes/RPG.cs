@@ -35,6 +35,7 @@ namespace PersonalDiscordBot.Classes
         public string Desc { get; set; } = "A new adventurer set out to..... Adventure?";
         public CharacterClass Class { get; set; }
         public Weapon Weapon { get; set; }
+        public Weapon StarterWeapon { get { return Weapons.GetStarterWeapon(this); } }
         public Armor Armor { get; set; }
         public BackPack Backpack { get; set; }
         public List<Spell> SpellBook = new List<Spell>();
@@ -1284,11 +1285,16 @@ namespace PersonalDiscordBot.Classes
                             var loot = LootDrop.PickLoot(args.Owner.CurrentCharacter);
                             args.Owner.CurrentCharacter.Loot.Add(loot);
                         }
-                        Toolbox.uDebugAddLog($"Lootdrop generated, lootcount: {lootTimes}");
+                        Toolbox.uDebugAddLog($"Lootdrop generated, lootcount before filter: {lootTimes} [ID]{args.Owner.OwnerID}");
+                        int pebbles = 0;
+                        int currency = 0;
+                        LootDrop.FilterLoot(args.Owner.CurrentCharacter, out pebbles, out currency);
+                        Toolbox.uDebugAddLog($"Lootdrop lootcount after filter: {args.Owner.CurrentCharacter.Loot.Count} [ID]{args.Owner.OwnerID}");
+                        await args.Context.Channel.SendMessageAsync($"{args.Context.Message.Author.Mention} You earned {pebbles} pebbles and {currency} currency");
                         await EmptyLoot(args.Context);
                         break;
                     case MatchCompleteResult.Lost:
-                        await args.Context.Channel.SendMessageAsync($"You were defeated in combat after defeating **{args.Match.DefeatedEnemies.Count} enemies**");
+                        await args.Context.Channel.SendMessageAsync($"You were defeated in combat by {args.Match.CurrentEnemy.Name} after defeating **{args.Match.DefeatedEnemies.Count} enemies**");
                         break;
                     case MatchCompleteResult.Forfeit:
                         await args.Context.Channel.SendMessageAsync($"You forefeited the match after going beyond teh match time limit of **{args.Match.TurnTimeLimit.Days}D {args.Match.TurnTimeLimit.Hours}H {args.Match.TurnTimeLimit.Minutes}M {args.Match.TurnTimeLimit.Seconds}Secs**, you lost **{args.Match.ExperienceEarned} experience**");
@@ -1369,6 +1375,7 @@ namespace PersonalDiscordBot.Classes
                                         owner.Currency += retLoot.Worth;
                                         owner.CurrentCharacter.Loot.Remove(loot);
                                         Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} sold {loot.Name}. [After]{owner.Currency} [ID]{owner.OwnerID}");
+                                        lootResp = true;
                                         await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {loot.Name} was sold for {retLoot.Worth} currency");
                                         break;
                                     case "cancel":
@@ -1494,6 +1501,7 @@ namespace PersonalDiscordBot.Classes
                 foreach (var arm in armorList)
                 {
                     armorString = $"{armorString}[{armorNum}] {arm.Name}{Environment.NewLine}";
+                    armorNum++;
                 }
                 armorString = $"{armorString}```";
                 var sentMsg = await context.Channel.SendMessageAsync(armorString);
@@ -1853,7 +1861,7 @@ namespace PersonalDiscordBot.Classes
 
     public class LootDrop
     {
-        #region LootDrop General
+        #region LootDrop Variables
 
         /// <summary>
         /// The range of the probability values (dividing a value in _lootProbabilites by this would give a probability in the range 0..1).
@@ -1886,6 +1894,10 @@ namespace PersonalDiscordBot.Classes
         {
             430, 730, 880, 980, MaxProbability // Chances: Common(43%), Uncommon(30%), Rare(15%), Epic(10%), Legendary(2%)
         };
+
+        #endregion
+
+        #region LootDrop General
 
         /// <summary>
         /// Choose a random loot type.
@@ -2032,6 +2044,42 @@ namespace PersonalDiscordBot.Classes
                 result = $"{result}{Environment.NewLine}{prop.Name}: {prop.GetValue(loot)}";
             }
             return result;
+        }
+
+        public static void FilterLoot(Character chara, out int pebblesAdded, out int currencyAdded)
+        {
+            Toolbox.uDebugAddLog($"Filtering out loot for {chara.Name} [ID]{chara.OwnerID}");
+            OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == chara.OwnerID);
+            pebblesAdded = 0;
+            currencyAdded = 0;
+            int filtered = 0;
+            int total = chara.Loot.Count;
+            var lootList = chara.Loot;
+            foreach (var bpItem in lootList)
+            {
+                var lootType = bpItem.GetLootType();
+                switch (lootType)
+                {
+                    case LootType.Nothing:
+                        chara.Pebbles++;
+                        owner.TotalPebbles++;
+                        pebblesAdded++;
+                        Toolbox.uDebugAddLog($"Added pebble to {chara.Name} and {owner.OwnerID} and removing from loot list for type {lootType}");
+                        chara.Loot.Remove(bpItem);
+                        break;
+                    case LootType.Item:
+                        Item item = (Item)bpItem;
+                        if (item.Type == ItemType.Currency)
+                        {
+                            owner.Currency += item.Worth;
+                            currencyAdded += item.Worth;
+                            Toolbox.uDebugAddLog($"Added {item.Worth} currency to {owner.OwnerID} and removing from loot list for type {lootType}");
+                            chara.Loot.Remove(bpItem);
+                        }
+                        break;
+                }
+            }
+            Toolbox.uDebugAddLog($"Filtered loot:{filtered}/{total} [ID]{chara.OwnerID}");
         }
 
         #endregion
@@ -2850,6 +2898,30 @@ namespace PersonalDiscordBot.Classes
             Weapon newWeap = new Weapon();
             PropertyCopy.Copy(weaponToCopy, newWeap);
             return newWeap;
+        }
+
+        public static Weapon GetStarterWeapon(Character chara)
+        {
+            Weapon weap = new Weapon();
+            switch (chara.Class)
+            {
+                case CharacterClass.Dragoon:
+                    weap = CopyNewWeapon(dragonSpear);
+                    break;
+                case CharacterClass.Mage:
+                    weap = CopyNewWeapon(stick);
+                    break;
+                case CharacterClass.Necromancer:
+                    weap = CopyNewWeapon(glowyOrb);
+                    break;
+                case CharacterClass.Rogue:
+                    weap = CopyNewWeapon(rogueDaggers);
+                    break;
+                case CharacterClass.Warrior:
+                    weap = CopyNewWeapon(warriorFists);
+                    break;
+            }
+            return weap;
         }
 
         #endregion
