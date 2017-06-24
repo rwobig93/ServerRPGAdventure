@@ -1601,6 +1601,46 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
+        public static async Task CharacterChangeDescription(CommandContext context)
+        {
+            var isSetup = VerifyProfileAndHasCharacter(context);
+            if (!isSetup)
+                return;
+            OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.User.Id);
+            var timeStamp = DateTime.Now;
+            List<IMessage> respondedList = new List<IMessage>();
+            Toolbox.uDebugAddLog($"Changing description of {owner.CurrentCharacter.Name} [ID]{owner.OwnerID}");
+            var sentMsg = await context.Channel.SendMessageAsync($"{context.User.Mention} What would you like the new description for {owner.CurrentCharacter.Name} to be? (enter answer or type cancel){Environment.NewLine}Current Description: {owner.CurrentCharacter.Desc}");
+            bool setupDone = false;
+            while (!setupDone)
+            {
+                var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
+                foreach (var msg in msgList)
+                    if (msg.Author == context.User && msg.Timestamp.DateTime > sentMsg.Timestamp.DateTime && !respondedList.Contains(sentMsg))
+                    {
+                        respondedList.Add(msg);
+                        if (msg.Content.ToString().ToLower() == "cancel")
+                        {
+                            await context.Channel.SendMessageAsync($"{context.User.Mention} canceled description change");
+                            Toolbox.uDebugAddLog($"Canceling description change [ID]{owner.OwnerID}");
+                            return;
+                        }
+                        Toolbox.uDebugAddLog($"Changing description, current: {owner.CurrentCharacter.Desc} [ID]{owner.OwnerID}");
+                        owner.CurrentCharacter.Desc = msg.Content.ToString();
+                        Toolbox.uDebugAddLog($"Changed description, new: {owner.CurrentCharacter.Desc} [ID]{owner.OwnerID}");
+                        setupDone = true;
+                        await context.Channel.SendMessageAsync($"{owner.CurrentCharacter.Name}'s description has been changed to : {msg.Content.ToString()}");
+                    }
+                if (timeStamp + TimeSpan.FromMinutes(5) <= DateTime.Now)
+                {
+                    await context.Channel.SendMessageAsync($"{context.User.Mention} A response hasn't been received within 5 min, description change canceled");
+                    Toolbox.uDebugAddLog($"5min passed, canceling request [ID]{owner.OwnerID}");
+                    return;
+                }
+                await Task.Delay(1000);
+            }
+        } 
+
         public static void UseItem(CommandContext context, OwnerProfile owner, Item item)
         {
             var iItem = owner.CurrentCharacter.Backpack.Stored.Find(x => x == item);
