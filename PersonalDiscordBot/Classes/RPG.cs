@@ -1564,6 +1564,7 @@ namespace PersonalDiscordBot.Classes
                 foreach (var weap in weapList)
                 {
                     weapString = $"{weapString}[{weapNum}] {weap.Name}{Environment.NewLine}";
+                    weapNum++;
                 }
                 weapString = $"{weapString}```";
                 var sentMsg = await context.Channel.SendMessageAsync(weapString);

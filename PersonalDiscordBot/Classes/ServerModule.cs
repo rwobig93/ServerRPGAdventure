@@ -1154,7 +1154,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 await Context.Channel.SendMessageAsync("No default test method is set");
             }
@@ -1284,7 +1284,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 string weapName = string.Empty;
                 string randGen = Testing.RandomWeap(out weapName);
@@ -1301,7 +1301,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 await Context.Channel.SendMessageAsync(Testing.RandomSpell());
             }
@@ -1316,7 +1316,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 string armorName = string.Empty;
                 string randGen = Testing.RandomArmor(out armorName);
@@ -1333,7 +1333,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 await Context.Channel.SendMessageAsync(Testing.RandomItem());
             }
@@ -1349,7 +1349,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 var intTimes = 0;
                 var isANum = int.TryParse(times, out intTimes);
@@ -1378,7 +1378,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 var intTimes = 0;
                 var isANum = int.TryParse(times, out intTimes);
@@ -1407,7 +1407,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 var intTimes = 0;
                 var isANum = int.TryParse(times, out intTimes);
@@ -1436,7 +1436,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 var intTimes = 0;
                 var isANum = int.TryParse(times, out intTimes);
@@ -1464,7 +1464,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 await Context.Channel.SendMessageAsync($"```{Testing.LootDropGen()}```");
             }
@@ -1479,7 +1479,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 var hasCharacters = await VerifyOwnerProfileAndIfHasCharacters();
                 OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
@@ -1702,7 +1702,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 if (!Permissions.Administrators.Contains(Context.Message.Author.Id))
                 {
@@ -1765,7 +1765,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 bool hasCharacters = await VerifyOwnerProfileAndIfHasCharacters();
                 OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
@@ -1962,7 +1962,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 if (Permissions.RPGChannelPermission(Context))
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} this channel is an RPG channel, go nuts!");
@@ -1980,7 +1980,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
                 if (!hasChar)
@@ -2003,7 +2003,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
                 if (!hasChar)
@@ -2032,7 +2032,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
                 if (!hasChar)
@@ -2053,7 +2053,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
                 if (!hasChar)
@@ -2074,7 +2074,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
                 if (!hasChar)
@@ -2095,7 +2095,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 await Management.CharacterChangeArmor(Context);
             }
@@ -2110,7 +2110,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 await Management.CharacterChangeWeapon(Context);
             }
@@ -2125,7 +2125,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 await Management.CharacterChangeDescription(Context);
             }
@@ -2140,7 +2140,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 var isAdmin = Permissions.AdminPermissions(Context);
                 if (!isAdmin)
@@ -2181,7 +2181,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 var isAdmin = Permissions.AdminPermissions(Context);
                 if (!isAdmin)
@@ -2215,7 +2215,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 var user = await GetDiscordUser(mentionedUser);
                 if (user == null)
@@ -2236,7 +2236,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!HasTestingPermission(Context))
+                if (! await HasTestingPermission(Context))
                     return;
                 var user = await GetDiscordUser(mentionedUser);
                 if (user == null)
@@ -2323,16 +2323,20 @@ namespace PersonalDiscordBot.Classes
             return ownerProfile.CharacterList.Count == 0 ? false : true;
         }
 
-        public static bool HasTestingPermission(CommandContext context)
+        public async Task<bool> HasTestingPermission(CommandContext context)
         {
             bool hasPerm = false;
+            string testingGroups = string.Empty;
             if (Permissions.Administrators.Contains(context.User.Id))
                 hasPerm = true;
             foreach (var role in Permissions.TestingGroups)
             {
+                testingGroups = $"{testingGroups}{role}{Environment.NewLine}";
                 if (((SocketGuildUser)context.User).RoleIds.Contains(role))
                     hasPerm = true;
             }
+            if (!hasPerm)
+                await context.Channel.SendMessageAsync($"{context.User.Mention} You don't have access to run this command, you need to be in one of the below: {Environment.NewLine}{testingGroups}");
             return hasPerm;
         }
     }
