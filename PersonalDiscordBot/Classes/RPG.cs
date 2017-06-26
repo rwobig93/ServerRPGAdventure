@@ -37,6 +37,7 @@ namespace PersonalDiscordBot.Classes
         public Weapon Weapon { get; set; }
         public Weapon StarterWeapon { get { return Weapons.GetStarterWeapon(this); } }
         public Armor Armor { get; set; }
+        public Armor StarterArmor { get { return Armors.GetStarterArmor(this); } }
         public BackPack Backpack { get; set; }
         public List<Spell> SpellBook = new List<Spell>();
         public List<IBackPackItem> Loot = new List<IBackPackItem>();
@@ -521,7 +522,8 @@ namespace PersonalDiscordBot.Classes
             Knight,
             DarkKnight,
             Bear,
-            MattPegler
+            MattPegler,
+            DickWobig
         }
 
         public enum MatchCompleteResult
@@ -744,7 +746,7 @@ namespace PersonalDiscordBot.Classes
                     newChar.Lvl = 1;
                     newChar.Exp = 0;
                     newChar.Weapon = Weapons.rogueDaggers;
-                    newChar.Armor = Armors.theiveGarb;
+                    newChar.Armor = Armors.thieveGarb;
                     newChar.Backpack = new BackPack
                     {
                         Stored =
@@ -3824,7 +3826,7 @@ namespace PersonalDiscordBot.Classes
 
         public static Armor knightArmor = new Armor { Name = "Novice Knight Armor", Type = ArmorType.Heavy, Lvl = 1, Speed = 50, Worth = 100, MaxDurability = 20, CurrentDurability = 20, Physical = 100, Desc = "Some beatup old armor you found in the old shed out back, next to the bones of an old dog... what was it's name again?" };
         public static Armor mageRobe = new Armor { Name = "Novice Mages' Robe", Type = ArmorType.Light, CurrentDurability = 10, MaxDurability = 10, Speed = 150, Worth = 100, Magic = 100, Lvl = 1, Physical = 10, Desc = "These might be 'Robes' if you believe hard enough, go on, believe... I can wait" };
-        public static Armor theiveGarb = new Armor { Name = "Novice Theives Garb", Type = ArmorType.Light, CurrentDurability = 15, Lvl = 1, MaxDurability = 15, Speed = 130, Worth = 100, Physical = 70, Magic = 30, Desc = "What better way to rock your first gear then to steal it, even if it was from old miss bitchface who is a blind amputee" };
+        public static Armor thieveGarb = new Armor { Name = "Novice thieves Garb", Type = ArmorType.Light, CurrentDurability = 15, Lvl = 1, MaxDurability = 15, Speed = 130, Worth = 100, Physical = 70, Magic = 30, Desc = "What better way to rock your first gear then to steal it, even if it was from old miss bitchface who is a blind amputee" };
         public static Armor undeadArmor = new Armor { Name = "Undead Armor", Type = ArmorType.Medium, CurrentDurability = 18, MaxDurability = 18, Lvl = 1, Speed = 80, Worth = 100, Physical = 85, Magic = 30, Desc = "Nothing weird here, you just picked up the bones from some dead people and strapped it to your body... they weren't using it anyway" };
         public static Armor dragonArmor = new Armor { Name = "Novice Dragon Hunter Armor", Type = ArmorType.Medium, Lvl = 1, MaxDurability = 20, CurrentDurability = 20, Speed = 100, Worth = 100, Physical = 6, Fire = 10, Ice = 10, Lightning = 10, Wind = 10, Desc = "Bad. Ass. Bad. Ass. Bad. Ass. Bad. Ass. - Naive thoughts running in your mind" };
         public static Armor royalRobeArmor = new Armor { Name = "Royal Robes", Type = ArmorType.Light, Lvl = 1, MaxDurability = 10, CurrentDurability = 10, Speed = 150, Worth = 100, Magic = 100, Physical = 10, Desc = "Yer a hairy Wizard!" };
@@ -3864,11 +3866,19 @@ namespace PersonalDiscordBot.Classes
 
         #region Armor Methods
 
+        /// <summary>
+        /// Generates a Unique Armor
+        /// </summary>
+        /// <param name="armor">Armor that will be modified</param>
+        /// <param name="rarity">Rarity Type</param>
+        /// <param name="rarityValue">Value associated to Rarity Type</param>
+        /// <param name="charLevel">Level of the Character</param>
+        /// <returns></returns>
         public static Armor ArmorUniqueGen(Armor armor, RarityType rarity, int rarityValue, int charLevel)
         {
             armor.IsUnique = true;
             rarityValue += 2;
-
+            int typeCount = LootDrop.ChooseElementCount(rarity) + 1;
             switch (armor.Type)
             {
                 case ArmorType.Light:
@@ -3892,7 +3902,7 @@ namespace PersonalDiscordBot.Classes
                     ArmorUniqueHeavyAddition(armor, rarityValue, charLevel, hNameIndex);
                     break;
             }
-
+            ArmorAddElement(armor, typeCount, rarityValue);
             return armor;
         }
 
@@ -3910,21 +3920,21 @@ namespace PersonalDiscordBot.Classes
                     armor.Name = $"{rarity} {armorBasicLightNames[lightNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 80;
-                    armor.Physical = ((rng.Next(0, 3) + typeCount + armor.Lvl));
+                    armor.Physical = ((rng.Next(0, 3) + typeCount + armor.Lvl)); //Min - Max at lvl 1 = 2 - 8
                     break;
                 case ArmorType.Medium:
                     int mediumNum = rng.Next(0, armorBasicMediumNames.ToArrayLength());
                     armor.Name = $"{rarity} {armorBasicMediumNames[mediumNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 60;
-                    armor.Physical = ((rng.Next(9, 12) + typeCount + armor.Lvl));
+                    armor.Physical = ((rng.Next(9, 12) + typeCount + armor.Lvl)); //Min - Max at lvl 1 = 11 - 17
                     break;
                 case ArmorType.Heavy:
                     int heavyNum = rng.Next(0, armorBasicHeavyNames.ToArrayLength());
                     armor.Name = $"{rarity} {armorBasicHeavyNames[heavyNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 40;
-                    armor.Physical = ((rng.Next(18, 21) + typeCount + armor.Lvl));
+                    armor.Physical = ((rng.Next(18, 21) + typeCount + armor.Lvl)); //Min - Max at lvl 1 = 20 - 26
                     break;
             }
             ArmorAddElement(armor, typeCount, rarityValue);
@@ -3969,6 +3979,31 @@ namespace PersonalDiscordBot.Classes
             Armor newArmor = new Armor();
             PropertyCopy.Copy(armorToCopy, newArmor);
             return newArmor;
+        }
+
+        public static Armor GetStarterArmor(Character chara)
+        {
+            Armor arm = new Armor();
+
+            switch (chara.Class)
+            {
+                case CharacterClass.Dragoon:
+                    arm = CopyNewArmor(dragonArmor);
+                    break;
+                case CharacterClass.Mage:
+                    arm = CopyNewArmor(mageRobe);
+                    break;
+                case CharacterClass.Necromancer:
+                    arm = CopyNewArmor(undeadArmor);
+                    break;
+                case CharacterClass.Rogue:
+                    arm = CopyNewArmor(thieveGarb);
+                    break;
+                case CharacterClass.Warrior:
+                    arm = CopyNewArmor(knightArmor);
+                    break;
+            }
+            return arm;
         }
 
         #endregion
@@ -4139,7 +4174,7 @@ namespace PersonalDiscordBot.Classes
 
         public static EnemyType ChooseEnemyType()
         {
-            EnemyType type = EnemyType.Goblin;
+            EnemyType type = EnemyType.DickWobig;
             return type;
         }
 
