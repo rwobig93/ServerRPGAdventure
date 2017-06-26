@@ -4059,6 +4059,11 @@ namespace PersonalDiscordBot.Classes
 
         public static string line = Environment.NewLine;
 
+        /// <summary>
+        /// Generates a random Weapon and displays all of the properties in a string
+        /// </summary>
+        /// <param name="namer">This is the name of the Weapon</param>
+        /// <returns></returns>
         public static string RandomWeap(out string namer)
         {
             RarityType rarity = LootDrop.ChooseRarity();
