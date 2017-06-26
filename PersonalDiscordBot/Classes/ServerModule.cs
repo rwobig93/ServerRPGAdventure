@@ -926,7 +926,7 @@ namespace PersonalDiscordBot.Classes
                  ";test rng thing %Number%{0}" +
                  ";test lootdrop{0}" +
                  ";test create{0}" +
-                 ";test give %Character% %Amount%{0}" +
+                 ";test give %Character% %CurrencyAmount%{0}" +
                  ";test swtich{0}" +
                  ";test testiculees{0}" +
                  ";test delete{0}" +
@@ -940,7 +940,9 @@ namespace PersonalDiscordBot.Classes
                  ";test view{0}" +
                  ";test change armor{0}" +
                  ";test change weapon{0}" +
-                 ";test add loot```",
+                 ";test change description{0}" +
+                 ";test add loot{0}" +
+                 ";test testing %Role/Group%```",
                  Environment.NewLine
                 );
                 await Context.Channel.SendMessageAsync(_helpArticle);
@@ -1152,6 +1154,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 await Context.Channel.SendMessageAsync("No default test method is set");
             }
             catch (Exception ex)
@@ -1189,7 +1193,7 @@ namespace PersonalDiscordBot.Classes
                         Toolbox.uDebugAddLog($"Invalid User: {userFound.Username} | {userID}");
                         await Context.Channel.SendMessageAsync($"{userID} doesn't match a discord user on your server");
                         return;
-                    }
+                    } 
                     Toolbox.uDebugAddLog($"MentionedUser: {mentionedUser}");
                     int foundUsers = 0;
                     foreach (var admin in Permissions.Administrators)
@@ -1280,6 +1284,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 string weapName = string.Empty;
                 string randGen = Testing.RandomWeap(out weapName);
                 await Context.Channel.SendMessageAsync($"Generated {weapName}{randGen}");
@@ -1295,6 +1301,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 await Context.Channel.SendMessageAsync(Testing.RandomSpell());
             }
             catch (Exception ex)
@@ -1308,6 +1316,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 string armorName = string.Empty;
                 string randGen = Testing.RandomArmor(out armorName);
                 await Context.Channel.SendMessageAsync($"Generated: {armorName}{randGen}");
@@ -1323,6 +1333,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 await Context.Channel.SendMessageAsync(Testing.RandomItem());
             }
             catch (Exception ex)
@@ -1337,6 +1349,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 var intTimes = 0;
                 var isANum = int.TryParse(times, out intTimes);
                 if (isANum)
@@ -1364,6 +1378,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 var intTimes = 0;
                 var isANum = int.TryParse(times, out intTimes);
                 if (isANum)
@@ -1391,6 +1407,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 var intTimes = 0;
                 var isANum = int.TryParse(times, out intTimes);
                 if (isANum)
@@ -1418,6 +1436,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 var intTimes = 0;
                 var isANum = int.TryParse(times, out intTimes);
                 if (isANum)
@@ -1444,6 +1464,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 await Context.Channel.SendMessageAsync($"```{Testing.LootDropGen()}```");
             }
             catch (Exception ex)
@@ -1457,6 +1479,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 var hasCharacters = await VerifyOwnerProfileAndIfHasCharacters();
                 OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
                 int cost = Management.DetermineCharacterCost(ownerProfile);
@@ -1678,6 +1702,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 if (!Permissions.Administrators.Contains(Context.Message.Author.Id))
                 {
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have rights to run this command");
@@ -1739,6 +1765,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 bool hasCharacters = await VerifyOwnerProfileAndIfHasCharacters();
                 OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
                 if (!hasCharacters)
@@ -1898,7 +1926,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        [Command("rpg"), Summary("Testicules Delete Profile")]
+        [Command("rpg"), Summary("Testicules toggle rpg channel")]
         public async Task Testacules11()
         {
             try
@@ -1934,6 +1962,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 if (Permissions.RPGChannelPermission(Context))
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} this channel is an RPG channel, go nuts!");
                 else
@@ -1950,6 +1980,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
                 if (!hasChar)
                 {
@@ -1971,6 +2003,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
                 if (!hasChar)
                 {
@@ -1998,6 +2032,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
                 if (!hasChar)
                 {
@@ -2017,6 +2053,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
                 if (!hasChar)
                 {
@@ -2036,6 +2074,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
                 if (!hasChar)
                 {
@@ -2055,6 +2095,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 await Management.CharacterChangeArmor(Context);
             }
             catch (Exception ex)
@@ -2068,7 +2110,24 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 await Management.CharacterChangeWeapon(Context);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("change description"), Summary("Testicules Change Desc")]
+        public async Task Testacules18d()
+        {
+            try
+            {
+                if (! await HasTestingPermission(Context))
+                    return;
+                await Management.CharacterChangeDescription(Context);
             }
             catch (Exception ex)
             {
@@ -2081,6 +2140,8 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                if (! await HasTestingPermission(Context))
+                    return;
                 var isAdmin = Permissions.AdminPermissions(Context);
                 if (!isAdmin)
                 {
@@ -2115,6 +2176,137 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
+        [Command("testing"), Summary("Testicules Add Testing Group")]
+        public async Task Testacules20(string testingRoleString)
+        {
+            try
+            {
+                if (! await HasTestingPermission(Context))
+                    return;
+                var isAdmin = Permissions.AdminPermissions(Context);
+                if (!isAdmin)
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have permission to run this command");
+                }
+                var testingRole = await GetDiscordRole(testingRoleString);
+                if (testingRole == null)
+                    return;
+                if (!Permissions.TestingGroups.Contains(testingRole.Id))
+                {
+                    Permissions.TestingGroups.Add(testingRole.Id);
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} **Added** testing permission to **{testingRole.Name}**");
+                    Toolbox.uDebugAddLog($"Added role as a testing group: {testingRole.Name} | {testingRole.Id} [ID]{Context.Message.Author.Id}");
+                }
+                else
+                {
+                    Permissions.TestingGroups.Remove(testingRole.Id);
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} **Removed** testing permission from **{testingRole.Name}**");
+                    Toolbox.uDebugAddLog($"Removed role as a testing group: {testingRole.Name} | {testingRole.Id} [ID]{Context.Message.Author.Id}");
+                }
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("roles"), Summary("Testicules check roles")]
+        public async Task Testacules21(string mentionedUser)
+        {
+            try
+            {
+                if (! await HasTestingPermission(Context))
+                    return;
+                var user = await GetDiscordUser(mentionedUser);
+                if (user == null)
+                    return;
+                var roleString = string.Empty;
+                foreach (var id in ((SocketGuildUser)user).RoleIds)
+                    roleString = $"{roleString}{id}{Environment.NewLine}";
+                await Context.Channel.SendMessageAsync($"Roles for {user.Username}:{Environment.NewLine}{roleString}");
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("inrole"), Summary("Testicules check role")]
+        public async Task Testacules22(string mentionedUser, string mentionedRole)
+        {
+            try
+            {
+                if (! await HasTestingPermission(Context))
+                    return;
+                var user = await GetDiscordUser(mentionedUser);
+                if (user == null)
+                    return;
+                var role = await GetDiscordRole(mentionedRole);
+                if (role == null)
+                    return;
+                if (((SocketGuildUser)user).RoleIds.Contains(role.Id))
+                    await Context.Channel.SendMessageAsync($"{user.Username} is in {role.Mention}");
+                else
+                    await Context.Channel.SendMessageAsync($"{user.Username} is not in {role.Mention}");
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        public async Task<IUser> GetDiscordUser(string user)
+        {
+            IUser userFound = null;
+            Toolbox.uDebugAddLog($"Before Removing '<,@,>': {user}");
+            user = user.Replace("<", string.Empty).Replace("@", string.Empty).Replace(">", string.Empty);
+            Toolbox.uDebugAddLog($"After Removing '<,@,>': {user}");
+            ulong userID = 0;
+            var isUlong = ulong.TryParse(user, out userID);
+            if (!isUlong)
+            {
+                Toolbox.uDebugAddLog($"Invalid Ulong: {userID}");
+                await Context.Channel.SendMessageAsync($"{user} isn't a valid discord user");
+                userID = 0;
+                return userFound;
+            }
+            userFound = await Context.Channel.GetUserAsync(userID);
+            if (userFound == null)
+            {
+                Toolbox.uDebugAddLog($"Invalid User: {userFound.Username} | {userID}");
+                await Context.Channel.SendMessageAsync($"{userID} doesn't match a discord user on your server");
+                userID = 0;
+                return userFound;
+            }
+            return userFound;
+        }
+
+        public async Task<IRole> GetDiscordRole(string role)
+        {
+            IRole roleFound = null;
+            Toolbox.uDebugAddLog($"Before Removing '<,@,>,&': {role}");
+            role = role.Replace("<", string.Empty).Replace("@", string.Empty).Replace(">", string.Empty).Replace("&", string.Empty);
+            Toolbox.uDebugAddLog($"After Removing '<,@,>,&': {role}");
+            ulong roleID = 0;
+            var isUlong = ulong.TryParse(role, out roleID);
+            if (!isUlong)
+            {
+                Toolbox.uDebugAddLog($"Invalid Ulong: {roleID}");
+                await Context.Channel.SendMessageAsync($"{role} isn't a valid discord role");
+                roleID = 0;
+                return roleFound;
+            }
+            roleFound = Context.Guild.GetRole(roleID);
+            if (roleFound == null)
+            {
+                Toolbox.uDebugAddLog($"Invalid Role: {roleFound.Name} | {roleID}");
+                await Context.Channel.SendMessageAsync($"{roleID} doesn't match a discord role on your server");
+                roleID = 0;
+                return roleFound;
+            }
+            return roleFound;
+        }
+
         public async Task<bool> VerifyOwnerProfileAndIfHasCharacters()
         {
             OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
@@ -2129,6 +2321,23 @@ namespace PersonalDiscordBot.Classes
             else
                 Toolbox.uDebugAddLog($"Owner profile was found for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
             return ownerProfile.CharacterList.Count == 0 ? false : true;
+        }
+
+        public async Task<bool> HasTestingPermission(CommandContext context)
+        {
+            bool hasPerm = false;
+            string testingGroups = string.Empty;
+            if (Permissions.Administrators.Contains(context.User.Id))
+                hasPerm = true;
+            foreach (var role in Permissions.TestingGroups)
+            {
+                testingGroups = $"{testingGroups}{role}{Environment.NewLine}";
+                if (((SocketGuildUser)context.User).RoleIds.Contains(role))
+                    hasPerm = true;
+            }
+            if (!hasPerm)
+                await context.Channel.SendMessageAsync($"{context.User.Mention} You don't have access to run this command, you need to be in one of the below: {Environment.NewLine}{testingGroups}");
+            return hasPerm;
         }
     }
     #endregion
