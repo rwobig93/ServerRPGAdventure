@@ -1665,8 +1665,13 @@ namespace PersonalDiscordBot.Classes
                         return;
                     }
                 }
-                if (!hasCharacters) ownerProfile.Currency -= cost;
-                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You have been charged {cost} currency, you now have: {ownerProfile.Currency}");
+                if (cost <= 0)
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} This first character is on us, enjoy");
+                else
+                {
+                    if (!hasCharacters) ownerProfile.Currency -= cost;
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You have been charged {cost} currency, you now have: {ownerProfile.Currency}");
+                }
                 Character newChar = Management.CreateNewCharacter(Context.Message.Author.Id, chosenClass, charName);
                 ownerProfile.CharacterList.Add(newChar);
                 if (ownerProfile.CharacterList.Count == 1)

@@ -43,6 +43,7 @@ namespace PersonalDiscordBot.Classes
         public List<IBackPackItem> Loot = new List<IBackPackItem>();
         public IDidTheThingPlayer ThingsDone = new IDidTheThingPlayer();
         public List<Affliction> StatusEffects = new List<Affliction>();
+        public Discord.Color Color { get; set; } = new Discord.Color(21, 96, 216);
         public int Pebbles { get; set; } = 0;
         public int Lvl { get; set; }
         public int Exp { get; set; }
@@ -91,6 +92,7 @@ namespace PersonalDiscordBot.Classes
         public Weapon Weapon { get; set; }
         public Armor Armor { get; set; }
         public List<Affliction> StatusEffects = new List<Affliction>();
+        public Discord.Color Color { get; set; } = new Discord.Color(219, 0, 0);
         public int Lvl { get; set; }
         public int ExpLoot { get; set; }
         public int MaxHP { get; set; }
@@ -862,7 +864,7 @@ namespace PersonalDiscordBot.Classes
                     {
                         Name = owner.CurrentCharacter.Name
                     },
-                    Color = new Discord.Color(25, 113, 255),
+                    Color = new Discord.Color(21, 96, 216),
                     Title = owner.CurrentCharacter.Desc,
                     Description = $"Backpack Storage: {owner.CurrentCharacter.Backpack.Stored.Count}/{owner.CurrentCharacter.Backpack.Capacity}{line}Level: {owner.CurrentCharacter.Lvl}{line}Experience: {owner.CurrentCharacter.Exp}{line}HP: {owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP}{line}Mana: {owner.CurrentCharacter.CurrentMana}/{owner.CurrentCharacter.MaxMana}{line}Strength: {owner.CurrentCharacter.Str}{line}Defense: {owner.CurrentCharacter.Def}{line}Dexterity: {owner.CurrentCharacter.Dex}{line}Intelligence: {owner.CurrentCharacter.Int}{line}Speed: {owner.CurrentCharacter.Spd}{line}Luck: {owner.CurrentCharacter.Lck}",
                     Footer = new EmbedFooterBuilder()
@@ -1041,14 +1043,24 @@ namespace PersonalDiscordBot.Classes
                     {
                         enemy.CurrentHP -= totalDamage;
                         Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} attacked {enemy.Name} [D]{totalDamage} [ID]{owner.OwnerID}");
-                        Events.SendDiscordMessage(context, $"**{owner.CurrentCharacter.Name}** attacked **{enemy.Name}** and dealt **{totalDamage}** damage ({enemy.CurrentHP}/{enemy.MaxHP} left)");
+                        EmbedBuilder embed = new EmbedBuilder()
+                        {
+                            Color = owner.CurrentCharacter.Color,
+                            Description = $"**{owner.CurrentCharacter.Name}** attacked **{enemy.Name}** and dealt **{totalDamage}** damage ({enemy.CurrentHP}/{enemy.MaxHP} left)"
+                        };
+                        Events.SendDiscordMessage(context, embed);
                         return;
                     }
                 }
                 else if (totalDamage == 0)
                 {
                     Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} attacked {enemy.Name}, didn't deal damage [D]{totalDamage} [ID]{owner.OwnerID}");
-                    Events.SendDiscordMessage(context, $"**{owner.CurrentCharacter.Name}** attacked **{enemy.Name}** and didn't deal any damage ({enemy.CurrentHP}/{enemy.MaxHP} left)");
+                    EmbedBuilder embed = new EmbedBuilder()
+                    {
+                        Color = owner.CurrentCharacter.Color,
+                        Description = $"**{owner.CurrentCharacter.Name}** attacked **{enemy.Name}** and didn't deal any damage ({enemy.CurrentHP}/{enemy.MaxHP} left)"
+                    };
+                    Events.SendDiscordMessage(context, embed);
                     return;
                 }
                 else
@@ -1058,7 +1070,12 @@ namespace PersonalDiscordBot.Classes
                     else
                         enemy.CurrentHP = enemy.MaxHP;
                     Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} attacked {enemy.Name}, absorbed {totalDamage} [ID]{owner.OwnerID}");
-                    Events.SendDiscordMessage(context, $"**{owner.CurrentCharacter.Name}** attacked, **{enemy.Name}** absorbed **{totalDamage}** damage and was healed ({enemy.CurrentHP}/{enemy.MaxHP} left)");
+                    EmbedBuilder embed = new EmbedBuilder()
+                    {
+                        Color = owner.CurrentCharacter.Color,
+                        Description = $"**{owner.CurrentCharacter.Name}** attacked, **{enemy.Name}** absorbed **{totalDamage}** damage and was healed ({enemy.CurrentHP}/{enemy.MaxHP} left)"
+                    };
+                    Events.SendDiscordMessage(context, embed);
                     return;
                 }
             }
@@ -1149,14 +1166,24 @@ namespace PersonalDiscordBot.Classes
                     {
                         owner.CurrentCharacter.CurrentHP -= enemyTotal;
                         Toolbox.uDebugAddLog($"{enemy.Name} attacked {owner.CurrentCharacter.Name} and dealt {enemyTotal} [ID]{owner.OwnerID}");
-                        Events.SendDiscordMessage(context, $"**{enemy.Name}** attacked **{owner.CurrentCharacter.Name}** and dealt **{enemyTotal}** damage ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)");
+                        EmbedBuilder embed = new EmbedBuilder()
+                        {
+                            Color = enemy.Color,
+                            Description = $"**{enemy.Name}** attacked **{owner.CurrentCharacter.Name}** and dealt **{enemyTotal}** damage ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)"
+                        };
+                        Events.SendDiscordMessage(context, embed);
                         return;
                     }
                 }
                 else if (enemyTotal == 0)
                 {
                     Toolbox.uDebugAddLog($"{enemy.Name} attacked {owner.CurrentCharacter.Name} and didn't deal any damage [D]{enemyTotal} [ID]{owner.OwnerID}");
-                    Events.SendDiscordMessage(context, $"**{enemy.Name}** attacked **{owner.CurrentCharacter.Name}** and didn't deal any damage ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)");
+                    EmbedBuilder embed = new EmbedBuilder()
+                    {
+                        Color = enemy.Color,
+                        Description = $"**{enemy.Name}** attacked **{owner.CurrentCharacter.Name}** and didn't deal any damage ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)"
+                    };
+                    Events.SendDiscordMessage(context, embed);
                     return;
                 }
                 else
@@ -1166,7 +1193,12 @@ namespace PersonalDiscordBot.Classes
                     else
                         owner.CurrentCharacter.CurrentHP = owner.CurrentCharacter.MaxHP;
                     Toolbox.uDebugAddLog($"{enemy.Name} attacked, {owner.CurrentCharacter.Name} absorbed {enemyTotal} damage and was healed");
-                    Events.SendDiscordMessage(context, $"**{enemy.Name}** attacked, **{owner.CurrentCharacter.Name}** absorbed **{enemyTotal}** damage and was healed ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)");
+                    EmbedBuilder embed = new EmbedBuilder()
+                    {
+                        Color = enemy.Color,
+                        Description = $"**{enemy.Name}** attacked, **{owner.CurrentCharacter.Name}** absorbed **{enemyTotal}** damage and was healed ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)"
+                    };
+                    Events.SendDiscordMessage(context, embed);
                     return;
                 }
             }
