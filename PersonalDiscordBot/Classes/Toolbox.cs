@@ -42,7 +42,7 @@ namespace PersonalDiscordBot.Classes
                 node.Attributes[attribute].Value = "";
                 uDebugAddLogExternal(string.Format("Added missing {0} attribute to XMLNode {1}", attribute, node.Name));
             }
-            node.OwnerDocument.Save(MainWindow._paths.ServerConfig);
+            node.OwnerDocument.Save(Toolbox._paths.ServerConfig);
         }
 
         public static void VerifyXMLNodeAttributes(this XmlNode node, string[] attributes)
@@ -55,7 +55,7 @@ namespace PersonalDiscordBot.Classes
                     node.Attributes[attribute].Value = "";
                     uDebugAddLogExternal(string.Format("Added missing {0} attribute to XMLNode {1}", attribute, node.Name));
                 }
-            node.OwnerDocument.Save(MainWindow._paths.ServerConfig);
+            node.OwnerDocument.Save(Toolbox._paths.ServerConfig);
         }
 
         public static string ToUpperFirst(this string str)

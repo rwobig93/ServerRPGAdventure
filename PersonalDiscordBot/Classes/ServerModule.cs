@@ -792,7 +792,7 @@ namespace PersonalDiscordBot.Classes
         {
             string exString = string.Format("TimeStamp: {1}{0}Exception Type: {2}{0}Caller: {3} at {4}{0}Message: {5}{0}HR: {6}{0}StackTrace:{0}{7}{0}", Environment.NewLine, $"{DateTime.Now.ToLocalTime().ToShortDateString()} {DateTime.Now.ToLocalTime().ToShortTimeString()}", ex.GetType().Name, caller, lineNumber, ex.Message, ex.HResult, ex.StackTrace);
             Toolbox.uDebugAddLog(string.Format("EXCEPTION: {0} at {1}", caller, lineNumber));
-            string _logLocation = string.Format(@"{0}\Exceptions.log", MainWindow._paths.LogLocation);
+            string _logLocation = string.Format(@"{0}\Exceptions.log", Toolbox._paths.LogLocation);
             if (!File.Exists(_logLocation))
                 using (StreamWriter _sw = new StreamWriter(_logLocation))
                     _sw.WriteLine(exString + Environment.NewLine);
@@ -870,7 +870,8 @@ namespace PersonalDiscordBot.Classes
                  "```;playing a game{0}Sets the bots' Playing status to 'a game' or whatever you type after playing```" +
                  "```;name{0}Sets the bots' Name status to 'My Boiiiiiiiiiiiii'```" +
                  "```;name Raspberry Schmeckles{0}Sets the bots' Name status to 'Raspberry Schmeckles' or whatever you type after name```" +
-                 "```;f @Someone{0}Pays respects to a mentioned person / or whatever you want```",
+                 "```;f @Someone{0}Pays respects to a mentioned person / or whatever you want```" +
+                 "```;update{0}Checks for an update for the bot```",
                  Environment.NewLine
                 );
                 await Context.Channel.SendMessageAsync(_helpArticle);
@@ -1074,6 +1075,40 @@ namespace PersonalDiscordBot.Classes
             catch (Exception ex)
             {
                 ServerModule.FullExceptionLog(ex);
+            }
+        }
+    }
+
+    [Group("update"), Summary("Checks for update for bot")]
+    public class UpdateModule : ModuleBase
+    {
+        [Command(""), Summary("Default Entry")]
+        public async Task Update()
+        {
+            var admin = Permissions.AdminPermissions(Context);
+            if (!admin)
+            {
+                await Context.Channel.SendMessageAsync($"{Context.User.Mention} You don't have permissions to run this command");
+                return;
+            }
+            var gitClient = MainWindow.gitClient;
+            if (gitClient == null)
+                gitClient = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("PDB"));
+            if (Toolbox._paths.CurrentVersion == null)
+                Toolbox._paths.CurrentVersion = new Version("0.1.00.00");
+            var releases = await gitClient.Repository.Release.GetAll("rwobig93", "ServerRPGAdventure");
+            var release = releases[0];
+            Version releaseVersion = new Version(release.TagName);
+            var result = Toolbox._paths.CurrentVersion.CompareTo(releaseVersion);
+            if (result < 0)
+            {
+                await Context.Channel.SendMessageAsync($"Newer release found, updating now... [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
+                Toolbox._paths.CurrentVersion = releaseVersion;
+                MainWindow.StartUpdate();
+            }
+            else
+            {
+                await Context.Channel.SendMessageAsync($"Release Version is the same version or older than running assembly. [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
             }
         }
     }
