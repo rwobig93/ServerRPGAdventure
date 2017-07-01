@@ -56,6 +56,7 @@ namespace PersonalDiscordBot
         public static DiscordSocketClient client;
         private CommandService commands;
         private DependencyMap map;
+        private Octokit.GitHubClient gitClient;
         public static Classes.LocalSettings _paths = new Classes.LocalSettings();
         private bool _activeSession = false;
         private bool notificationPlaying = false;
@@ -123,6 +124,7 @@ namespace PersonalDiscordBot
         {
             try
             {
+                await UpdateApplication();
                 _activeSession = true;
                 if (string.IsNullOrEmpty(_paths.BotToken))
                 {
@@ -150,6 +152,20 @@ namespace PersonalDiscordBot
             try
             {
                 var botName = client.CurrentUser.Username;
+
+                if (Permissions.GeneralPermissions.logChannel != 0)
+                {
+                    var channel = client.GetChannel(Permissions.GeneralPermissions.logChannel);
+                    if (channel != null)
+                    {
+#if DEBUG
+                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has disconnected in DEBUG Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+#else
+                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has disconnected biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+#endif
+                        ShowNotification($"Bot {client.CurrentUser.Username} Sent disconnected message to log channel {((IMessageChannel)channel).Name}", 6);
+                    }
+                }
                 await client.DisconnectAsync();
                 Toolbox.uDebugAddLog("Disconnected Client");
                 await client.LogoutAsync();
@@ -1004,6 +1020,20 @@ namespace PersonalDiscordBot
 #endif
         }
 
+        private void StartUpdate()
+        {
+            try
+            {
+                string updaterLocation = $@"{Directory.GetCurrentDirectory()}\PDBUpdater.exe";
+                Process updater = new Process() { StartInfo = new ProcessStartInfo { FileName = updaterLocation } };
+                updater.Start();
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
+        }
+
         #endregion
 
         #region Threaded Methods
@@ -1167,6 +1197,20 @@ namespace PersonalDiscordBot
                 await client.ConnectAsync();
 
                 ShowNotification($"Bot {client.CurrentUser.Username} Successfully Connected", 4);
+
+                if (Permissions.GeneralPermissions.logChannel != 0)
+                {
+                    var channel = client.GetChannel(Permissions.GeneralPermissions.logChannel);
+                    if (channel != null)
+                    {
+#if DEBUG
+                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has connected in DEBUG Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+#else
+                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has connected biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+#endif
+                        ShowNotification($"Bot {client.CurrentUser.Username} Sent connected message to log channel {((IMessageChannel)channel).Name}", 6);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1251,6 +1295,34 @@ namespace PersonalDiscordBot
                     var possEx = result.Error.Value;
                     uStatusUpdate(result.ErrorReason);
                     ResultLog(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
+        }
+
+        private async Task UpdateApplication()
+        {
+            try
+            {
+                if (gitClient == null)
+                    gitClient = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("PDB"));
+                if (_paths.CurrentVersion == null)
+                    _paths.CurrentVersion = new Version("0.1.00.00");
+                var releases = await gitClient.Repository.Release.GetAll("rwobig93", "ServerRPGAdventure");
+                var release = releases[0];
+                Version releaseVersion = new Version(release.TagName);
+                var result = _paths.CurrentVersion.CompareTo(releaseVersion);
+                if (result < 0)
+                {
+                    uStatusUpdate($"Newer release found, updating now... [Current]{_paths.CurrentVersion} [Release]{releaseVersion}");
+                    StartUpdate();
+                }
+                else
+                {
+                    uStatusUpdate($"Release Version is the same version or older than running assembly. [Current]{_paths.CurrentVersion} [Release]{releaseVersion}");
                 }
             }
             catch (Exception ex)

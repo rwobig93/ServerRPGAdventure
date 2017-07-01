@@ -942,7 +942,8 @@ namespace PersonalDiscordBot.Classes
                  ";test change weapon{0}" +
                  ";test change description{0}" +
                  ";test add loot{0}" +
-                 ";test testing %Role/Group%```",
+                 ";test testing %Role/Group%" +
+                 ";test log channel %MentionChannel%```",
                  Environment.NewLine
                 );
                 await Context.Channel.SendMessageAsync(_helpArticle);
@@ -2255,6 +2256,38 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
+        [Command("log channel"), Summary("Testicules add log channel")]
+        public async Task Testacules23(string mentionedChannel)
+        {
+            try
+            {
+                if (!Permissions.AdminPermissions(Context))
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} You don't have permissions to use this command");
+                    return;
+                }
+                var channel = await GetDiscordChannel(mentionedChannel);
+                if (channel == null)
+                    return;
+                if (Permissions.GeneralPermissions.logChannel != channel.Id)
+                {
+                    Permissions.GeneralPermissions.logChannel = channel.Id;
+                    Toolbox.uDebugAddLog($"Added {channel.Name} | {channel.Id} as the logging channel [ID]{Context.User.Id}");
+                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} The **{channel.Name}** channel has been marked as the logging channel");
+                }
+                else
+                {
+                    Permissions.GeneralPermissions.logChannel = 0;
+                    Toolbox.uDebugAddLog($"Removed {channel.Name} | {channel.Id} as the logging channel [ID]{Context.User.Id}");
+                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} The **{channel.Name}** channel has been removed as the logging channel");
+                }
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
         public async Task<IUser> GetDiscordUser(string user)
         {
             IUser userFound = null;
@@ -2305,6 +2338,32 @@ namespace PersonalDiscordBot.Classes
                 return roleFound;
             }
             return roleFound;
+        }
+
+        public async Task<IGuildChannel> GetDiscordChannel(string channel)
+        {
+            IGuildChannel channelFound = null;
+            Toolbox.uDebugAddLog($"Before Removing '<,@,>,#': {channel}");
+            channel = channel.Replace("<", string.Empty).Replace("@", string.Empty).Replace(">", string.Empty).Replace("#", string.Empty);
+            Toolbox.uDebugAddLog($"After Removing '<,@,>,#': {channel}");
+            ulong channelID = 0;
+            var isUlong = ulong.TryParse(channel, out channelID);
+            if (!isUlong)
+            {
+                Toolbox.uDebugAddLog($"Invalid Ulong: {channelID}");
+                await Context.Channel.SendMessageAsync($"{channel} isn't a valid discord channel");
+                channelID = 0;
+                return channelFound;
+            }
+            channelFound = await Context.Guild.GetChannelAsync(channelID);
+            if (channelFound == null)
+            {
+                Toolbox.uDebugAddLog($"Invalid Channel: {channelFound.Name} | {channelID}");
+                await Context.Channel.SendMessageAsync($"{channelID} doesn't match a discord channel on your server");
+                channelID = 0;
+                return channelFound;
+            }
+            return channelFound;
         }
 
         public async Task<bool> VerifyOwnerProfileAndIfHasCharacters()
