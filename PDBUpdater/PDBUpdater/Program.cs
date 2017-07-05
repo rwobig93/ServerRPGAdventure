@@ -120,6 +120,8 @@ namespace PDBUpdater
             try
             {
                 gitClient = new GitHubClient(new ProductHeaderValue("PDB_Updater"));
+                Console.WriteLine("Successfully setup gitclient, press any key to continue...");
+                Console.ReadLine();
             }
             catch (Exception ex)
             {
@@ -129,10 +131,6 @@ namespace PDBUpdater
 
         private void UpdateToNewVersion(Version releaseVerNum)
         {
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.RunWorkerCompleted += (sender, e) => { StartPDB(); Exit(); };
-            worker.DoWork += (sender, e) =>
-            {
             KillRunningProcesses();
             saveData.CurrentVersion = releaseVerNum;
             string releaseURI = $@"{saveData.DownloadBaseURL}/{releaseVerNum}/";
@@ -142,8 +140,6 @@ namespace PDBUpdater
             webClient.DownloadFileCompleted += (sender2, e2) => { Console.WriteLine("Download complete, now starting updated version"); BackupPreviousVersion(); };
             Console.WriteLine($"Starting download for v{releaseVerNum}...");
             webClient.DownloadFileAsync(new Uri(releaseURI), exeName);
-            };
-            worker.RunWorkerAsync();
         }
 
         private void KillRunningProcesses()
@@ -162,13 +158,32 @@ namespace PDBUpdater
             }
         }
 
-        private void StartPDB()
+        private async Task StartPDB()
         {
             try
             {
                 Process startPDB = new Process() { StartInfo = new ProcessStartInfo { FileName = $@"{saveData.InstallDirectory}\PersonalDiscordBot.exe" } };
                 startPDB.Start();
-                Console.WriteLine($"Started PDB from {startPDB.StartInfo.FileName}");
+                Process started = Process.GetProcessById(startPDB.Id);
+                if (started == null)
+                {
+                    Console.WriteLine($"Process {startPDB.ProcessName} didn't start successfully, couldn't find process ID {startPDB.Id}, would you like to try again? (y/n)");
+                    string response = Console.ReadLine();
+                    if (response.ToLower() == "y")
+                    {
+                        await CheckNewRelease();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Cancelling update, press any key to close...");
+                        Console.ReadLine();
+                        Exit();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Started PDB from {startPDB.StartInfo.FileName}");
+                }
             }
             catch (Exception ex)
             {
@@ -202,6 +217,13 @@ namespace PDBUpdater
             this.Exit();
         }
 
+        private async Task Cleanup()
+        {
+            Console.WriteLine("Starting bot...");
+            await StartPDB();
+            Exit();
+        }
+
         private async Task CheckNewRelease()
         {
             try
@@ -214,6 +236,7 @@ namespace PDBUpdater
                 {
                     Console.WriteLine($"Newer release found, updating now... [Current]{saveData.CurrentVersion} [Release]{releaseVersion}");
                     UpdateToNewVersion(releaseVersion);
+                    await Cleanup();
                 }
                 else
                 {

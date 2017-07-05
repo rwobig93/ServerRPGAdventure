@@ -1220,7 +1220,12 @@ namespace PersonalDiscordBot.Classes
                 Toolbox.uDebugAddLog($"Removed {enemy.Name} from the enemy list, added to the defeated enemy list and added ExpLoot");
                 if (RPG.MatchList.Find(x => x.Owner == owner).EnemyList.Count <= 0)
                 {
-                    Events.SendDiscordMessage(context, $"You have defeated **{enemy.Name}** and earned **{enemy.ExpLoot} EXP!**");
+                    EmbedBuilder embed = new EmbedBuilder()
+                    {
+                        Color = owner.CurrentCharacter.Color,
+                        Description = $"You have defeated **{enemy.Name}** and earned **{enemy.ExpLoot} EXP!**"
+                    };
+                    Events.SendDiscordMessage(context, embed);
                     MatchOver(context, owner, enemy, MatchCompleteResult.Won);
                     return;
                 }

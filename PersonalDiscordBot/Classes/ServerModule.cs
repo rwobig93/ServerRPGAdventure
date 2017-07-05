@@ -943,7 +943,7 @@ namespace PersonalDiscordBot.Classes
                  ";test change weapon{0}" +
                  ";test change description{0}" +
                  ";test add loot{0}" +
-                 ";test testing %Role/Group%" +
+                 ";test testing %Role/Group%{0}" +
                  ";test log channel %MentionChannel%```",
                  Environment.NewLine
                 );
