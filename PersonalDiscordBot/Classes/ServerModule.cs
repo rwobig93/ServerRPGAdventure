@@ -2411,7 +2411,7 @@ namespace PersonalDiscordBot.Classes
             OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
             if (ownerProfile == null)
             {
-                OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id };
+                OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id, OwnerUN = Context.User.Username };
                 RPG.Owners.Add(owner);
                 Events.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
                 await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you didn't have a profile yet so I made you one");
