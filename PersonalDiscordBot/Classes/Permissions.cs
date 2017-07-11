@@ -138,6 +138,6 @@ namespace PersonalDiscordBot.Classes
 
     public class GeneralPermissions
     {
-        public static ulong logChannel;
+        public ulong logChannel = 0;
     }
 }

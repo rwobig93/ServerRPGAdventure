@@ -21,6 +21,7 @@ namespace PersonalDiscordBot.Classes
     public class OwnerProfile
     {
         public ulong OwnerID { get; set; }
+        public string OwnerUN { get; set; }
         public int Currency { get; set; } = 100;
         public int TotalPebbles { get; set; } = 0;
         public List<Character> CharacterList = new List<Character>();
@@ -43,19 +44,21 @@ namespace PersonalDiscordBot.Classes
         public List<IBackPackItem> Loot = new List<IBackPackItem>();
         public IDidTheThingPlayer ThingsDone = new IDidTheThingPlayer();
         public List<Affliction> StatusEffects = new List<Affliction>();
+        public Discord.Color Color { get; set; } = new Discord.Color(21, 96, 216);
+        public PriorityFactors PF { get { return PriorityFactors.GetPF(this); } }
         public int Pebbles { get; set; } = 0;
         public int Lvl { get; set; }
         public int Exp { get; set; }
-        public int MaxHP { get; set; }
+        public int MaxHP { get { if (this.MaxHP == 0) { return RPG.HPMPStatCalc(this, this.Def, this.PF.Def); } else { return this.MaxHP; } } set { this.MaxHP = value; } }
         public int CurrentHP { get; set; }
-        public int MaxMana { get; set; }
+        public int MaxMana { get { if (this.MaxMana == 0) { return RPG.HPMPStatCalc(this, this.Int, this.PF.Int); } else { return this.MaxMana; } } }
         public int CurrentMana { get; set; }
-        public int Str { get; set; }
-        public int Def { get; set; }
-        public int Dex { get; set; }
-        public int Int { get; set; }
-        public int Spd { get; set; }
-        public int Lck { get; set; }
+        public int Str { get { if (this.Str == 0) { return RPG.VitalStatCalc(this, this.PF.Str); } else { return this.Str; } } set { this.Str = value; } }
+        public int Def { get { if (this.Def == 0) { return RPG.VitalStatCalc(this, this.PF.Def); } else { return this.Def; } } set { this.Def = value; } }
+        public int Dex { get { if (this.Dex == 0) { return RPG.VitalStatCalc(this, this.PF.Dex); } else { return this.Dex; } } set { this.Dex = value; } }
+        public int Int { get { if (this.Int == 0) { return RPG.VitalStatCalc(this, this.PF.Int); } else { return this.Int; } } set { this.Int = value; } }
+        public int Spd { get { if (this.Spd == 0) { return RPG.VitalStatCalc(this, this.PF.Spd); } else { return this.Spd; } } set { this.Spd = value; } }
+        public int Lck { get { if (this.Lck == 0) { return RPG.VitalStatCalc(this, this.PF.Lck); } else { return this.Lck; } } set { this.Lck = value; } }
     }
 
     public class Match
@@ -91,6 +94,7 @@ namespace PersonalDiscordBot.Classes
         public Weapon Weapon { get; set; }
         public Armor Armor { get; set; }
         public List<Affliction> StatusEffects = new List<Affliction>();
+        public Discord.Color Color { get; set; } = new Discord.Color(219, 0, 0);
         public int Lvl { get; set; }
         public int ExpLoot { get; set; }
         public int MaxHP { get; set; }
@@ -355,6 +359,65 @@ namespace PersonalDiscordBot.Classes
         public int Wind { get; set; } = 0;
     }
 
+    public class PriorityFactors
+    {
+        public static PriorityFactors GetPF(Character chara)
+        {
+            PriorityFactors pf = new PriorityFactors() { LCK = 1 };
+            switch (chara.Class)
+            {
+                case CharacterClass.Dragoon:
+                    pf.STR = 6;
+                    pf.DEF = 4;
+                    pf.DEX = 10;
+                    pf.INT = 3;
+                    pf.SPD = 7;
+                    break;
+                case CharacterClass.Mage:
+                    pf.STR = 1;
+                    pf.DEF = 5;
+                    pf.DEX = 6;
+                    pf.INT = 10;
+                    pf.SPD = 8;
+                    break;
+                case CharacterClass.Necromancer:
+                    pf.STR = 8;
+                    pf.DEF = 8;
+                    pf.DEX = 5;
+                    pf.INT = 8;
+                    pf.SPD = 1;
+                    break;
+                case CharacterClass.Rogue:
+                    pf.STR = 5;
+                    pf.DEF = 6;
+                    pf.DEX = 8;
+                    pf.INT = 1;
+                    pf.SPD = 10;
+                    break;
+                case CharacterClass.Warrior:
+                    pf.STR = 10;
+                    pf.DEF = 8;
+                    pf.DEX = 6;
+                    pf.INT = 1;
+                    pf.SPD = 5;
+                    break;
+            }
+            return pf;
+        }
+        private int STR;
+        private int DEF;
+        private int DEX;
+        private int INT;
+        private int SPD;
+        private int LCK;
+        public int Str { get { return STR; } }
+        public int Def { get { return DEF; } }
+        public int Dex { get { return DEX; } }
+        public int Int { get { return INT; } }
+        public int Spd { get { return SPD; } }
+        public int Lck { get { return LCK; } }
+    }
+
     #endregion
 
     public static class RPG
@@ -392,6 +455,29 @@ namespace PersonalDiscordBot.Classes
             if (trueChance > 100 || trueChance < 0)
                 throw new ArgumentOutOfRangeException("trueChance", "int was above or below argument range");
             return rng.Next(0, 100) >= (100 - trueChance);
+        }
+
+        /// <summary>
+        /// Calculates Vital statistics based on priority factor of the class on each stat
+        /// </summary>
+        /// <param name="chara"></param>
+        /// <param name="statPF"></param>
+        /// <returns></returns>
+        public static int VitalStatCalc(Character chara, int statPF)
+        {
+            return ((statPF * chara.Lvl) + (2 * (chara.Lvl % 3)) + (10 + chara.Lvl));
+        }
+
+        /// <summary>
+        /// Calculates HP/MP statistics baed on the current respective stat and the class's priority factor
+        /// </summary>
+        /// <param name="chara"></param>
+        /// <param name="stat"></param>
+        /// <param name="statPF"></param>
+        /// <returns></returns>
+        public static int HPMPStatCalc(Character chara, int stat, int statPF)
+        {
+            return ((stat / 2) + (statPF * chara.Lvl) + (statPF * 4));
         }
 
         #endregion
@@ -675,16 +761,8 @@ namespace PersonalDiscordBot.Classes
                     };
                     newChar.SpellBook.Add(Spells.dragonRage);
                     newChar.Class = chosenClass;
-                    newChar.MaxHP = 85;
                     newChar.CurrentHP = newChar.MaxHP;
-                    newChar.MaxMana = 5;
                     newChar.CurrentMana = newChar.MaxMana;
-                    newChar.Str = 10;
-                    newChar.Def = 3;
-                    newChar.Dex = 4;
-                    newChar.Int = 3;
-                    newChar.Spd = rng.Next(115, 150);
-                    newChar.Lck = 1;
                     break;
                 case CharacterClass.Mage:
                     newChar.Name = name;
@@ -703,16 +781,8 @@ namespace PersonalDiscordBot.Classes
                     newChar.SpellBook.Add(Spells.magesEnergy);
                     newChar.SpellBook.Add(Spells.arcaneArmor);
                     newChar.Class = chosenClass;
-                    newChar.MaxHP = rng.Next(20, 80);
                     newChar.CurrentHP = newChar.MaxHP;
-                    newChar.MaxMana = 20;
                     newChar.CurrentMana = newChar.MaxMana;
-                    newChar.Str = rng.Next(1, 10);
-                    newChar.Def = rng.Next(1, 15);
-                    newChar.Dex = rng.Next(1, 7);
-                    newChar.Int = rng.Next(10, 20);
-                    newChar.Spd = rng.Next(105, 125);
-                    newChar.Lck = rng.Next(0, 10);
                     break;
                 case CharacterClass.Necromancer:
                     newChar.Name = name;
@@ -730,16 +800,8 @@ namespace PersonalDiscordBot.Classes
                     };
                     newChar.SpellBook.Add(Spells.boneSpike);
                     newChar.Class = chosenClass;
-                    newChar.MaxHP = rng.Next(60, 110);
                     newChar.CurrentHP = newChar.MaxHP;
-                    newChar.MaxMana = 0;
                     newChar.CurrentMana = newChar.MaxMana;
-                    newChar.Str = rng.Next(5, 12);
-                    newChar.Def = rng.Next(5, 12);
-                    newChar.Dex = rng.Next(6, 14);
-                    newChar.Int = rng.Next(6, 25);
-                    newChar.Spd = rng.Next(80, 105);
-                    newChar.Lck = rng.Next(0, 10);
                     break;
                 case CharacterClass.Rogue:
                     newChar.Name = name;
@@ -755,16 +817,8 @@ namespace PersonalDiscordBot.Classes
                         }
                     };
                     newChar.Class = chosenClass;
-                    newChar.MaxHP = rng.Next(70, 1110);
                     newChar.CurrentHP = newChar.MaxHP;
-                    newChar.MaxMana = 0;
                     newChar.CurrentMana = newChar.MaxMana;
-                    newChar.Str = rng.Next(2, 15);
-                    newChar.Def = rng.Next(4, 12);
-                    newChar.Dex = rng.Next(10, 20);
-                    newChar.Int = rng.Next(0, 8);
-                    newChar.Spd = rng.Next(115, 140);
-                    newChar.Lck = rng.Next(1, 12);
                     break;
                 case CharacterClass.Warrior:
                     newChar.Name = name;
@@ -780,16 +834,8 @@ namespace PersonalDiscordBot.Classes
                         }
                     };
                     newChar.Class = chosenClass;
-                    newChar.MaxHP = rng.Next(50, 100);
                     newChar.CurrentHP = newChar.MaxHP;
-                    newChar.MaxMana = 0;
                     newChar.CurrentMana = newChar.MaxMana;
-                    newChar.Str = rng.Next(5, 20);
-                    newChar.Def = rng.Next(5, 20);
-                    newChar.Dex = rng.Next(1, 15);
-                    newChar.Int = rng.Next(0, 2);
-                    newChar.Spd = rng.Next(100, 120);
-                    newChar.Lck = rng.Next(0, 10);
                     break;
             }
             return newChar;
@@ -862,7 +908,7 @@ namespace PersonalDiscordBot.Classes
                     {
                         Name = owner.CurrentCharacter.Name
                     },
-                    Color = new Discord.Color(25, 113, 255),
+                    Color = new Discord.Color(21, 96, 216),
                     Title = owner.CurrentCharacter.Desc,
                     Description = $"Backpack Storage: {owner.CurrentCharacter.Backpack.Stored.Count}/{owner.CurrentCharacter.Backpack.Capacity}{line}Level: {owner.CurrentCharacter.Lvl}{line}Experience: {owner.CurrentCharacter.Exp}{line}HP: {owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP}{line}Mana: {owner.CurrentCharacter.CurrentMana}/{owner.CurrentCharacter.MaxMana}{line}Strength: {owner.CurrentCharacter.Str}{line}Defense: {owner.CurrentCharacter.Def}{line}Dexterity: {owner.CurrentCharacter.Dex}{line}Intelligence: {owner.CurrentCharacter.Int}{line}Speed: {owner.CurrentCharacter.Spd}{line}Luck: {owner.CurrentCharacter.Lck}",
                     Footer = new EmbedFooterBuilder()
@@ -1041,14 +1087,24 @@ namespace PersonalDiscordBot.Classes
                     {
                         enemy.CurrentHP -= totalDamage;
                         Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} attacked {enemy.Name} [D]{totalDamage} [ID]{owner.OwnerID}");
-                        Events.SendDiscordMessage(context, $"**{owner.CurrentCharacter.Name}** attacked **{enemy.Name}** and dealt **{totalDamage}** damage ({enemy.CurrentHP}/{enemy.MaxHP} left)");
+                        EmbedBuilder embed = new EmbedBuilder()
+                        {
+                            Color = owner.CurrentCharacter.Color,
+                            Description = $"**{owner.CurrentCharacter.Name}** attacked **{enemy.Name}** and dealt **{totalDamage}** damage ({enemy.CurrentHP}/{enemy.MaxHP} left)"
+                        };
+                        Events.SendDiscordMessage(context, embed);
                         return;
                     }
                 }
                 else if (totalDamage == 0)
                 {
                     Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} attacked {enemy.Name}, didn't deal damage [D]{totalDamage} [ID]{owner.OwnerID}");
-                    Events.SendDiscordMessage(context, $"**{owner.CurrentCharacter.Name}** attacked **{enemy.Name}** and didn't deal any damage ({enemy.CurrentHP}/{enemy.MaxHP} left)");
+                    EmbedBuilder embed = new EmbedBuilder()
+                    {
+                        Color = owner.CurrentCharacter.Color,
+                        Description = $"**{owner.CurrentCharacter.Name}** attacked **{enemy.Name}** and didn't deal any damage ({enemy.CurrentHP}/{enemy.MaxHP} left)"
+                    };
+                    Events.SendDiscordMessage(context, embed);
                     return;
                 }
                 else
@@ -1058,7 +1114,12 @@ namespace PersonalDiscordBot.Classes
                     else
                         enemy.CurrentHP = enemy.MaxHP;
                     Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} attacked {enemy.Name}, absorbed {totalDamage} [ID]{owner.OwnerID}");
-                    Events.SendDiscordMessage(context, $"**{owner.CurrentCharacter.Name}** attacked, **{enemy.Name}** absorbed **{totalDamage}** damage and was healed ({enemy.CurrentHP}/{enemy.MaxHP} left)");
+                    EmbedBuilder embed = new EmbedBuilder()
+                    {
+                        Color = owner.CurrentCharacter.Color,
+                        Description = $"**{owner.CurrentCharacter.Name}** attacked, **{enemy.Name}** absorbed **{totalDamage}** damage and was healed ({enemy.CurrentHP}/{enemy.MaxHP} left)"
+                    };
+                    Events.SendDiscordMessage(context, embed);
                     return;
                 }
             }
@@ -1149,14 +1210,24 @@ namespace PersonalDiscordBot.Classes
                     {
                         owner.CurrentCharacter.CurrentHP -= enemyTotal;
                         Toolbox.uDebugAddLog($"{enemy.Name} attacked {owner.CurrentCharacter.Name} and dealt {enemyTotal} [ID]{owner.OwnerID}");
-                        Events.SendDiscordMessage(context, $"**{enemy.Name}** attacked **{owner.CurrentCharacter.Name}** and dealt **{enemyTotal}** damage ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)");
+                        EmbedBuilder embed = new EmbedBuilder()
+                        {
+                            Color = enemy.Color,
+                            Description = $"**{enemy.Name}** attacked **{owner.CurrentCharacter.Name}** and dealt **{enemyTotal}** damage ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)"
+                        };
+                        Events.SendDiscordMessage(context, embed);
                         return;
                     }
                 }
                 else if (enemyTotal == 0)
                 {
                     Toolbox.uDebugAddLog($"{enemy.Name} attacked {owner.CurrentCharacter.Name} and didn't deal any damage [D]{enemyTotal} [ID]{owner.OwnerID}");
-                    Events.SendDiscordMessage(context, $"**{enemy.Name}** attacked **{owner.CurrentCharacter.Name}** and didn't deal any damage ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)");
+                    EmbedBuilder embed = new EmbedBuilder()
+                    {
+                        Color = enemy.Color,
+                        Description = $"**{enemy.Name}** attacked **{owner.CurrentCharacter.Name}** and didn't deal any damage ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)"
+                    };
+                    Events.SendDiscordMessage(context, embed);
                     return;
                 }
                 else
@@ -1166,7 +1237,12 @@ namespace PersonalDiscordBot.Classes
                     else
                         owner.CurrentCharacter.CurrentHP = owner.CurrentCharacter.MaxHP;
                     Toolbox.uDebugAddLog($"{enemy.Name} attacked, {owner.CurrentCharacter.Name} absorbed {enemyTotal} damage and was healed");
-                    Events.SendDiscordMessage(context, $"**{enemy.Name}** attacked, **{owner.CurrentCharacter.Name}** absorbed **{enemyTotal}** damage and was healed ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)");
+                    EmbedBuilder embed = new EmbedBuilder()
+                    {
+                        Color = enemy.Color,
+                        Description = $"**{enemy.Name}** attacked, **{owner.CurrentCharacter.Name}** absorbed **{enemyTotal}** damage and was healed ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)"
+                    };
+                    Events.SendDiscordMessage(context, embed);
                     return;
                 }
             }
@@ -1188,7 +1264,12 @@ namespace PersonalDiscordBot.Classes
                 Toolbox.uDebugAddLog($"Removed {enemy.Name} from the enemy list, added to the defeated enemy list and added ExpLoot");
                 if (RPG.MatchList.Find(x => x.Owner == owner).EnemyList.Count <= 0)
                 {
-                    Events.SendDiscordMessage(context, $"You have defeated **{enemy.Name}** and earned **{enemy.ExpLoot} EXP!**");
+                    EmbedBuilder embed = new EmbedBuilder()
+                    {
+                        Color = owner.CurrentCharacter.Color,
+                        Description = $"You have defeated **{enemy.Name}** and earned **{enemy.ExpLoot} EXP!**"
+                    };
+                    Events.SendDiscordMessage(context, embed);
                     MatchOver(context, owner, enemy, MatchCompleteResult.Won);
                     return;
                 }
@@ -4778,14 +4859,9 @@ namespace PersonalDiscordBot.Classes
             Lvl = 1,
             OwnerID = testiculeesProfile.OwnerID,
             Armor = Armors.knightArmor,
-            MaxHP = 12000000,
             CurrentHP = 12000000,
             Weapon = Weapons.warriorFists,
-            Exp = 0,
-            Str = 10,
-            Def = 10,
-            Spd = 100,
-            Lck = 10
+            Exp = 0
         };
 
         #endregion

@@ -792,7 +792,7 @@ namespace PersonalDiscordBot.Classes
         {
             string exString = string.Format("TimeStamp: {1}{0}Exception Type: {2}{0}Caller: {3} at {4}{0}Message: {5}{0}HR: {6}{0}StackTrace:{0}{7}{0}", Environment.NewLine, $"{DateTime.Now.ToLocalTime().ToShortDateString()} {DateTime.Now.ToLocalTime().ToShortTimeString()}", ex.GetType().Name, caller, lineNumber, ex.Message, ex.HResult, ex.StackTrace);
             Toolbox.uDebugAddLog(string.Format("EXCEPTION: {0} at {1}", caller, lineNumber));
-            string _logLocation = string.Format(@"{0}\Exceptions.log", MainWindow._paths.LogLocation);
+            string _logLocation = string.Format(@"{0}\Exceptions.log", Toolbox._paths.LogLocation);
             if (!File.Exists(_logLocation))
                 using (StreamWriter _sw = new StreamWriter(_logLocation))
                     _sw.WriteLine(exString + Environment.NewLine);
@@ -870,7 +870,8 @@ namespace PersonalDiscordBot.Classes
                  "```;playing a game{0}Sets the bots' Playing status to 'a game' or whatever you type after playing```" +
                  "```;name{0}Sets the bots' Name status to 'My Boiiiiiiiiiiiii'```" +
                  "```;name Raspberry Schmeckles{0}Sets the bots' Name status to 'Raspberry Schmeckles' or whatever you type after name```" +
-                 "```;f @Someone{0}Pays respects to a mentioned person / or whatever you want```",
+                 "```;f @Someone{0}Pays respects to a mentioned person / or whatever you want```" +
+                 "```;update{0}Checks for an update for the bot```",
                  Environment.NewLine
                 );
                 await Context.Channel.SendMessageAsync(_helpArticle);
@@ -942,7 +943,8 @@ namespace PersonalDiscordBot.Classes
                  ";test change weapon{0}" +
                  ";test change description{0}" +
                  ";test add loot{0}" +
-                 ";test testing %Role/Group%```",
+                 ";test testing %Role/Group%{0}" +
+                 ";test log channel %MentionChannel%```",
                  Environment.NewLine
                 );
                 await Context.Channel.SendMessageAsync(_helpArticle);
@@ -1073,6 +1075,40 @@ namespace PersonalDiscordBot.Classes
             catch (Exception ex)
             {
                 ServerModule.FullExceptionLog(ex);
+            }
+        }
+    }
+
+    [Group("update"), Summary("Checks for update for bot")]
+    public class UpdateModule : ModuleBase
+    {
+        [Command(""), Summary("Default Entry")]
+        public async Task Update()
+        {
+            var admin = Permissions.AdminPermissions(Context);
+            if (!admin)
+            {
+                await Context.Channel.SendMessageAsync($"{Context.User.Mention} You don't have permissions to run this command");
+                return;
+            }
+            var gitClient = MainWindow.gitClient;
+            if (gitClient == null)
+                gitClient = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("PDB"));
+            if (Toolbox._paths.CurrentVersion == null)
+                Toolbox._paths.CurrentVersion = new Version("0.1.00.00");
+            var releases = await gitClient.Repository.Release.GetAll("rwobig93", "ServerRPGAdventure");
+            var release = releases[0];
+            Version releaseVersion = new Version(release.TagName);
+            var result = Toolbox._paths.CurrentVersion.CompareTo(releaseVersion);
+            if (result < 0)
+            {
+                await Context.Channel.SendMessageAsync($"Newer release found, updating now... [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
+                Toolbox._paths.CurrentVersion = releaseVersion;
+                MainWindow.StartUpdate();
+            }
+            else
+            {
+                await Context.Channel.SendMessageAsync($"Release Version is the same version or older than running assembly. [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
             }
         }
     }
@@ -1665,8 +1701,13 @@ namespace PersonalDiscordBot.Classes
                         return;
                     }
                 }
-                if (!hasCharacters) ownerProfile.Currency -= cost;
-                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You have been charged {cost} currency, you now have: {ownerProfile.Currency}");
+                if (cost <= 0)
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} This first character is on us, enjoy");
+                else
+                {
+                    if (!hasCharacters) ownerProfile.Currency -= cost;
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You have been charged {cost} currency, you now have: {ownerProfile.Currency}");
+                }
                 Character newChar = Management.CreateNewCharacter(Context.Message.Author.Id, chosenClass, charName);
                 ownerProfile.CharacterList.Add(newChar);
                 if (ownerProfile.CharacterList.Count == 1)
@@ -2255,6 +2296,38 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
+        [Command("log channel"), Summary("Testicules add log channel")]
+        public async Task Testacules23(string mentionedChannel)
+        {
+            try
+            {
+                if (!Permissions.AdminPermissions(Context))
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} You don't have permissions to use this command");
+                    return;
+                }
+                var channel = await GetDiscordChannel(mentionedChannel);
+                if (channel == null)
+                    return;
+                if (Permissions.GeneralPermissions.logChannel != channel.Id)
+                {
+                    Permissions.GeneralPermissions.logChannel = channel.Id;
+                    Toolbox.uDebugAddLog($"Added {channel.Name} | {channel.Id} as the logging channel [ID]{Context.User.Id}");
+                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} The **{channel.Name}** channel has been marked as the logging channel");
+                }
+                else
+                {
+                    Permissions.GeneralPermissions.logChannel = 0;
+                    Toolbox.uDebugAddLog($"Removed {channel.Name} | {channel.Id} as the logging channel [ID]{Context.User.Id}");
+                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} The **{channel.Name}** channel has been removed as the logging channel");
+                }
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
         public async Task<IUser> GetDiscordUser(string user)
         {
             IUser userFound = null;
@@ -2307,12 +2380,38 @@ namespace PersonalDiscordBot.Classes
             return roleFound;
         }
 
+        public async Task<IGuildChannel> GetDiscordChannel(string channel)
+        {
+            IGuildChannel channelFound = null;
+            Toolbox.uDebugAddLog($"Before Removing '<,@,>,#': {channel}");
+            channel = channel.Replace("<", string.Empty).Replace("@", string.Empty).Replace(">", string.Empty).Replace("#", string.Empty);
+            Toolbox.uDebugAddLog($"After Removing '<,@,>,#': {channel}");
+            ulong channelID = 0;
+            var isUlong = ulong.TryParse(channel, out channelID);
+            if (!isUlong)
+            {
+                Toolbox.uDebugAddLog($"Invalid Ulong: {channelID}");
+                await Context.Channel.SendMessageAsync($"{channel} isn't a valid discord channel");
+                channelID = 0;
+                return channelFound;
+            }
+            channelFound = await Context.Guild.GetChannelAsync(channelID);
+            if (channelFound == null)
+            {
+                Toolbox.uDebugAddLog($"Invalid Channel: {channelFound.Name} | {channelID}");
+                await Context.Channel.SendMessageAsync($"{channelID} doesn't match a discord channel on your server");
+                channelID = 0;
+                return channelFound;
+            }
+            return channelFound;
+        }
+
         public async Task<bool> VerifyOwnerProfileAndIfHasCharacters()
         {
             OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
             if (ownerProfile == null)
             {
-                OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id };
+                OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id, OwnerUN = Context.User.Username };
                 RPG.Owners.Add(owner);
                 Events.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
                 await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you didn't have a profile yet so I made you one");
