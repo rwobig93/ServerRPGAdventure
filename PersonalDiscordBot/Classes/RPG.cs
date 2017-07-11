@@ -908,7 +908,7 @@ namespace PersonalDiscordBot.Classes
                     {
                         Name = owner.CurrentCharacter.Name
                     },
-                    Color = new Discord.Color(21, 96, 216),
+                    Color = owner.CurrentCharacter.Color,
                     Title = owner.CurrentCharacter.Desc,
                     Description = $"Backpack Storage: {owner.CurrentCharacter.Backpack.Stored.Count}/{owner.CurrentCharacter.Backpack.Capacity}{line}Level: {owner.CurrentCharacter.Lvl}{line}Experience: {owner.CurrentCharacter.Exp}{line}HP: {owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP}{line}Mana: {owner.CurrentCharacter.CurrentMana}/{owner.CurrentCharacter.MaxMana}{line}Strength: {owner.CurrentCharacter.Str}{line}Defense: {owner.CurrentCharacter.Def}{line}Dexterity: {owner.CurrentCharacter.Dex}{line}Intelligence: {owner.CurrentCharacter.Int}{line}Speed: {owner.CurrentCharacter.Spd}{line}Luck: {owner.CurrentCharacter.Lck}",
                     Footer = new EmbedFooterBuilder()
@@ -922,6 +922,76 @@ namespace PersonalDiscordBot.Classes
             {
                 Toolbox.FullExceptionLog(ex);
             }
+        }
+
+        public static async Task CheckCharacterBackpak(CommandContext context)
+        {
+            try
+            {
+                var line = Environment.NewLine;
+                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
+                if (owner == null)
+                {
+                    Events.SendDiscordMessage(context, "You don't currently have a profile. Please create a character first");
+                    return;
+                }
+                else if (owner.CharacterList.Count <= 0)
+                {
+                    Events.SendDiscordMessage(context, "You don't currently have any characters. Please create a character.");
+                    return;
+                }
+                string itemList = "";
+                int number = 1;
+                var timestamp = DateTime.Now;
+                List<IMessage> respondeded = new List<IMessage>();
+                Toolbox.uDebugAddLog($"Asking [Owner]{owner.CurrentCharacter.Loot.Count} [ID]{owner.OwnerID} what to see");
+                var backpackMsg = await context.Channel.SendMessageAsync($"What would you like to see? (armor, items, weapons, all)");
+                bool msgResp = false;
+                if (!msgResp)
+                {
+                    // ask for if they want Armor, Item, Weapon, or All
+                    // they said Armor
+                    // switch(answer)
+                    // case(armor)
+                    List<Armor> armors = new List<Armor>();
+                    foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
+                    {
+                        if (i.GetLootType() == LootDrop.LootType.Armor)
+                        {
+                            armors.Add((Armor)i);
+                        }
+                    }
+                    foreach (Armor a in armors)
+                    {
+                        itemList = $"{itemList}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
+                        number++;
+                    }
+                    //case(all)
+                    //foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
+                    //{
+                    //    itemList = $"{itemList}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
+                    //    number++;
+                    //}
+                    EmbedBuilder embed = new EmbedBuilder()
+                    {
+                        Author = new EmbedAuthorBuilder()
+                        {
+                            Name = owner.CurrentCharacter.Name
+                        },
+                        Color = owner.CurrentCharacter.Color,
+                        Title = owner.CurrentCharacter.Desc,
+                        Description = $"Backpack Storage: {owner.CurrentCharacter.Backpack.Stored.Count}/{owner.CurrentCharacter.Backpack.Capacity}" +
+                        $"{itemList}"
+                    };
+                    Events.SendDiscordMessage(context, embed);
+                }
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+
+
         }
 
         public static void ChangeArmor(CommandContext context, Armor armor)
@@ -4829,6 +4899,26 @@ namespace PersonalDiscordBot.Classes
             }
             sw.Stop();
             return $"{yaBlewIt}{line}You simulated {num} loot drops.{line}It took {sw.Elapsed.TotalSeconds} seconds to run.{line}Here are your results:{line}---------------------------{line}Armor: {armor}{line}     Light: {light}{line}     Medium: {medium}{line}     Heavy: {heavy}{line}---------------------------{line}Item: {item}{line}     Restore: {restore}{line}     Buff: {buff}{line}     Damage: {damage}{line}     Money: {light}{line}     Repair: {repair}{line}---------------------------{line}Nothing: {pebble}{line}---------------------------{line}Spell: {spell}{line}     Attack: {attack}{line}     Defense: {defense}{line}     Restorative: {restorative}{line}     Starter Spell: {spellStarter}{line}---------------------------{line}Weapon: {weap}{line}     Sword: {sword}{line}     Dagger: {dagger}{line}     GreatSword: {greatsword}{line}     Katana: {katana}{line}     Staff: {staff}{line}     Focus Stone: {focusStone}{line}     Spear: {spear}{line}     Dragon Spear:  {dragonSpear}{line}     Twin Swords: {twinSwords}{line}     Other:  {other}{line}     Starter Weapon: {weaponStarter}{line}---------------------------{line}Rarity:{line}     Common:  {common}{line}     Uncommon: {uncommon}{line}     Rare: {rare}{line}     Epic: {epic}{line}     Legendary: {legendary}{line}---------------------------{line}Unique Items: {isUnique}";
+        }
+
+        public static string ShowBackPackItems()
+        {
+            string itemList = "";
+            int number = 1;
+            List<IBackPackItem> TestBackPack = new List<IBackPackItem>();
+            TestBackPack.Add(new Item() { Name = "Mr. Meeseeks 1", Desc = "Existence is pain, Jerry.", Worth = 42, });
+            TestBackPack.Add(new Item() { Name = "Mr. Meeseeks 2", Desc = "Existence is pain, Jerry.", Worth = 42, });
+            TestBackPack.Add(new Armor() { Name = "Mr. Meeseeks 3", Desc = "Existence is pain, Jerry.", Worth = 42, });
+            TestBackPack.Add(new Armor() { Name = "Mr. Meeseeks 4", Desc = "Existence is pain, Jerry.", Worth = 42, });
+            TestBackPack.Add(new Weapon() { Name = "Mr. Meeseeks 5", Desc = "Existence is pain, Jerry.", Worth = 42, });
+            TestBackPack.Add(new Weapon() { Name = "Mr. Meeseeks 6", Desc = "Existence is pain, Jerry.", Worth = 42, });
+
+            foreach (IBackPackItem i in TestBackPack)
+            {
+                itemList = $"{itemList} [{number}] - Type: {i.GetLootType()}     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
+                number++;
+            }
+            return itemList;
         }
 
         public static string GetMarried()

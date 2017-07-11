@@ -1360,7 +1360,7 @@ namespace PersonalDiscordBot
         {
             //Permissions.SerializePermissions();
             //Management.SerializeData();
-            uStatusUpdate(Testing.RandomItem());
+            uStatusUpdate(Testing.ShowBackPackItems());
         }
 
         private void SetupTest()

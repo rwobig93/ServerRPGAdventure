@@ -922,7 +922,7 @@ namespace PersonalDiscordBot.Classes
                  ";test armor{0}" +
                  ";test thing{0}" +
                  ";test rng weap %Number%{0}" +
-                 ";test rng spell %Number%{0}"+
+                 ";test rng spell %Number%{0}" +
                  ";test rng armor %Number%{0}" +
                  ";test rng thing %Number%{0}" +
                  ";test lootdrop{0}" +
@@ -944,7 +944,8 @@ namespace PersonalDiscordBot.Classes
                  ";test change description{0}" +
                  ";test add loot{0}" +
                  ";test testing %Role/Group%{0}" +
-                 ";test log channel %MentionChannel%```",
+                 ";test log channel %MentionChannel%```"+
+                 ";test check backpack",
                  Environment.NewLine
                 );
                 await Context.Channel.SendMessageAsync(_helpArticle);
@@ -2321,6 +2322,27 @@ namespace PersonalDiscordBot.Classes
                     Toolbox.uDebugAddLog($"Removed {channel.Name} | {channel.Id} as the logging channel [ID]{Context.User.Id}");
                     await Context.Channel.SendMessageAsync($"{Context.User.Mention} The **{channel.Name}** channel has been removed as the logging channel");
                 }
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("check backpack"), Summary("Testicules checks the loot in his backpack")]
+        public async Task Testacules24()
+        {
+            try
+            {
+                if (!await HasTestingPermission(Context))
+                    return;
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have any characters, please create one before trying to view your phat loot");
+                    return;
+                }
+                Management.CheckCharacterStats(Context);
             }
             catch (Exception ex)
             {

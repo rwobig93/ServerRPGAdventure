@@ -1,0 +1,67 @@
+07/11/2017_11:42 AM :: Running DEBUG Mode
+07/11/2017_11:42 AM :: Deserializing Permission Data
+07/11/2017_11:42 AM :: Deserializing Sava Data
+07/11/2017_11:42 AM :: Version updated to 1.0.6401.21067
+07/11/2017_11:42 AM :: Admin Deserialization Complete
+07/11/2017_11:42 AM :: Owner Deserialization Complete
+07/11/2017_11:42 AM :: Refreshed admin list, total admins: 0
+07/11/2017_11:42 AM :: 1Mr. Meeseeks 1 Existence is pain, Jerry. 1 42
+2Mr. Meeseeks 2 Existence is pain, Jerry. 3 42
+3Mr. Meeseeks 3 Existence is pain, Jerry. 32435 42
+4Mr. Meeseeks 4 Existence is pain, Jerry. -5 42
+5Mr. Meeseeks 5 Existence is pain, Jerry. 734 42
+6Mr. Meeseeks 6 Existence is pain, Jerry. 295 42
+
+07/11/2017_11:42 AM :: Serializing Permission Data
+07/11/2017_11:42 AM :: Serializing Save Data
+
+07/11/2017_11:45 AM :: Running DEBUG Mode
+07/11/2017_11:45 AM :: Deserializing Sava Data
+07/11/2017_11:45 AM :: Deserializing Permission Data
+07/11/2017_11:45 AM :: Version updated to 1.0.6401.21169
+07/11/2017_11:45 AM :: Owner Deserialization Complete
+07/11/2017_11:45 AM :: Admin Deserialization Complete
+07/11/2017_11:45 AM :: Item 1:     Name: Mr. Meeseeks 1     Description: Existence is pain, Jerry.     Count: 1     Worth: 42
+Item 2:     Name: Mr. Meeseeks 2     Description: Existence is pain, Jerry.     Count: 3     Worth: 42
+Item 3:     Name: Mr. Meeseeks 3     Description: Existence is pain, Jerry.     Count: 32435     Worth: 42
+Item 4:     Name: Mr. Meeseeks 4     Description: Existence is pain, Jerry.     Count: -5     Worth: 42
+Item 5:     Name: Mr. Meeseeks 5     Description: Existence is pain, Jerry.     Count: 734     Worth: 42
+Item 6:     Name: Mr. Meeseeks 6     Description: Existence is pain, Jerry.     Count: 295     Worth: 42
+
+07/11/2017_11:45 AM :: Refreshed admin list, total admins: 0
+07/11/2017_11:46 AM :: Serializing Save Data
+
+07/11/2017_1:53 PM :: Running DEBUG Mode
+07/11/2017_1:53 PM :: Deserializing Permission Data
+07/11/2017_1:53 PM :: Deserializing Sava Data
+07/11/2017_1:53 PM :: Version updated to 1.0.6401.25002
+07/11/2017_1:53 PM :: Admin Deserialization Complete
+07/11/2017_1:53 PM :: Owner Deserialization Complete
+07/11/2017_1:53 PM :: Refreshed admin list, total admins: 0
+07/11/2017_1:53 PM ::  Item 1:     Name: Mr. Meeseeks 1     Description: Existence is pain, Jerry.     Worth: 42
+ Item 2:     Name: Mr. Meeseeks 2     Description: Existence is pain, Jerry.     Worth: 42
+ Armor 3:     Name: Mr. Meeseeks 3     Description: Existence is pain, Jerry.     Worth: 42
+ Armor 4:     Name: Mr. Meeseeks 4     Description: Existence is pain, Jerry.     Worth: 42
+ Weapon 5:     Name: Mr. Meeseeks 5     Description: Existence is pain, Jerry.     Worth: 42
+ Weapon 6:     Name: Mr. Meeseeks 6     Description: Existence is pain, Jerry.     Worth: 42
+
+07/11/2017_1:53 PM :: Serializing Save Data
+07/11/2017_1:53 PM :: Serializing Permission Data
+
+07/11/2017_1:55 PM :: Deserializing Sava Data
+07/11/2017_1:55 PM :: Running DEBUG Mode
+07/11/2017_1:55 PM :: Deserializing Permission Data
+07/11/2017_1:55 PM :: Owner Deserialization Complete
+07/11/2017_1:55 PM :: Admin Deserialization Complete
+07/11/2017_1:55 PM :: Version updated to 1.0.6401.25050
+07/11/2017_1:55 PM ::  [1] - Type: Item     Name: Mr. Meeseeks 1     Description: Existence is pain, Jerry.     Worth: 42
+ [2] - Type: Item     Name: Mr. Meeseeks 2     Description: Existence is pain, Jerry.     Worth: 42
+ [3] - Type: Armor     Name: Mr. Meeseeks 3     Description: Existence is pain, Jerry.     Worth: 42
+ [4] - Type: Armor     Name: Mr. Meeseeks 4     Description: Existence is pain, Jerry.     Worth: 42
+ [5] - Type: Weapon     Name: Mr. Meeseeks 5     Description: Existence is pain, Jerry.     Worth: 42
+ [6] - Type: Weapon     Name: Mr. Meeseeks 6     Description: Existence is pain, Jerry.     Worth: 42
+
+07/11/2017_1:55 PM :: Refreshed admin list, total admins: 0
+07/11/2017_1:55 PM :: Serializing Save Data
+07/11/2017_1:55 PM :: Serializing Permission Data
+
