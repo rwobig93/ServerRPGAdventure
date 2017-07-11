@@ -34,6 +34,7 @@ namespace PersonalDiscordBot.Classes
         public ulong OwnerID { get; set; }
         public string Name { get; set; }
         public string Desc { get; set; } = "A new adventurer set out to..... Adventure?";
+        public string ImgURL { get { if (string.IsNullOrWhiteSpace(this.ImgURL)) { return Management.GetCharacterImgDefault(this); } else { return this.ImgURL; } } set { this.ImgURL = value; } }
         public CharacterClass Class { get; set; }
         public Weapon Weapon { get; set; }
         public Weapon StarterWeapon { get { return Weapons.GetStarterWeapon(this); } }
@@ -45,7 +46,7 @@ namespace PersonalDiscordBot.Classes
         public IDidTheThingPlayer ThingsDone = new IDidTheThingPlayer();
         public List<Affliction> StatusEffects = new List<Affliction>();
         public Discord.Color Color { get; set; } = new Discord.Color(21, 96, 216);
-        public PriorityFactors PF { get { return PriorityFactors.GetPF(this); } }
+        public PriorityFactors PF { get { if (this.Name != "Testiculees teh Great") { return PriorityFactors.GetPF(this); } else { return PriorityFactors.SetPF(10, 10, 10, 10, 10, 10); } } }
         public int Pebbles { get; set; } = 0;
         public int Lvl { get; set; }
         public int Exp { get; set; }
@@ -95,17 +96,19 @@ namespace PersonalDiscordBot.Classes
         public Armor Armor { get; set; }
         public List<Affliction> StatusEffects = new List<Affliction>();
         public Discord.Color Color { get; set; } = new Discord.Color(219, 0, 0);
+        public PriorityFactors PF { get; set; } = PriorityFactors.SetPF(3, 2, 3, 1, 4, 1);
         public int Lvl { get; set; }
         public int ExpLoot { get; set; }
-        public int MaxHP { get; set; }
+        public int MaxHP { get { if (this.MaxHP == 0) { return RPG.HPMPStatCalc(this, this.Def, this.PF.Def); } else { return this.MaxHP; } } set { this.MaxHP = value; } }
         public int CurrentHP { get; set; }
-        public int Mana { get; set; }
-        public int Str { get; set; }
-        public int Def { get; set; }
-        public int Dex { get; set; }
-        public int Int { get; set; }
-        public int Spd { get; set; }
-        public int Lck { get; set; }
+        public int MaxMana { get { if (this.MaxMana == 0) { return RPG.HPMPStatCalc(this, this.Int, this.PF.Int); } else { return this.MaxMana; } } }
+        public int CurrentMana { get; set; }
+        public int Str { get { if (this.Str == 0) { return RPG.VitalStatCalc(this, this.PF.Str); } else { return this.Str; } } set { this.Str = value; } }
+        public int Def { get { if (this.Def == 0) { return RPG.VitalStatCalc(this, this.PF.Def); } else { return this.Def; } } set { this.Def = value; } }
+        public int Dex { get { if (this.Dex == 0) { return RPG.VitalStatCalc(this, this.PF.Dex); } else { return this.Dex; } } set { this.Dex = value; } }
+        public int Int { get { if (this.Int == 0) { return RPG.VitalStatCalc(this, this.PF.Int); } else { return this.Int; } } set { this.Int = value; } }
+        public int Spd { get { if (this.Spd == 0) { return RPG.VitalStatCalc(this, this.PF.Spd); } else { return this.Spd; } } set { this.Spd = value; } }
+        public int Lck { get { if (this.Lck == 0) { return RPG.VitalStatCalc(this, this.PF.Lck); } else { return this.Lck; } } set { this.Lck = value; } }
     }
 
     public class Boss : Enemy
@@ -404,6 +407,10 @@ namespace PersonalDiscordBot.Classes
             }
             return pf;
         }
+        public static PriorityFactors SetPF(int str, int def, int dex, int inT, int spd, int lck)
+        {
+            return new PriorityFactors() { STR = str, DEF = def, DEX = dex, INT = inT, SPD = spd, LCK = lck };
+        }
         private int STR;
         private int DEF;
         private int DEX;
@@ -478,6 +485,29 @@ namespace PersonalDiscordBot.Classes
         public static int HPMPStatCalc(Character chara, int stat, int statPF)
         {
             return ((stat / 2) + (statPF * chara.Lvl) + (statPF * 4));
+        }
+
+        /// <summary>
+        /// Calculates Vital statistics based on priority factor of the enemy on each stat
+        /// </summary>
+        /// <param name="chara"></param>
+        /// <param name="statPF"></param>
+        /// <returns></returns>
+        public static int VitalStatCalc(Enemy enemy, int statPF)
+        {
+            return ((statPF * enemy.Lvl) + (2 * (enemy.Lvl % 3)) + (10 + enemy.Lvl));
+        }
+
+        /// <summary>
+        /// Calculates HP/MP statistics baed on the current respective stat and the enemy's priority factor
+        /// </summary>
+        /// <param name="chara"></param>
+        /// <param name="stat"></param>
+        /// <param name="statPF"></param>
+        /// <returns></returns>
+        public static int HPMPStatCalc(Enemy enemy, int stat, int statPF)
+        {
+            return ((stat / 2) + (statPF * enemy.Lvl) + (statPF * 4));
         }
 
         #endregion
@@ -910,6 +940,7 @@ namespace PersonalDiscordBot.Classes
                     },
                     Color = new Discord.Color(21, 96, 216),
                     Title = owner.CurrentCharacter.Desc,
+                    ImageUrl = owner.CurrentCharacter.ImgURL,
                     Description = $"Backpack Storage: {owner.CurrentCharacter.Backpack.Stored.Count}/{owner.CurrentCharacter.Backpack.Capacity}{line}Level: {owner.CurrentCharacter.Lvl}{line}Experience: {owner.CurrentCharacter.Exp}{line}HP: {owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP}{line}Mana: {owner.CurrentCharacter.CurrentMana}/{owner.CurrentCharacter.MaxMana}{line}Strength: {owner.CurrentCharacter.Str}{line}Defense: {owner.CurrentCharacter.Def}{line}Dexterity: {owner.CurrentCharacter.Dex}{line}Intelligence: {owner.CurrentCharacter.Int}{line}Speed: {owner.CurrentCharacter.Spd}{line}Luck: {owner.CurrentCharacter.Lck}",
                     Footer = new EmbedFooterBuilder()
                     {
@@ -954,6 +985,30 @@ namespace PersonalDiscordBot.Classes
             {
                 Toolbox.FullExceptionLog(ex);
             }
+        }
+
+        public static string GetCharacterImgDefault(Character chara)
+        {
+            string imgURL = string.Empty;
+            switch (chara.Class)
+            {
+                case CharacterClass.Warrior:
+                    imgURL = "http://imgur.com/J2XiNOV.png";
+                    break;
+                case CharacterClass.Dragoon:
+                    imgURL = "http://imgur.com/J2XiNOV.png";
+                    break;
+                case CharacterClass.Mage:
+                    imgURL = "http://i.imgur.com/DBhxgnw.png";
+                    break;
+                case CharacterClass.Necromancer:
+                    imgURL = "http://i.imgur.com/DBhxgnw.png";
+                    break;
+                case CharacterClass.Rogue:
+                    imgURL = "http://imgur.com/J2XiNOV.png";
+                    break;
+            }
+            return imgURL;
         }
 
         #endregion
@@ -4277,7 +4332,7 @@ namespace PersonalDiscordBot.Classes
 
         #region Static Enemies
 
-        public static Enemy punchingBag = new Enemy() { Name = "PunchingBag", Desc = "I was created by our developer gods as a baseline for combat, I also pass butter", Def = 5, Dex = 5, Int = 5, Lck = 5, Lvl = 1, Mana = 5, MaxHP = 100, CurrentHP = 100, Str = 5, Spd = 100, ExpLoot = 50, Armor = Armors.basicEnemyArmor, Weapon = Weapons.enemySword };
+        public static Enemy punchingBag = new Enemy() { Name = "PunchingBag", Desc = "I was created by our developer gods as a baseline for combat, I also pass butter", Lvl = 1, ExpLoot = 50, Armor = Armors.basicEnemyArmor, Weapon = Weapons.enemySword };
 
         #endregion
     }

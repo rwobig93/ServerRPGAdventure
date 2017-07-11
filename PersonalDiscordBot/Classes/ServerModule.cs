@@ -1641,8 +1641,17 @@ namespace PersonalDiscordBot.Classes
                                 response = msg.Content.ToString();
                                 Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
                                 Toolbox.uDebugAddLog($"Response: {response}");
-                                charName = response;
-                                responseRecvd2 = true;
+                                if (response == "Testiculees teh Great")
+                                {
+                                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} Nice try but you are not the great one, that power is beyond your reach!");
+                                    Toolbox.uDebugAddLog($"{Context.User.Username} tried to recreate Testiculees and we told them no [ID]{Context.User.Id}");
+                                }
+                                else
+                                {
+                                    Toolbox.uDebugAddLog($"Valid response recieved, setting Character name [ID]{Context.User.Id}");
+                                    charName = response;
+                                    responseRecvd2 = true;
+                                }
                             }
                         }
                         if (timeStamp2 + TimeSpan.FromSeconds(60) <= DateTime.Now)
@@ -1815,6 +1824,7 @@ namespace PersonalDiscordBot.Classes
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't have a character yet, try creating one... pleb");
                     return;
                 }
+                
                 string response = $"Please enter the number for the respective character you want to use:{line}";
                 int counter = 0;
                 foreach (Character chara in ownerProfile.CharacterList)
