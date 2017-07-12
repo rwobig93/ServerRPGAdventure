@@ -35,8 +35,8 @@ namespace PersonalDiscordBot.Classes
         public string Name { get; set; }
         public string Desc { get; set; } = "A new adventurer set out to..... Adventure?";
         private string imgUrl = string.Empty;
-        public string ImgURL { get { if (string.IsNullOrWhiteSpace(imgUrl)) { return Management.GetCharacterImgDefault(this); } else { return imgUrl; } } set { imgUrl = value; } }
         public CharacterClass Class { get; set; }
+        public string ImgURL { get { if (string.IsNullOrWhiteSpace(imgUrl)) { return Management.GetCharacterImgDefault(this); } else { return imgUrl; } } set { imgUrl = value; } }
         public Weapon Weapon { get; set; }
         public Weapon StarterWeapon { get { return Weapons.GetStarterWeapon(this); } }
         public Armor Armor { get; set; }
@@ -93,6 +93,10 @@ namespace PersonalDiscordBot.Classes
     {
         public string Name { get; set; }
         public string Desc { get; set; } = "I want your bod, not in a sexual or romantic way. But more of a dead and ragdoll kinda way";
+        public EnemyType Type { get; set; }
+        public EnemyTier Tier { get; set; }
+        private string imgUrl = string.Empty;
+        public string ImgURL { get { if (string.IsNullOrWhiteSpace(imgUrl)) { return Management.GetEnemyImg(this); } else { return imgUrl; } } set { imgUrl = value; } }
         public Weapon Weapon { get; set; }
         public Armor Armor { get; set; }
         public List<Affliction> StatusEffects = new List<Affliction>();
@@ -640,7 +644,8 @@ namespace PersonalDiscordBot.Classes
             DarkKnight,
             Bear,
             MattPegler,
-            DickWobig
+            DickWobig,
+            ButterRobot
         }
 
         public enum MatchCompleteResult
@@ -1077,6 +1082,18 @@ namespace PersonalDiscordBot.Classes
                     break;
                 case CharacterClass.Rogue:
                     imgURL = "http://imgur.com/J2XiNOV.png";
+                    break;
+            }
+            return imgURL;
+        }
+
+        public static string GetEnemyImg(Enemy enemy)
+        {
+            string imgURL = string.Empty;
+            switch (enemy.Type)
+            {
+                case EnemyType.ButterRobot:
+                    imgURL = "http://imgur.com/DborMgE.png";
                     break;
             }
             return imgURL;
@@ -2304,8 +2321,7 @@ namespace PersonalDiscordBot.Classes
             currencyAdded = 0;
             int filtered = 0;
             int total = chara.Loot.Count;
-            var lootList = chara.Loot;
-            foreach (var bpItem in lootList)
+            foreach (var bpItem in chara.Loot)
             {
                 var lootType = bpItem.GetLootType();
                 switch (lootType)

@@ -138,6 +138,7 @@ namespace PersonalDiscordBot
                 string _senderText = sender.ToString();
                 Thread _updateConn = new Thread(tUpdateConnectionStatus);
                 _updateConn.Start();
+                await SendConnectedMsg();
             }
             catch (Exception ex)
             {
@@ -1218,20 +1219,6 @@ namespace PersonalDiscordBot
                 await client.ConnectAsync();
 
                 ShowNotification($"Bot {client.CurrentUser.Username} Successfully Connected", 4);
-
-                if (Permissions.GeneralPermissions.logChannel != 0)
-                {
-                    var channel = client.GetChannel(Permissions.GeneralPermissions.logChannel);
-                    if (channel != null)
-                    {
-#if DEBUG
-                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has connected in DEBUG Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
-#else
-                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has connected biiiiiiiiiiiiiiiiiiiiiiatch!!!");
-#endif
-                        ShowNotification($"Bot {client.CurrentUser.Username} Sent connected message to log channel {((IMessageChannel)channel).Name}", 6);
-                    }
-                }
             }
             catch (Exception ex)
             {
@@ -1349,6 +1336,28 @@ namespace PersonalDiscordBot
             catch (Exception ex)
             {
                 FullExceptionLog(ex);
+            }
+        }
+
+        private async Task SendConnectedMsg()
+        {
+            await Task.Delay(3000);
+            if (Permissions.GeneralPermissions.logChannel != 0)
+            {
+                var channel = client.GetChannel(Permissions.GeneralPermissions.logChannel);
+                if (channel != null)
+                {
+#if DEBUG
+                    await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has connected in DEBUG Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+                    Toolbox.uDebugAddLog($"Sent connected debug message to channel {channel.Id}");
+#else
+                    await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has connected biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+                    Toolbox.uDebugAddLog($"Sent connected message to channel {channel.Id}");
+#endif
+                    ShowNotification($"Bot {client.CurrentUser.Username} Sent connected message to log channel {((IMessageChannel)channel).Name}", 6);
+                }
+                else
+                    Toolbox.uDebugAddLog($"IMessageChannel came back null when looking for {Permissions.GeneralPermissions.logChannel}, connected message wasn't sent");
             }
         }
 
