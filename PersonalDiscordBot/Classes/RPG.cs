@@ -34,7 +34,8 @@ namespace PersonalDiscordBot.Classes
         public ulong OwnerID { get; set; }
         public string Name { get; set; }
         public string Desc { get; set; } = "A new adventurer set out to..... Adventure?";
-        public string ImgURL { get { if (string.IsNullOrWhiteSpace(this.ImgURL)) { return Management.GetCharacterImgDefault(this); } else { return this.ImgURL; } } set { this.ImgURL = value; } }
+        private string imgUrl = string.Empty;
+        public string ImgURL { get { if (string.IsNullOrWhiteSpace(imgUrl)) { return Management.GetCharacterImgDefault(this); } else { return imgUrl; } } set { imgUrl = value; } }
         public CharacterClass Class { get; set; }
         public Weapon Weapon { get; set; }
         public Weapon StarterWeapon { get { return Weapons.GetStarterWeapon(this); } }
@@ -50,16 +51,16 @@ namespace PersonalDiscordBot.Classes
         public int Pebbles { get; set; } = 0;
         public int Lvl { get; set; }
         public int Exp { get; set; }
-        public int MaxHP { get { if (this.MaxHP == 0) { return RPG.HPMPStatCalc(this, this.Def, this.PF.Def); } else { return this.MaxHP; } } set { this.MaxHP = value; } }
+        public int MaxHP { get { return RPG.HPMPStatCalc(this, this.Def, this.PF.Def); } }
         public int CurrentHP { get; set; }
-        public int MaxMana { get { if (this.MaxMana == 0) { return RPG.HPMPStatCalc(this, this.Int, this.PF.Int); } else { return this.MaxMana; } } }
+        public int MaxMana { get { return RPG.HPMPStatCalc(this, this.Int, this.PF.Int);} }
         public int CurrentMana { get; set; }
-        public int Str { get { if (this.Str == 0) { return RPG.VitalStatCalc(this, this.PF.Str); } else { return this.Str; } } set { this.Str = value; } }
-        public int Def { get { if (this.Def == 0) { return RPG.VitalStatCalc(this, this.PF.Def); } else { return this.Def; } } set { this.Def = value; } }
-        public int Dex { get { if (this.Dex == 0) { return RPG.VitalStatCalc(this, this.PF.Dex); } else { return this.Dex; } } set { this.Dex = value; } }
-        public int Int { get { if (this.Int == 0) { return RPG.VitalStatCalc(this, this.PF.Int); } else { return this.Int; } } set { this.Int = value; } }
-        public int Spd { get { if (this.Spd == 0) { return RPG.VitalStatCalc(this, this.PF.Spd); } else { return this.Spd; } } set { this.Spd = value; } }
-        public int Lck { get { if (this.Lck == 0) { return RPG.VitalStatCalc(this, this.PF.Lck); } else { return this.Lck; } } set { this.Lck = value; } }
+        public int Str { get { return RPG.VitalStatCalc(this, this.PF.Str); } }
+        public int Def { get { return RPG.VitalStatCalc(this, this.PF.Def); } }
+        public int Dex { get { return RPG.VitalStatCalc(this, this.PF.Dex); } }
+        public int Int { get { return RPG.VitalStatCalc(this, this.PF.Int); } }
+        public int Spd { get { return RPG.VitalStatCalc(this, this.PF.Spd); } }
+        public int Lck { get { return RPG.VitalStatCalc(this, this.PF.Lck); } }
     }
 
     public class Match
@@ -96,19 +97,19 @@ namespace PersonalDiscordBot.Classes
         public Armor Armor { get; set; }
         public List<Affliction> StatusEffects = new List<Affliction>();
         public Discord.Color Color { get; set; } = new Discord.Color(219, 0, 0);
-        public PriorityFactors PF { get; set; } = PriorityFactors.SetPF(3, 2, 3, 1, 4, 1);
+        public PriorityFactors PF { get; set; } = PriorityFactors.SetPF(4, 3, 3, 1, 4, 1);
         public int Lvl { get; set; }
         public int ExpLoot { get; set; }
-        public int MaxHP { get { if (this.MaxHP == 0) { return RPG.HPMPStatCalc(this, this.Def, this.PF.Def); } else { return this.MaxHP; } } set { this.MaxHP = value; } }
+        public int MaxHP { get { return RPG.HPMPStatCalc(this, this.Def, this.PF.Def); } }
         public int CurrentHP { get; set; }
-        public int MaxMana { get { if (this.MaxMana == 0) { return RPG.HPMPStatCalc(this, this.Int, this.PF.Int); } else { return this.MaxMana; } } }
+        public int MaxMana { get { return RPG.HPMPStatCalc(this, this.Int, this.PF.Int); } }
         public int CurrentMana { get; set; }
-        public int Str { get { if (this.Str == 0) { return RPG.VitalStatCalc(this, this.PF.Str); } else { return this.Str; } } set { this.Str = value; } }
-        public int Def { get { if (this.Def == 0) { return RPG.VitalStatCalc(this, this.PF.Def); } else { return this.Def; } } set { this.Def = value; } }
-        public int Dex { get { if (this.Dex == 0) { return RPG.VitalStatCalc(this, this.PF.Dex); } else { return this.Dex; } } set { this.Dex = value; } }
-        public int Int { get { if (this.Int == 0) { return RPG.VitalStatCalc(this, this.PF.Int); } else { return this.Int; } } set { this.Int = value; } }
-        public int Spd { get { if (this.Spd == 0) { return RPG.VitalStatCalc(this, this.PF.Spd); } else { return this.Spd; } } set { this.Spd = value; } }
-        public int Lck { get { if (this.Lck == 0) { return RPG.VitalStatCalc(this, this.PF.Lck); } else { return this.Lck; } } set { this.Lck = value; } }
+        public int Str { get { return RPG.VitalStatCalc(this, this.PF.Str); } }
+        public int Def { get { return RPG.VitalStatCalc(this, this.PF.Def); } }
+        public int Dex { get { return RPG.VitalStatCalc(this, this.PF.Dex); } }
+        public int Int { get { return RPG.VitalStatCalc(this, this.PF.Int); } }
+        public int Spd { get { return RPG.VitalStatCalc(this, this.PF.Spd); } }
+        public int Lck { get { return RPG.VitalStatCalc(this, this.PF.Lck); } }
     }
 
     public class Boss : Enemy
@@ -1099,7 +1100,7 @@ namespace PersonalDiscordBot.Classes
                     }
                     Toolbox.uDebugAddLog($"Generating new match for {owner.OwnerID}");
                     Match newMatch = new Match() { Owner = owner, MatchStart = DateTime.Now };
-                    Enemy newEnemy = Enemies.CopyNewEnemy(Enemies.punchingBag);
+                    Enemy newEnemy = Enemies.punchingBag();
                     newMatch.CurrentEnemy = newEnemy;
                     newMatch.EnemyList.Add(newEnemy);
                     Toolbox.uDebugAddLog($"Generated enemy {newEnemy.Name}, set as current enemy and added to the enemy list for {owner.OwnerID}");
@@ -4030,17 +4031,17 @@ namespace PersonalDiscordBot.Classes
 
         #region Static Armors
 
-        public static Armor knightArmor = new Armor { Name = "Novice Knight Armor", Type = ArmorType.Heavy, Lvl = 1, Speed = 50, Worth = 100, MaxDurability = 20, CurrentDurability = 20, Physical = 100, Desc = "Some beatup old armor you found in the old shed out back, next to the bones of an old dog... what was it's name again?" };
-        public static Armor mageRobe = new Armor { Name = "Novice Mages' Robe", Type = ArmorType.Light, CurrentDurability = 10, MaxDurability = 10, Speed = 150, Worth = 100, Magic = 100, Lvl = 1, Physical = 10, Desc = "These might be 'Robes' if you believe hard enough, go on, believe... I can wait" };
-        public static Armor thieveGarb = new Armor { Name = "Novice thieves Garb", Type = ArmorType.Light, CurrentDurability = 15, Lvl = 1, MaxDurability = 15, Speed = 130, Worth = 100, Physical = 70, Magic = 30, Desc = "What better way to rock your first gear then to steal it, even if it was from old miss bitchface who is a blind amputee" };
-        public static Armor undeadArmor = new Armor { Name = "Undead Armor", Type = ArmorType.Medium, CurrentDurability = 18, MaxDurability = 18, Lvl = 1, Speed = 80, Worth = 100, Physical = 85, Magic = 30, Desc = "Nothing weird here, you just picked up the bones from some dead people and strapped it to your body... they weren't using it anyway" };
-        public static Armor dragonArmor = new Armor { Name = "Novice Dragon Hunter Armor", Type = ArmorType.Medium, Lvl = 1, MaxDurability = 20, CurrentDurability = 20, Speed = 100, Worth = 100, Physical = 6, Fire = 10, Ice = 10, Lightning = 10, Wind = 10, Desc = "Bad. Ass. Bad. Ass. Bad. Ass. Bad. Ass. - Naive thoughts running in your mind" };
-        public static Armor royalRobeArmor = new Armor { Name = "Royal Robes", Type = ArmorType.Light, Lvl = 1, MaxDurability = 10, CurrentDurability = 10, Speed = 150, Worth = 100, Magic = 100, Physical = 10, Desc = "Yer a hairy Wizard!" };
-        public static Armor glassArmor = new Armor { Name = "Glass Armor", Type = ArmorType.Light, Lvl = 1, MaxDurability = 10, CurrentDurability = 10, Speed = 150, Worth = 100, Magic = 100, Physical = 10, Desc = "The Emperor's new armor" };
-        public static Armor leatheryArmor = new Armor { Name = "Skin Tight Leather Armor", Type = ArmorType.Medium, Lvl = 1, MaxDurability = 18, CurrentDurability = 18, Speed = 80, Worth = 100, Physical = 85, Magic = 20, Desc = "Why do Rogues wear leather? It's made of hide" };
-        public static Armor scaleArmor = new Armor { Name = "Golden Scale Armor", Type = ArmorType.Medium, Lvl = 1, MaxDurability = 18, CurrentDurability = 18, Speed = 80, Worth = 100, Physical = 85, Magic = 20, Desc = "Scaley scales to scale...scaley" };
-        public static Armor blackPlateArmor = new Armor { Name = "Blackened Plate Armor", Type = ArmorType.Heavy, Lvl = 1, MaxDurability = 30, CurrentDurability = 30, Speed = 60, Worth = 100, Physical = 100, Desc = "Armor darker than your Emo phase" };
-        public static Armor imperialArmor = new Armor { Name = "Imperial Armor", Type = ArmorType.Heavy, Lvl = 1, MaxDurability = 30, CurrentDurability = 30, Speed = 60, Worth = 100, Physical = 100, Desc = "Armor that tends to be weaker around the knees. Mind the arrows" };
+        public static Armor knightArmor = new Armor { Name = "Novice Knight Armor", Type = ArmorType.Heavy, Lvl = 1, Speed = 50, Worth = 100, MaxDurability = 20, CurrentDurability = 20, Physical = 6, Desc = "Some beatup old armor you found in the old shed out back, next to the bones of an old dog... what was it's name again?" };
+        public static Armor mageRobe = new Armor { Name = "Novice Mages' Robe", Type = ArmorType.Light, CurrentDurability = 10, MaxDurability = 10, Speed = 150, Worth = 100, Magic = 100, Lvl = 1, Physical = 2, Desc = "These might be 'Robes' if you believe hard enough, go on, believe... I can wait" };
+        public static Armor thieveGarb = new Armor { Name = "Novice thieves Garb", Type = ArmorType.Light, CurrentDurability = 15, Lvl = 1, MaxDurability = 15, Speed = 130, Worth = 100, Physical = 3, Magic = 30, Desc = "What better way to rock your first gear then to steal it, even if it was from old miss bitchface who is a blind amputee" };
+        public static Armor undeadArmor = new Armor { Name = "Undead Armor", Type = ArmorType.Medium, CurrentDurability = 18, MaxDurability = 18, Lvl = 1, Speed = 80, Worth = 100, Physical = 5, Magic = 30, Desc = "Nothing weird here, you just picked up the bones from some dead people and strapped it to your body... they weren't using it anyway" };
+        public static Armor dragonArmor = new Armor { Name = "Novice Dragon Hunter Armor", Type = ArmorType.Medium, Lvl = 1, MaxDurability = 20, CurrentDurability = 20, Speed = 100, Worth = 100, Physical = 4, Fire = 10, Ice = 10, Lightning = 10, Wind = 10, Desc = "Bad. Ass. Bad. Ass. Bad. Ass. Bad. Ass. - Naive thoughts running in your mind" };
+        public static Armor royalRobeArmor = new Armor { Name = "Royal Robes", Type = ArmorType.Light, Lvl = 1, MaxDurability = 10, CurrentDurability = 10, Speed = 150, Worth = 100, Magic = 100, Physical = 6, Desc = "Yer a hairy Wizard!" };
+        public static Armor glassArmor = new Armor { Name = "Glass Armor", Type = ArmorType.Light, Lvl = 1, MaxDurability = 10, CurrentDurability = 10, Speed = 150, Worth = 100, Magic = 100, Physical = 8, Desc = "The Emperor's new armor" };
+        public static Armor leatheryArmor = new Armor { Name = "Skin Tight Leather Armor", Type = ArmorType.Medium, Lvl = 1, MaxDurability = 18, CurrentDurability = 18, Speed = 80, Worth = 100, Physical = 7, Magic = 20, Desc = "Why do Rogues wear leather? It's made of hide" };
+        public static Armor scaleArmor = new Armor { Name = "Golden Scale Armor", Type = ArmorType.Medium, Lvl = 1, MaxDurability = 18, CurrentDurability = 18, Speed = 80, Worth = 100, Physical = 9, Magic = 20, Desc = "Scaley scales to scale...scaley" };
+        public static Armor blackPlateArmor = new Armor { Name = "Blackened Plate Armor", Type = ArmorType.Heavy, Lvl = 1, MaxDurability = 30, CurrentDurability = 30, Speed = 60, Worth = 100, Physical = 10, Desc = "Armor darker than your Emo phase" };
+        public static Armor imperialArmor = new Armor { Name = "Imperial Armor", Type = ArmorType.Heavy, Lvl = 1, MaxDurability = 30, CurrentDurability = 30, Speed = 60, Worth = 100, Physical = 180, Desc = "Armor that tends to be weaker around the knees. Mind the arrows" };
 
         #endregion
 
@@ -4402,7 +4403,8 @@ namespace PersonalDiscordBot.Classes
 
         #region Static Enemies
 
-        public static Enemy punchingBag = new Enemy() { Name = "PunchingBag", Desc = "I was created by our developer gods as a baseline for combat, I also pass butter", Lvl = 1, ExpLoot = 50, Armor = Armors.basicEnemyArmor, Weapon = Weapons.enemySword };
+        public static Enemy punchingBag()
+        { return new Enemy() { Name = "PunchingBag", Desc = "I was created by our developer gods as a baseline for combat, I also pass butter", Lvl = 1, ExpLoot = 50, Armor = Armors.basicEnemyArmor, Weapon = Weapons.enemySword }; }
 
         #endregion
     }
