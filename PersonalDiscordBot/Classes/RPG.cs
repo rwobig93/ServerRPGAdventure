@@ -977,7 +977,7 @@ namespace PersonalDiscordBot.Classes
                 var timestamp = DateTime.Now;
                 List<IMessage> respondeded = new List<IMessage>();
                 Toolbox.uDebugAddLog($"Asking [Owner]{owner.CurrentCharacter.Loot.Count} [ID]{owner.OwnerID} what to see");
-                var backpackMsg = await context.Channel.SendMessageAsync($"What would you like to see? (armor, items, weapons, all)");
+                var backpackMsg = await context.Channel.SendMessageAsync($"What would you like to see? (armor, items, weapons, all, cancel)");
                 bool msgResp = false;
                 if (!msgResp)
                 {
@@ -4127,21 +4127,21 @@ namespace PersonalDiscordBot.Classes
                     armor.Name = $"{rarity} {armorBasicLightNames[lightNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 80;
-                    armor.Physical = ((rng.Next(0, 3) + typeCount + armor.Lvl)); //Min - Max at lvl 1 = 2 - 8
+                    armor.Physical = ((rng.Next(0, 3) + (typeCount * 3) * armor.Lvl));
                     break;
                 case ArmorType.Medium:
                     int mediumNum = rng.Next(0, armorBasicMediumNames.ToArrayLength());
                     armor.Name = $"{rarity} {armorBasicMediumNames[mediumNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 60;
-                    armor.Physical = ((rng.Next(9, 12) + typeCount + armor.Lvl)); //Min - Max at lvl 1 = 11 - 17
+                    armor.Physical = ((rng.Next(9, 12) + (typeCount * 3) * armor.Lvl));
                     break;
                 case ArmorType.Heavy:
                     int heavyNum = rng.Next(0, armorBasicHeavyNames.ToArrayLength());
                     armor.Name = $"{rarity} {armorBasicHeavyNames[heavyNum]}";
                     armor.Desc = $"{armor.Type} {armor.Name}";
                     armor.Speed = ((rng.Next(0, 2) + typeCount + armor.Lvl) * 10) + 40;
-                    armor.Physical = ((rng.Next(18, 21) + typeCount + armor.Lvl)); //Min - Max at lvl 1 = 20 - 26
+                    armor.Physical = ((rng.Next(18, 21) + (typeCount * 3) * armor.Lvl));
                     break;
             }
             ArmorAddElement(armor, typeCount, rarityValue);

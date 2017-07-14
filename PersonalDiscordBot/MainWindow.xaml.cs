@@ -1360,6 +1360,8 @@ namespace PersonalDiscordBot
         {
             //Permissions.SerializePermissions();
             //Management.SerializeData();
+            var toast = Enemies.punchingBag();
+            var hero = Management.CreateNewCharacter(828282, RPG.CharacterClass.Dragoon, "HERO");
             uStatusUpdate(Testing.ShowBackPackItems());
         }
 
