@@ -35,8 +35,8 @@ namespace PersonalDiscordBot.Classes
         public string Name { get; set; }
         public string Desc { get; set; } = "A new adventurer set out to..... Adventure?";
         private string imgUrl = string.Empty;
-        public string ImgURL { get { if (string.IsNullOrWhiteSpace(imgUrl)) { return Management.GetCharacterImgDefault(this); } else { return imgUrl; } } set { imgUrl = value; } }
         public CharacterClass Class { get; set; }
+        public string ImgURL { get { if (string.IsNullOrWhiteSpace(imgUrl)) { return Management.GetCharacterImgDefault(this); } else { return imgUrl; } } set { imgUrl = value; } }
         public Weapon Weapon { get; set; }
         public Weapon StarterWeapon { get { return Weapons.GetStarterWeapon(this); } }
         public Armor Armor { get; set; }
@@ -93,6 +93,10 @@ namespace PersonalDiscordBot.Classes
     {
         public string Name { get; set; }
         public string Desc { get; set; } = "I want your bod, not in a sexual or romantic way. But more of a dead and ragdoll kinda way";
+        public EnemyType Type { get; set; }
+        public EnemyTier Tier { get; set; }
+        private string imgUrl = string.Empty;
+        public string ImgURL { get { if (string.IsNullOrWhiteSpace(imgUrl)) { return Management.GetEnemyImg(this); } else { return imgUrl; } } set { imgUrl = value; } }
         public Weapon Weapon { get; set; }
         public Armor Armor { get; set; }
         public List<Affliction> StatusEffects = new List<Affliction>();
@@ -640,7 +644,8 @@ namespace PersonalDiscordBot.Classes
             DarkKnight,
             Bear,
             MattPegler,
-            DickWobig
+            DickWobig,
+            ButterRobot
         }
 
         public enum MatchCompleteResult
@@ -1082,6 +1087,18 @@ namespace PersonalDiscordBot.Classes
             return imgURL;
         }
 
+        public static string GetEnemyImg(Enemy enemy)
+        {
+            string imgURL = string.Empty;
+            switch (enemy.Type)
+            {
+                case EnemyType.ButterRobot:
+                    imgURL = "http://imgur.com/DborMgE.png";
+                    break;
+            }
+            return imgURL;
+        }
+
         #endregion
 
         #region Combat Methods
@@ -1136,70 +1153,9 @@ namespace PersonalDiscordBot.Classes
                     return;
                 }
                 Toolbox.uDebugAddLog($"Attacking enemy [C]{owner.CurrentCharacter.Name} [E]{enemy.Name} [ID]{owner.OwnerID}");
-                int totalDamage = 0;
-                int physDamage = owner.CurrentCharacter.Weapon.PhysicalDamage;
-                int magiDamage = owner.CurrentCharacter.Weapon.MagicDamage;
-                int fireDamage = owner.CurrentCharacter.Weapon.FireDamage;
-                int lighDamage = owner.CurrentCharacter.Weapon.LightningDamage;
-                int iceeDamage = owner.CurrentCharacter.Weapon.IceDamage;
-                int windDamage = owner.CurrentCharacter.Weapon.WindDamage;
 
-                int enemyPhys = enemy.Armor.Physical;
-                int enemyMagi = enemy.Armor.Magic;
-                int enemyFire = enemy.Armor.Fire;
-                int enemyLigh = enemy.Armor.Lightning;
-                int enemyIcee = enemy.Armor.Ice;
-                int enemyWind = enemy.Armor.Wind;
+                int totalDamage = AttackEnem(owner.CurrentCharacter, enemy);
 
-                Affliction buff = new Affliction();
-                foreach (var affl in owner.CurrentCharacter.StatusEffects)
-                {
-                    if (affl.Positive)
-                    {
-                        Toolbox.uDebugAddLog($"Applying affliction to {owner.CurrentCharacter.Name}, Before: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage} [ID]{owner.OwnerID}");
-                        physDamage += affl.Physical;
-                        magiDamage += affl.Magic;
-                        fireDamage += affl.Fire;
-                        lighDamage += affl.Lightning;
-                        iceeDamage += affl.Ice;
-                        windDamage += affl.Ice;
-                        Toolbox.uDebugAddLog($"Applied affliction to {owner.CurrentCharacter.Name}, After: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage} [ID]{owner.OwnerID}");
-                    }
-                }
-
-                Affliction dmg = new Affliction();
-                foreach (var affl in enemy.StatusEffects)
-                {
-                    if (!affl.Positive)
-                    {
-                        Toolbox.uDebugAddLog($"Applying affliction to {enemy.Name}, Before: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind} [ID]{owner.OwnerID}");
-                        enemyPhys = enemyPhys - affl.Physical >= 0 ? enemyPhys - affl.Physical : 0;
-                        enemyMagi = enemyMagi - affl.Magic >= 0 ? enemyMagi - affl.Magic : 0;
-                        enemyFire = enemyFire - affl.Fire >= 0 ? enemyFire - affl.Fire : 0;
-                        enemyLigh = enemyLigh - affl.Lightning >= 0 ? enemyLigh - affl.Lightning : 0;
-                        enemyIcee = enemyIcee - affl.Ice >= 0 ? enemyIcee - affl.Ice : 0;
-                        enemyWind = enemyWind - affl.Wind >= 0 ? enemyWind - affl.Wind : 0;
-                        Toolbox.uDebugAddLog($"Applied affliction to {enemy.Name}, After: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind} [ID]{owner.OwnerID}");
-                    }
-                }
-
-                Toolbox.uDebugAddLog($"physDamage = ({physDamage} * {owner.CurrentCharacter.Str}) - ({enemyPhys} * {enemy.Def})");
-                physDamage = (physDamage * owner.CurrentCharacter.Str) - (enemyPhys * enemy.Def);
-                if (physDamage <= 0) physDamage = 0;
-                Toolbox.uDebugAddLog("Calculating magiDamage");
-                magiDamage = CalculateElement(magiDamage, enemyMagi);
-                Toolbox.uDebugAddLog("Calculating fireDamage");
-                fireDamage = CalculateElement(fireDamage, enemyFire);
-                Toolbox.uDebugAddLog("Calculating lighDamage");
-                lighDamage = CalculateElement(lighDamage, enemyLigh);
-                Toolbox.uDebugAddLog("Calculating iceeDamage");
-                iceeDamage = CalculateElement(iceeDamage, enemyIcee);
-                Toolbox.uDebugAddLog("Calculating windDamage");
-                windDamage = CalculateElement(windDamage, enemyWind);
-                Toolbox.uDebugAddLog($"Calculated Damage Types: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage} [ID]{owner.OwnerID}");
-
-                totalDamage = physDamage + magiDamage + fireDamage + lighDamage + iceeDamage + windDamage;
-                Toolbox.uDebugAddLog($"Calculated Total Damage: {totalDamage} [ID]{owner.OwnerID}");
                 RPG.MatchList.Find(x => x.Owner == owner).LastPlayerTurn = DateTime.Now;
 
                 if (totalDamage > 0)
@@ -1259,71 +1215,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                Toolbox.uDebugAddLog($"Enemy {enemy.Name} attacking Character {owner.CurrentCharacter.Name} [ID]{owner.OwnerID}");
-                int physDamage = owner.CurrentCharacter.Armor.Physical;
-                int magiDamage = owner.CurrentCharacter.Armor.Magic;
-                int fireDamage = owner.CurrentCharacter.Armor.Fire;
-                int lighDamage = owner.CurrentCharacter.Armor.Lightning;
-                int iceeDamage = owner.CurrentCharacter.Armor.Ice;
-                int windDamage = owner.CurrentCharacter.Armor.Wind;
-
-                int enemyTotal = 0;
-                int enemyPhys = enemy.Weapon.PhysicalDamage;
-                int enemyMagi = enemy.Weapon.MagicDamage;
-                int enemyFire = enemy.Weapon.FireDamage;
-                int enemyLigh = enemy.Weapon.LightningDamage;
-                int enemyIcee = enemy.Weapon.IceDamage;
-                int enemyWind = enemy.Weapon.WindDamage;
-
-                Affliction buff = new Affliction();
-                foreach (var affl in owner.CurrentCharacter.StatusEffects)
-                {
-                    if (affl.Positive)
-                    {
-                        Toolbox.uDebugAddLog($"Applying affliction to {owner.CurrentCharacter.Name}, Before: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage} [ID]{owner.OwnerID}");
-                        physDamage += affl.Physical;
-                        magiDamage += affl.Magic;
-                        fireDamage += affl.Fire;
-                        lighDamage += affl.Lightning;
-                        iceeDamage += affl.Ice;
-                        windDamage += affl.Ice;
-                        Toolbox.uDebugAddLog($"Applied affliction to {owner.CurrentCharacter.Name}, After: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage} [ID]{owner.OwnerID}");
-                    }
-                }
-
-                Affliction dmg = new Affliction();
-                foreach (var affl in enemy.StatusEffects)
-                {
-                    if (!affl.Positive)
-                    {
-                        Toolbox.uDebugAddLog($"Applying affliction to {enemy.Name}, Before: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind} [ID]{owner.OwnerID}");
-                        enemyPhys = enemyPhys - affl.Physical >= 0 ? enemyPhys - affl.Physical : 0;
-                        enemyMagi = enemyMagi - affl.Magic >= 0 ? enemyMagi - affl.Magic : 0;
-                        enemyFire = enemyFire - affl.Fire >= 0 ? enemyFire - affl.Fire : 0;
-                        enemyLigh = enemyLigh - affl.Lightning >= 0 ? enemyLigh - affl.Lightning : 0;
-                        enemyIcee = enemyIcee - affl.Ice >= 0 ? enemyIcee - affl.Ice : 0;
-                        enemyWind = enemyWind - affl.Wind >= 0 ? enemyWind - affl.Wind : 0;
-                        Toolbox.uDebugAddLog($"Applied affliction to {enemy.Name}, After: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind} [ID]{owner.OwnerID}");
-                    }
-                }
-
-                Toolbox.uDebugAddLog($"physDamage = ({enemyPhys} * {enemy.Str}) - ({physDamage} * {owner.CurrentCharacter.Def})");
-                enemyPhys = (enemyPhys * enemy.Str) - (physDamage * owner.CurrentCharacter.Def);
-                if (enemyPhys <= 0) enemyPhys = 0;
-                Toolbox.uDebugAddLog("Calculating magiDamage");
-                enemyMagi = CalculateElement(enemyMagi, magiDamage);
-                Toolbox.uDebugAddLog("Calculating fireDamage");
-                enemyFire = CalculateElement(enemyFire, fireDamage);
-                Toolbox.uDebugAddLog("Calculating lighDamage");
-                enemyLigh = CalculateElement(enemyLigh, lighDamage);
-                Toolbox.uDebugAddLog("Calculating iceeDamage");
-                enemyIcee = CalculateElement(enemyIcee, iceeDamage);
-                Toolbox.uDebugAddLog("Calculating windDamage");
-                enemyWind = CalculateElement(enemyWind, windDamage);
-                Toolbox.uDebugAddLog($"Calculated Damage Types: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind} [ID]{owner.OwnerID}");
-
-                enemyTotal = enemyPhys + enemyMagi + enemyFire + enemyLigh + enemyIcee + enemyWind;
-                Toolbox.uDebugAddLog($"Calculated Total Damage: {enemyTotal} [ID]{owner.OwnerID}");
+                int enemyTotal = AttackChara(enemy, owner.CurrentCharacter);
 
                 if (enemyTotal > 0)
                 {
@@ -2106,6 +1998,154 @@ namespace PersonalDiscordBot.Classes
             Toolbox.uDebugAddLog("Finished affliction removal");
         }
 
+        public static int AttackEnem(Character chara, Enemy enemy)
+        {
+            int totalDamage = 0;
+            int physDamage = chara.Weapon.PhysicalDamage;
+            int magiDamage = chara.Weapon.MagicDamage;
+            int fireDamage = chara.Weapon.FireDamage;
+            int lighDamage = chara.Weapon.LightningDamage;
+            int iceeDamage = chara.Weapon.IceDamage;
+            int windDamage = chara.Weapon.WindDamage;
+
+            int enemyPhys = enemy.Armor.Physical;
+            int enemyMagi = enemy.Armor.Magic;
+            int enemyFire = enemy.Armor.Fire;
+            int enemyLigh = enemy.Armor.Lightning;
+            int enemyIcee = enemy.Armor.Ice;
+            int enemyWind = enemy.Armor.Wind;
+
+            Affliction buff = new Affliction();
+            foreach (var affl in chara.StatusEffects)
+            {
+                if (affl.Positive)
+                {
+                    Toolbox.uDebugAddLog($"Applying affliction to {chara.Name}, Before: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage}");
+                    physDamage += affl.Physical;
+                    magiDamage += affl.Magic;
+                    fireDamage += affl.Fire;
+                    lighDamage += affl.Lightning;
+                    iceeDamage += affl.Ice;
+                    windDamage += affl.Ice;
+                    Toolbox.uDebugAddLog($"Applied affliction to {chara.Name}, After: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage}");
+                }
+            }
+
+            Affliction dmg = new Affliction();
+            foreach (var affl in enemy.StatusEffects)
+            {
+                if (!affl.Positive)
+                {
+                    Toolbox.uDebugAddLog($"Applying affliction to {enemy.Name}, Before: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind}");
+                    enemyPhys = enemyPhys - affl.Physical >= 0 ? enemyPhys - affl.Physical : 0;
+                    enemyMagi = enemyMagi - affl.Magic >= 0 ? enemyMagi - affl.Magic : 0;
+                    enemyFire = enemyFire - affl.Fire >= 0 ? enemyFire - affl.Fire : 0;
+                    enemyLigh = enemyLigh - affl.Lightning >= 0 ? enemyLigh - affl.Lightning : 0;
+                    enemyIcee = enemyIcee - affl.Ice >= 0 ? enemyIcee - affl.Ice : 0;
+                    enemyWind = enemyWind - affl.Wind >= 0 ? enemyWind - affl.Wind : 0;
+                    Toolbox.uDebugAddLog($"Applied affliction to {enemy.Name}, After: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind}");
+                }
+            }
+
+            var attack = physDamage * chara.Str;
+            Toolbox.uDebugAddLog($"attack = [weapon]{physDamage} * [str]{chara.Str}");
+            var defense = enemyPhys * enemy.Def;
+            Toolbox.uDebugAddLog($"defense = [armor]{enemyPhys} * [def]{enemy.Def}");
+            physDamage = (attack * attack) / (attack + defense);
+            Toolbox.uDebugAddLog($"physDamage = ({attack} * {attack}) / ({attack} + {defense})");
+            if (physDamage <= 0) physDamage = 0;
+            Toolbox.uDebugAddLog("Calculating magiDamage");
+            magiDamage = CalculateElement(magiDamage, enemyMagi);
+            Toolbox.uDebugAddLog("Calculating fireDamage");
+            fireDamage = CalculateElement(fireDamage, enemyFire);
+            Toolbox.uDebugAddLog("Calculating lighDamage");
+            lighDamage = CalculateElement(lighDamage, enemyLigh);
+            Toolbox.uDebugAddLog("Calculating iceeDamage");
+            iceeDamage = CalculateElement(iceeDamage, enemyIcee);
+            Toolbox.uDebugAddLog("Calculating windDamage");
+            windDamage = CalculateElement(windDamage, enemyWind);
+            Toolbox.uDebugAddLog($"Calculated Damage Types: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage}");
+
+            totalDamage = physDamage + magiDamage + fireDamage + lighDamage + iceeDamage + windDamage;
+            Toolbox.uDebugAddLog($"Calculated Total Damage: {totalDamage}");
+
+            return totalDamage;
+        }
+
+        public static int AttackChara(Enemy enemy, Character chara)
+        {
+            int physDamage = chara.Armor.Physical;
+            int magiDamage = chara.Armor.Magic;
+            int fireDamage = chara.Armor.Fire;
+            int lighDamage = chara.Armor.Lightning;
+            int iceeDamage = chara.Armor.Ice;
+            int windDamage = chara.Armor.Wind;
+
+            int enemyTotal = 0;
+            int enemyPhys = enemy.Weapon.PhysicalDamage;
+            int enemyMagi = enemy.Weapon.MagicDamage;
+            int enemyFire = enemy.Weapon.FireDamage;
+            int enemyLigh = enemy.Weapon.LightningDamage;
+            int enemyIcee = enemy.Weapon.IceDamage;
+            int enemyWind = enemy.Weapon.WindDamage;
+
+            Affliction buff = new Affliction();
+            foreach (var affl in chara.StatusEffects)
+            {
+                if (affl.Positive)
+                {
+                    Toolbox.uDebugAddLog($"Applying affliction to {chara.Name}, Before: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage}");
+                    physDamage += affl.Physical;
+                    magiDamage += affl.Magic;
+                    fireDamage += affl.Fire;
+                    lighDamage += affl.Lightning;
+                    iceeDamage += affl.Ice;
+                    windDamage += affl.Ice;
+                    Toolbox.uDebugAddLog($"Applied affliction to {chara.Name}, After: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage}");
+                }
+            }
+
+            Affliction dmg = new Affliction();
+            foreach (var affl in enemy.StatusEffects)
+            {
+                if (!affl.Positive)
+                {
+                    Toolbox.uDebugAddLog($"Applying affliction to {enemy.Name}, Before: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind}");
+                    enemyPhys = enemyPhys - affl.Physical >= 0 ? enemyPhys - affl.Physical : 0;
+                    enemyMagi = enemyMagi - affl.Magic >= 0 ? enemyMagi - affl.Magic : 0;
+                    enemyFire = enemyFire - affl.Fire >= 0 ? enemyFire - affl.Fire : 0;
+                    enemyLigh = enemyLigh - affl.Lightning >= 0 ? enemyLigh - affl.Lightning : 0;
+                    enemyIcee = enemyIcee - affl.Ice >= 0 ? enemyIcee - affl.Ice : 0;
+                    enemyWind = enemyWind - affl.Wind >= 0 ? enemyWind - affl.Wind : 0;
+                    Toolbox.uDebugAddLog($"Applied affliction to {enemy.Name}, After: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind}");
+                }
+            }
+            
+            var attack = enemyPhys * enemy.Str;
+            Toolbox.uDebugAddLog($"attack = [weapon]{enemyPhys} * [str]{enemy.Str}");
+            var defense = physDamage * chara.Def;
+            Toolbox.uDebugAddLog($"defense = [armor]{physDamage} * [def]{chara.Def}");
+            enemyPhys = (attack * attack) / (attack + defense);
+            Toolbox.uDebugAddLog($"enemyPhys = ({attack} * {attack}) / ({attack} + {defense})");
+            if (enemyPhys <= 0) enemyPhys = 0;
+            Toolbox.uDebugAddLog("Calculating magiDamage");
+            enemyMagi = Management.CalculateElement(enemyMagi, magiDamage);
+            Toolbox.uDebugAddLog("Calculating fireDamage");
+            enemyFire = Management.CalculateElement(enemyFire, fireDamage);
+            Toolbox.uDebugAddLog("Calculating lighDamage");
+            enemyLigh = Management.CalculateElement(enemyLigh, lighDamage);
+            Toolbox.uDebugAddLog("Calculating iceeDamage");
+            enemyIcee = Management.CalculateElement(enemyIcee, iceeDamage);
+            Toolbox.uDebugAddLog("Calculating windDamage");
+            enemyWind = Management.CalculateElement(enemyWind, windDamage);
+            Toolbox.uDebugAddLog($"Calculated Damage Types: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind}");
+
+            enemyTotal = enemyPhys + enemyMagi + enemyFire + enemyLigh + enemyIcee + enemyWind;
+            Toolbox.uDebugAddLog($"Calculated Total Damage: {enemyTotal}");
+
+            return enemyTotal;
+        }
+
         #endregion
     }
 
@@ -2304,8 +2344,7 @@ namespace PersonalDiscordBot.Classes
             currencyAdded = 0;
             int filtered = 0;
             int total = chara.Loot.Count;
-            var lootList = chara.Loot;
-            foreach (var bpItem in lootList)
+            foreach (var bpItem in chara.Loot)
             {
                 var lootType = bpItem.GetLootType();
                 switch (lootType)
@@ -4987,17 +5026,327 @@ namespace PersonalDiscordBot.Classes
             return whatchaSay;
         }
 
+        public static void CreateMatch(OwnerProfile owner)
+        {
+            try
+            {
+                var match = RPG.MatchList.Find(x => x.Owner == owner);
+                if (match == null)
+                {
+                    if (owner.CurrentCharacter.Loot.Count > 0)
+                    {
+                        Events.uStatusUpdateExt($"You still have {owner.CurrentCharacter.Loot.Count} pieces of loot to go through before you can start another match");
+                        return;
+                    }
+                    Toolbox.uDebugAddLog($"Generating new match for {owner.OwnerID}");
+                    Match newMatch = new Match() { Owner = owner, MatchStart = DateTime.Now };
+                    Enemy newEnemy = Enemies.punchingBag();
+                    newMatch.CurrentEnemy = newEnemy;
+                    newMatch.EnemyList.Add(newEnemy);
+                    Toolbox.uDebugAddLog($"Generated enemy {newEnemy.Name}, set as current enemy and added to the enemy list for {owner.OwnerID}");
+                    RPG.MatchList.Add(newMatch);
+                    Toolbox.uDebugAddLog($"Successfully generated new match with {newMatch.EnemyList.Count} enemies");
+                    Events.uStatusUpdateExt($"A new match was generated with {newMatch.EnemyList.Count} enemies");
+                    CalculateTurn(owner);
+                    return;
+                }
+                else
+                {
+                    Toolbox.uDebugAddLog($"Attempt to generate new match, existing match found for {owner.OwnerID}");
+                    TimeSpan time = DateTime.Now - match.MatchStart;
+                    TimeSpan timeLeft = (match.LastPlayerTurn + match.TurnTimeLimit) - match.LastPlayerTurn;
+                    Events.uStatusUpdateExt($"You currently have an active match with {match.CurrentEnemy.Name} that was started {time.Days}D {time.Hours}H {time.Minutes}M {time.Seconds}Secs ago, please attack your current enemy, you have {timeLeft.Days}D {timeLeft.Hours}H {timeLeft.Minutes}M {timeLeft.Seconds}Secs left before you forfeit");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
+        public static void CalculateTurn(OwnerProfile owner)
+        {
+            try
+            {
+                string result = string.Empty;
+                var match = RPG.MatchList.Find(x => x.Owner == owner);
+                if (match.CurrentTurn == Turn.NotChosen)
+                {
+                    Toolbox.uDebugAddLog($"Initial Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+                    match.PlayerSpeedTime = owner.CurrentCharacter.CalculateSpeed();
+                    match.EnemySpeedTime = match.CurrentEnemy.CalculateSpeed();
+                    match.PlayerTurnTime = match.PlayerSpeedTime;
+                    match.EnemyTurnTime = match.EnemySpeedTime;
+                    Toolbox.uDebugAddLog($"Initial Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+                }
+                if (match.PlayerTurnTime > match.EnemyTurnTime)
+                {
+                    Toolbox.uDebugAddLog($"Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+                    match.CurrentTurn = Turn.Enemy;
+                    match.PlayerTurnTime = match.PlayerTurnTime - match.EnemyTurnTime;
+                    match.EnemyTurnTime = match.EnemySpeedTime;
+                    Toolbox.uDebugAddLog($"Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+                    AttackCharacter(match.CurrentEnemy, owner);
+                    match.Turns += 1;
+                    RemoveAfflictions(owner, match.CurrentEnemy);
+                    CalculateTurn(owner);
+                }
+                else
+                {
+                    Toolbox.uDebugAddLog($"Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+                    match.CurrentTurn = Turn.Player;
+                    match.Turns += 1;
+                    match.EnemyTurnTime = match.EnemyTurnTime - match.PlayerTurnTime;
+                    match.PlayerTurnTime = match.PlayerSpeedTime;
+                    Toolbox.uDebugAddLog($"Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+                    Events.uStatusUpdateExt($"It is {owner.CurrentCharacter.Name}'s turn");
+                    AttackEnemy(owner, match.CurrentEnemy);
+                    RemoveAfflictions(owner, match.CurrentEnemy);
+                    CalculateTurn(owner);
+                }
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
+        public static void AttackCharacter(Enemy enemy, OwnerProfile owner)
+        {
+            try
+            {
+                Toolbox.uDebugAddLog($"Enemy {enemy.Name} attacking Character {owner.CurrentCharacter.Name} [ID]{owner.OwnerID}");
+                int enemyTotal = Management.AttackChara(enemy, owner.CurrentCharacter);
+
+                if (enemyTotal > 0)
+                {
+                    if (owner.CurrentCharacter.CurrentHP - enemyTotal <= 0)
+                    {
+                        MatchOver(owner, enemy, MatchCompleteResult.Lost);
+                        return;
+                    }
+                    else
+                    {
+                        owner.CurrentCharacter.CurrentHP -= enemyTotal;
+                        Toolbox.uDebugAddLog($"{enemy.Name} attacked {owner.CurrentCharacter.Name} and dealt {enemyTotal} [ID]{owner.OwnerID}");
+                        Events.uStatusUpdateExt($"**{enemy.Name}** attacked **{owner.CurrentCharacter.Name}** and dealt **{enemyTotal}** damage ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)");
+                        return;
+                    }
+                }
+                else if (enemyTotal == 0)
+                {
+                    Toolbox.uDebugAddLog($"{enemy.Name} attacked {owner.CurrentCharacter.Name} and didn't deal any damage [D]{enemyTotal} [ID]{owner.OwnerID}");
+                    Events.uStatusUpdateExt($"**{enemy.Name}** attacked **{owner.CurrentCharacter.Name}** and didn't deal any damage ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)");
+                    return;
+                }
+                else
+                {
+                    if (owner.CurrentCharacter.CurrentHP + enemyTotal < owner.CurrentCharacter.MaxHP)
+                        owner.CurrentCharacter.CurrentHP -= enemyTotal;
+                    else
+                        owner.CurrentCharacter.CurrentHP = owner.CurrentCharacter.MaxHP;
+                    Toolbox.uDebugAddLog($"{enemy.Name} attacked, {owner.CurrentCharacter.Name} absorbed {enemyTotal} damage and was healed");
+                    Events.uStatusUpdateExt($"**{enemy.Name}** attacked, **{owner.CurrentCharacter.Name}** absorbed **{enemyTotal}** damage and was healed ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
+        public static void AttackEnemy(OwnerProfile owner, Enemy enemy)
+        {
+            try
+            {
+                var match = RPG.MatchList.Find(x => x.Owner == owner);
+                if (match.CurrentTurn != Turn.Player)
+                {
+                    Events.uStatusUpdateExt($"It isn't {owner.CurrentCharacter.Name}'s turn, it's {enemy.Name}'s turn");
+                    return;
+                }
+                Toolbox.uDebugAddLog($"Attacking enemy [C]{owner.CurrentCharacter.Name} [E]{enemy.Name} [ID]{owner.OwnerID}");
+
+                int totalDamage = Management.AttackEnem(owner.CurrentCharacter, enemy);
+
+                RPG.MatchList.Find(x => x.Owner == owner).LastPlayerTurn = DateTime.Now;
+
+                if (totalDamage > 0)
+                {
+                    if (enemy.CurrentHP - totalDamage <= 0)
+                    {
+                        EnemyDied(owner, enemy);
+                        return;
+                    }
+                    else
+                    {
+                        enemy.CurrentHP -= totalDamage;
+                        Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} attacked {enemy.Name} [D]{totalDamage} [ID]{owner.OwnerID}");
+                        Events.uStatusUpdateExt($"**{owner.CurrentCharacter.Name}** attacked **{enemy.Name}** and dealt **{totalDamage}** damage ({enemy.CurrentHP}/{enemy.MaxHP} left)");
+                        return;
+                    }
+                }
+                else if (totalDamage == 0)
+                {
+                    Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} attacked {enemy.Name}, didn't deal damage [D]{totalDamage} [ID]{owner.OwnerID}");
+                    Events.uStatusUpdateExt($"**{owner.CurrentCharacter.Name}** attacked **{enemy.Name}** and didn't deal any damage ({enemy.CurrentHP}/{enemy.MaxHP} left)");
+                    return;
+                }
+                else
+                {
+                    if (enemy.CurrentHP + totalDamage < enemy.MaxHP)
+                        enemy.CurrentHP -= totalDamage;
+                    else
+                        enemy.CurrentHP = enemy.MaxHP;
+                    Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} attacked {enemy.Name}, absorbed {totalDamage} [ID]{owner.OwnerID}");
+                    Events.uStatusUpdateExt($"**{owner.CurrentCharacter.Name}** attacked, **{enemy.Name}** absorbed **{totalDamage}** damage and was healed ({enemy.CurrentHP}/{enemy.MaxHP} left)");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
+        public static void EnemyDied(OwnerProfile owner, Enemy enemy)
+        {
+            try
+            {
+                Toolbox.uDebugAddLog($"{owner.OwnerID} defeated {enemy.Name}");
+                var match = RPG.MatchList.Find(x => x.Owner == owner);
+                match.EnemyList.Remove(enemy);
+                match.DefeatedEnemies.Add(enemy);
+                match.ExperienceEarned += enemy.ExpLoot;
+                Toolbox.uDebugAddLog($"Removed {enemy.Name} from the enemy list, added to the defeated enemy list and added ExpLoot");
+                if (RPG.MatchList.Find(x => x.Owner == owner).EnemyList.Count <= 0)
+                {
+                    Events.uStatusUpdateExt($"You have defeated **{enemy.Name}** and earned **{enemy.ExpLoot} EXP!**");
+                    MatchOver(owner, enemy, MatchCompleteResult.Won);
+                    return;
+                }
+                else
+                {
+                    NextEnemy(owner, enemy);
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
+        public static void MatchOver(OwnerProfile owner, Enemy enemy, MatchCompleteResult result)
+        {
+            try
+            {
+                owner.CurrentCharacter.CurrentHP = owner.CurrentCharacter.MaxHP;
+                Toolbox.uDebugAddLog($"Match complete, healed {owner.CurrentCharacter.Name} to full health [CHP]{owner.CurrentCharacter.CurrentHP} [MHP]{owner.CurrentCharacter.MaxHP} [ID]{owner.OwnerID}");
+                owner.CurrentCharacter.StatusEffects.Clear();
+                Toolbox.uDebugAddLog($"Removed afflictions from {owner.CurrentCharacter.Name}, new count: {owner.CurrentCharacter.StatusEffects.Count} [ID]{owner.OwnerID}");
+                switch (result)
+                {
+                    case MatchCompleteResult.Won:
+                        var match = RPG.MatchList.Find(x => x.Owner == owner);
+                        var defEnemies = match.DefeatedEnemies.Count;
+                        TimeSpan time = (DateTime.Now - match.MatchStart);
+                        Toolbox.uDebugAddLog($"{owner.OwnerID} finished the match after defeating {enemy.Name}");
+                        Toolbox.uDebugAddLog($"Triggering MatchCompleted Event: [R]{result} [EC]{match.DefeatedEnemies.Count} [EXP]{match.ExperienceEarned} [T]{time.Days}D {time.Hours}H {time.Minutes}M {time.Seconds}S [O]{owner.OwnerID}");
+                        Events.uStatusUpdateExt($"{owner.CurrentCharacter.Name} won the match");
+                        RPG.MatchList.Remove(match);
+                        Toolbox.uDebugAddLog($"Removed match from match list for {owner.OwnerID}");
+                        return;
+                    case MatchCompleteResult.Lost:
+                        var match2 = RPG.MatchList.Find(x => x.Owner == owner);
+                        var defEnemies2 = match2.DefeatedEnemies.Count;
+                        TimeSpan time2 = (DateTime.Now - match2.MatchStart);
+                        Toolbox.uDebugAddLog($"{owner.OwnerID} was defeated by {enemy.Name}");
+                        Toolbox.uDebugAddLog($"Triggering MatchCompleted Event: [R]{result} [EC]{match2.DefeatedEnemies.Count} [EXP]{match2.ExperienceEarned} [T]{time2.Days}D {time2.Hours}H {time2.Minutes}M {time2.Seconds}S [O]{owner.OwnerID}");
+                        Events.uStatusUpdateExt($"{owner.CurrentCharacter.Name} lost the match");
+                        RPG.MatchList.Remove(match2);
+                        Toolbox.uDebugAddLog($"Removed match from match list for {owner.OwnerID}");
+                        return;
+                    case MatchCompleteResult.Forfeit:
+                        var match3 = RPG.MatchList.Find(x => x.Owner == owner);
+                        var timeSpan = match3.TurnTimeLimit;
+                        var exp = match3.ExperienceEarned;
+                        Toolbox.uDebugAddLog($"{owner.OwnerID} forfeited the match agains {enemy.Name}");
+                        Toolbox.uDebugAddLog($"Triggering MatchCompleted Event: [R]{result} [EC]{match3.DefeatedEnemies.Count} [EXP]{match3.ExperienceEarned} [T]{match3.TurnTimeLimit.Days}D {match3.TurnTimeLimit.Hours}H {match3.TurnTimeLimit.Minutes}M {match3.TurnTimeLimit.Seconds}S [O]{owner.OwnerID}");
+                        Events.uStatusUpdateExt($"{owner.CurrentCharacter.Name} forefeited the match");
+                        RPG.MatchList.Remove(match3);
+                        Toolbox.uDebugAddLog($"Removed match from match list for {owner.OwnerID}");
+                        return;
+                }
+                Toolbox.uDebugAddLog($"MATCHOVER UNREACHABLE WAS REACHED");
+                Events.uStatusUpdateExt($"MATCHOVER UNREACHABLE WAS REACHED, PLEASE LET THE DEVELOPER KNOW!!!!");
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
+        public static void RemoveAfflictions(OwnerProfile owner, Enemy enemy)
+        {
+            Toolbox.uDebugAddLog("Starting affliction removal");
+            var match = RPG.MatchList.Find(x => x.Owner == owner);
+            foreach (var affl in owner.CurrentCharacter.StatusEffects)
+            {
+                if (match.Turns >= (affl.TurnStarted + (affl.TurnsActive * 2)))
+                {
+                    owner.CurrentCharacter.StatusEffects.Remove(affl);
+                    Toolbox.uDebugAddLog($"Removed affliction {affl.Name} from {owner.CurrentCharacter.Name} on turn {match.Turns} [afflStart]{affl.TurnStarted} [afflActive]{affl.TurnsActive} [afflTotalActive]{affl.TurnsActive * 2} [ID]{owner.OwnerID}");
+                    Events.uStatusUpdateExt($"Affliction {affl.Name} has been removed from {owner.CurrentCharacter.Name} after {affl.TurnsActive} turns");
+                }
+            }
+            foreach (var affl in enemy.StatusEffects)
+            {
+                if (match.Turns >= (affl.TurnStarted + (affl.TurnsActive * 2)))
+                {
+                    enemy.StatusEffects.Remove(affl);
+                    Toolbox.uDebugAddLog($"Removed affliction {affl.Name} from {enemy.Name} on turn {match.Turns} [afflStart]{affl.TurnStarted} [afflActive]{affl.TurnsActive} [afflTotalActive]{affl.TurnsActive * 2} [ID]{owner.OwnerID}");
+                    Events.uStatusUpdateExt($"Affliction {affl.Name} has been removed from {enemy.Name} after {affl.TurnsActive} turns");
+                }
+            }
+            Toolbox.uDebugAddLog("Finished affliction removal");
+        }
+
+        public static void NextEnemy(OwnerProfile owner, Enemy enemy)
+        {
+            try
+            {
+                Toolbox.uDebugAddLog($"{owner.OwnerID} defeated {enemy.Name}, switching enemies");
+                Match match = RPG.MatchList.Find(x => x.Owner == owner);
+                match.EnemyList.Remove(enemy);
+                Toolbox.uDebugAddLog($"Removed {enemy.Name} from the enemy list");
+                Enemy newEnemy = match.EnemyList[0];
+                RPG.MatchList.Find(x => x.Owner == owner).CurrentEnemy = newEnemy;
+                RPG.MatchList.Find(x => x.Owner == owner).CurrentTurn = Turn.NotChosen;
+                Toolbox.uDebugAddLog($"Changed {enemy.Name} to the current enemy");
+                Events.uStatusUpdateExt($"You have defeated **{enemy.Name}** and are now fighting **{newEnemy.Name}**. Enemies left: {match.EnemyList.Count}");
+                CalculateTurn(owner);
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
+        public static string EmulateFight(OwnerProfile owner)
+        {
+            var newChar = Management.CreateNewCharacter(owner.OwnerID, CharacterClass.Necromancer, "Test Tester");
+            owner.CurrentCharacter = newChar;
+            owner.CharacterList.Add(newChar);
+            CreateMatch(owner);
+            return "Test Complete";
+        }
+
         #endregion
 
         #region Testing Assets
-
-        public static OwnerProfile testiculeesProfile = new OwnerProfile()
-        {
-            CurrentCharacter = testiculeesCharacter,
-            CharacterList = new List<Character>() { testiculeesCharacter },
-            Currency = 696969,
-            OwnerID = 12345678910111213
-        };
 
         public static Character testiculeesCharacter = new Character()
         {
@@ -5009,6 +5358,14 @@ namespace PersonalDiscordBot.Classes
             CurrentHP = 12000000,
             Weapon = Weapons.warriorFists,
             Exp = 0
+        };
+
+        public static OwnerProfile testiculeesProfile = new OwnerProfile()
+        {
+            CurrentCharacter = testiculeesCharacter,
+            CharacterList = new List<Character>() { testiculeesCharacter },
+            Currency = 696969,
+            OwnerID = 12345678910111213
         };
 
         #endregion

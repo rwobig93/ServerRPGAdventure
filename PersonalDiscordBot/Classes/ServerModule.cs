@@ -1799,7 +1799,46 @@ namespace PersonalDiscordBot.Classes
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't have a character yet, try creating one... pleb");
                     return;
                 }
-                
+                List<IMessage> recvdMsgs = new List<IMessage>();
+                var match = RPG.MatchList.Find(x => x.Owner == ownerProfile);
+                if (match != null)
+                {
+                    var verifyMatch = await Context.Channel.SendMessageAsync($"You currently have an active match with {match.CurrentEnemy.Name}, your match will end if you switch characters, would you still like to switch? (Yes/No)");
+                    bool verifyRecvd = false;
+                    while (!verifyRecvd)
+                    {
+                        var msgList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        Toolbox.uDebugAddLog("Generated message list");
+                        foreach (var msg in msgList)
+                        {
+                            if (msg.Author == Context.User && msg.Timestamp.DateTime > verifyMatch.Timestamp.DateTime && (!recvdMsgs.Contains(msg)))
+                            {
+                                recvdMsgs.Add(msg);
+                                var answer = msg.Content.ToString();
+                                Toolbox.uDebugAddLog($"Found newer message from the same author, answer: {answer}");
+                                if (answer.ToLower() == "yes")
+                                {
+                                    verifyRecvd = true;
+                                    RPG.MatchList.Remove(match);
+                                    Toolbox.uDebugAddLog($"Removed active match due to switching characters [ID]{ownerProfile.OwnerID}");
+                                }
+                                else if (answer.ToLower() == "no")
+                                {
+                                    verifyRecvd = true;
+                                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} Canceling character switch");
+                                    return;
+                                }
+                                else
+                                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} {answer} isn't a valid response, please try again");
+                            }
+                        }
+                        if (verifyMatch.Timestamp.DateTime + TimeSpan.FromMinutes(5) <= DateTime.Now)
+                        {
+                            await Context.Channel.SendMessageAsync($"{Context.User.Mention} An answer wasn't received within 5 min, canceling character switch...");
+                            return;
+                        }
+                    }
+                }
                 string response = $"Please enter the number for the respective character you want to use:{line}";
                 int counter = 0;
                 foreach (Character chara in ownerProfile.CharacterList)
@@ -1818,8 +1857,9 @@ namespace PersonalDiscordBot.Classes
                     string answer = string.Empty;
                     foreach (IMessage msg in newList)
                     {
-                        if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime))
+                        if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime) && (!recvdMsgs.Contains(msg)))
                         {
+                            recvdMsgs.Add(msg);
                             answer = msg.Content.ToString();
                             Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
                             Toolbox.uDebugAddLog($"Before Response: {answer}");
