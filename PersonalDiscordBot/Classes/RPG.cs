@@ -1405,34 +1405,35 @@ namespace PersonalDiscordBot.Classes
                     case MatchCompleteResult.Won:
                         await args.Context.Channel.SendMessageAsync($"{args.Context.Message.Author.Mention} You have defeated **{args.Match.DefeatedEnemies.Count} enemies** and completed the match!");
                         int lootCount = rng.Next(rng.Next(0, 2), 3 + (rng.Next(0, args.Match.DefeatedEnemies.Count)));
+                        var character = RPG.Owners.Find(x => x.OwnerID == args.Owner.OwnerID).CurrentCharacter;
                         Toolbox.uDebugAddLog($"Generating lootdrop, lootcount: {lootCount}");
                         int lootTimes = 0;
                         for (int i = lootCount; i > 0; i--)
                         {
                             lootTimes++;
-                            var loot = LootDrop.PickLoot(args.Owner.CurrentCharacter);
-                            args.Owner.CurrentCharacter.Loot.Add(loot);
+                            var loot = LootDrop.PickLoot(character);
+                            character.Loot.Add(loot);
                         }
                         Toolbox.uDebugAddLog($"Lootdrop generated, lootcount before filter: {lootTimes} [ID]{args.Owner.OwnerID}");
                         int pebbles = 0;
                         int currency = 0;
-                        LootDrop.FilterLoot(args.Owner.CurrentCharacter, out pebbles, out currency);
-                        var copyChara = args.Owner.CurrentCharacter;
-                        args.Owner.CurrentCharacter.Exp += args.Match.ExperienceEarned;
-                        if (VerifyLvlUp(args.Owner.CurrentCharacter))
+                        LootDrop.FilterLoot(character, out pebbles, out currency);
+                        var copyChara = character;
+                        character.Exp += args.Match.ExperienceEarned;
+                        if (VerifyLvlUp(character))
                         {
                             var owner = args.Owner;
                             var line = Environment.NewLine;
                             EmbedBuilder embed = new EmbedBuilder()
                             {
-                                Title = $"{args.Owner.CurrentCharacter.Name} has leveled up!",
+                                Title = $"{character.Name} has leveled up!",
                                 Color = args.Owner.CurrentCharacter.Color,
-                                Description = $"Level: {copyChara.Lvl} > {owner.CurrentCharacter.Lvl}{line}MaxHP: {copyChara.MaxHP} > {owner.CurrentCharacter.MaxHP}{line}MaxMana: {copyChara.MaxMana} > {owner.CurrentCharacter.MaxMana}{line}Strength: {copyChara.Str} > {owner.CurrentCharacter.Str}{line}Defense: {copyChara.Def} > {owner.CurrentCharacter.Def}{line}Dexterity: {copyChara.Dex} > {owner.CurrentCharacter.Dex}{line}Intelligence: {copyChara.Int} > {owner.CurrentCharacter.Int}{line}Speed: {copyChara.Spd} > {owner.CurrentCharacter.Spd}{line}Luck: {copyChara.Lck} > {owner.CurrentCharacter.Lck}",
-                                ImageUrl = args.Owner.CurrentCharacter.ImgURL
+                                Description = $"Level: {copyChara.Lvl} > {character.Lvl}{line}MaxHP: {copyChara.MaxHP} > {character.MaxHP}{line}MaxMana: {copyChara.MaxMana} > {character.MaxMana}{line}Strength: {copyChara.Str} > {character.Str}{line}Defense: {copyChara.Def} > {character.Def}{line}Dexterity: {copyChara.Dex} > {character.Dex}{line}Intelligence: {copyChara.Int} > {character.Int}{line}Speed: {copyChara.Spd} > {character.Spd}{line}Luck: {copyChara.Lck} > {character.Lck}",
+                                ImageUrl = character.ImgURL
                             };
                             Events.SendDiscordMessage(args.Context, embed);
                         }
-                        Toolbox.uDebugAddLog($"Lootdrop lootcount after filter: {args.Owner.CurrentCharacter.Loot.Count} [ID]{args.Owner.OwnerID}");
+                        Toolbox.uDebugAddLog($"Lootdrop lootcount after filter: {character.Loot.Count} [ID]{args.Owner.OwnerID}");
                         await args.Context.Channel.SendMessageAsync($"{args.Context.Message.Author.Mention} You earned {pebbles} pebbles,{currency} currency, and earned {args.Match.ExperienceEarned} experience!");
                         await EmptyLoot(args.Context);
                         break;
