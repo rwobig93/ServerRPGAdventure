@@ -1370,9 +1370,16 @@ namespace PersonalDiscordBot
             //Permissions.SerializePermissions();
             //Management.SerializeData();
             //uStatusUpdate(Testing.ShowBackPackItems());
-            OwnerProfile owner = new OwnerProfile() { OwnerID = 123456789, Currency = 696969, OwnerUN = "That one Guy", TotalPebbles = 99 };
-            RPG.Owners.Add(owner);
-            uStatusUpdate(Testing.EmulateFight(owner));
+            //OwnerProfile owner = new OwnerProfile() { OwnerID = 123456789, Currency = 696969, OwnerUN = "That one Guy", TotalPebbles = 99 };
+            //RPG.Owners.Add(owner);
+            //uStatusUpdate(Testing.EmulateFight(owner));
+            List<int> lvlList = new List<int>();
+            for (var i = 1; i <= 15; i++)
+            {
+                int exp = 0;
+                uStatusUpdate($"Experience lvl {i}: {exp = Management.CalculateExperience(i)}");
+                lvlList.Add(exp);
+            }
         }
 
         private void SetupTest()
