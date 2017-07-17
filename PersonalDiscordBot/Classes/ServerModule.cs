@@ -792,7 +792,7 @@ namespace PersonalDiscordBot.Classes
         {
             string exString = string.Format("TimeStamp: {1}{0}Exception Type: {2}{0}Caller: {3} at {4}{0}Message: {5}{0}HR: {6}{0}StackTrace:{0}{7}{0}", Environment.NewLine, $"{DateTime.Now.ToLocalTime().ToShortDateString()} {DateTime.Now.ToLocalTime().ToShortTimeString()}", ex.GetType().Name, caller, lineNumber, ex.Message, ex.HResult, ex.StackTrace);
             Toolbox.uDebugAddLog(string.Format("EXCEPTION: {0} at {1}", caller, lineNumber));
-            string _logLocation = string.Format(@"{0}\Exceptions.log", MainWindow._paths.LogLocation);
+            string _logLocation = string.Format(@"{0}\Exceptions.log", Toolbox._paths.LogLocation);
             if (!File.Exists(_logLocation))
                 using (StreamWriter _sw = new StreamWriter(_logLocation))
                     _sw.WriteLine(exString + Environment.NewLine);
@@ -870,7 +870,8 @@ namespace PersonalDiscordBot.Classes
                  "```;playing a game{0}Sets the bots' Playing status to 'a game' or whatever you type after playing```" +
                  "```;name{0}Sets the bots' Name status to 'My Boiiiiiiiiiiiii'```" +
                  "```;name Raspberry Schmeckles{0}Sets the bots' Name status to 'Raspberry Schmeckles' or whatever you type after name```" +
-                 "```;f @Someone{0}Pays respects to a mentioned person / or whatever you want```",
+                 "```;f @Someone{0}Pays respects to a mentioned person / or whatever you want```" +
+                 "```;update{0}Checks for an update for the bot```",
                  Environment.NewLine
                 );
                 await Context.Channel.SendMessageAsync(_helpArticle);
@@ -913,27 +914,41 @@ namespace PersonalDiscordBot.Classes
                 (
                  "_{0}" +
                  "{0}```╬ RPG Testing Commands ╬```{0}" +
-                 "```;test{0}Testicules Engages in...something?```" +
-                 "```;test weap{0}Creates a random weapon.```" +
-                 "```;test spell{0}Creates a random spell.```" +
-                 "```;test armor{0}Creates a random armor.```" +
-                 "```;test rng weap %Number%{0}Creates %Number% of random weapons.```" +
-                 "```;test rng spell %Number%{0}Creates %Number% of random spells.```"+
-                 "```;test rng armor %Number%{0}Creates %Number% of random armors.```" +
-                 "```;test lootdrop{0}Simulates that lootdrop that you don't actually get for winning a fight (yet).```" +
-                 "```;test create{0}Khajiit creates character, if you have coin.```" +
-                 "```;test give %Character% %Amount%{0}(Requires Admin) Gives %Character% %Amount% of coins.```" +
-                 "```;test swtich{0}Displays a list of your characters and allows you to choose which one to Activate. You may only have 1 character active at a time.```" +
-                 "```;test testiculees{0}(Requires Admin) Summons the mighty Testiculees, Champion of Unhandled Exceptions, and adds him to your list of characters.```" +
-                 "```;test delete{0}(Requires Admin) Deletes your profile. No one liked you anyway.```" +
-                 "```;test delete %USER%{0}(Requires Admin) Deletes %USER%'s profile. No one liked them anyway.```" +
-                 "```;test rpg{0}(Requires Admin) Allows or Denies a channel to use RPG commands.```" +
-                 "```;test permission{0}Checks to see if channel can or can't use RPG commands.```" +
-                 "```;test match{0}Start a match against AI.```" +
-                 "```;test attack{0}Attacks your oppoenent in your current match.```" +
-                 "```;test loot{0}Displays all the phat loot you have.```" +
-                 "```;test item{0}Shows a list of your items to use in combat and asks you to choose one to use if it is your turn```" +
-                 "```;test view{0}Displays info about your currently selected character```",
+                 "```;test{0}" +
+                 ";test add admin %USER%{0}" +
+                 ";test remove admin %USER%{0}" +
+                 ";test weap{0}" +
+                 ";test spell{0}" +
+                 ";test armor{0}" +
+                 ";test thing{0}" +
+                 ";test rng weap %Number%{0}" +
+                 ";test rng spell %Number%{0}" +
+                 ";test rng armor %Number%{0}" +
+                 ";test rng thing %Number%{0}" +
+                 ";test lootdrop{0}" +
+                 ";test create{0}" +
+                 ";test give %Character% %CurrencyAmount%{0}" +
+                 ";test swtich{0}" +
+                 ";test testiculees{0}" +
+                 ";test delete{0}" +
+                 ";test delete %USER%{0}" +
+                 ";test rpg{0}" +
+                 ";test permission{0}" +
+                 ";test match{0}" +
+                 ";test attack{0}" +
+                 ";test loot{0}" +
+                 ";test item{0}" +
+                 ";test view{0}" +
+                 ";test change armor{0}" +
+                 ";test change weapon{0}" +
+                 ";test change description{0}" +
+                 ";test add loot{0}" +
+                 ";test testing %Role/Group%{0}" +
+                 ";test log channel %MentionChannel%"+
+                 ";test check backpack" +
+                 ";test change color %color%" +
+                 "   (red, blue, black, green, yellow, brown, orange, gold, pink, purple, silver, slategray, white)" +
+                 ";test change color 00,00,00 (r,g,b)```",
                  Environment.NewLine
                 );
                 await Context.Channel.SendMessageAsync(_helpArticle);
@@ -1068,6 +1083,40 @@ namespace PersonalDiscordBot.Classes
         }
     }
 
+    [Group("update"), Summary("Checks for update for bot")]
+    public class UpdateModule : ModuleBase
+    {
+        [Command(""), Summary("Default Entry")]
+        public async Task Update()
+        {
+            var admin = Permissions.AdminPermissions(Context);
+            if (!admin)
+            {
+                await Context.Channel.SendMessageAsync($"{Context.User.Mention} You don't have permissions to run this command");
+                return;
+            }
+            var gitClient = MainWindow.gitClient;
+            if (gitClient == null)
+                gitClient = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("PDB"));
+            if (Toolbox._paths.CurrentVersion == null)
+                Toolbox._paths.CurrentVersion = new Version("0.1.00.00");
+            var releases = await gitClient.Repository.Release.GetAll("rwobig93", "ServerRPGAdventure");
+            var release = releases[0];
+            Version releaseVersion = new Version(release.TagName);
+            var result = Toolbox._paths.CurrentVersion.CompareTo(releaseVersion);
+            if (result < 0)
+            {
+                await Context.Channel.SendMessageAsync($"Newer release found, updating now... [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
+                Toolbox._paths.CurrentVersion = releaseVersion;
+                MainWindow.StartUpdate();
+            }
+            else
+            {
+                await Context.Channel.SendMessageAsync($"Release Version is the same version or older than running assembly. [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
+            }
+        }
+    }
+
     [Group("name"), Summary("Changes bot name")]
     public class NameModule : ModuleBase
     {
@@ -1153,6 +1202,121 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
+        [Command("add admin"), Summary("Add User to Admin List")]
+        public async Task Testacules1a(string mentionedUser)
+        {
+            try
+            {
+                if (!Permissions.Administrators.Contains(Context.Message.Author.Id))
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have rights to run this command");
+                    return;
+                }
+                else
+                {
+                    Toolbox.uDebugAddLog($"Before Removing '<,@,>': {mentionedUser}");
+                    mentionedUser = mentionedUser.Replace("<", string.Empty).Replace("@", string.Empty).Replace(">", string.Empty);
+                    Toolbox.uDebugAddLog($"After Removing '<,@,>': {mentionedUser}");
+                    ulong userID = 0;
+                    var isUlong = ulong.TryParse(mentionedUser, out userID);
+                    if (!isUlong)
+                    {
+                        Toolbox.uDebugAddLog($"Invalid Ulong: {userID}");
+                        await Context.Channel.SendMessageAsync($"{mentionedUser} isn't a valid discord user");
+                        return;
+                    }
+                    var userFound = await Context.Channel.GetUserAsync(userID);
+                    if (userFound == null)
+                    {
+                        Toolbox.uDebugAddLog($"Invalid User: {userFound.Username} | {userID}");
+                        await Context.Channel.SendMessageAsync($"{userID} doesn't match a discord user on your server");
+                        return;
+                    } 
+                    Toolbox.uDebugAddLog($"MentionedUser: {mentionedUser}");
+                    int foundUsers = 0;
+                    foreach (var admin in Permissions.Administrators)
+                    {
+                        if (userFound.Id == admin)
+                        {
+                            Events.uStatusUpdateExt($"Found {userFound.Username} in Admin List | {userFound.Id}");
+                            await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} {userFound.Mention} is already an Admin. You can't just give them Admin power twice. That's not how you create Super Admins.");
+                            foundUsers++;
+                        }
+                    }
+                    if (foundUsers == 0)
+                    {
+                        Toolbox.uDebugAddLog($"No admins found matching ID: {userFound.Id} Admins: {foundUsers}");
+                        Permissions.Administrators.Add(userFound.Id);
+                        await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} Added {userFound.Mention} as an Admin. I hope you know what you're doing.");
+                        return;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("remove admin"), Summary("Add User to Admin List")]
+        public async Task Testacules1r(string mentionedUser)
+        {
+            try
+            {
+                if (!Permissions.Administrators.Contains(Context.Message.Author.Id))
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have rights to run this command");
+                    return;
+                }
+                else
+                {
+                    Toolbox.uDebugAddLog($"Before Removing '<,@,>': {mentionedUser}");
+                    mentionedUser = mentionedUser.Replace("<", string.Empty).Replace("@", string.Empty).Replace(">", string.Empty);
+                    Toolbox.uDebugAddLog($"After Removing '<,@,>': {mentionedUser}");
+                    ulong userID = 0;
+                    var isUlong = ulong.TryParse(mentionedUser, out userID);
+                    if (!isUlong)
+                    {
+                        Toolbox.uDebugAddLog($"Invalid Ulong: {userID}");
+                        await Context.Channel.SendMessageAsync($"{mentionedUser} isn't a valid discord user");
+                        return;
+                    }
+                    var userFound = await Context.Channel.GetUserAsync(userID);
+                    if (userFound == null)
+                    {
+                        Toolbox.uDebugAddLog($"Invalid User: {userFound.Username} | {userID}");
+                        await Context.Channel.SendMessageAsync($"{userID} doesn't match a discord user on your server");
+                        return;
+                    }
+                    Toolbox.uDebugAddLog($"MentionedUser: {mentionedUser}");
+                    int foundUsers = 0;
+                    foreach (var admin in Permissions.Administrators)
+                    {
+                        if (userFound.Id == admin)
+                        {
+                            Events.uStatusUpdateExt($"Removed {userFound.Username} from Admin List | {userFound.Id}");
+                            Permissions.Administrators.Remove(userFound.Id);
+                            await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} Removed {userFound.Mention}'s power. They are no longer an Admin.");
+                            foundUsers++;
+                        }
+                    }
+                    if (foundUsers == 0)
+                    {
+                        Toolbox.uDebugAddLog($"No admins found matching ID: {userFound.Id} Admins: {foundUsers}");
+                        Permissions.Administrators.Add(userFound.Id);
+                        await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} {userFound.Mention} is not currently an Admin. You can't take away something they don't even have.");
+                        return;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
         [Command("weap"), Summary("Testicules Weap Gen")]
         public async Task Testacules2w()
         {
@@ -1194,6 +1358,20 @@ namespace PersonalDiscordBot.Classes
             {
                 ServerModule.FullExceptionLog(ex);
             }
+        }
+
+        [Command("thing"), Summary("Testicules Item Gen")]
+        public async Task Testacules2t()
+        {
+            try
+            {
+                await Context.Channel.SendMessageAsync(Testing.RandomItem());
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+
         }
 
         [Command("rng weap"), Summary("Testicules RNG Gen Weap")]
@@ -1267,6 +1445,32 @@ namespace PersonalDiscordBot.Classes
                     }
                     else
                         await Context.Channel.SendMessageAsync($"Generated {intTimes} Armors: {Environment.NewLine}{Testing.RandomMassTestArmor(intTimes)}");
+                }
+                else
+                    await Context.Channel.SendMessageAsync($"{times} is not a valid number. Rethink your life choices and try again.");
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("rng thing"), Summary("Testicules RNG Gen Item")]
+        public async Task Testacules3t(string times)
+        {
+            try
+            {
+                var intTimes = 0;
+                var isANum = int.TryParse(times, out intTimes);
+                if (isANum)
+                {
+                    if (intTimes > 100000)
+                    {
+                        await Context.Channel.SendMessageAsync("The highest integer allowed is 100,000. I'm generating that for you now, don't do that again!");
+                        intTimes = 100000;
+                        await Context.Channel.SendMessageAsync($"Generated {intTimes} Items: {Environment.NewLine}{Testing.RandomMassTestItem(intTimes)}");
+                    }
+                    await Context.Channel.SendMessageAsync($"Generated {intTimes} Items: {Environment.NewLine}{Testing.RandomMassTestItem(intTimes)}");
                 }
                 else
                     await Context.Channel.SendMessageAsync($"{times} is not a valid number. Rethink your life choices and try again.");
@@ -1419,8 +1623,17 @@ namespace PersonalDiscordBot.Classes
                                 response = msg.Content.ToString();
                                 Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
                                 Toolbox.uDebugAddLog($"Response: {response}");
-                                charName = response;
-                                responseRecvd2 = true;
+                                if (response == "Testiculees teh Great")
+                                {
+                                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} Nice try but you are not the great one, that power is beyond your reach!");
+                                    Toolbox.uDebugAddLog($"{Context.User.Username} tried to recreate Testiculees and we told them no [ID]{Context.User.Id}");
+                                }
+                                else
+                                {
+                                    Toolbox.uDebugAddLog($"Valid response recieved, setting Character name [ID]{Context.User.Id}");
+                                    charName = response;
+                                    responseRecvd2 = true;
+                                }
                             }
                         }
                         if (timeStamp2 + TimeSpan.FromSeconds(60) <= DateTime.Now)
@@ -1479,8 +1692,13 @@ namespace PersonalDiscordBot.Classes
                         return;
                     }
                 }
-                if (!hasCharacters) ownerProfile.Currency -= cost;
-                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You have been charged {cost} currency, you now have: {ownerProfile.Currency}");
+                if (cost <= 0)
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} This first character is on us, enjoy");
+                else
+                {
+                    if (!hasCharacters) ownerProfile.Currency -= cost;
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You have been charged {cost} currency, you now have: {ownerProfile.Currency}");
+                }
                 Character newChar = Management.CreateNewCharacter(Context.Message.Author.Id, chosenClass, charName);
                 ownerProfile.CharacterList.Add(newChar);
                 if (ownerProfile.CharacterList.Count == 1)
@@ -1584,6 +1802,46 @@ namespace PersonalDiscordBot.Classes
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't have a character yet, try creating one... pleb");
                     return;
                 }
+                List<IMessage> recvdMsgs = new List<IMessage>();
+                var match = RPG.MatchList.Find(x => x.Owner == ownerProfile);
+                if (match != null)
+                {
+                    var verifyMatch = await Context.Channel.SendMessageAsync($"You currently have an active match with {match.CurrentEnemy.Name}, your match will end if you switch characters, would you still like to switch? (Yes/No)");
+                    bool verifyRecvd = false;
+                    while (!verifyRecvd)
+                    {
+                        var msgList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        Toolbox.uDebugAddLog("Generated message list");
+                        foreach (var msg in msgList)
+                        {
+                            if (msg.Author == Context.User && msg.Timestamp.DateTime > verifyMatch.Timestamp.DateTime && (!recvdMsgs.Contains(msg)))
+                            {
+                                recvdMsgs.Add(msg);
+                                var answer = msg.Content.ToString();
+                                Toolbox.uDebugAddLog($"Found newer message from the same author, answer: {answer}");
+                                if (answer.ToLower() == "yes")
+                                {
+                                    verifyRecvd = true;
+                                    RPG.MatchList.Remove(match);
+                                    Toolbox.uDebugAddLog($"Removed active match due to switching characters [ID]{ownerProfile.OwnerID}");
+                                }
+                                else if (answer.ToLower() == "no")
+                                {
+                                    verifyRecvd = true;
+                                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} Canceling character switch");
+                                    return;
+                                }
+                                else
+                                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} {answer} isn't a valid response, please try again");
+                            }
+                        }
+                        if (verifyMatch.Timestamp.DateTime + TimeSpan.FromMinutes(5) <= DateTime.Now)
+                        {
+                            await Context.Channel.SendMessageAsync($"{Context.User.Mention} An answer wasn't received within 5 min, canceling character switch...");
+                            return;
+                        }
+                    }
+                }
                 string response = $"Please enter the number for the respective character you want to use:{line}";
                 int counter = 0;
                 foreach (Character chara in ownerProfile.CharacterList)
@@ -1602,8 +1860,9 @@ namespace PersonalDiscordBot.Classes
                     string answer = string.Empty;
                     foreach (IMessage msg in newList)
                     {
-                        if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime))
+                        if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime) && (!recvdMsgs.Contains(msg)))
                         {
+                            recvdMsgs.Add(msg);
                             answer = msg.Content.ToString();
                             Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
                             Toolbox.uDebugAddLog($"Before Response: {answer}");
@@ -1736,7 +1995,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        [Command("rpg"), Summary("Testicules Delete Profile")]
+        [Command("rpg"), Summary("Testicules toggle rpg channel")]
         public async Task Testacules11()
         {
             try
@@ -1751,14 +2010,14 @@ namespace PersonalDiscordBot.Classes
                     Toolbox.uDebugAddLog($"Channel isn't an RPG channel, attempting to add RPG Channel: {Context.Channel.Name} | {Context.Channel.Id}");
                     Permissions.AllowedChannels.Add(Context.Channel.Id);
                     Events.uStatusUpdateExt($"RPG Channel Added: {Context.Channel.Name} | {Context.Channel.Id}");
-                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} Successfully added RPG Channel **{Context.Channel.Name}**");
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} **Added** RPG Channel **{Context.Channel.Name}**");
                 }
                 else
                 {
                     Toolbox.uDebugAddLog($"Channel is already an RPG channel, attempting to remove RPG Channel: {Context.Channel.Name} | {Context.Channel.Id}");
                     Permissions.AllowedChannels.Remove(Context.Channel.Id);
                     Events.uStatusUpdateExt($"RPG Channel Removed: {Context.Channel.Name} | {Context.Channel.Id}");
-                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} Successfully removed RPG Channel **{Context.Channel.Name}**");
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention}  **Removed** RPG Channel **{Context.Channel.Name}**");
                 }
             }
             catch (Exception ex)
@@ -1888,12 +2147,404 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
+        [Command("change armor"), Summary("Testicules Change Armor")]
+        public async Task Testacules18a()
+        {
+            try
+            {
+                await Management.CharacterChangeArmor(Context);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("change weapon"), Summary("Testicules Change Weapon")]
+        public async Task Testacules18w()
+        {
+            try
+            {
+                await Management.CharacterChangeWeapon(Context);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("change description"), Summary("Testicules Change Desc")]
+        public async Task Testacules18d()
+        {
+            try
+            {
+                await Management.CharacterChangeDescription(Context);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("add loot"), Summary("Testicules Change Armor")]
+        public async Task Testacules19()
+        {
+            try
+            {
+                var isAdmin = Permissions.AdminPermissions(Context);
+                if (!isAdmin)
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have permission to run this command");
+                }
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} Generating loot for your character {RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id).CurrentCharacter.Name}");
+                Match lootMatch = new Match()
+                {
+                    DefeatedEnemies = new List<Enemy>()
+                    {
+                        Enemies.punchingBag(),
+                        Enemies.punchingBag(),
+                        Enemies.punchingBag(),
+                        Enemies.punchingBag(),
+                        Enemies.punchingBag(),
+                        Enemies.punchingBag(),
+                        Enemies.punchingBag(),
+                        Enemies.punchingBag(),
+                        Enemies.punchingBag(),
+                        Enemies.punchingBag(),
+                    },
+                    ExperienceEarned = 1000,
+                    MatchStart = DateTime.Now - TimeSpan.FromMinutes(20),
+                    Owner = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id),
+                    Turns = 10
+                };
+                Events.CompleteMatch(Context, lootMatch.Owner, lootMatch, DateTime.Now - lootMatch.MatchStart, RPG.MatchCompleteResult.Won);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("testing"), Summary("Testicules Add Testing Group")]
+        public async Task Testacules20(string testingRoleString)
+        {
+            try
+            {
+                var isAdmin = Permissions.AdminPermissions(Context);
+                if (!isAdmin)
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have permission to run this command");
+                }
+                var testingRole = await GetDiscordRole(testingRoleString);
+                if (testingRole == null)
+                    return;
+                if (!Permissions.TestingGroups.Contains(testingRole.Id))
+                {
+                    Permissions.TestingGroups.Add(testingRole.Id);
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} **Added** testing permission to **{testingRole.Name}**");
+                    Toolbox.uDebugAddLog($"Added role as a testing group: {testingRole.Name} | {testingRole.Id} [ID]{Context.Message.Author.Id}");
+                }
+                else
+                {
+                    Permissions.TestingGroups.Remove(testingRole.Id);
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} **Removed** testing permission from **{testingRole.Name}**");
+                    Toolbox.uDebugAddLog($"Removed role as a testing group: {testingRole.Name} | {testingRole.Id} [ID]{Context.Message.Author.Id}");
+                }
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("roles"), Summary("Testicules check roles")]
+        public async Task Testacules21(string mentionedUser)
+        {
+            try
+            {
+                var user = await GetDiscordUser(mentionedUser);
+                if (user == null)
+                    return;
+                var roleString = string.Empty;
+                foreach (var id in ((SocketGuildUser)user).RoleIds)
+                    roleString = $"{roleString}{id}{Environment.NewLine}";
+                await Context.Channel.SendMessageAsync($"Roles for {user.Username}:{Environment.NewLine}{roleString}");
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("inrole"), Summary("Testicules check role")]
+        public async Task Testacules22(string mentionedUser, string mentionedRole)
+        {
+            try
+            {
+                var user = await GetDiscordUser(mentionedUser);
+                if (user == null)
+                    return;
+                var role = await GetDiscordRole(mentionedRole);
+                if (role == null)
+                    return;
+                if (((SocketGuildUser)user).RoleIds.Contains(role.Id))
+                    await Context.Channel.SendMessageAsync($"{user.Username} is in {role.Mention}");
+                else
+                    await Context.Channel.SendMessageAsync($"{user.Username} is not in {role.Mention}");
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("log channel"), Summary("Testicules add log channel")]
+        public async Task Testacules23(string mentionedChannel)
+        {
+            try
+            {
+                if (!Permissions.AdminPermissions(Context))
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} You don't have permissions to use this command");
+                    return;
+                }
+                var channel = await GetDiscordChannel(mentionedChannel);
+                if (channel == null)
+                    return;
+                if (Permissions.GeneralPermissions.logChannel != channel.Id)
+                {
+                    Permissions.GeneralPermissions.logChannel = channel.Id;
+                    Toolbox.uDebugAddLog($"Added {channel.Name} | {channel.Id} as the logging channel [ID]{Context.User.Id}");
+                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} The **{channel.Name}** channel has been marked as the logging channel");
+                }
+                else
+                {
+                    Permissions.GeneralPermissions.logChannel = 0;
+                    Toolbox.uDebugAddLog($"Removed {channel.Name} | {channel.Id} as the logging channel [ID]{Context.User.Id}");
+                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} The **{channel.Name}** channel has been removed as the logging channel");
+                }
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("check backpack"), Summary("Testicules checks the loot in his backpack")]
+        public async Task Testacules24()
+        {
+            try
+            {
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have any characters, please create one before trying to view your phat loot");
+                    return;
+                }
+                Management.CheckCharacterStats(Context);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("change color"), Summary("Testicules Change Color")]
+        public async Task Testacules25(string color)
+        {
+            try
+            {
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                    return;
+                if (color.Contains(","))
+                {
+                    Toolbox.uDebugAddLog($"Changing character color, string contains comma [ID]{Context.User.Id}");
+                    var split = color.Split(',');
+                    if (split.Length <= 2)
+                    {
+                        Events.SendDiscordMessage(Context, $"You didn't enter enough numbers to make an RGB color, please try again [entered]{color}");
+                        Toolbox.uDebugAddLog($"Incorrect arguments (split.Length <= 2) for RGB color entered: {color} [ID]{Context.User.Id}");
+                        return;
+                    }
+                    if (split.Length > 3)
+                    {
+                        Events.SendDiscordMessage(Context, $"You entered too many arguments to create an RGB color, you need 3 arguments, please try again [entered]{color}");
+                        Toolbox.uDebugAddLog($"Incorrect arguments (split.Length > 3) for RGB color entered: {color} [ID]{Context.User.Id}");
+                        return;
+                    }
+                    int num1 = 0;
+                    int num2 = 0;
+                    int num3 = 0;
+                    var isNum1 = int.TryParse(split[0], out num1);
+                    if (!isNum1)
+                    {
+                        Events.SendDiscordMessage(Context, $"The number you entered for argument 1 isn't a valid integer: {split[0]}");
+                        Toolbox.uDebugAddLog($"Argument 1 isn't a valid integer: {split[0]} [ID]{Context.User.Id}");
+                        return;
+                    }
+                    var isNum2 = int.TryParse(split[1], out num2);
+                    if (!isNum2)
+                    {
+                        Events.SendDiscordMessage(Context, $"The number you entered for argument 2 isn't a valid integer: {split[1]}");
+                        Toolbox.uDebugAddLog($"Argument 2 isn't a valid integer: {split[1]} [ID]{Context.User.Id}");
+                        return;
+                    }
+                    var isNum3 = int.TryParse(split[2], out num3);
+                    if (!isNum3)
+                    {
+                        Events.SendDiscordMessage(Context, $"The number you entered for argument 3 isn't a valid integer: {split[2]}");
+                        Toolbox.uDebugAddLog($"Argument 3 isn't a valid integer: {split[2]} [ID]{Context.User.Id}");
+                        return;
+                    }
+                    Discord.Color newColor = new Discord.Color(num1, num2, num3);
+                    Management.ChangeColor(Context, newColor);
+                }
+                else
+                {
+                    Toolbox.uDebugAddLog($"Changing character color, string doesn't contain comma [ID]{Context.User.Id}");
+                    color = color.ToLower();
+                    Discord.Color newColor = new Color(0,0,0);
+                    System.Windows.Media.Color selColor = System.Windows.Media.Colors.Blue;
+                    switch (color)
+                    {
+                        case "red":
+                            selColor = System.Windows.Media.Colors.Red;
+                            break;
+                        case "blue":
+                            selColor = System.Windows.Media.Colors.Blue;
+                            break;
+                        case "black":
+                            selColor = System.Windows.Media.Colors.Black;
+                            break;
+                        case "green":
+                            selColor = System.Windows.Media.Colors.Green;
+                            break;
+                        case "yellow":
+                            selColor = System.Windows.Media.Colors.Yellow;
+                            break;
+                        case "brown":
+                            selColor = System.Windows.Media.Colors.Brown;
+                            break;
+                        case "orange":
+                            selColor = System.Windows.Media.Colors.Orange;
+                            break;
+                        case "gold":
+                            selColor = System.Windows.Media.Colors.Gold;
+                            break;
+                        case "pink":
+                            selColor = System.Windows.Media.Colors.Pink;
+                            break;
+                        case "purple":
+                            selColor = System.Windows.Media.Colors.Purple;
+                            break;
+                        case "silver":
+                            selColor = System.Windows.Media.Colors.Silver;
+                            break;
+                        case "slategray":
+                            selColor = System.Windows.Media.Colors.SlateGray;
+                            break;
+                        case "white":
+                            selColor = System.Windows.Media.Colors.White;
+                            break;
+                        default:
+                            Events.SendDiscordMessage(Context, $"{color} is an incorrect color, please try again");
+                            return;
+                    }
+                    newColor = new Color(selColor.R, selColor.G, selColor.B);
+                    Management.ChangeColor(Context, newColor);
+                }
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        public async Task<IUser> GetDiscordUser(string user)
+        {
+            IUser userFound = null;
+            Toolbox.uDebugAddLog($"Before Removing '<,@,>': {user}");
+            user = user.Replace("<", string.Empty).Replace("@", string.Empty).Replace(">", string.Empty);
+            Toolbox.uDebugAddLog($"After Removing '<,@,>': {user}");
+            ulong userID = 0;
+            var isUlong = ulong.TryParse(user, out userID);
+            if (!isUlong)
+            {
+                Toolbox.uDebugAddLog($"Invalid Ulong: {userID}");
+                await Context.Channel.SendMessageAsync($"{user} isn't a valid discord user");
+                userID = 0;
+                return userFound;
+            }
+            userFound = await Context.Channel.GetUserAsync(userID);
+            if (userFound == null)
+            {
+                Toolbox.uDebugAddLog($"Invalid User: {userFound.Username} | {userID}");
+                await Context.Channel.SendMessageAsync($"{userID} doesn't match a discord user on your server");
+                userID = 0;
+                return userFound;
+            }
+            return userFound;
+        }
+
+        public async Task<IRole> GetDiscordRole(string role)
+        {
+            IRole roleFound = null;
+            Toolbox.uDebugAddLog($"Before Removing '<,@,>,&': {role}");
+            role = role.Replace("<", string.Empty).Replace("@", string.Empty).Replace(">", string.Empty).Replace("&", string.Empty);
+            Toolbox.uDebugAddLog($"After Removing '<,@,>,&': {role}");
+            ulong roleID = 0;
+            var isUlong = ulong.TryParse(role, out roleID);
+            if (!isUlong)
+            {
+                Toolbox.uDebugAddLog($"Invalid Ulong: {roleID}");
+                await Context.Channel.SendMessageAsync($"{role} isn't a valid discord role");
+                roleID = 0;
+                return roleFound;
+            }
+            roleFound = Context.Guild.GetRole(roleID);
+            if (roleFound == null)
+            {
+                Toolbox.uDebugAddLog($"Invalid Role: {roleFound.Name} | {roleID}");
+                await Context.Channel.SendMessageAsync($"{roleID} doesn't match a discord role on your server");
+                roleID = 0;
+                return roleFound;
+            }
+            return roleFound;
+        }
+
+        public async Task<IGuildChannel> GetDiscordChannel(string channel)
+        {
+            IGuildChannel channelFound = null;
+            Toolbox.uDebugAddLog($"Before Removing '<,@,>,#': {channel}");
+            channel = channel.Replace("<", string.Empty).Replace("@", string.Empty).Replace(">", string.Empty).Replace("#", string.Empty);
+            Toolbox.uDebugAddLog($"After Removing '<,@,>,#': {channel}");
+            ulong channelID = 0;
+            var isUlong = ulong.TryParse(channel, out channelID);
+            if (!isUlong)
+            {
+                Toolbox.uDebugAddLog($"Invalid Ulong: {channelID}");
+                await Context.Channel.SendMessageAsync($"{channel} isn't a valid discord channel");
+                channelID = 0;
+                return channelFound;
+            }
+            channelFound = await Context.Guild.GetChannelAsync(channelID);
+            if (channelFound == null)
+            {
+                Toolbox.uDebugAddLog($"Invalid Channel: {channelFound.Name} | {channelID}");
+                await Context.Channel.SendMessageAsync($"{channelID} doesn't match a discord channel on your server");
+                channelID = 0;
+                return channelFound;
+            }
+            return channelFound;
+        }
+
         public async Task<bool> VerifyOwnerProfileAndIfHasCharacters()
         {
             OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
             if (ownerProfile == null)
             {
-                OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id };
+                OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id, OwnerUN = Context.User.Username };
                 RPG.Owners.Add(owner);
                 Events.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
                 await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you didn't have a profile yet so I made you one");
@@ -1902,6 +2553,25 @@ namespace PersonalDiscordBot.Classes
             else
                 Toolbox.uDebugAddLog($"Owner profile was found for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
             return ownerProfile.CharacterList.Count == 0 ? false : true;
+        }
+
+        public async Task<bool> HasTestingPermission(CommandContext context)
+        {
+            await Context.Channel.SendMessageAsync("");
+            return true;
+            //bool hasPerm = false;
+            //string testingGroups = string.Empty;
+            //if (Permissions.Administrators.Contains(context.User.Id))
+            //    hasPerm = true;
+            //foreach (var role in Permissions.TestingGroups)
+            //{
+            //    testingGroups = $"{testingGroups}{role}{Environment.NewLine}";
+            //    if (((SocketGuildUser)context.User).RoleIds.Contains(role))
+            //        hasPerm = true;
+            //}
+            //if (!hasPerm)
+            //    await context.Channel.SendMessageAsync($"{context.User.Mention} You don't have access to run this command, you need to be in one of the below: {Environment.NewLine}{testingGroups}");
+            //return hasPerm;
         }
     }
     #endregion
