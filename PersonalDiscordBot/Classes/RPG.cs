@@ -4002,7 +4002,7 @@ namespace PersonalDiscordBot.Classes
         public static string[] armorBasicMediumNames = 
         {
             "Leather Armor",
-            "Scale Armor"
+            "Furry Armor"
         };
         public static string[] ArmorUniqueMediumNames(RarityType rarity)
         {
