@@ -43,18 +43,20 @@ namespace PersonalDiscordBot
         public MainWindow()
         {
             InitializeComponent();
-            uDebugAddLog(string.Format("{0}########################## Application Start ##########################{0}", Environment.NewLine));
+            Toolbox.uDebugAddLog(string.Format("{0}########################## Application Start ##########################{0}", Environment.NewLine));
             SetupConfig();
-            txtLogDirectory.Text = _paths.LogLocation;
+            txtLogDirectory.Text = Toolbox._paths.LogLocation;
+            Events.MessagePromptShown += (e) => { uStatusUpdate(e.Content); };
+            Events.MatchCompleted += async (e) => { await Management.EndOfMatchLootAsync(e); };
+            Events.DiscordMessageSend += async (e, b) => { if (b) { await e.Context.Channel.SendMessageAsync(e.Context.Message.Author.Mention, false, e.Embed); } else { string resp = $"{e.Context.Message.Author.Mention} {e.Message}"; await e.Context.Channel.SendMessageAsync(resp); Toolbox.uDebugAddLog($"DCRDMSGSNT: {resp}"); } };
         }
 
         #region Global Variables
-
+        
         public static DiscordSocketClient client;
         private CommandService commands;
         private DependencyMap map;
-        public static StringBuilder _debugLog = new StringBuilder();
-        public static Classes.Paths _paths = new Classes.Paths();
+        public static Octokit.GitHubClient gitClient;
         private bool _activeSession = false;
         private bool notificationPlaying = false;
         public static ObservableCollection<GameServer> ServerList = new ObservableCollection<GameServer>();
@@ -87,13 +89,24 @@ namespace PersonalDiscordBot
 
         private void winMain_Loaded(object sender, RoutedEventArgs e)
         {
+            Management.DeSerializeData();
+            Permissions.DeSerializePermissions();
+            VerifyDebug();
+            LoadWindowLocation();
             HideGrids();
+            UpdateVerison();
+            tSaveRPGData();
+            tRefreshAdminList();
         }
 
         private void winMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            uDebugAddLog(string.Format("{0}########################## Application Stop ##########################{0}", Environment.NewLine));
-            DumpDebugLog();
+            Management.SerializeData();
+            Permissions.SerializePermissions();
+            Toolbox.uDebugAddLog(string.Format("{0}########################## Application Stop ##########################{0}", Environment.NewLine));
+            Toolbox.DumpDebugLog();
+            DumpStatusLog();
+            SaveWindowLocation();
         }
 
         private void winMain_Closed(object sender, EventArgs e)
@@ -110,12 +123,13 @@ namespace PersonalDiscordBot
         {
             try
             {
+                await UpdateApplication();
                 _activeSession = true;
-                if (string.IsNullOrEmpty(sGeneral.Default.Token))
+                if (string.IsNullOrEmpty(Toolbox._paths.BotToken))
                 {
-                    uDebugAddLog("Token wasn't found in sGeneral.Settings, prompting for token and sending notification");
-                    Thickness to = new Thickness(-734, 42, 0, 0);
-                    Thickness from = new Thickness(0, 42, 0, 0);
+                    Toolbox.uDebugAddLog("Token wasn't found in LocalSettings, prompting for token and sending notification");
+                    Thickness from = new Thickness(-734, 97, 0, 0);
+                    Thickness to = new Thickness(0, 97, 0, 0);
                     SlideGrid(from, to, grdToken);
                     ShowNotification("A previous token wasn't found, please enter a bot token, save, then try again.", 4);
                     return;
@@ -124,6 +138,7 @@ namespace PersonalDiscordBot
                 string _senderText = sender.ToString();
                 Thread _updateConn = new Thread(tUpdateConnectionStatus);
                 _updateConn.Start();
+                await SendConnectedMsg();
             }
             catch (Exception ex)
             {
@@ -136,11 +151,28 @@ namespace PersonalDiscordBot
         {
             try
             {
+                var botName = client.CurrentUser.Username;
+
+                if (Permissions.GeneralPermissions.logChannel != 0)
+                {
+                    var channel = client.GetChannel(Permissions.GeneralPermissions.logChannel);
+                    if (channel != null)
+                    {
+#if DEBUG
+                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has disconnected in DEBUG Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+#else
+                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has disconnected biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+#endif
+                        ShowNotification($"Bot {client.CurrentUser.Username} Sent disconnected message to log channel {((IMessageChannel)channel).Name}", 6);
+                    }
+                }
                 await client.DisconnectAsync();
-                uDebugAddLog("Disconnected Client");
+                Toolbox.uDebugAddLog("Disconnected Client");
                 await client.LogoutAsync();
-                uDebugAddLog("Logged out");
+                Toolbox.uDebugAddLog("Logged out");
                 _activeSession = false;
+                uStatusUpdate("Bot Client has disconnected and logged out");
+                ShowNotification($"Bot {botName} has disconnected and logged out", 5);
             }
             catch (Exception ex)
             {
@@ -188,13 +220,13 @@ namespace PersonalDiscordBot
         {
             try
             {
-                sGeneral.Default.Token = txtTokenValue.Text;
-                sGeneral.Default.Save();
-                uDebugAddLog(string.Format("Saved new token: {0}", txtTokenValue.Text));
-                Thickness from = new Thickness(-734, 42, 0, 0);
-                Thickness to = new Thickness(0, 42, 0, 0);
+                Toolbox._paths.BotToken = txtTokenValue.Text;
+                SaveConfig(ConfigType.Paths);
+                Toolbox.uDebugAddLog(string.Format("Saved new token: {0}", Toolbox._paths.BotToken));
+                Thickness from = new Thickness(0, 97, 0, 0);
+                Thickness to = new Thickness(-734, 97, 0, 0);
                 SlideGrid(from, to, grdToken);
-                uDebugAddLog("Slid grdToken back out of view");
+                Toolbox.uDebugAddLog("Slid grdToken back out of view");
                 ShowNotification($"Successfully saved new token!", 3);
             }
             catch (Exception ex)
@@ -207,10 +239,10 @@ namespace PersonalDiscordBot
         {
             try
             {
-                sGeneral.Default.Token = string.Empty;
-                sGeneral.Default.Save();
+                Toolbox._paths.BotToken = string.Empty;
+                SaveConfig(ConfigType.Paths);
                 txtTokenValue.Text = string.Empty;
-                uDebugAddLog("Cleared token from sGeneral.Settings and the txtTokenValue textbox");
+                Toolbox.uDebugAddLog("Cleared token from LocalSettings and the txtTokenValue textbox");
                 ShowNotification("Cleared token data", 3);
             }
             catch (Exception ex)
@@ -223,15 +255,22 @@ namespace PersonalDiscordBot
         {
             try
             {
-                Thickness from = new Thickness(-734, 42, 0, 0);
-                Thickness to = new Thickness(0, 42, 0, 0);
+                Thickness from = new Thickness(0, 97, 0, 0);
+                Thickness to = new Thickness(-734, 97, 0, 0);
                 SlideGrid(from, to, grdToken);
-                uDebugAddLog("Slid grdToken out of view");
+                Toolbox.uDebugAddLog("Slid grdToken out of view");
             }
             catch (Exception ex)
             {
                 FullExceptionLog(ex);
             }
+        }
+
+        private void btnChangeToken_Click(object sender, RoutedEventArgs e)
+        {
+            Thickness from = new Thickness(-734, 97, 0, 0);
+            Thickness to = new Thickness(0, 97, 0, 0);
+            SlideGrid(from, to, grdToken);
         }
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
@@ -250,7 +289,7 @@ namespace PersonalDiscordBot
         {
             try
             {
-                uDebugAddLog(string.Format("Log Directory Location changed to: {0}", txtLogDirectory.Text));
+                Toolbox.uDebugAddLog(string.Format("Log Directory Location changed to: {0}", txtLogDirectory.Text));
             }
             catch (Exception ex)
             {
@@ -309,12 +348,12 @@ namespace PersonalDiscordBot
                 if (entry != null && entry.Type == ServModifyType.NewServer)
                 {
                     uStatusUpdate(string.Format("The game server {0} was successfully added, if you want this change to stick please save!", entry.Server.ServerName));
-                    uDebugAddLog(string.Format("Successfully added server {0} || Type {1}", entry.Server.ServerName, entry.Type.ToString()));
+                    Toolbox.uDebugAddLog(string.Format("Successfully added server {0} || Type {1}", entry.Server.ServerName, entry.Type.ToString()));
                 }
                 else if (entry != null)
                 {
                     uStatusUpdate(string.Format("Something unexpected happened, the return entry wasn't null but the return type wasn't ExistingServer. ServName: {0} || Type: {1}", entry.Server.ServerName, entry.Type.ToString()));
-                    uDebugAddLog(string.Format("Unexpected Server Entry Returned: Serv: {0} || Type {1} || Type Expect {3}", entry.Server.ServerName, entry.Type.ToString(), ServModifyType.NewServer.ToString()));
+                    Toolbox.uDebugAddLog(string.Format("Unexpected Server Entry Returned: Serv: {0} || Type {1} || Type Expect {3}", entry.Server.ServerName, entry.Type.ToString(), ServModifyType.NewServer.ToString()));
                 }
             }
             catch (Exception ex)
@@ -334,12 +373,12 @@ namespace PersonalDiscordBot
                     if (entry != null && entry.Type == ServModifyType.ExistingServer)
                     {
                         uStatusUpdate(string.Format("The game server {0} was successfully updated, if you want this change to stick please save!", entry.Server.ServerName));
-                        uDebugAddLog(string.Format("Successfully added server {0} || Type {1}", entry.Server.ServerName, entry.Type.ToString()));
+                        Toolbox.uDebugAddLog(string.Format("Successfully added server {0} || Type {1}", entry.Server.ServerName, entry.Type.ToString()));
                     }
                     else if (entry != null)
                     {
                         uStatusUpdate(string.Format("Something unexpected happened, the return entry wasn't null but the return type wasn't ExistingServer. ServName: {0} || Type: {1}", entry.Server.ServerName, entry.Type.ToString()));
-                        uDebugAddLog(string.Format("Unexpected Server Entry Returned: Serv: {0} || Type Ret {1} || Type Expect {3}", entry.Server.ServerName, entry.Type.ToString(), ServModifyType.ExistingServer.ToString()));
+                        Toolbox.uDebugAddLog(string.Format("Unexpected Server Entry Returned: Serv: {0} || Type Ret {1} || Type Expect {3}", entry.Server.ServerName, entry.Type.ToString(), ServModifyType.ExistingServer.ToString()));
                     }
                 }
             }
@@ -354,6 +393,7 @@ namespace PersonalDiscordBot
             try
             {
                 ReadConfig(ConfigType.Servers);
+                RefreshServerList();
             }
             catch (Exception ex)
             {
@@ -415,9 +455,83 @@ namespace PersonalDiscordBot
         {
             try
             {
-                _paths.LogLocation = txtLogDirectory.Text;
+                Toolbox._paths.LogLocation = txtLogDirectory.Text;
                 SaveConfig(ConfigType.Paths);
                 uStatusUpdate("Saved Settings Successfully");
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
+        }
+
+        private void btnDumpDebug_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Toolbox.DumpDebugLog();
+                uStatusUpdate("Manually Dumped Debug Log");
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
+        }
+
+        private void btnAddAdmin_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ulong adminID = 0;
+                var isUlong = ulong.TryParse(txtAdminUlong.Text, out adminID);
+                if (!isUlong)
+                {
+                    ShowNotification("Admin Id entered was invalid, please try again", 5);
+                    return;
+                }
+                if (Permissions.Administrators.Contains(adminID))
+                {
+                    uStatusUpdate($"{adminID} is already in the admin list, canceling...");
+                    return;
+                }
+                Permissions.Administrators.Add(adminID);
+                Events.uStatusUpdateExt($"Added admin ID: {adminID}");
+                tRefreshAdminList();
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
+        }
+
+        private void btnRemoveAdmin_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ulong adminID = 0;
+                var isUlong = ulong.TryParse(comboAdmins.SelectedItem.ToString(), out adminID);
+                if (!isUlong)
+                {
+                    ShowNotification("Admin ID selected from combobox is invalid", 5);
+                    uStatusUpdate($"Combobox Admin ID invalid: {adminID}");
+                    return;
+                }
+                Permissions.Administrators.Remove(adminID);
+                uStatusUpdate($"Removed admin ID: {adminID}");
+                tRefreshAdminList();
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
+        }
+
+        private void btnSaveRPG_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Management.SerializeData();
+                Permissions.SerializePermissions();
             }
             catch (Exception ex)
             {
@@ -433,59 +547,18 @@ namespace PersonalDiscordBot
         {
             try
             {
-                string _timeNow = DateTime.Now.ToLocalTime().ToShortTimeString();
+                string _timeNow = $"{DateTime.Now.ToLocalTime().ToShortDateString()}_{DateTime.Now.ToLocalTime().ToShortTimeString()}";
                 string _statusString = string.Format("{0} :: {1}{2}", _timeNow, _status, Environment.NewLine);
                 bool isFocused = true;
-                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { txtStatusValue.AppendText(_statusString); });
-                uDebugAddLog(string.Format("STATUS: {0}", _status));
+                int lineCount = 0;
+                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { txtStatusValue.AppendText(_statusString); lineCount = txtStatusValue.LineCount; });
+                Toolbox.uDebugAddLog(string.Format("STATUS: {0}", _status));
                 Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { isFocused = txtStatusValue.IsFocused; });
+                if (lineCount > 300)
+                    DumpStatusLog();
                 if (!isFocused)
                 {
                     Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { txtStatusValue.ScrollToEnd(); });
-                }
-            }
-            catch (Exception ex)
-            {
-                FullExceptionLog(ex);
-            }
-        }
-
-        private void uDebugAddLog(string _log)
-        {
-            try
-            {
-                string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
-                string _timeNow = DateTime.Now.ToLocalTime().ToLongTimeString();
-                _debugLog.AppendLine(string.Format("{0}_{1} :: {2}", _dateNow, _timeNow, _log));
-                if (_debugLog.Length >= 5000)
-                    DumpDebugLog();
-            }
-            catch (Exception ex)
-            {
-                FullExceptionLog(ex);
-            }
-        }
-
-        private void DumpDebugLog()
-        {
-            try
-            {
-                string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
-                string _debugLocation = string.Format(@"{0}\DebugLog_{1}.txt", _paths.LogLocation, _dateNow);
-                if (!File.Exists(_debugLocation))
-                    using (StreamWriter _sw = new StreamWriter(_debugLocation))
-                        _sw.WriteLine(_debugLog.ToString());
-                else
-                    using (StreamWriter _sw = File.AppendText(_debugLocation))
-                        _sw.WriteLine(_debugLog.ToString());
-                _debugLog.Clear();
-                DirectoryInfo _dI = new DirectoryInfo(_paths.LogLocation);
-                foreach (FileInfo _fI in _dI.GetFiles())
-                {
-                    if (_fI.Name.StartsWith("DebugLog") && _fI.CreationTime.ToLocalTime() <= DateTime.Now.AddDays(-14).ToLocalTime())
-                    {
-                        _fI.Delete(); uDebugAddLog(string.Format("Deleted old DebugLog: {0}", _fI.Name));
-                    }
                 }
             }
             catch (Exception ex)
@@ -503,30 +576,31 @@ namespace PersonalDiscordBot
                 string _confDir = string.Format(@"{0}\Config", _currDir);
                 string _pathConfig = string.Format(@"{0}\Paths.json", _confDir);
                 string _servConfig = string.Format(@"{0}\ServerConfig.xml", _confDir);
-                _paths.ConfigLocation = _confDir; _paths.LogLocation = _logDir; _paths.PathsConfig = _pathConfig; _paths.ServerConfig = _servConfig;
+                Toolbox._paths.ConfigLocation = _confDir; Toolbox._paths.LogLocation = _logDir; Toolbox._paths.PathsConfig = _pathConfig; Toolbox._paths.ServerConfig = _servConfig;
                 if (!Directory.Exists(_logDir))
                 {
-                    Directory.CreateDirectory(_logDir); uDebugAddLog(string.Format("Didn't find Log Directory, created at: {0}", _logDir));
+                    Directory.CreateDirectory(_logDir); Toolbox.uDebugAddLog(string.Format("Didn't find Log Directory, created at: {0}", _logDir));
                 }
-                else { uDebugAddLog(string.Format("Found Log Directory at: {0}", _logDir)); }
+                else { Toolbox.uDebugAddLog(string.Format("Found Log Directory at: {0}", _logDir)); }
                 if (!Directory.Exists(_confDir))
                 {
-                    Directory.CreateDirectory(_confDir); uDebugAddLog(string.Format("Didn't find Config Directory, created at: {0}", _confDir));
+                    Directory.CreateDirectory(_confDir); Toolbox.uDebugAddLog(string.Format("Didn't find Config Directory, created at: {0}", _confDir));
                 }
-                else { uDebugAddLog(string.Format("Found Config Directory at: {0}", _confDir)); }
+                else { Toolbox.uDebugAddLog(string.Format("Found Config Directory at: {0}", _confDir)); }
                 if (!File.Exists(_pathConfig))
                 {
-                    CreateDefaultConfig(ConfigType.Paths); uDebugAddLog(string.Format("Paths.json not found, created at: {0}", _pathConfig));
+                    CreateDefaultConfig(ConfigType.Paths); Toolbox.uDebugAddLog(string.Format("Paths.json not found, created at: {0}", _pathConfig));
                 }
-                else { uDebugAddLog(string.Format("Found Paths.json at: {0}", _pathConfig)); }
+                else { Toolbox.uDebugAddLog(string.Format("Found Paths.json at: {0}", _pathConfig)); }
                 if (!File.Exists(_servConfig))
                 {
-                    CreateDefaultConfig(ConfigType.Servers); uDebugAddLog(string.Format("ServerConfig.xml not found, created at {0}", _servConfig));
+                    CreateDefaultConfig(ConfigType.Servers); Toolbox.uDebugAddLog(string.Format("ServerConfig.xml not found, created at {0}", _servConfig));
                 }
-                else { uDebugAddLog(string.Format("Found ServerConfig.xml at: {0}", _servConfig)); }
+                else { Toolbox.uDebugAddLog(string.Format("Found ServerConfig.xml at: {0}", _servConfig)); }
                 ReadConfig(ConfigType.Paths);
                 ReadConfig(ConfigType.Servers);
-                uDebugAddLog("Finished reading config");
+                RefreshServerList();
+                Toolbox.uDebugAddLog("Finished reading config");
             }
             catch (Exception ex)
             {
@@ -534,33 +608,34 @@ namespace PersonalDiscordBot
             }
         }
 
-        private void ReadConfig(ConfigType confType)
+        public static void ReadConfig(ConfigType confType)
         {
             try
             {
                 switch (confType)
                 {
                     case ConfigType.Paths:
-                        using (StreamReader _sr = File.OpenText(_paths.PathsConfig))
+                        using (StreamReader _sr = File.OpenText(Toolbox._paths.PathsConfig))
                         {
-                            Paths pathsCopy = _paths;
-                            string _origPath = _paths.PathsConfig;
+                            LocalSettings pathsCopy = Toolbox._paths;
+                            string _origPath = Toolbox._paths.PathsConfig;
                             string _json = _sr.ReadToEnd();
-                            _paths = JsonConvert.DeserializeObject<List<Paths>>(_json)[0];
-                            if (!Directory.Exists(_paths.ConfigLocation))
-                                _paths.ConfigLocation = pathsCopy.ConfigLocation;
-                            if (!Directory.Exists(_paths.LogLocation))
-                                _paths.LogLocation = pathsCopy.LogLocation;
-                            if (!File.Exists(_paths.PathsConfig))
-                                _paths.PathsConfig = pathsCopy.PathsConfig;
-                            if (!File.Exists(_paths.ServerConfig))
-                                _paths.ServerConfig = pathsCopy.ServerConfig;
-                            uDebugAddLog(string.Format("{0} Deserialized:{1} LogLocation[{2}]{1} ConfigLocation[{3}]{1} PathsConfig[{4}]{1} ServerConfig[{5}]", _origPath, Environment.NewLine, _paths.LogLocation, _paths.ConfigLocation, _paths.PathsConfig, _paths.ServerConfig));
+                            Toolbox._paths = JsonConvert.DeserializeObject<List<LocalSettings>>(_json)[0];
+                            if (!Directory.Exists(Toolbox._paths.ConfigLocation))
+                                Toolbox._paths.ConfigLocation = pathsCopy.ConfigLocation;
+                            if (!Directory.Exists(Toolbox._paths.LogLocation))
+                                Toolbox._paths.LogLocation = pathsCopy.LogLocation;
+                            if (!File.Exists(Toolbox._paths.PathsConfig))
+                                Toolbox._paths.PathsConfig = pathsCopy.PathsConfig;
+                            if (!File.Exists(Toolbox._paths.ServerConfig))
+                                Toolbox._paths.ServerConfig = pathsCopy.ServerConfig;
+                            Toolbox.uDebugAddLog(string.Format("{0} Deserialized:{1} LogLocation[{2}]{1} ConfigLocation[{3}]{1} PathsConfig[{4}]{1} ServerConfig[{5}]", _origPath, Environment.NewLine, Toolbox._paths.LogLocation, Toolbox._paths.ConfigLocation, Toolbox._paths.PathsConfig, Toolbox._paths.ServerConfig));
+                            
                         }
                         break;
                     case ConfigType.Servers:
                         ServerList.Clear();
-                        StreamReader reader = new StreamReader(new FileStream(_paths.ServerConfig, FileMode.Open, FileAccess.Read, FileShare.Read));
+                        StreamReader reader = new StreamReader(new FileStream(Toolbox._paths.ServerConfig, FileMode.Open, FileAccess.Read, FileShare.Read));
                         XmlDocument doc = new XmlDocument();
                         string xmlIn = reader.ReadToEnd();
                         reader.Close();
@@ -589,41 +664,42 @@ namespace PersonalDiscordBot
                                         ServerLogPath = node.Attributes["logpath"].Value ?? ""
                                     };
                                     ServerList.Add(gs);
-                                    uDebugAddLog(string.Format("Added GameServer from config: Game[{0}] ServName[{1}]", gs.Game, gs.ServerName));
+                                    Toolbox.uDebugAddLog(string.Format("Added GameServer from config: Game[{0}] ServName[{1}]", gs.Game, gs.ServerName));
                                 }
                         ServerList = new ObservableCollection<GameServer>(ServerList.OrderBy(x => x.Game));
-                        lvServers.ItemsSource = null;
-                        lvServers.ItemsSource = CurrentServerList;
                         break;
                 }
             }
             catch (Exception ex)
             {
-                FullExceptionLog(ex);
+                Toolbox.FullExceptionLog(ex);
             }
         }
 
-        private void SaveConfig(ConfigType confType)
+        public static void SaveConfig(ConfigType confType)
         {
             try
             {
                 switch (confType)
                 {
                     case ConfigType.Paths:
-                        List<Paths> _pathsT = new List<Paths>();
-                        FileInfo _fI = new FileInfo(_paths.PathsConfig);
+                        List<LocalSettings> _pathsT = new List<LocalSettings>();
+                        FileInfo _fI = new FileInfo(Toolbox._paths.PathsConfig);
                         if (File.Exists(_fI.FullName))
                             _fI.Delete();
-                        _pathsT.Add(new Paths
+                        _pathsT.Add(new LocalSettings
                         {
-                            LogLocation = _paths.LogLocation,
-                            ConfigLocation = _paths.ConfigLocation,
-                            PathsConfig = _paths.PathsConfig,
-                            ServerConfig = _paths.ServerConfig
+                            LogLocation = Toolbox._paths.LogLocation,
+                            ConfigLocation = Toolbox._paths.ConfigLocation,
+                            PathsConfig = Toolbox._paths.PathsConfig,
+                            ServerConfig = Toolbox._paths.ServerConfig,
+                            BotToken = Toolbox._paths.BotToken,
+                            Updated = Toolbox._paths.Updated,
+                            CurrentVersion = Toolbox._paths.CurrentVersion
                         });
                         string jSon = JsonConvert.SerializeObject(_pathsT.ToArray(), Newtonsoft.Json.Formatting.Indented);
-                        File.WriteAllText(_paths.PathsConfig, jSon);
-                        uDebugAddLog("Saved current config to Paths.json");
+                        File.WriteAllText(Toolbox._paths.PathsConfig, jSon);
+                        Toolbox.uDebugAddLog("Saved current config to Paths.json");
                         break;
                     case ConfigType.Servers:
                         XmlDocument doc = new XmlDocument();
@@ -642,7 +718,7 @@ namespace PersonalDiscordBot
                             serv.SetAttribute("password", game.Password ?? "");
                             serv.SetAttribute("ipaddress", game.IPAddress ?? "");
                             serv.SetAttribute("port", game.PortNum.ToString() ?? "");
-                            serv.SetAttribute("queryport", game.PortNum.ToString() ?? "");
+                            serv.SetAttribute("queryport", game.QueryPort.ToString() ?? "");
                             serv.SetAttribute("exthost", game.ExtHostname ?? "");
                             serv.SetAttribute("modded", game.Modded.ToString() ?? "");
                             serv.SetAttribute("runexepath", game.ServerExe.ToString() ?? "");
@@ -651,15 +727,21 @@ namespace PersonalDiscordBot
                             serv.SetAttribute("logpath", game.ServerLogPath ?? "");
                             gameServ.AppendChild(serv);
                         }
-                        doc.Save(_paths.ServerConfig);
-                        uDebugAddLog("Saved current game server list to ServerConfig.xml");
+                        doc.Save(Toolbox._paths.ServerConfig);
+                        Toolbox.uDebugAddLog("Saved current game server list to ServerConfig.xml");
                         break;
                 }
             }
             catch (Exception ex)
             {
-                FullExceptionLog(ex);
+                Toolbox.FullExceptionLog(ex);
             }
+        }
+
+        private void RefreshServerList()
+        {
+            lvServers.ItemsSource = null;
+            lvServers.ItemsSource = CurrentServerList;
         }
 
         private void CreateDefaultConfig(ConfigType confType)
@@ -674,23 +756,23 @@ namespace PersonalDiscordBot
                 switch (confType)
                 {
                     case ConfigType.Paths:
-                        List<Classes.Paths> _pathsT = new List<Classes.Paths>();
-                        _pathsT.Add(new Classes.Paths
+                        List<Classes.LocalSettings> _pathsT = new List<Classes.LocalSettings>();
+                        _pathsT.Add(new Classes.LocalSettings
                         {
                             LogLocation = _logDir,
                             ConfigLocation = _confDir,
                             PathsConfig = _pathConfig,
                             ServerConfig = _servConfig
                         });
-                        _paths.LogLocation = _logDir; _paths.ConfigLocation = _confDir; _paths.PathsConfig = _pathConfig; _paths.ServerConfig = _servConfig;
+                        Toolbox._paths.LogLocation = _logDir; Toolbox._paths.ConfigLocation = _confDir; Toolbox._paths.PathsConfig = _pathConfig; Toolbox._paths.ServerConfig = _servConfig;
                         string _json = JsonConvert.SerializeObject(_pathsT, Newtonsoft.Json.Formatting.Indented);
                         File.WriteAllText(_pathConfig, _json);
-                        uDebugAddLog(string.Format("Created default Paths.json: LogLoc: {0} ConfLoc: {1} PathLoc: {2} ServLoc: {3}", _logDir, _confDir, _pathConfig, _servConfig));
+                        Toolbox.uDebugAddLog(string.Format("Created default Paths.json: LogLoc: {0} ConfLoc: {1} PathLoc: {2} ServLoc: {3}", _logDir, _confDir, _pathConfig, _servConfig));
                         break;
                     case ConfigType.Servers:
                         XDocument doc = new XDocument(new XElement("GameServers"));
-                        doc.Save(_paths.ServerConfig);
-                        uDebugAddLog(string.Format("Created default ServerConfig.xml at {0}", _servConfig));
+                        doc.Save(Toolbox._paths.ServerConfig);
+                        Toolbox.uDebugAddLog(string.Format("Created default ServerConfig.xml at {0}", _servConfig));
                         break;
                 }
             }
@@ -703,9 +785,9 @@ namespace PersonalDiscordBot
         private void FullExceptionLog(Exception ex, [CallerLineNumber] int lineNumber = 0, [CallerMemberName] string caller = null, [CallerFilePath] string filePath = null)
         {
             string exString = string.Format("TimeStamp: {1}{0}Exception Type: {2}{0}Caller: {3} at {4}{0}Message: {5}{0}HR: {6}{0}StackTrace:{0}{7}{0}", Environment.NewLine, string.Format("{0}_{1}", DateTime.Now.ToLocalTime().ToString("MM-dd-yy"), DateTime.Now.ToLocalTime().ToLongTimeString()), ex.GetType().Name, caller, lineNumber, ex.Message, ex.HResult, ex.StackTrace);
-            uDebugAddLog(string.Format("EXCEPTION: {0} at {1}", caller, lineNumber));
+            Toolbox.uDebugAddLog(string.Format("EXCEPTION: {0} at {1}", caller, lineNumber));
             uStatusUpdate(string.Format("An Exception Occured: {0} at {1}{2}Msg: {3}", caller, lineNumber, Environment.NewLine, ex.Message));
-            string _logLocation = string.Format(@"{0}\Exceptions.log", _paths.LogLocation);
+            string _logLocation = string.Format(@"{0}\Exceptions.log", Toolbox._paths.LogLocation);
             if (!File.Exists(_logLocation))
                 using (StreamWriter _sw = new StreamWriter(_logLocation))
                     _sw.WriteLine(exString + Environment.NewLine);
@@ -714,13 +796,13 @@ namespace PersonalDiscordBot
                     _sw.WriteLine(exString + Environment.NewLine);
         }
 
-        private void ResultLog(IResult ex)
+        private void ResultLog(IResult ex, [CallerLineNumber] int lineNumber = 0, [CallerMemberName] string caller = null, [CallerFilePath] string filePath = null)
         {
             if (ex.ErrorReason.ToLower() == "unknown command.") return;
-            string exString = string.Format("ErrorReason[{0}] ErrorValue[{1}]", ex.ErrorReason, ex.Error.Value);
-            uDebugAddLog(string.Format("RSLTFAIL: {0}", exString));
+            string exString = $"TimeStamp: {$"{DateTime.Now.ToLocalTime().ToString("MM-dd-yy")} {DateTime.Now.ToLocalTime().ToLongTimeString()}"}{line}Exception Type: {ex.GetType().Name}{line}Caller: {caller} at {lineNumber}{line}Error: {ex.Error}{line}Error Reason: {ex.ErrorReason}{line}StackTrace: {line}{ex.Error.Value}{line}";
+            Toolbox.uDebugAddLog(string.Format("RSLTFAIL: {0}", exString));
             uStatusUpdate(string.Format("A result failed: {0}", exString));
-            string _logLocation = string.Format(@"{0}\Exceptions.txt", _paths.LogLocation);
+            string _logLocation = string.Format(@"{0}\Exceptions.log", Toolbox._paths.LogLocation);
             if (!File.Exists(_logLocation))
                 using (StreamWriter _sw = new StreamWriter(_logLocation))
                     _sw.WriteLine(exString);
@@ -739,6 +821,7 @@ namespace PersonalDiscordBot
                 _animate.AccelerationRatio = .9;
                 _animate.Duration = new Duration(TimeSpan.FromSeconds(.3));
                 _grd.BeginAnimation(Grid.MarginProperty, _animate);
+                Toolbox.uDebugAddLog($"Slid Grid {_grd.Name} from {from.ToString()} to {to.ToString()}");
             }
             catch (Exception ex)
             {
@@ -791,12 +874,12 @@ namespace PersonalDiscordBot
                 if (!secondClick)
                 {
                     SlideGridTo(0, 0, 0, 0, grdMenu);
-                    uDebugAddLog("Slid Main Menu out of view");
+                    Toolbox.uDebugAddLog("Slid Main Menu out of view");
                 }
                 else if (secondClick)
                 {
                     SlideGridTo(0, 0, 0, -285, grdMenu);
-                    uDebugAddLog("Slid Main Menu into view");
+                    Toolbox.uDebugAddLog("Slid Main Menu into view");
                 }
             }
             catch (Exception ex)
@@ -811,7 +894,7 @@ namespace PersonalDiscordBot
             {
                 case Visibility.Visible:
                     grd.Visibility = Visibility.Hidden;
-                    uDebugAddLog(string.Format("Hid Grid {0}", grd.Name));
+                    Toolbox.uDebugAddLog(string.Format("Hid Grid {0}", grd.Name));
                     MainMenuGridSlide(true);
                     break;
                 case Visibility.Hidden:
@@ -820,12 +903,12 @@ namespace PersonalDiscordBot
                         if (grid != grd)
                         {
                             grid.Visibility = Visibility.Hidden;
-                            uDebugAddLog(string.Format("Hid Grid {0}", grid.Name));
+                            Toolbox.uDebugAddLog(string.Format("Hid Grid {0}", grid.Name));
                         }
                         else
                         {
                             grid.Visibility = Visibility.Visible;
-                            uDebugAddLog(string.Format("Revealed Grid {0}", grid.Name));
+                            Toolbox.uDebugAddLog(string.Format("Revealed Grid {0}", grid.Name));
                         }
                     }
                     MainMenuGridSlide(false);
@@ -838,8 +921,45 @@ namespace PersonalDiscordBot
             foreach (Grid grd in FindVisualChildren<Grid>(grdMenu))
             {
                 grd.Visibility = Visibility.Hidden;
-                uDebugAddLog(string.Format("Set Grid {0} to Hidden on launch", grd.Name));
+                Toolbox.uDebugAddLog(string.Format("Set Grid {0} to Hidden on launch", grd.Name));
             }
+        }
+
+        private void UpdateVerison()
+        {
+            string verNum = GetVersionNumber();
+            if (verNum != sGeneral.Default.CurrentVersion)
+            {
+                string prevVersion = sGeneral.Default.CurrentVersion;
+                string dateUpdate = $"{DateTime.Now.ToLocalTime().ToString("MM-dd-yyyy")} {DateTime.Now.ToLocalTime().ToLongTimeString()}";
+                sGeneral.Default.LastUpdate = dateUpdate;
+                sGeneral.Default.CurrentVersion = verNum;
+                sGeneral.Default.Save();
+                lblUpdateTime.Text = sGeneral.Default.LastUpdate;
+                lblVersionNumber.Text = $"Version {sGeneral.Default.CurrentVersion}";
+                uStatusUpdate($"Version updated to {sGeneral.Default.CurrentVersion}");
+            }
+            else
+            {
+                lblUpdateTime.Text = sGeneral.Default.LastUpdate;
+                lblVersionNumber.Text = $"Version {verNum}";
+                uStatusUpdate($"Current Version: {sGeneral.Default.CurrentVersion}");
+            }
+            if (Toolbox._paths.Updated)
+            {
+                Toolbox._paths.Updated = false;
+                uStatusUpdate($"Updated to github version {Toolbox._paths.CurrentVersion}");
+                if (Permissions.GeneralPermissions.logChannel != 0)
+                {
+                    var channel = (IMessageChannel)client.GetChannel(Permissions.GeneralPermissions.logChannel);
+                    channel.SendMessageAsync($"Bot upgraded to github v{Toolbox._paths.CurrentVersion}");
+                }
+            }
+        }
+
+        private string GetVersionNumber()
+        {
+            return Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
@@ -861,6 +981,78 @@ namespace PersonalDiscordBot
                         }
                     }
                 }
+            }
+        }
+
+        private void SaveWindowLocation()
+        {
+            Toolbox.uDebugAddLog("Saving window location");
+            Thickness winLocation = new Thickness(this.Left, this.Top, this.Width, this.Height);
+            sGeneral.Default.WindowLocation = winLocation;
+            sGeneral.Default.Save();
+            Toolbox.uDebugAddLog($"Window Location Saved: [L]{winLocation.Left} [T]{winLocation.Top} [R]{winLocation.Right} [B]{winLocation.Bottom}");
+        }
+
+        private void LoadWindowLocation()
+        {
+            Toolbox.uDebugAddLog("Loading window location");
+            Thickness savedLocation = sGeneral.Default.WindowLocation;
+            this.Left = savedLocation.Left;
+            this.Top = savedLocation.Top;
+            this.Width = savedLocation.Right;
+            this.Height = savedLocation.Bottom;
+            Toolbox.uDebugAddLog($"Window Location Loaded and applied: [L]{savedLocation.Left} [T]{savedLocation.Top} [R]{savedLocation.Right} [B]{savedLocation.Bottom}");
+        }
+
+        private void DumpStatusLog()
+        {
+            string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
+            string _logLocation = string.Format(@"{0}\StatusLog_{1}.txt", Toolbox._paths.LogLocation, _dateNow);
+            string textDump = string.Empty;
+            Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { textDump = txtStatusValue.Text; txtStatusValue.Text = string.Empty; });
+            if (!File.Exists(_logLocation))
+                using (StreamWriter _sw = new StreamWriter(_logLocation))
+                    _sw.WriteLine(textDump);
+            else
+                using (StreamWriter _sw = File.AppendText(_logLocation))
+                    _sw.WriteLine(textDump);
+            DirectoryInfo _dI = new DirectoryInfo(Toolbox._paths.LogLocation);
+            foreach (FileInfo _fI in _dI.GetFiles())
+            {
+                if (_fI.Name.StartsWith("StatusLog") && _fI.CreationTime.ToLocalTime() <= DateTime.Now.AddDays(-14).ToLocalTime())
+                {
+                    _fI.Delete(); Toolbox.uDebugAddLog(string.Format("Deleted old StatusLog: {0}", _fI.Name));
+                }
+            }
+            uStatusUpdate($"Dumped status log to: {_logLocation}");
+        }
+
+        private void VerifyDebug()
+        {
+#if DEBUG
+            uStatusUpdate("Running DEBUG Mode");
+            btnTest.Visibility = Visibility.Visible;
+#else
+            btnTest.Visibility = Visibility.Hidden;   
+#endif
+        }
+
+        public static void StartUpdate()
+        {
+            try
+            {
+                Toolbox._paths.Updated = true;
+                Permissions.SerializePermissions();
+                Management.SerializeData();
+                SaveConfig(ConfigType.Paths);
+                SaveConfig(ConfigType.Servers);
+                string updaterLocation = $@"{Directory.GetCurrentDirectory()}\PDBUpdater.exe";
+                Process updater = new Process() { StartInfo = new ProcessStartInfo { FileName = updaterLocation } };
+                updater.Start();
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
             }
         }
 
@@ -889,7 +1081,7 @@ namespace PersonalDiscordBot
                             grdNotification.BeginAnimation(Grid.MarginProperty, slideIn);
                             break;
                         default:
-                            uDebugAddLog("Something happened and the incorrect notification state was used, accepted states: 1 or 2");
+                            Toolbox.uDebugAddLog("Something happened and the incorrect notification state was used, accepted states: 1 or 2");
                             break;
                     }
                 };
@@ -898,11 +1090,11 @@ namespace PersonalDiscordBot
                     try
                     {
                         Notification newNote = new Notification() { Message = notification, ShowTime = showTime };
-                        uDebugAddLog($"New Notification: {newNote.Message}, {newNote.ShowTime}sec(s)");
+                        Toolbox.uDebugAddLog($"New Notification: {newNote.Message}, {newNote.ShowTime}sec(s)");
                         Notification.notifications.Add(newNote);
-                        if (notificationPlaying) { uDebugAddLog("Notification is currently playing, returning"); return; }
+                        if (notificationPlaying) { Toolbox.uDebugAddLog("Notification is currently playing, returning"); return; }
                         notificationPlaying = true;
-                        uDebugAddLog("Notification wasn't playing, starting notification play cycles");
+                        Toolbox.uDebugAddLog("Notification wasn't playing, starting notification play cycles");
                         while (Notification.notifications.Count != 0)
                         {
                             foreach (var notif in Notification.notifications.ToList())
@@ -912,12 +1104,12 @@ namespace PersonalDiscordBot
                                 Thread.Sleep(TimeSpan.FromSeconds(notif.ShowTime));
                                 worker.ReportProgress(2);
                                 Notification.notifications.Remove(notif);
-                                uDebugAddLog($"Removed notification: {notif.Message}");
-                                uDebugAddLog($"Notifications left: {Notification.notifications.Count}");
+                                Toolbox.uDebugAddLog($"Removed notification: {notif.Message}");
+                                Toolbox.uDebugAddLog($"Notifications left: {Notification.notifications.Count}");
                             }
                         }
                         notificationPlaying = false;
-                        uDebugAddLog("Finished playing all notifications");
+                        Toolbox.uDebugAddLog("Finished playing all notifications");
                     }
                     catch (Exception ex)
                     {
@@ -949,6 +1141,50 @@ namespace PersonalDiscordBot
             }
         }
 
+        private void tSaveRPGData()
+        {
+            Thread save = new Thread(() =>
+            {
+                while (true)
+                {
+                    Thread.Sleep(TimeSpan.FromMinutes(10));
+                    Management.SerializeData();
+                }
+            });
+            save.Start();
+        }
+
+        private void tRefreshAdminList()
+        {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += (s, e) =>
+            {
+                try
+                {
+                    Toolbox.uDebugAddLog("Refreshing admin list");
+                    Thread.Sleep(TimeSpan.FromSeconds(3));
+                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { comboAdmins.Items.Clear(); });
+                    int count = 0;
+                    if (Permissions.Administrators.Count <= 0)
+                    {
+                        Events.uStatusUpdateExt($"Refreshed admin list, total admins: {count}");
+                        return;
+                    }
+                    foreach (var admin in Permissions.Administrators)
+                    {
+                        count++;
+                        Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { comboAdmins.Items.Add(admin); });
+                    }
+                    Events.uStatusUpdateExt($"Refreshed admin list, total admins: {count}");
+                }
+                catch (Exception ex)
+                {
+                   FullExceptionLog(ex);
+                }
+            };
+            worker.RunWorkerAsync();
+        }
+
         #endregion
 
         #region Async Methods
@@ -971,7 +1207,7 @@ namespace PersonalDiscordBot
                 // Define the DiscordSocketClient
                 client = new DiscordSocketClient();
 
-                var token = sGeneral.Default.Token;
+                var token = Toolbox._paths.BotToken;
                 commands = new CommandService();
                 map = new DependencyMap();
                 map.Add(client);
@@ -981,6 +1217,8 @@ namespace PersonalDiscordBot
                 // Login and connect to Discord.
                 await client.LoginAsync(TokenType.Bot, token);
                 await client.ConnectAsync();
+
+                ShowNotification($"Bot {client.CurrentUser.Username} Successfully Connected", 4);
             }
             catch (Exception ex)
             {
@@ -1056,9 +1294,9 @@ namespace PersonalDiscordBot
                 if (!(msg.HasCharPrefix(';', ref argPos) || msg.HasMentionPrefix(client.CurrentUser, ref argPos))) return;
                 
                 CommandContext context = new CommandContext(client, msg);
-                string cmd = string.Format("User: {0} ◥◤ Command: {1}", arg.Author.Username, arg.ToString());
+                var cmd = $"User: {arg.Author.Username} ◥◤ Command: {arg.ToString()}";
                 uStatusUpdate(cmd);
-                uDebugAddLog(string.Format("COMMAND: {0}", cmd));
+                Toolbox.uDebugAddLog(string.Format("COMMAND: {0}", cmd));
                 var result = await commands.ExecuteAsync(context, argPos, map);
                 if (!result.IsSuccess)
                 {
@@ -1073,17 +1311,89 @@ namespace PersonalDiscordBot
             }
         }
 
-        #endregion
+        private async Task UpdateApplication()
+        {
+            try
+            {
+                if (gitClient == null)
+                    gitClient = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("PDB"));
+                if (Toolbox._paths.CurrentVersion == null)
+                    Toolbox._paths.CurrentVersion = new Version("0.1.00.00");
+                var releases = await gitClient.Repository.Release.GetAll("rwobig93", "ServerRPGAdventure");
+                var release = releases[0];
+                Version releaseVersion = new Version(release.TagName);
+                var result = Toolbox._paths.CurrentVersion.CompareTo(releaseVersion);
+                if (result < 0)
+                {
+                    uStatusUpdate($"Newer release found, updating now... [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
+                    StartUpdate();
+                }
+                else
+                {
+                    uStatusUpdate($"Release Version is the same version or older than running assembly. [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
+                }
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
+        }
+
+        private async Task SendConnectedMsg()
+        {
+            await Task.Delay(3000);
+            if (Permissions.GeneralPermissions.logChannel != 0)
+            {
+                var channel = client.GetChannel(Permissions.GeneralPermissions.logChannel);
+                if (channel != null)
+                {
+#if DEBUG
+                    await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has connected in DEBUG Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+                    Toolbox.uDebugAddLog($"Sent connected debug message to channel {channel.Id}");
+#else
+                    await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has connected biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+                    Toolbox.uDebugAddLog($"Sent connected message to channel {channel.Id}");
+#endif
+                    ShowNotification($"Bot {client.CurrentUser.Username} Sent connected message to log channel {((IMessageChannel)channel).Name}", 6);
+                }
+                else
+                    Toolbox.uDebugAddLog($"IMessageChannel came back null when looking for {Permissions.GeneralPermissions.logChannel}, connected message wasn't sent");
+            }
+        }
+
+#endregion
 
         #region WIP
 
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
-            var pickedLoot = (Weapon)LootDrop.PickLoot(RPG.testiculeesCharacter);
-            uStatusUpdate($"{line}Name: {pickedLoot.Name}{line}Description: {pickedLoot.Desc}{line}Type: {pickedLoot.Type.ToString()}{line}Rarity: {pickedLoot.Rarity}{line}Level: {pickedLoot.Lvl}{line}Max Durability: {pickedLoot.MaxDurability}{line}Current Durability: {pickedLoot.CurrentDurability}{line}Worth: {pickedLoot.Worth}{line}Speed: {pickedLoot.Speed}{line}Physical Damage: {pickedLoot.PhysicalDamage}");
-        } 
+            //Permissions.SerializePermissions();
+            //Management.SerializeData();
+            //uStatusUpdate(Testing.ShowBackPackItems());
+            //OwnerProfile owner = new OwnerProfile() { OwnerID = 123456789, Currency = 696969, OwnerUN = "That one Guy", TotalPebbles = 99 };
+            //RPG.Owners.Add(owner);
+            //uStatusUpdate(Testing.EmulateFight(owner));
+            List<int> lvlList = new List<int>();
+            for (var i = 1; i <= 15; i++)
+            {
+                int exp = 0;
+                uStatusUpdate($"Experience lvl {i}: {exp = Management.CalculateExperience(i)}");
+                lvlList.Add(exp);
+            }
+        }
 
-        #endregion
+        private void SetupTest()
+        {
+            RPG.Owners.Add(Testing.testiculeesProfile);
+            var owner = RPG.Owners.Find(x => x.OwnerID == 12345678910111213);
+            var chara = Testing.testiculeesCharacter;
+            owner.CharacterList.Add(chara);
+            owner.CurrentCharacter = chara;
+            Permissions.Administrators.Add(127561010893553664);
+            uStatusUpdate("Testing setup");
+        }
+
+#endregion
     }
 
     public class Notification

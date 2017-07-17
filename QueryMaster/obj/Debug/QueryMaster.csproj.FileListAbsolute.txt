@@ -1,5 +1,0 @@
-C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\bin\Debug\QueryMaster.dll
-C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\bin\Debug\QueryMaster.pdb
-C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\bin\Debug\Ionic.BZip2.dll
-C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\obj\Debug\QueryMaster.dll
-C:\Users\Rick\Documents\Visual Studio 2015\Projects\QueryMaster\obj\Debug\QueryMaster.pdb
