@@ -51,6 +51,7 @@ namespace PersonalDiscordBot.Classes
         public int Pebbles { get; set; } = 0;
         public int Lvl { get; set; }
         public int Exp { get; set; }
+        public int ExpToLvl { get; set; } = Management.CalculateExperience(2);
         public int MaxHP { get { return RPG.HPMPStatCalc(this, this.Def, this.PF.Def); } }
         public int CurrentHP { get; set; }
         public int MaxMana { get { return RPG.HPMPStatCalc(this, this.Int, this.PF.Int);} }
@@ -105,9 +106,11 @@ namespace PersonalDiscordBot.Classes
         public int Lvl { get; set; }
         public int ExpLoot { get; set; }
         public int MaxHP { get { return RPG.HPMPStatCalc(this, this.Def, this.PF.Def); } }
-        public int CurrentHP { get; set; }
+        private int currentHP { get; set; } = -1;
+        public int CurrentHP { get { if (currentHP == -1) { return this.MaxHP; } else { return currentHP; } } set { currentHP = value; } }
         public int MaxMana { get { return RPG.HPMPStatCalc(this, this.Int, this.PF.Int); } }
-        public int CurrentMana { get; set; }
+        private int currentMana { get; set; } = -1;
+        public int CurrentMana { get { if (currentHP == -1) { return this.MaxMana; } else { return currentMana; } } set { currentMana = value; } }
         public int Str { get { return RPG.VitalStatCalc(this, this.PF.Str); } }
         public int Def { get { return RPG.VitalStatCalc(this, this.PF.Def); } }
         public int Dex { get { return RPG.VitalStatCalc(this, this.PF.Dex); } }
@@ -947,7 +950,7 @@ namespace PersonalDiscordBot.Classes
                     Color = owner.CurrentCharacter.Color,
                     Title = owner.CurrentCharacter.Desc,
                     ImageUrl = owner.CurrentCharacter.ImgURL,
-                    Description = $"Backpack Storage: {owner.CurrentCharacter.Backpack.Stored.Count}/{owner.CurrentCharacter.Backpack.Capacity}{line}Level: {owner.CurrentCharacter.Lvl}{line}Experience: {owner.CurrentCharacter.Exp}{line}HP: {owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP}{line}Mana: {owner.CurrentCharacter.CurrentMana}/{owner.CurrentCharacter.MaxMana}{line}Strength: {owner.CurrentCharacter.Str}{line}Defense: {owner.CurrentCharacter.Def}{line}Dexterity: {owner.CurrentCharacter.Dex}{line}Intelligence: {owner.CurrentCharacter.Int}{line}Speed: {owner.CurrentCharacter.Spd}{line}Luck: {owner.CurrentCharacter.Lck}",
+                    Description = $"Backpack Storage: {owner.CurrentCharacter.Backpack.Stored.Count}/{owner.CurrentCharacter.Backpack.Capacity}{line}Level: {owner.CurrentCharacter.Lvl}{line}Experience: {owner.CurrentCharacter.Exp}/{owner.CurrentCharacter.ExpToLvl}{line}HP: {owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP}{line}Mana: {owner.CurrentCharacter.CurrentMana}/{owner.CurrentCharacter.MaxMana}{line}Strength: {owner.CurrentCharacter.Str}{line}Defense: {owner.CurrentCharacter.Def}{line}Dexterity: {owner.CurrentCharacter.Dex}{line}Intelligence: {owner.CurrentCharacter.Int}{line}Speed: {owner.CurrentCharacter.Spd}{line}Luck: {owner.CurrentCharacter.Lck}",
                     Footer = new EmbedFooterBuilder()
                     {
                         Text = owner.CurrentCharacter.Class.ToString()
@@ -1099,6 +1102,27 @@ namespace PersonalDiscordBot.Classes
             return imgURL;
         }
 
+        public static int CalculateExperience(int level)
+        {
+            return Convert.ToInt32(287 * (Math.Pow(level, 2.37)));
+        }
+
+        public static bool VerifyLvlUp(Character chara)
+        {
+            Toolbox.uDebugAddLog($"Checking if {chara.Name} leveled up: [currexp]{chara.Exp} [exptolvl]{chara.ExpToLvl}");
+            if (chara.Exp > chara.ExpToLvl)
+            {
+                Toolbox.uDebugAddLog($"Before Level Up: [lvl]{chara.Lvl} [exp]{chara.Exp}/{chara.ExpToLvl}");
+                chara.Lvl++;
+                chara.ExpToLvl = Management.CalculateExperience(chara.Lvl);
+                Toolbox.uDebugAddLog($"After Level Up: [lvl]{chara.Lvl} [exp]{chara.Exp}/{chara.ExpToLvl}");
+                return true;
+            }
+            else
+                Toolbox.uDebugAddLog($"{chara.Name} didn't level up {chara.Exp}/{chara.ExpToLvl}");
+            return false;
+        }
+
         #endregion
 
         #region Combat Methods
@@ -1123,7 +1147,10 @@ namespace PersonalDiscordBot.Classes
                     Toolbox.uDebugAddLog($"Generated enemy {newEnemy.Name}, set as current enemy and added to the enemy list for {owner.OwnerID}");
                     RPG.MatchList.Add(newMatch);
                     Toolbox.uDebugAddLog($"Successfully generated new match with {newMatch.EnemyList.Count} enemies");
-                    Events.SendDiscordMessage(context, $"A new match was generated with **{newMatch.EnemyList.Count}** enemies");
+                    EmbedBuilder embed = new EmbedBuilder(){ Title = $"A new match was generated with **{newMatch.EnemyList.Count}** enemies", Color = owner.CurrentCharacter.Color, Description = $"{owner.CurrentCharacter.Name} vs. {newEnemy.Name}" };
+                    embed.AddField(x => { x.Name = "Player Img"; x.IsInline = true; x.Value = owner.CurrentCharacter.ImgURL; });
+                    embed.AddField(x => { x.Name = "Enemy Img"; x.IsInline = true; x.Value = newEnemy.ImgURL; });
+                    Events.SendDiscordMessage(context, embed);
                     CalculateTurn(context, owner);
                     return;
                 }
@@ -1378,20 +1405,36 @@ namespace PersonalDiscordBot.Classes
                     case MatchCompleteResult.Won:
                         await args.Context.Channel.SendMessageAsync($"{args.Context.Message.Author.Mention} You have defeated **{args.Match.DefeatedEnemies.Count} enemies** and completed the match!");
                         int lootCount = rng.Next(rng.Next(0, 2), 3 + (rng.Next(0, args.Match.DefeatedEnemies.Count)));
+                        var character = RPG.Owners.Find(x => x.OwnerID == args.Owner.OwnerID).CurrentCharacter;
                         Toolbox.uDebugAddLog($"Generating lootdrop, lootcount: {lootCount}");
                         int lootTimes = 0;
                         for (int i = lootCount; i > 0; i--)
                         {
                             lootTimes++;
-                            var loot = LootDrop.PickLoot(args.Owner.CurrentCharacter);
-                            args.Owner.CurrentCharacter.Loot.Add(loot);
+                            var loot = LootDrop.PickLoot(character);
+                            character.Loot.Add(loot);
                         }
                         Toolbox.uDebugAddLog($"Lootdrop generated, lootcount before filter: {lootTimes} [ID]{args.Owner.OwnerID}");
                         int pebbles = 0;
                         int currency = 0;
-                        LootDrop.FilterLoot(args.Owner.CurrentCharacter, out pebbles, out currency);
-                        Toolbox.uDebugAddLog($"Lootdrop lootcount after filter: {args.Owner.CurrentCharacter.Loot.Count} [ID]{args.Owner.OwnerID}");
-                        await args.Context.Channel.SendMessageAsync($"{args.Context.Message.Author.Mention} You earned {pebbles} pebbles and {currency} currency");
+                        LootDrop.FilterLoot(character, out pebbles, out currency);
+                        var copyChara = character;
+                        character.Exp += args.Match.ExperienceEarned;
+                        if (VerifyLvlUp(character))
+                        {
+                            var owner = args.Owner;
+                            var line = Environment.NewLine;
+                            EmbedBuilder embed = new EmbedBuilder()
+                            {
+                                Title = $"{character.Name} has leveled up!",
+                                Color = args.Owner.CurrentCharacter.Color,
+                                Description = $"Level: {copyChara.Lvl} > {character.Lvl}{line}MaxHP: {copyChara.MaxHP} > {character.MaxHP}{line}MaxMana: {copyChara.MaxMana} > {character.MaxMana}{line}Strength: {copyChara.Str} > {character.Str}{line}Defense: {copyChara.Def} > {character.Def}{line}Dexterity: {copyChara.Dex} > {character.Dex}{line}Intelligence: {copyChara.Int} > {character.Int}{line}Speed: {copyChara.Spd} > {character.Spd}{line}Luck: {copyChara.Lck} > {character.Lck}",
+                                ImageUrl = character.ImgURL
+                            };
+                            Events.SendDiscordMessage(args.Context, embed);
+                        }
+                        Toolbox.uDebugAddLog($"Lootdrop lootcount after filter: {character.Loot.Count} [ID]{args.Owner.OwnerID}");
+                        await args.Context.Channel.SendMessageAsync($"{args.Context.Message.Author.Mention} You earned {pebbles} pebbles,{currency} currency, and earned {args.Match.ExperienceEarned} experience!");
                         await EmptyLoot(args.Context);
                         break;
                     case MatchCompleteResult.Lost:
@@ -1894,7 +1937,10 @@ namespace PersonalDiscordBot.Classes
                 RPG.MatchList.Find(x => x.Owner == owner).CurrentEnemy = newEnemy;
                 RPG.MatchList.Find(x => x.Owner == owner).CurrentTurn = Turn.NotChosen;
                 Toolbox.uDebugAddLog($"Changed {enemy.Name} to the current enemy");
-                Events.SendDiscordMessage(context, $"You have defeated **{enemy.Name}** and are now fighting **{newEnemy.Name}**. Enemies left: {match.EnemyList.Count}");
+                EmbedBuilder embed = new EmbedBuilder() { Title = $"You have defeated **{enemy.Name}** and are now fighting **{newEnemy.Name}**. Enemies left: **{match.EnemyList.Count}**", Color = owner.CurrentCharacter.Color, Description = $"{owner.CurrentCharacter.Name} vs. {enemy.Name}" };
+                embed.AddField(x => { x.Name = "Player Img"; x.IsInline = true; x.Value = owner.CurrentCharacter.ImgURL; });
+                embed.AddField(x => { x.Name = "Enemy Img"; x.IsInline = true; x.Value = enemy.ImgURL; });
+                Events.SendDiscordMessage(context, embed);
                 CalculateTurn(context, owner);
             }
             catch (Exception ex)
@@ -2347,25 +2393,24 @@ namespace PersonalDiscordBot.Classes
             foreach (var bpItem in chara.Loot)
             {
                 var lootType = bpItem.GetLootType();
-                switch (lootType)
+                if (lootType == LootType.Nothing)
                 {
-                    case LootType.Nothing:
-                        chara.Pebbles++;
-                        owner.TotalPebbles++;
-                        pebblesAdded++;
-                        Toolbox.uDebugAddLog($"Added pebble to {chara.Name} and {owner.OwnerID} and removing from loot list for type {lootType}");
+                    chara.Pebbles++;
+                    owner.TotalPebbles++;
+                    pebblesAdded++;
+                    Toolbox.uDebugAddLog($"Added pebble to {chara.Name} and {owner.OwnerID} and removing from loot list for type {lootType}");
+                    chara.Loot.Remove(bpItem);
+                }
+                else if (lootType == LootType.Item)
+                {
+                    Item item = (Item)bpItem;
+                    if (item.Type == ItemType.Currency)
+                    {
+                        owner.Currency += item.Worth;
+                        currencyAdded += item.Worth;
+                        Toolbox.uDebugAddLog($"Added {item.Worth} currency to {owner.OwnerID} and removing from loot list for type {lootType}");
                         chara.Loot.Remove(bpItem);
-                        break;
-                    case LootType.Item:
-                        Item item = (Item)bpItem;
-                        if (item.Type == ItemType.Currency)
-                        {
-                            owner.Currency += item.Worth;
-                            currencyAdded += item.Worth;
-                            Toolbox.uDebugAddLog($"Added {item.Worth} currency to {owner.OwnerID} and removing from loot list for type {lootType}");
-                            chara.Loot.Remove(bpItem);
-                        }
-                        break;
+                    }
                 }
             }
             Toolbox.uDebugAddLog($"Filtered loot:{filtered}/{total} [ID]{chara.OwnerID}");
