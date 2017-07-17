@@ -1066,6 +1066,21 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
+        public static void ChangeColor(CommandContext context, Discord.Color color)
+        {
+            try
+            {
+                var chara = RPG.Owners.Find(x => x.OwnerID == context.User.Id).CurrentCharacter;
+                chara.Color = color;
+                EmbedBuilder embed = new EmbedBuilder() { Color = chara.Color, Description = "Your color has been updated!" };
+                Events.SendDiscordMessage(context, embed);
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
         public static string GetCharacterImgDefault(Character chara)
         {
             string imgURL = string.Empty;
@@ -1109,18 +1124,26 @@ namespace PersonalDiscordBot.Classes
 
         public static bool VerifyLvlUp(Character chara)
         {
-            Toolbox.uDebugAddLog($"Checking if {chara.Name} leveled up: [currexp]{chara.Exp} [exptolvl]{chara.ExpToLvl}");
-            if (chara.Exp > chara.ExpToLvl)
+            try
             {
-                Toolbox.uDebugAddLog($"Before Level Up: [lvl]{chara.Lvl} [exp]{chara.Exp}/{chara.ExpToLvl}");
-                chara.Lvl++;
-                chara.ExpToLvl = Management.CalculateExperience(chara.Lvl);
-                Toolbox.uDebugAddLog($"After Level Up: [lvl]{chara.Lvl} [exp]{chara.Exp}/{chara.ExpToLvl}");
-                return true;
+                Toolbox.uDebugAddLog($"Checking if {chara.Name} leveled up: [currexp]{chara.Exp} [exptolvl]{chara.ExpToLvl}");
+                if (chara.Exp > chara.ExpToLvl)
+                {
+                    Toolbox.uDebugAddLog($"Before Level Up: [lvl]{chara.Lvl} [exp]{chara.Exp}/{chara.ExpToLvl}");
+                    chara.Lvl++;
+                    chara.ExpToLvl = Management.CalculateExperience(chara.Lvl);
+                    Toolbox.uDebugAddLog($"After Level Up: [lvl]{chara.Lvl} [exp]{chara.Exp}/{chara.ExpToLvl}");
+                    return true;
+                }
+                else
+                    Toolbox.uDebugAddLog($"{chara.Name} didn't level up {chara.Exp}/{chara.ExpToLvl}");
+                return false;
             }
-            else
-                Toolbox.uDebugAddLog($"{chara.Name} didn't level up {chara.Exp}/{chara.ExpToLvl}");
-            return false;
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+                return false;
+            }
         }
 
         #endregion
@@ -1788,140 +1811,147 @@ namespace PersonalDiscordBot.Classes
 
         public static void UseItem(CommandContext context, OwnerProfile owner, Item item)
         {
-            var iItem = owner.CurrentCharacter.Backpack.Stored.Find(x => x == item);
-            if (iItem == null)
+            try
             {
-                Toolbox.uDebugAddLog($"ERROR: Item wasn't found in backpack when it was pulled from backpack [Name] {item.Name} [Count] {item.Count}");
-                Events.SendDiscordMessage(context, $"An error occured and the item you want to use wasn't found in your backpack after finding it... I know confusing but you should let the developer know (don't worry, I left it as your turn, I'm not heartless)");
-                return;
-            }
-            var match = RPG.MatchList.Find(x => x.Owner == owner);
-            if (match == null)
-            {
-                Toolbox.uDebugAddLog($"Match wasn't found for {owner.CurrentCharacter.Name}, canceling item use [ID]{owner.OwnerID}");
-                Events.SendDiscordMessage(context, "You aren't currently in an active match, please start a match then try again");
-                return;
-            }
-            Item tmpItem = (Item)iItem;
-            switch (item.Type)
-            {
-                case ItemType.Buff:
-                    Affliction bff = new Affliction()
-                    {
-                        Name = tmpItem.Name,
-                        Positive = true,
-                        TurnsActive = tmpItem.CalculateAfflictionTurnCount(),
-                        Physical = tmpItem.Physical,
-                        Magic = tmpItem.Magic,
-                        Fire = tmpItem.Fire,
-                        Lightning = tmpItem.Lightning,
-                        Ice = tmpItem.Ice,
-                        Wind = tmpItem.Wind
-                    };
-                    owner.CurrentCharacter.StatusEffects.Add(bff);
-                    Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} added affliction to themself [ID]{owner.OwnerID} {bff.EnumPropsLogging()}");
-                    Events.SendDiscordMessage(context, $"{owner.CurrentCharacter.Name} used {tmpItem.Name} on themself which will last {bff.TurnsActive} turns");
-                    if (tmpItem.Count > 1)
-                    {
-                        Item bpItem = (Item)owner.CurrentCharacter.Backpack.Stored.Find(x => x == item);
-                        Toolbox.uDebugAddLog($"Removing 1 from count on item {bpItem.Name}, count: {bpItem.Count} [ID]{owner.OwnerID}");
-                        bpItem.Count -= 1;
-                        Toolbox.uDebugAddLog($"Removed 1 from count on item {bpItem.Name}, count: {bpItem.Count} [ID]{owner.OwnerID}");
-                    }
-                    else
-                    {
-                        owner.CurrentCharacter.Backpack.Stored.Remove(iItem);
-                        Toolbox.uDebugAddLog($"Removed {iItem.Name} from {owner.CurrentCharacter}'s backpack as it had a count of {tmpItem.Count}");
-                    }
-                    CalculateTurn(context, owner);
-                    break;
-                case ItemType.Damaging:
-                    Affliction dmg = new Affliction()
-                    {
-                        Name = tmpItem.Name,
-                        Positive = false,
-                        TurnsActive = tmpItem.CalculateAfflictionTurnCount(),
-                        Physical = tmpItem.Physical,
-                        Magic = tmpItem.Magic,
-                        Fire = tmpItem.Fire,
-                        Lightning = tmpItem.Lightning,
-                        Ice = tmpItem.Ice,
-                        Wind = tmpItem.Wind
-                    };
-                    match.CurrentEnemy.StatusEffects.Add(dmg);
-                    Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} added affliction to {match.CurrentEnemy.Name} [ID]{owner.OwnerID} {dmg.EnumPropsLogging()}");
-                    Events.SendDiscordMessage(context, $"{owner.CurrentCharacter.Name} used {tmpItem.Name} on {match.CurrentEnemy.Name} which will last {dmg.TurnsActive} turns");
-                    if (tmpItem.Count > 1)
-                    {
-                        Item bpItem = (Item)owner.CurrentCharacter.Backpack.Stored.Find(x => x == item);
-                        Toolbox.uDebugAddLog($"Removing 1 from count on item {bpItem.Name}, count: {bpItem.Count} [ID]{owner.OwnerID}");
-                        bpItem.Count -= 1;
-                        Toolbox.uDebugAddLog($"Removed 1 from count on item {bpItem.Name}, count: {bpItem.Count} [ID]{owner.OwnerID}");
-                    }
-                    else
-                    {
-                        owner.CurrentCharacter.Backpack.Stored.Remove(iItem);
-                        Toolbox.uDebugAddLog($"Removed {iItem.Name} from {owner.CurrentCharacter}'s backpack as it had a count of {tmpItem.Count}");
-                    }
-                    CalculateTurn(context, owner);
-                    break;
-                case ItemType.Repair:
-                    Toolbox.uDebugAddLog($"Repairing {owner.CurrentCharacter.Name}'s {owner.CurrentCharacter.Weapon.Name}. [Current]{owner.CurrentCharacter.Weapon.CurrentDurability}/{owner.CurrentCharacter.Weapon.MaxDurability} [ID]{owner.OwnerID}");
-                    owner.CurrentCharacter.Weapon.CurrentDurability = owner.CurrentCharacter.Weapon.MaxDurability;
-                    Toolbox.uDebugAddLog($"Repaired {owner.CurrentCharacter.Name}'s {owner.CurrentCharacter.Weapon.Name}. [After]{owner.CurrentCharacter.Weapon.CurrentDurability}/{owner.CurrentCharacter.Weapon.MaxDurability} [ID]{owner.OwnerID}");
-                    Events.SendDiscordMessage(context, $"{owner.CurrentCharacter.Name}'s {owner.CurrentCharacter.Weapon.Name} has been repaired, current durability: {owner.CurrentCharacter.Weapon.CurrentDurability}/{owner.CurrentCharacter.Weapon.MaxDurability} [ID]{owner.OwnerID}");
-                    if (tmpItem.Count > 1)
-                    {
-                        Item bpItem = (Item)owner.CurrentCharacter.Backpack.Stored.Find(x => x == item);
-                        Toolbox.uDebugAddLog($"Removing 1 from count on item {bpItem.Name}, count: {bpItem.Count} [ID]{owner.OwnerID}");
-                        bpItem.Count -= 1;
-                        Toolbox.uDebugAddLog($"Removed 1 from count on item {bpItem.Name}, count: {bpItem.Count} [ID]{owner.OwnerID}");
-                    }
-                    else
-                    {
-                        owner.CurrentCharacter.Backpack.Stored.Remove(iItem);
-                        Toolbox.uDebugAddLog($"Removed {iItem.Name} from {owner.CurrentCharacter}'s backpack as it had a count of {tmpItem.Count}");
-                    }
-                    CalculateTurn(context, owner);
-                    break;
-                case ItemType.Restorative:
-                    if (item.Name.ToLower().Contains("health"))
-                    {
-                        owner.CurrentCharacter.CurrentHP += item.CalculateHealthPotion(owner.CurrentCharacter);
-                        Events.SendDiscordMessage(context, $"**{owner.CurrentCharacter.Name}** was health was restored by {item.CalculateHealthPotion(owner.CurrentCharacter)}, current health: {owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} ({item.Count - 1} left)");
+                var iItem = owner.CurrentCharacter.Backpack.Stored.Find(x => x == item);
+                if (iItem == null)
+                {
+                    Toolbox.uDebugAddLog($"ERROR: Item wasn't found in backpack when it was pulled from backpack [Name] {item.Name} [Count] {item.Count}");
+                    Events.SendDiscordMessage(context, $"An error occured and the item you want to use wasn't found in your backpack after finding it... I know confusing but you should let the developer know (don't worry, I left it as your turn, I'm not heartless)");
+                    return;
+                }
+                var match = RPG.MatchList.Find(x => x.Owner == owner);
+                if (match == null)
+                {
+                    Toolbox.uDebugAddLog($"Match wasn't found for {owner.CurrentCharacter.Name}, canceling item use [ID]{owner.OwnerID}");
+                    Events.SendDiscordMessage(context, "You aren't currently in an active match, please start a match then try again");
+                    return;
+                }
+                Item tmpItem = (Item)iItem;
+                switch (item.Type)
+                {
+                    case ItemType.Buff:
+                        Affliction bff = new Affliction()
+                        {
+                            Name = tmpItem.Name,
+                            Positive = true,
+                            TurnsActive = tmpItem.CalculateAfflictionTurnCount(),
+                            Physical = tmpItem.Physical,
+                            Magic = tmpItem.Magic,
+                            Fire = tmpItem.Fire,
+                            Lightning = tmpItem.Lightning,
+                            Ice = tmpItem.Ice,
+                            Wind = tmpItem.Wind
+                        };
+                        owner.CurrentCharacter.StatusEffects.Add(bff);
+                        Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} added affliction to themself [ID]{owner.OwnerID} {bff.EnumPropsLogging()}");
+                        Events.SendDiscordMessage(context, $"{owner.CurrentCharacter.Name} used {tmpItem.Name} on themself which will last {bff.TurnsActive} turns");
+                        if (tmpItem.Count > 1)
+                        {
+                            Item bpItem = (Item)owner.CurrentCharacter.Backpack.Stored.Find(x => x == item);
+                            Toolbox.uDebugAddLog($"Removing 1 from count on item {bpItem.Name}, count: {bpItem.Count} [ID]{owner.OwnerID}");
+                            bpItem.Count -= 1;
+                            Toolbox.uDebugAddLog($"Removed 1 from count on item {bpItem.Name}, count: {bpItem.Count} [ID]{owner.OwnerID}");
+                        }
+                        else
+                        {
+                            owner.CurrentCharacter.Backpack.Stored.Remove(iItem);
+                            Toolbox.uDebugAddLog($"Removed {iItem.Name} from {owner.CurrentCharacter}'s backpack as it had a count of {tmpItem.Count}");
+                        }
                         CalculateTurn(context, owner);
-                    }
-                    else if (item.Name.ToLower().Contains("mana"))
-                    {
-                        owner.CurrentCharacter.CurrentMana += item.CalculateManaPotion(owner.CurrentCharacter);
-                        Events.SendDiscordMessage(context, $"**{owner.CurrentCharacter.Name}'s** mana was restored by {item.CalculateManaPotion(owner.CurrentCharacter)}, current mana: {owner.CurrentCharacter.CurrentMana}/{owner.CurrentCharacter.MaxMana} ({item.Count - 1} left)");
+                        break;
+                    case ItemType.Damaging:
+                        Affliction dmg = new Affliction()
+                        {
+                            Name = tmpItem.Name,
+                            Positive = false,
+                            TurnsActive = tmpItem.CalculateAfflictionTurnCount(),
+                            Physical = tmpItem.Physical,
+                            Magic = tmpItem.Magic,
+                            Fire = tmpItem.Fire,
+                            Lightning = tmpItem.Lightning,
+                            Ice = tmpItem.Ice,
+                            Wind = tmpItem.Wind
+                        };
+                        match.CurrentEnemy.StatusEffects.Add(dmg);
+                        Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} added affliction to {match.CurrentEnemy.Name} [ID]{owner.OwnerID} {dmg.EnumPropsLogging()}");
+                        Events.SendDiscordMessage(context, $"{owner.CurrentCharacter.Name} used {tmpItem.Name} on {match.CurrentEnemy.Name} which will last {dmg.TurnsActive} turns");
+                        if (tmpItem.Count > 1)
+                        {
+                            Item bpItem = (Item)owner.CurrentCharacter.Backpack.Stored.Find(x => x == item);
+                            Toolbox.uDebugAddLog($"Removing 1 from count on item {bpItem.Name}, count: {bpItem.Count} [ID]{owner.OwnerID}");
+                            bpItem.Count -= 1;
+                            Toolbox.uDebugAddLog($"Removed 1 from count on item {bpItem.Name}, count: {bpItem.Count} [ID]{owner.OwnerID}");
+                        }
+                        else
+                        {
+                            owner.CurrentCharacter.Backpack.Stored.Remove(iItem);
+                            Toolbox.uDebugAddLog($"Removed {iItem.Name} from {owner.CurrentCharacter}'s backpack as it had a count of {tmpItem.Count}");
+                        }
                         CalculateTurn(context, owner);
-                    }
-                    else
-                    {
-                        Toolbox.uDebugAddLog($"Something happened and the restorative item didn't contain health or mana: {LootDrop.GetLootInfo(iItem)} [ID]{owner.OwnerID}");
-                        Events.SendDiscordMessage(context, "Something happened and the restorative wasn't for health for mana, please let the dev know");
-                        return;
-                    }
-                    if (item.Count > 1)
-                    {
-                        Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} currently has {item.Count} {item.Name} in their bag, removing one [ID]{owner.OwnerID}");
-                        Item _item = (Item)owner.CurrentCharacter.Backpack.Stored.Find(x => x == item);
-                        _item.Count -= 1;
-                        Toolbox.uDebugAddLog($"Removed 1 count from {iItem.Name}, count: {_item.Count} [ID]{owner.OwnerID}");
-                    }
-                    else
-                    {
-                        Item _item = (Item)owner.CurrentCharacter.Backpack.Stored.Find(x => x == item);
-                        owner.CurrentCharacter.Backpack.Stored.Remove(iItem);
-                        Toolbox.uDebugAddLog($"Removed item from backpack: {iItem.Name}, count was {_item.Count} [ID]{owner.OwnerID}");
-                    }
-                    CalculateTurn(context, owner);
-                    break;
-                default:
-                    Toolbox.uDebugAddLog($"ERROR: Item was used and wasn't one of the 4 item types. [Char]{owner.CurrentCharacter.Name} [ID]{owner.OwnerID} [Item]{tmpItem.EnumPropsLogging()}");
-                    Events.SendDiscordMessage(context, $"Something happend and you couldn't use the item {tmpItem.Name}, please let the devs know. You still have your turn");
-                    break;
+                        break;
+                    case ItemType.Repair:
+                        Toolbox.uDebugAddLog($"Repairing {owner.CurrentCharacter.Name}'s {owner.CurrentCharacter.Weapon.Name}. [Current]{owner.CurrentCharacter.Weapon.CurrentDurability}/{owner.CurrentCharacter.Weapon.MaxDurability} [ID]{owner.OwnerID}");
+                        owner.CurrentCharacter.Weapon.CurrentDurability = owner.CurrentCharacter.Weapon.MaxDurability;
+                        Toolbox.uDebugAddLog($"Repaired {owner.CurrentCharacter.Name}'s {owner.CurrentCharacter.Weapon.Name}. [After]{owner.CurrentCharacter.Weapon.CurrentDurability}/{owner.CurrentCharacter.Weapon.MaxDurability} [ID]{owner.OwnerID}");
+                        Events.SendDiscordMessage(context, $"{owner.CurrentCharacter.Name}'s {owner.CurrentCharacter.Weapon.Name} has been repaired, current durability: {owner.CurrentCharacter.Weapon.CurrentDurability}/{owner.CurrentCharacter.Weapon.MaxDurability} [ID]{owner.OwnerID}");
+                        if (tmpItem.Count > 1)
+                        {
+                            Item bpItem = (Item)owner.CurrentCharacter.Backpack.Stored.Find(x => x == item);
+                            Toolbox.uDebugAddLog($"Removing 1 from count on item {bpItem.Name}, count: {bpItem.Count} [ID]{owner.OwnerID}");
+                            bpItem.Count -= 1;
+                            Toolbox.uDebugAddLog($"Removed 1 from count on item {bpItem.Name}, count: {bpItem.Count} [ID]{owner.OwnerID}");
+                        }
+                        else
+                        {
+                            owner.CurrentCharacter.Backpack.Stored.Remove(iItem);
+                            Toolbox.uDebugAddLog($"Removed {iItem.Name} from {owner.CurrentCharacter}'s backpack as it had a count of {tmpItem.Count}");
+                        }
+                        CalculateTurn(context, owner);
+                        break;
+                    case ItemType.Restorative:
+                        if (item.Name.ToLower().Contains("health"))
+                        {
+                            owner.CurrentCharacter.CurrentHP += item.CalculateHealthPotion(owner.CurrentCharacter);
+                            Events.SendDiscordMessage(context, $"**{owner.CurrentCharacter.Name}** was health was restored by {item.CalculateHealthPotion(owner.CurrentCharacter)}, current health: {owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} ({item.Count - 1} left)");
+                            CalculateTurn(context, owner);
+                        }
+                        else if (item.Name.ToLower().Contains("mana"))
+                        {
+                            owner.CurrentCharacter.CurrentMana += item.CalculateManaPotion(owner.CurrentCharacter);
+                            Events.SendDiscordMessage(context, $"**{owner.CurrentCharacter.Name}'s** mana was restored by {item.CalculateManaPotion(owner.CurrentCharacter)}, current mana: {owner.CurrentCharacter.CurrentMana}/{owner.CurrentCharacter.MaxMana} ({item.Count - 1} left)");
+                            CalculateTurn(context, owner);
+                        }
+                        else
+                        {
+                            Toolbox.uDebugAddLog($"Something happened and the restorative item didn't contain health or mana: {LootDrop.GetLootInfo(iItem)} [ID]{owner.OwnerID}");
+                            Events.SendDiscordMessage(context, "Something happened and the restorative wasn't for health for mana, please let the dev know");
+                            return;
+                        }
+                        if (item.Count > 1)
+                        {
+                            Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} currently has {item.Count} {item.Name} in their bag, removing one [ID]{owner.OwnerID}");
+                            Item _item = (Item)owner.CurrentCharacter.Backpack.Stored.Find(x => x == item);
+                            _item.Count -= 1;
+                            Toolbox.uDebugAddLog($"Removed 1 count from {iItem.Name}, count: {_item.Count} [ID]{owner.OwnerID}");
+                        }
+                        else
+                        {
+                            Item _item = (Item)owner.CurrentCharacter.Backpack.Stored.Find(x => x == item);
+                            owner.CurrentCharacter.Backpack.Stored.Remove(iItem);
+                            Toolbox.uDebugAddLog($"Removed item from backpack: {iItem.Name}, count was {_item.Count} [ID]{owner.OwnerID}");
+                        }
+                        CalculateTurn(context, owner);
+                        break;
+                    default:
+                        Toolbox.uDebugAddLog($"ERROR: Item was used and wasn't one of the 4 item types. [Char]{owner.CurrentCharacter.Name} [ID]{owner.OwnerID} [Item]{tmpItem.EnumPropsLogging()}");
+                        Events.SendDiscordMessage(context, $"Something happend and you couldn't use the item {tmpItem.Name}, please let the devs know. You still have your turn");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
             }
         }
 
@@ -2021,175 +2051,198 @@ namespace PersonalDiscordBot.Classes
 
         public static void RemoveAfflictions(CommandContext context, OwnerProfile owner, Enemy enemy)
         {
-            Toolbox.uDebugAddLog("Starting affliction removal");
-            var match = RPG.MatchList.Find(x => x.Owner == owner);
-            foreach (var affl in owner.CurrentCharacter.StatusEffects)
+            try
             {
-                if (match.Turns >= (affl.TurnStarted + (affl.TurnsActive * 2)))
+                Toolbox.uDebugAddLog("Starting affliction removal");
+                var match = RPG.MatchList.Find(x => x.Owner == owner);
+                foreach (var affl in owner.CurrentCharacter.StatusEffects)
                 {
-                    owner.CurrentCharacter.StatusEffects.Remove(affl);
-                    Toolbox.uDebugAddLog($"Removed affliction {affl.Name} from {owner.CurrentCharacter.Name} on turn {match.Turns} [afflStart]{affl.TurnStarted} [afflActive]{affl.TurnsActive} [afflTotalActive]{affl.TurnsActive * 2} [ID]{owner.OwnerID}");
-                    Events.SendDiscordMessage(context, $"Affliction {affl.Name} has been removed from {owner.CurrentCharacter.Name} after {affl.TurnsActive} turns");
+                    if (match.Turns >= (affl.TurnStarted + (affl.TurnsActive * 2)))
+                    {
+                        owner.CurrentCharacter.StatusEffects.Remove(affl);
+                        Toolbox.uDebugAddLog($"Removed affliction {affl.Name} from {owner.CurrentCharacter.Name} on turn {match.Turns} [afflStart]{affl.TurnStarted} [afflActive]{affl.TurnsActive} [afflTotalActive]{affl.TurnsActive * 2} [ID]{owner.OwnerID}");
+                        Events.SendDiscordMessage(context, $"Affliction {affl.Name} has been removed from {owner.CurrentCharacter.Name} after {affl.TurnsActive} turns");
+                    }
                 }
+                foreach (var affl in enemy.StatusEffects)
+                {
+                    if (match.Turns >= (affl.TurnStarted + (affl.TurnsActive * 2)))
+                    {
+                        enemy.StatusEffects.Remove(affl);
+                        Toolbox.uDebugAddLog($"Removed affliction {affl.Name} from {enemy.Name} on turn {match.Turns} [afflStart]{affl.TurnStarted} [afflActive]{affl.TurnsActive} [afflTotalActive]{affl.TurnsActive * 2} [ID]{owner.OwnerID}");
+                        Events.SendDiscordMessage(context, $"Affliction {affl.Name} has been removed from {enemy.Name} after {affl.TurnsActive} turns");
+                    }
+                }
+                Toolbox.uDebugAddLog("Finished affliction removal");
             }
-            foreach (var affl in enemy.StatusEffects)
+            catch (Exception ex)
             {
-                if (match.Turns >= (affl.TurnStarted + (affl.TurnsActive * 2)))
-                {
-                    enemy.StatusEffects.Remove(affl);
-                    Toolbox.uDebugAddLog($"Removed affliction {affl.Name} from {enemy.Name} on turn {match.Turns} [afflStart]{affl.TurnStarted} [afflActive]{affl.TurnsActive} [afflTotalActive]{affl.TurnsActive * 2} [ID]{owner.OwnerID}");
-                    Events.SendDiscordMessage(context, $"Affliction {affl.Name} has been removed from {enemy.Name} after {affl.TurnsActive} turns");
-                }
+                Toolbox.FullExceptionLog(ex);
             }
-            Toolbox.uDebugAddLog("Finished affliction removal");
         }
 
         public static int AttackEnem(Character chara, Enemy enemy)
         {
-            int totalDamage = 0;
-            int physDamage = chara.Weapon.PhysicalDamage;
-            int magiDamage = chara.Weapon.MagicDamage;
-            int fireDamage = chara.Weapon.FireDamage;
-            int lighDamage = chara.Weapon.LightningDamage;
-            int iceeDamage = chara.Weapon.IceDamage;
-            int windDamage = chara.Weapon.WindDamage;
-
-            int enemyPhys = enemy.Armor.Physical;
-            int enemyMagi = enemy.Armor.Magic;
-            int enemyFire = enemy.Armor.Fire;
-            int enemyLigh = enemy.Armor.Lightning;
-            int enemyIcee = enemy.Armor.Ice;
-            int enemyWind = enemy.Armor.Wind;
-
-            Affliction buff = new Affliction();
-            foreach (var affl in chara.StatusEffects)
+            try
             {
-                if (affl.Positive)
-                {
-                    Toolbox.uDebugAddLog($"Applying affliction to {chara.Name}, Before: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage}");
-                    physDamage += affl.Physical;
-                    magiDamage += affl.Magic;
-                    fireDamage += affl.Fire;
-                    lighDamage += affl.Lightning;
-                    iceeDamage += affl.Ice;
-                    windDamage += affl.Ice;
-                    Toolbox.uDebugAddLog($"Applied affliction to {chara.Name}, After: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage}");
-                }
-            }
+                int totalDamage = 0;
+                int physDamage = chara.Weapon.PhysicalDamage;
+                int magiDamage = chara.Weapon.MagicDamage;
+                int fireDamage = chara.Weapon.FireDamage;
+                int lighDamage = chara.Weapon.LightningDamage;
+                int iceeDamage = chara.Weapon.IceDamage;
+                int windDamage = chara.Weapon.WindDamage;
 
-            Affliction dmg = new Affliction();
-            foreach (var affl in enemy.StatusEffects)
+                int enemyPhys = enemy.Armor.Physical;
+                int enemyMagi = enemy.Armor.Magic;
+                int enemyFire = enemy.Armor.Fire;
+                int enemyLigh = enemy.Armor.Lightning;
+                int enemyIcee = enemy.Armor.Ice;
+                int enemyWind = enemy.Armor.Wind;
+
+                Affliction buff = new Affliction();
+                foreach (var affl in chara.StatusEffects)
+                {
+                    if (affl.Positive)
+                    {
+                        Toolbox.uDebugAddLog($"Applying affliction to {chara.Name}, Before: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage}");
+                        physDamage += affl.Physical;
+                        magiDamage += affl.Magic;
+                        fireDamage += affl.Fire;
+                        lighDamage += affl.Lightning;
+                        iceeDamage += affl.Ice;
+                        windDamage += affl.Ice;
+                        Toolbox.uDebugAddLog($"Applied affliction to {chara.Name}, After: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage}");
+                    }
+                }
+
+                Affliction dmg = new Affliction();
+                foreach (var affl in enemy.StatusEffects)
+                {
+                    if (!affl.Positive)
+                    {
+                        Toolbox.uDebugAddLog($"Applying affliction to {enemy.Name}, Before: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind}");
+                        enemyPhys = enemyPhys - affl.Physical >= 0 ? enemyPhys - affl.Physical : 0;
+                        enemyMagi = enemyMagi - affl.Magic >= 0 ? enemyMagi - affl.Magic : 0;
+                        enemyFire = enemyFire - affl.Fire >= 0 ? enemyFire - affl.Fire : 0;
+                        enemyLigh = enemyLigh - affl.Lightning >= 0 ? enemyLigh - affl.Lightning : 0;
+                        enemyIcee = enemyIcee - affl.Ice >= 0 ? enemyIcee - affl.Ice : 0;
+                        enemyWind = enemyWind - affl.Wind >= 0 ? enemyWind - affl.Wind : 0;
+                        Toolbox.uDebugAddLog($"Applied affliction to {enemy.Name}, After: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind}");
+                    }
+                }
+
+                var attack = physDamage * chara.Str;
+                Toolbox.uDebugAddLog($"attack = [weapon]{physDamage} * [str]{chara.Str}");
+                var defense = enemyPhys * enemy.Def;
+                Toolbox.uDebugAddLog($"defense = [armor]{enemyPhys} * [def]{enemy.Def}");
+                physDamage = (attack * attack) / (attack + defense);
+                Toolbox.uDebugAddLog($"physDamage = ({attack} * {attack}) / ({attack} + {defense})");
+                if (physDamage <= 0) physDamage = 0;
+                Toolbox.uDebugAddLog("Calculating magiDamage");
+                magiDamage = CalculateElement(magiDamage, enemyMagi);
+                Toolbox.uDebugAddLog("Calculating fireDamage");
+                fireDamage = CalculateElement(fireDamage, enemyFire);
+                Toolbox.uDebugAddLog("Calculating lighDamage");
+                lighDamage = CalculateElement(lighDamage, enemyLigh);
+                Toolbox.uDebugAddLog("Calculating iceeDamage");
+                iceeDamage = CalculateElement(iceeDamage, enemyIcee);
+                Toolbox.uDebugAddLog("Calculating windDamage");
+                windDamage = CalculateElement(windDamage, enemyWind);
+                Toolbox.uDebugAddLog($"Calculated Damage Types: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage}");
+
+                totalDamage = physDamage + magiDamage + fireDamage + lighDamage + iceeDamage + windDamage;
+                Toolbox.uDebugAddLog($"Calculated Total Damage: {totalDamage}");
+
+                return totalDamage;
+            }
+            catch (Exception ex)
             {
-                if (!affl.Positive)
-                {
-                    Toolbox.uDebugAddLog($"Applying affliction to {enemy.Name}, Before: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind}");
-                    enemyPhys = enemyPhys - affl.Physical >= 0 ? enemyPhys - affl.Physical : 0;
-                    enemyMagi = enemyMagi - affl.Magic >= 0 ? enemyMagi - affl.Magic : 0;
-                    enemyFire = enemyFire - affl.Fire >= 0 ? enemyFire - affl.Fire : 0;
-                    enemyLigh = enemyLigh - affl.Lightning >= 0 ? enemyLigh - affl.Lightning : 0;
-                    enemyIcee = enemyIcee - affl.Ice >= 0 ? enemyIcee - affl.Ice : 0;
-                    enemyWind = enemyWind - affl.Wind >= 0 ? enemyWind - affl.Wind : 0;
-                    Toolbox.uDebugAddLog($"Applied affliction to {enemy.Name}, After: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind}");
-                }
+                Toolbox.FullExceptionLog(ex);
+                return -1;
             }
-
-            var attack = physDamage * chara.Str;
-            Toolbox.uDebugAddLog($"attack = [weapon]{physDamage} * [str]{chara.Str}");
-            var defense = enemyPhys * enemy.Def;
-            Toolbox.uDebugAddLog($"defense = [armor]{enemyPhys} * [def]{enemy.Def}");
-            physDamage = (attack * attack) / (attack + defense);
-            Toolbox.uDebugAddLog($"physDamage = ({attack} * {attack}) / ({attack} + {defense})");
-            if (physDamage <= 0) physDamage = 0;
-            Toolbox.uDebugAddLog("Calculating magiDamage");
-            magiDamage = CalculateElement(magiDamage, enemyMagi);
-            Toolbox.uDebugAddLog("Calculating fireDamage");
-            fireDamage = CalculateElement(fireDamage, enemyFire);
-            Toolbox.uDebugAddLog("Calculating lighDamage");
-            lighDamage = CalculateElement(lighDamage, enemyLigh);
-            Toolbox.uDebugAddLog("Calculating iceeDamage");
-            iceeDamage = CalculateElement(iceeDamage, enemyIcee);
-            Toolbox.uDebugAddLog("Calculating windDamage");
-            windDamage = CalculateElement(windDamage, enemyWind);
-            Toolbox.uDebugAddLog($"Calculated Damage Types: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage}");
-
-            totalDamage = physDamage + magiDamage + fireDamage + lighDamage + iceeDamage + windDamage;
-            Toolbox.uDebugAddLog($"Calculated Total Damage: {totalDamage}");
-
-            return totalDamage;
         }
 
         public static int AttackChara(Enemy enemy, Character chara)
         {
-            int physDamage = chara.Armor.Physical;
-            int magiDamage = chara.Armor.Magic;
-            int fireDamage = chara.Armor.Fire;
-            int lighDamage = chara.Armor.Lightning;
-            int iceeDamage = chara.Armor.Ice;
-            int windDamage = chara.Armor.Wind;
-
-            int enemyTotal = 0;
-            int enemyPhys = enemy.Weapon.PhysicalDamage;
-            int enemyMagi = enemy.Weapon.MagicDamage;
-            int enemyFire = enemy.Weapon.FireDamage;
-            int enemyLigh = enemy.Weapon.LightningDamage;
-            int enemyIcee = enemy.Weapon.IceDamage;
-            int enemyWind = enemy.Weapon.WindDamage;
-
-            Affliction buff = new Affliction();
-            foreach (var affl in chara.StatusEffects)
+            try
             {
-                if (affl.Positive)
-                {
-                    Toolbox.uDebugAddLog($"Applying affliction to {chara.Name}, Before: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage}");
-                    physDamage += affl.Physical;
-                    magiDamage += affl.Magic;
-                    fireDamage += affl.Fire;
-                    lighDamage += affl.Lightning;
-                    iceeDamage += affl.Ice;
-                    windDamage += affl.Ice;
-                    Toolbox.uDebugAddLog($"Applied affliction to {chara.Name}, After: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage}");
-                }
-            }
+                int physDamage = chara.Armor.Physical;
+                int magiDamage = chara.Armor.Magic;
+                int fireDamage = chara.Armor.Fire;
+                int lighDamage = chara.Armor.Lightning;
+                int iceeDamage = chara.Armor.Ice;
+                int windDamage = chara.Armor.Wind;
 
-            Affliction dmg = new Affliction();
-            foreach (var affl in enemy.StatusEffects)
+                int enemyTotal = 0;
+                int enemyPhys = enemy.Weapon.PhysicalDamage;
+                int enemyMagi = enemy.Weapon.MagicDamage;
+                int enemyFire = enemy.Weapon.FireDamage;
+                int enemyLigh = enemy.Weapon.LightningDamage;
+                int enemyIcee = enemy.Weapon.IceDamage;
+                int enemyWind = enemy.Weapon.WindDamage;
+
+                Affliction buff = new Affliction();
+                foreach (var affl in chara.StatusEffects)
+                {
+                    if (affl.Positive)
+                    {
+                        Toolbox.uDebugAddLog($"Applying affliction to {chara.Name}, Before: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage}");
+                        physDamage += affl.Physical;
+                        magiDamage += affl.Magic;
+                        fireDamage += affl.Fire;
+                        lighDamage += affl.Lightning;
+                        iceeDamage += affl.Ice;
+                        windDamage += affl.Ice;
+                        Toolbox.uDebugAddLog($"Applied affliction to {chara.Name}, After: [P]{physDamage} [M]{magiDamage} [F]{fireDamage} [L]{lighDamage} [I]{iceeDamage} [W]{windDamage}");
+                    }
+                }
+
+                Affliction dmg = new Affliction();
+                foreach (var affl in enemy.StatusEffects)
+                {
+                    if (!affl.Positive)
+                    {
+                        Toolbox.uDebugAddLog($"Applying affliction to {enemy.Name}, Before: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind}");
+                        enemyPhys = enemyPhys - affl.Physical >= 0 ? enemyPhys - affl.Physical : 0;
+                        enemyMagi = enemyMagi - affl.Magic >= 0 ? enemyMagi - affl.Magic : 0;
+                        enemyFire = enemyFire - affl.Fire >= 0 ? enemyFire - affl.Fire : 0;
+                        enemyLigh = enemyLigh - affl.Lightning >= 0 ? enemyLigh - affl.Lightning : 0;
+                        enemyIcee = enemyIcee - affl.Ice >= 0 ? enemyIcee - affl.Ice : 0;
+                        enemyWind = enemyWind - affl.Wind >= 0 ? enemyWind - affl.Wind : 0;
+                        Toolbox.uDebugAddLog($"Applied affliction to {enemy.Name}, After: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind}");
+                    }
+                }
+
+                var attack = enemyPhys * enemy.Str;
+                Toolbox.uDebugAddLog($"attack = [weapon]{enemyPhys} * [str]{enemy.Str}");
+                var defense = physDamage * chara.Def;
+                Toolbox.uDebugAddLog($"defense = [armor]{physDamage} * [def]{chara.Def}");
+                enemyPhys = (attack * attack) / (attack + defense);
+                Toolbox.uDebugAddLog($"enemyPhys = ({attack} * {attack}) / ({attack} + {defense})");
+                if (enemyPhys <= 0) enemyPhys = 0;
+                Toolbox.uDebugAddLog("Calculating magiDamage");
+                enemyMagi = Management.CalculateElement(enemyMagi, magiDamage);
+                Toolbox.uDebugAddLog("Calculating fireDamage");
+                enemyFire = Management.CalculateElement(enemyFire, fireDamage);
+                Toolbox.uDebugAddLog("Calculating lighDamage");
+                enemyLigh = Management.CalculateElement(enemyLigh, lighDamage);
+                Toolbox.uDebugAddLog("Calculating iceeDamage");
+                enemyIcee = Management.CalculateElement(enemyIcee, iceeDamage);
+                Toolbox.uDebugAddLog("Calculating windDamage");
+                enemyWind = Management.CalculateElement(enemyWind, windDamage);
+                Toolbox.uDebugAddLog($"Calculated Damage Types: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind}");
+
+                enemyTotal = enemyPhys + enemyMagi + enemyFire + enemyLigh + enemyIcee + enemyWind;
+                Toolbox.uDebugAddLog($"Calculated Total Damage: {enemyTotal}");
+
+                return enemyTotal;
+            }
+            catch (Exception ex)
             {
-                if (!affl.Positive)
-                {
-                    Toolbox.uDebugAddLog($"Applying affliction to {enemy.Name}, Before: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind}");
-                    enemyPhys = enemyPhys - affl.Physical >= 0 ? enemyPhys - affl.Physical : 0;
-                    enemyMagi = enemyMagi - affl.Magic >= 0 ? enemyMagi - affl.Magic : 0;
-                    enemyFire = enemyFire - affl.Fire >= 0 ? enemyFire - affl.Fire : 0;
-                    enemyLigh = enemyLigh - affl.Lightning >= 0 ? enemyLigh - affl.Lightning : 0;
-                    enemyIcee = enemyIcee - affl.Ice >= 0 ? enemyIcee - affl.Ice : 0;
-                    enemyWind = enemyWind - affl.Wind >= 0 ? enemyWind - affl.Wind : 0;
-                    Toolbox.uDebugAddLog($"Applied affliction to {enemy.Name}, After: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind}");
-                }
+                Toolbox.FullExceptionLog(ex);
+                return -1;
             }
-            
-            var attack = enemyPhys * enemy.Str;
-            Toolbox.uDebugAddLog($"attack = [weapon]{enemyPhys} * [str]{enemy.Str}");
-            var defense = physDamage * chara.Def;
-            Toolbox.uDebugAddLog($"defense = [armor]{physDamage} * [def]{chara.Def}");
-            enemyPhys = (attack * attack) / (attack + defense);
-            Toolbox.uDebugAddLog($"enemyPhys = ({attack} * {attack}) / ({attack} + {defense})");
-            if (enemyPhys <= 0) enemyPhys = 0;
-            Toolbox.uDebugAddLog("Calculating magiDamage");
-            enemyMagi = Management.CalculateElement(enemyMagi, magiDamage);
-            Toolbox.uDebugAddLog("Calculating fireDamage");
-            enemyFire = Management.CalculateElement(enemyFire, fireDamage);
-            Toolbox.uDebugAddLog("Calculating lighDamage");
-            enemyLigh = Management.CalculateElement(enemyLigh, lighDamage);
-            Toolbox.uDebugAddLog("Calculating iceeDamage");
-            enemyIcee = Management.CalculateElement(enemyIcee, iceeDamage);
-            Toolbox.uDebugAddLog("Calculating windDamage");
-            enemyWind = Management.CalculateElement(enemyWind, windDamage);
-            Toolbox.uDebugAddLog($"Calculated Damage Types: [P]{enemyPhys} [M]{enemyMagi} [F]{enemyFire} [L]{enemyLigh} [I]{enemyIcee} [W]{enemyWind}");
-
-            enemyTotal = enemyPhys + enemyMagi + enemyFire + enemyLigh + enemyIcee + enemyWind;
-            Toolbox.uDebugAddLog($"Calculated Total Damage: {enemyTotal}");
-
-            return enemyTotal;
         }
 
         #endregion

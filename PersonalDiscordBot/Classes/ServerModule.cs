@@ -944,8 +944,11 @@ namespace PersonalDiscordBot.Classes
                  ";test change description{0}" +
                  ";test add loot{0}" +
                  ";test testing %Role/Group%{0}" +
-                 ";test log channel %MentionChannel%```"+
-                 ";test check backpack",
+                 ";test log channel %MentionChannel%"+
+                 ";test check backpack" +
+                 ";test change color %color%" +
+                 "   (red, blue, black, green, yellow, brown, orange, gold, pink, purple, silver, slategray, white)" +
+                 ";test change color 00,00,00 (r,g,b)```",
                  Environment.NewLine
                 );
                 await Context.Channel.SendMessageAsync(_helpArticle);
@@ -2339,6 +2342,118 @@ namespace PersonalDiscordBot.Classes
                     return;
                 }
                 Management.CheckCharacterStats(Context);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("change color"), Summary("Testicules Change Color")]
+        public async Task Testacules25(string color)
+        {
+            try
+            {
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                    return;
+                if (color.Contains(","))
+                {
+                    Toolbox.uDebugAddLog($"Changing character color, string contains comma [ID]{Context.User.Id}");
+                    var split = color.Split(',');
+                    if (split.Length <= 2)
+                    {
+                        Events.SendDiscordMessage(Context, $"You didn't enter enough numbers to make an RGB color, please try again [entered]{color}");
+                        Toolbox.uDebugAddLog($"Incorrect arguments (split.Length <= 2) for RGB color entered: {color} [ID]{Context.User.Id}");
+                        return;
+                    }
+                    if (split.Length > 3)
+                    {
+                        Events.SendDiscordMessage(Context, $"You entered too many arguments to create an RGB color, you need 3 arguments, please try again [entered]{color}");
+                        Toolbox.uDebugAddLog($"Incorrect arguments (split.Length > 3) for RGB color entered: {color} [ID]{Context.User.Id}");
+                        return;
+                    }
+                    int num1 = 0;
+                    int num2 = 0;
+                    int num3 = 0;
+                    var isNum1 = int.TryParse(split[0], out num1);
+                    if (!isNum1)
+                    {
+                        Events.SendDiscordMessage(Context, $"The number you entered for argument 1 isn't a valid integer: {split[0]}");
+                        Toolbox.uDebugAddLog($"Argument 1 isn't a valid integer: {split[0]} [ID]{Context.User.Id}");
+                        return;
+                    }
+                    var isNum2 = int.TryParse(split[1], out num2);
+                    if (!isNum2)
+                    {
+                        Events.SendDiscordMessage(Context, $"The number you entered for argument 2 isn't a valid integer: {split[1]}");
+                        Toolbox.uDebugAddLog($"Argument 2 isn't a valid integer: {split[1]} [ID]{Context.User.Id}");
+                        return;
+                    }
+                    var isNum3 = int.TryParse(split[2], out num3);
+                    if (!isNum3)
+                    {
+                        Events.SendDiscordMessage(Context, $"The number you entered for argument 3 isn't a valid integer: {split[2]}");
+                        Toolbox.uDebugAddLog($"Argument 3 isn't a valid integer: {split[2]} [ID]{Context.User.Id}");
+                        return;
+                    }
+                    Discord.Color newColor = new Discord.Color(num1, num2, num3);
+                    Management.ChangeColor(Context, newColor);
+                }
+                else
+                {
+                    Toolbox.uDebugAddLog($"Changing character color, string doesn't contain comma [ID]{Context.User.Id}");
+                    color = color.ToLower();
+                    Discord.Color newColor = new Color(0,0,0);
+                    System.Windows.Media.Color selColor = System.Windows.Media.Colors.Blue;
+                    switch (color)
+                    {
+                        case "red":
+                            selColor = System.Windows.Media.Colors.Red;
+                            break;
+                        case "blue":
+                            selColor = System.Windows.Media.Colors.Blue;
+                            break;
+                        case "black":
+                            selColor = System.Windows.Media.Colors.Black;
+                            break;
+                        case "green":
+                            selColor = System.Windows.Media.Colors.Green;
+                            break;
+                        case "yellow":
+                            selColor = System.Windows.Media.Colors.Yellow;
+                            break;
+                        case "brown":
+                            selColor = System.Windows.Media.Colors.Brown;
+                            break;
+                        case "orange":
+                            selColor = System.Windows.Media.Colors.Orange;
+                            break;
+                        case "gold":
+                            selColor = System.Windows.Media.Colors.Gold;
+                            break;
+                        case "pink":
+                            selColor = System.Windows.Media.Colors.Pink;
+                            break;
+                        case "purple":
+                            selColor = System.Windows.Media.Colors.Purple;
+                            break;
+                        case "silver":
+                            selColor = System.Windows.Media.Colors.Silver;
+                            break;
+                        case "slategray":
+                            selColor = System.Windows.Media.Colors.SlateGray;
+                            break;
+                        case "white":
+                            selColor = System.Windows.Media.Colors.White;
+                            break;
+                        default:
+                            Events.SendDiscordMessage(Context, $"{color} is an incorrect color, please try again");
+                            return;
+                    }
+                    newColor = new Color(selColor.R, selColor.G, selColor.B);
+                    Management.ChangeColor(Context, newColor);
+                }
             }
             catch (Exception ex)
             {
