@@ -744,7 +744,7 @@ namespace PersonalDiscordBot.Classes
             return newMatch;
         }
 
-        public static bool VerifyProfile(CommandContext context)
+        public static bool VerifyProfile(ICommandContext context)
         {
             bool hasProfile = false;
             OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
@@ -759,7 +759,7 @@ namespace PersonalDiscordBot.Classes
             return hasProfile;
         }
 
-        public static bool VerifyProfileAndHasCharacter(CommandContext context)
+        public static bool VerifyProfileAndHasCharacter(ICommandContext context)
         {
             bool hasBoth = false;
             hasBoth = VerifyProfile(context);
@@ -925,7 +925,7 @@ namespace PersonalDiscordBot.Classes
             return cost;
         }
 
-        public static void CheckCharacterStats(CommandContext context)
+        public static void CheckCharacterStats(ICommandContext context)
         {
             try
             {
@@ -964,67 +964,174 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static async Task CheckCharacterBackpak(CommandContext context)
+        public static async Task CheckCharacterBackpak(ICommandContext context)
         {
             try
             {
                 var line = Environment.NewLine;
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
-                if (owner == null)
-                {
-                    Events.SendDiscordMessage(context, "You don't currently have a profile. Please create a character first");
-                    return;
-                }
-                else if (owner.CharacterList.Count <= 0)
-                {
-                    Events.SendDiscordMessage(context, "You don't currently have any characters. Please create a character.");
-                    return;
-                }
                 string itemList = "";
                 int number = 1;
                 var timestamp = DateTime.Now;
                 List<IMessage> respondeded = new List<IMessage>();
                 Toolbox.uDebugAddLog($"Asking [Owner]{owner.CurrentCharacter.Loot.Count} [ID]{owner.OwnerID} what to see");
                 var backpackMsg = await context.Channel.SendMessageAsync($"What would you like to see? (armor, items, weapons, all, cancel)");
+                List<IBackPackItem> backPack = new List<IBackPackItem>();
+                var chosenLootType = LootDrop.LootType.Armor;
                 bool msgResp = false;
-                if (!msgResp)
+                while (!msgResp)
                 {
-                    // ask for if they want Armor, Item, Weapon, or All
-                    // they said Armor
-                    // switch(answer)
-                    // case(armor)
-                    List<Armor> armors = new List<Armor>();
-                    foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
+                    var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
+                    foreach (var msg in msgList)
                     {
-                        if (i.GetLootType() == LootDrop.LootType.Armor)
+                        if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (!respondeded.Contains(msg)))
                         {
-                            armors.Add((Armor)i);
+                            respondeded.Add(msg);
+                            string answer = msg.Content.ToString().ToLower();
+                            Toolbox.uDebugAddLog($"Response recieved from same author and a newer message. [Resp]{answer} [ID]{owner.OwnerID}");
+                            switch (answer)
+                            {
+                                case "armor":
+                                    chosenLootType = LootDrop.LootType.Armor;
+                                    foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
+                                    {
+                                        if (i.GetLootType() == chosenLootType)
+                                        {
+                                            backPack.Add(i);
+                                        }
+                                    }
+                                    foreach (Armor a in backPack)
+                                    {
+                                        itemList = $"{itemList}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
+                                        number++;
+                                    }
+                                    msgResp = true;
+                                    break;
+                                case "items":
+                                    chosenLootType = LootDrop.LootType.Item;
+                                    foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
+                                    {
+                                        if (i.GetLootType() == chosenLootType)
+                                        {
+                                            backPack.Add(i);
+                                        }
+                                    }
+                                    foreach (Item i in backPack)
+                                    {
+                                        itemList = $"{itemList}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
+                                        number++;
+                                    }
+                                    msgResp = true;
+                                    break;
+                                case "weapons":
+                                    chosenLootType = LootDrop.LootType.Weapon;
+                                    foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
+                                    {
+                                        if (i.GetLootType() == chosenLootType)
+                                        {
+                                            backPack.Add(i);
+                                        }
+                                    }
+                                    foreach (Weapon w in backPack)
+                                    {
+                                        itemList = $"{itemList}[{number}]:     Name: {w.Name}     Description: {w.Desc}     Worth: {w.Worth}{line}";
+                                        number++;
+                                    }
+                                    msgResp = true;
+                                    break;
+                                case "all":
+                                    foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
+                                    {
+                                        backPack.Add(i);
+                                    }
+                                    foreach (IBackPackItem i in backPack)
+                                    {
+                                        itemList = $"{itemList}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
+                                        number++;
+                                    }
+                                    msgResp = true;
+                                    break;
+                                case "cancel":
+                                    msgResp = true;
+                                    break;
+                            }
+
                         }
                     }
-                    foreach (Armor a in armors)
+                    await Task.Delay(1000);
+                    if (timestamp + TimeSpan.FromMinutes(5) <= DateTime.Now)
                     {
-                        itemList = $"{itemList}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
-                        number++;
+                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} A response hasn't been received in 5 minutes, you can go through your backpack later by using ;test check backpack");
+                        return;
                     }
-                    //case(all)
-                    //foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
-                    //{
-                    //    itemList = $"{itemList}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
-                    //    number++;
-                    //}
-                    EmbedBuilder embed = new EmbedBuilder()
-                    {
-                        Author = new EmbedAuthorBuilder()
-                        {
-                            Name = owner.CurrentCharacter.Name
-                        },
-                        Color = owner.CurrentCharacter.Color,
-                        Title = owner.CurrentCharacter.Desc,
-                        Description = $"Backpack Storage: {owner.CurrentCharacter.Backpack.Stored.Count}/{owner.CurrentCharacter.Backpack.Capacity}" +
-                        $"{itemList}"
-                    };
-                    Events.SendDiscordMessage(context, embed);
                 }
+                //ask if they want to equip, use, trash, sell, cancel
+                //case(all)
+                //foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
+                //{
+                //    itemList = $"{itemList}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
+                //    number++;
+                //}
+                EmbedBuilder embed = new EmbedBuilder()
+                {
+                    Author = new EmbedAuthorBuilder()
+                    {
+                        Name = owner.CurrentCharacter.Name
+                    },
+                    Color = owner.CurrentCharacter.Color,
+                    Title = owner.CurrentCharacter.Desc,
+                    Description = $"Backpack Storage: {owner.CurrentCharacter.Backpack.Stored.Count}/{owner.CurrentCharacter.Backpack.Capacity}" +
+                    $"{itemList}"
+                };
+                Events.SendDiscordMessage(context, embed);
+                var pickedItemMsg = await context.Channel.SendMessageAsync($"Please type the item number you wish to inspect or type cancel to exit.");
+                bool itemPicked = false;
+                var timestamp2 = DateTime.Now;
+                while (!itemPicked)
+                {
+                    var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
+                    foreach (var msg in msgList)
+                    {
+                        if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (!respondeded.Contains(msg)))
+                        {
+                            respondeded.Add(msg);
+                            string answer = msg.Content.ToString().ToLower();
+                            Toolbox.uDebugAddLog($"Response recieved from same author and a newer message. [Resp]{answer} [ID]{owner.OwnerID}");
+
+                            if (string.IsNullOrWhiteSpace(answer))
+                            {
+                                //tell them they didn't type anythign
+                            }
+                            else if (answer.ToLower() == "cancel")
+                            {
+                                itemPicked = true;
+                            }
+                            else
+                            {
+                                int numAnswer = 0;
+                                var boolAnswer = int.TryParse(answer, out numAnswer);
+                                if (!boolAnswer)
+                                {
+                                    //send nasty message that you didn't enter a valid number.
+                                }
+                                if (numAnswer > number || numAnswer < number)
+                                {
+                                    //send nasty message that you didn't enter a valid number.
+                                }
+                                //use number give to return item that has the same number from List of items and ask "what do fam?"
+                            }
+
+                        }
+                    }
+                    if (timestamp2 + TimeSpan.FromMinutes(5) <= DateTime.Now)
+                    {
+                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} A response hasn't been received in 5 minutes, you can go through your backpack later by using ;test check backpack");
+                        return;
+                    }
+                    await Task.Delay(1000);
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -1034,7 +1141,7 @@ namespace PersonalDiscordBot.Classes
 
         }
 
-        public static void ChangeArmor(CommandContext context, Armor armor)
+        public static void ChangeArmor(ICommandContext context, Armor armor)
         {
             try
             {
@@ -1050,7 +1157,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static void ChangeWeapon(CommandContext context, Weapon weapon)
+        public static void ChangeWeapon(ICommandContext context, Weapon weapon)
         {
             try
             {
@@ -1066,7 +1173,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static void ChangeColor(CommandContext context, Discord.Color color)
+        public static void ChangeColor(ICommandContext context, Discord.Color color)
         {
             try
             {
@@ -1150,7 +1257,7 @@ namespace PersonalDiscordBot.Classes
 
         #region Combat Methods
 
-        public static void CreateMatch(CommandContext context, OwnerProfile owner)
+        public static void CreateMatch(ICommandContext context, OwnerProfile owner)
         {
             try
             {
@@ -1192,7 +1299,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static void AttackEnemy(CommandContext context, OwnerProfile owner, Enemy enemy)
+        public static void AttackEnemy(ICommandContext context, OwnerProfile owner, Enemy enemy)
         {
             try
             {
@@ -1261,7 +1368,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static void AttackCharacter(CommandContext context, Enemy enemy, OwnerProfile owner)
+        public static void AttackCharacter(ICommandContext context, Enemy enemy, OwnerProfile owner)
         {
             try
             {
@@ -1320,7 +1427,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static void EnemyDied(CommandContext context, OwnerProfile owner, Enemy enemy)
+        public static void EnemyDied(ICommandContext context, OwnerProfile owner, Enemy enemy)
         {
             try
             {
@@ -1353,7 +1460,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static void CharacterDied(CommandContext context, Enemy enemy, OwnerProfile owner)
+        public static void CharacterDied(ICommandContext context, Enemy enemy, OwnerProfile owner)
         {
             try
             {
@@ -1366,7 +1473,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static void MatchOver(CommandContext context, OwnerProfile owner, Enemy enemy, MatchCompleteResult result)
+        public static void MatchOver(ICommandContext context, OwnerProfile owner, Enemy enemy, MatchCompleteResult result)
         {
             try
             {
@@ -1474,7 +1581,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static async Task EmptyLoot(CommandContext context)
+        public static async Task EmptyLoot(ICommandContext context)
         {
             try
             {
@@ -1574,7 +1681,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static async Task CharacterUseItem(CommandContext context)
+        public static async Task CharacterUseItem(ICommandContext context)
         {
             try
             {
@@ -1643,7 +1750,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static async Task CharacterChangeArmor(CommandContext context)
+        public static async Task CharacterChangeArmor(ICommandContext context)
         {
             try
             {
@@ -1706,7 +1813,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static async Task CharacterChangeWeapon(CommandContext context)
+        public static async Task CharacterChangeWeapon(ICommandContext context)
         {
             try
             {
@@ -1769,7 +1876,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static async Task CharacterChangeDescription(CommandContext context)
+        public static async Task CharacterChangeDescription(ICommandContext context)
         {
             var isSetup = VerifyProfileAndHasCharacter(context);
             if (!isSetup)
@@ -1809,7 +1916,7 @@ namespace PersonalDiscordBot.Classes
             }
         } 
 
-        public static void UseItem(CommandContext context, OwnerProfile owner, Item item)
+        public static void UseItem(ICommandContext context, OwnerProfile owner, Item item)
         {
             try
             {
@@ -1955,7 +2062,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static void NextEnemy(CommandContext context, OwnerProfile owner, Enemy enemy)
+        public static void NextEnemy(ICommandContext context, OwnerProfile owner, Enemy enemy)
         {
             try
             {
@@ -1979,7 +2086,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static void CalculateTurn(CommandContext context, OwnerProfile owner)
+        public static void CalculateTurn(ICommandContext context, OwnerProfile owner)
         {
             try
             {
@@ -2049,7 +2156,7 @@ namespace PersonalDiscordBot.Classes
                 return ((attackDmg) / (100 / (armorDef)));
         }
 
-        public static void RemoveAfflictions(CommandContext context, OwnerProfile owner, Enemy enemy)
+        public static void RemoveAfflictions(ICommandContext context, OwnerProfile owner, Enemy enemy)
         {
             try
             {

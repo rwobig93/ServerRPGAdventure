@@ -32,6 +32,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using PersonalDiscordBot.Windows;
 using System.ComponentModel;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PersonalDiscordBot
 {
@@ -55,7 +56,7 @@ namespace PersonalDiscordBot
         
         public static DiscordSocketClient client;
         private CommandService commands;
-        private DependencyMap map;
+        private IServiceProvider services;
         public static Octokit.GitHubClient gitClient;
         private bool _activeSession = false;
         private bool notificationPlaying = false;
@@ -166,7 +167,7 @@ namespace PersonalDiscordBot
                         ShowNotification($"Bot {client.CurrentUser.Username} Sent disconnected message to log channel {((IMessageChannel)channel).Name}", 6);
                     }
                 }
-                await client.DisconnectAsync();
+                await client.StopAsync();
                 Toolbox.uDebugAddLog("Disconnected Client");
                 await client.LogoutAsync();
                 Toolbox.uDebugAddLog("Logged out");
@@ -1209,14 +1210,12 @@ namespace PersonalDiscordBot
 
                 var token = Toolbox._paths.BotToken;
                 commands = new CommandService();
-                map = new DependencyMap();
-                map.Add(client);
-                map.Add(commands);
+                services = new ServiceCollection().BuildServiceProvider();
                 await InstallCommands();
 
                 // Login and connect to Discord.
                 await client.LoginAsync(TokenType.Bot, token);
-                await client.ConnectAsync();
+                await client.StartAsync();
 
                 ShowNotification($"Bot {client.CurrentUser.Username} Successfully Connected", 4);
             }
@@ -1297,7 +1296,7 @@ namespace PersonalDiscordBot
                 var cmd = $"User: {arg.Author.Username} ◥◤ Command: {arg.ToString()}";
                 uStatusUpdate(cmd);
                 Toolbox.uDebugAddLog(string.Format("COMMAND: {0}", cmd));
-                var result = await commands.ExecuteAsync(context, argPos, map);
+                var result = await commands.ExecuteAsync(context, argPos, services);
                 if (!result.IsSuccess)
                 {
                     var possEx = result.Error.Value;
@@ -1326,6 +1325,8 @@ namespace PersonalDiscordBot
                 if (result < 0)
                 {
                     uStatusUpdate($"Newer release found, updating now... [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
+                    Toolbox._paths.CurrentVersion = releaseVersion;
+                    SaveConfig(ConfigType.Paths);
                     StartUpdate();
                 }
                 else

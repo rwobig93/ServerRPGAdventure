@@ -2266,7 +2266,7 @@ namespace PersonalDiscordBot.Classes
                 if (user == null)
                     return;
                 var roleString = string.Empty;
-                foreach (var id in ((SocketGuildUser)user).RoleIds)
+                foreach (var id in ((SocketGuildUser)user).Roles)
                     roleString = $"{roleString}{id}{Environment.NewLine}";
                 await Context.Channel.SendMessageAsync($"Roles for {user.Username}:{Environment.NewLine}{roleString}");
             }
@@ -2287,7 +2287,7 @@ namespace PersonalDiscordBot.Classes
                 var role = await GetDiscordRole(mentionedRole);
                 if (role == null)
                     return;
-                if (((SocketGuildUser)user).RoleIds.Contains(role.Id))
+                if (((SocketGuildUser)user).Roles.Contains(role))
                     await Context.Channel.SendMessageAsync($"{user.Username} is in {role.Mention}");
                 else
                     await Context.Channel.SendMessageAsync($"{user.Username} is not in {role.Mention}");
@@ -2555,7 +2555,7 @@ namespace PersonalDiscordBot.Classes
             return ownerProfile.CharacterList.Count == 0 ? false : true;
         }
 
-        public async Task<bool> HasTestingPermission(CommandContext context)
+        public async Task<bool> HasTestingPermission(ICommandContext context)
         {
             await Context.Channel.SendMessageAsync("");
             return true;

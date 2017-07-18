@@ -123,12 +123,12 @@ namespace PersonalDiscordBot.Classes
             worker.RunWorkerAsync();
         }
 
-        public static bool AdminPermissions(CommandContext context)
+        public static bool AdminPermissions(ICommandContext context)
         {
             return Administrators.Contains(context.Message.Author.Id);
         }
 
-        public static bool RPGChannelPermission(CommandContext context)
+        public static bool RPGChannelPermission(ICommandContext context)
         {
             return AllowedChannels.Contains(context.Channel.Id);
         }

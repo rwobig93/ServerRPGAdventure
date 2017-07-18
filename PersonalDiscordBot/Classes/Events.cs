@@ -26,13 +26,13 @@ namespace PersonalDiscordBot.Classes
 
         public delegate void DiscordMessage(MessageArgs args, bool isEmbed);
         public static event DiscordMessage DiscordMessageSend;
-        public static void SendDiscordMessage(CommandContext context, string message)
+        public static void SendDiscordMessage(ICommandContext context, string message)
         {
             MessageArgs args = new MessageArgs(context, message);
             DiscordMessageSend(args, false);
             Toolbox.uDebugAddLog($"Sent Discord Message via Event: [UN]{context.Message.Author.Username} [MSG]{message} [ID]{context.Message.Author.Id}");
         }
-        public static void SendDiscordMessage(CommandContext context, EmbedBuilder embed)
+        public static void SendDiscordMessage(ICommandContext context, EmbedBuilder embed)
         {
             MessageArgs args = new MessageArgs(context, embed);
             DiscordMessageSend(args, true);
@@ -45,7 +45,7 @@ namespace PersonalDiscordBot.Classes
 
         public delegate void MatchComplete(MatchArgs args);
         public static event MatchComplete MatchCompleted;
-        public static void CompleteMatch(CommandContext context, OwnerProfile owner, Match match, TimeSpan matchTime, RPG.MatchCompleteResult result)
+        public static void CompleteMatch(ICommandContext context, OwnerProfile owner, Match match, TimeSpan matchTime, RPG.MatchCompleteResult result)
         {
             MatchArgs args = new MatchArgs(context, owner, match, matchTime, result);
             MatchCompleted(args);
@@ -88,7 +88,7 @@ namespace PersonalDiscordBot.Classes
 
     public class MatchArgs : EventArgs
     {
-        private CommandContext context;
+        private ICommandContext context;
         private OwnerProfile owner;
         private Match match;
         private TimeSpan matchTime;
@@ -100,7 +100,7 @@ namespace PersonalDiscordBot.Classes
             this.matchTime = time;
             this.result = result;
         }
-        public MatchArgs(CommandContext context, OwnerProfile owner, Match match, TimeSpan time, RPG.MatchCompleteResult result)
+        public MatchArgs(ICommandContext context, OwnerProfile owner, Match match, TimeSpan time, RPG.MatchCompleteResult result)
         {
             this.context = context;
             this.owner = owner;
@@ -108,7 +108,7 @@ namespace PersonalDiscordBot.Classes
             this.matchTime = time;
             this.result = result;
         }
-        public CommandContext Context { get { return context; } }
+        public ICommandContext Context { get { return context; } }
         public OwnerProfile Owner { get { return owner; } }
         public Match Match { get { return match; } }
         public TimeSpan MatchTime { get { return matchTime; } }
@@ -118,20 +118,20 @@ namespace PersonalDiscordBot.Classes
     public class MessageArgs : EventArgs
     {
         private EmbedBuilder embed;
-        private CommandContext context;
+        private ICommandContext context;
         private string message;
-        public MessageArgs(CommandContext context, string message)
+        public MessageArgs(ICommandContext context, string message)
         {
             this.context = context;
             this.message = message;
         }
-        public MessageArgs(CommandContext context, EmbedBuilder embed)
+        public MessageArgs(ICommandContext context, EmbedBuilder embed)
         {
             this.context = context;
             this.embed = embed;
         }
         public EmbedBuilder Embed { get { return embed; } }
-        public CommandContext Context { get { return context; } }
+        public ICommandContext Context { get { return context; } }
         public string Message { get { return message; } }
     }
 
