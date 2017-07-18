@@ -948,8 +948,7 @@ namespace PersonalDiscordBot.Classes
                  ";test check backpack" +
                  ";test change color %color%" +
                  "   (red, blue, black, green, yellow, brown, orange, gold, pink, purple, silver, slategray, white)" +
-                 ";test change color 00,00,00 (r,g,b)" +
-                 "AWWWWWWW BOYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY```",
+                 ";test change color 00,00,00 (r,g,b)```",
                  Environment.NewLine
                 );
                 await Context.Channel.SendMessageAsync(_helpArticle);
