@@ -158,7 +158,7 @@ namespace PDBUpdater
                     saveData.CurrentVersion = new Version("0.1.00.00");
                     saveData.BackupFolder = $@"{Directory.GetCurrentDirectory()}\Backup";
                     saveData.InstallDirectory = $@"{Directory.GetCurrentDirectory()}";
-                    saveData.DownloadBaseURL = $@"https://github.com/rwobig93/ServerRPGAdventure/releases/download/";
+                    saveData.DownloadBaseURL = $@"https://github.com/rwobig93/ServerRPGAdventure/releases/download";
                     SerializeConfig();
                     uStatusWriteLine($@"Config file wasn't found, created default", ConsoleColor.DarkGray);
                 }

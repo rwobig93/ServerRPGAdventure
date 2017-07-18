@@ -52,9 +52,9 @@ namespace PersonalDiscordBot.Classes
         public int Lvl { get; set; }
         public int Exp { get; set; }
         public int ExpToLvl { get; set; } = Management.CalculateExperience(2);
-        public int MaxHP { get { return RPG.HPMPStatCalc(this, this.Def, this.PF.Def); } }
+        public int MaxHP { get { return RPG.HPStatCalc(this, this.Def, this.PF.Def); } }
         public int CurrentHP { get; set; }
-        public int MaxMana { get { return RPG.HPMPStatCalc(this, this.Int, this.PF.Int);} }
+        public int MaxMana { get { return RPG.MPStatCalc(this, this.Int, this.PF.Int);} }
         public int CurrentMana { get; set; }
         public int Str { get { return RPG.VitalStatCalc(this, this.PF.Str); } }
         public int Def { get { return RPG.VitalStatCalc(this, this.PF.Def); } }
@@ -484,15 +484,27 @@ namespace PersonalDiscordBot.Classes
         }
 
         /// <summary>
-        /// Calculates HP/MP statistics baed on the current respective stat and the class's priority factor
+        /// Calculates MP statistics based on the current respective stat and the class's priority factor
         /// </summary>
         /// <param name="chara"></param>
         /// <param name="stat"></param>
         /// <param name="statPF"></param>
         /// <returns></returns>
-        public static int HPMPStatCalc(Character chara, int stat, int statPF)
+        public static int MPStatCalc(Character chara, int stat, int statPF)
         {
             return ((stat / 2) + (statPF * chara.Lvl) + (statPF * 4));
+        }
+
+        /// <summary>
+        /// Calculates HP statistics based on the current respective stat and the class's priority factor
+        /// </summary>
+        /// <param name="chara"></param>
+        /// <param name="stat"></param>
+        /// <param name="statPF"></param>
+        /// <returns></returns>
+        public static int HPStatCalc(Character chara, int stat, int statPF)
+        {
+            return (((stat / 2) + (statPF * chara.Lvl) + (statPF * 4)) + ((chara.Lvl * statPF * stat) / 3));
         }
 
         /// <summary>
@@ -1278,8 +1290,8 @@ namespace PersonalDiscordBot.Classes
                     RPG.MatchList.Add(newMatch);
                     Toolbox.uDebugAddLog($"Successfully generated new match with {newMatch.EnemyList.Count} enemies");
                     EmbedBuilder embed = new EmbedBuilder(){ Title = $"A new match was generated with **{newMatch.EnemyList.Count}** enemies", Color = owner.CurrentCharacter.Color, Description = $"{owner.CurrentCharacter.Name} vs. {newEnemy.Name}" };
-                    embed.AddField(x => { x.Name = "Player Img"; x.IsInline = true; x.Value = owner.CurrentCharacter.ImgURL; });
-                    embed.AddField(x => { x.Name = "Enemy Img"; x.IsInline = true; x.Value = newEnemy.ImgURL; });
+                    //embed.AddField(x => { x.Name = "Player Img"; x.IsInline = true; x.Value = owner.CurrentCharacter.ImgURL; });
+                    //embed.AddField(x => { x.Name = "Enemy Img"; x.IsInline = true; x.Value = newEnemy.ImgURL; });
                     Events.SendDiscordMessage(context, embed);
                     CalculateTurn(context, owner);
                     return;
@@ -2325,8 +2337,8 @@ namespace PersonalDiscordBot.Classes
                 Toolbox.uDebugAddLog($"attack = [weapon]{enemyPhys} * [str]{enemy.Str}");
                 var defense = physDamage * chara.Def;
                 Toolbox.uDebugAddLog($"defense = [armor]{physDamage} * [def]{chara.Def}");
-                enemyPhys = (attack * attack) / (attack + defense);
-                Toolbox.uDebugAddLog($"enemyPhys = ({attack} * {attack}) / ({attack} + {defense})");
+                enemyPhys = ((attack * attack) / (attack + defense)) / 3;
+                Toolbox.uDebugAddLog($"enemyPhys = (({attack} * {attack}) / ({attack} + {defense})) / 3");
                 if (enemyPhys <= 0) enemyPhys = 0;
                 Toolbox.uDebugAddLog("Calculating magiDamage");
                 enemyMagi = Management.CalculateElement(enemyMagi, magiDamage);
