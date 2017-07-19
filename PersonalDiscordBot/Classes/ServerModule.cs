@@ -864,14 +864,15 @@ namespace PersonalDiscordBot.Classes
                 (
                  "_{0}" +
                  "{0}```۩ General Commands ۩```{0}" +
-                 "```;help{0}You already did this command, don't do it again unless you're a pleb or something...```" +
-                 "```;status{0}Displays information about the bots' current status/info```" +
-                 "```;playing{0}Sets the bots' Playing status to nothing (not playing anything)```" +
-                 "```;playing a game{0}Sets the bots' Playing status to 'a game' or whatever you type after playing```" +
-                 "```;name{0}Sets the bots' Name status to 'My Boiiiiiiiiiiiii'```" +
-                 "```;name Raspberry Schmeckles{0}Sets the bots' Name status to 'Raspberry Schmeckles' or whatever you type after name```" +
-                 "```;f @Someone{0}Pays respects to a mentioned person / or whatever you want```" +
-                 "```;update{0}Checks for an update for the bot```",
+                 "```;help{0}   You already did this command, don't do it again unless you're a pleb or something...{0}" +
+                 ";status{0}   Displays information about the bots' current status/info{0}" +
+                 ";playing{0}   Sets the bots' Playing status to nothing (not playing anything){0}" +
+                 ";playing a game{0}   Sets the bots' Playing status to 'a game' or whatever you type after playing{0}" +
+                 ";name{0}   Sets the bots' Name status to 'My Boiiiiiiiiiiiii'{0}" +
+                 ";name Raspberry Schmeckles{0}   Sets the bots' Name status to 'Raspberry Schmeckles' or whatever you type after name{0}" +
+                 ";f @Someone{0}   Pays respects to a mentioned person / or whatever you want{0}" +
+                 ";update{0}   Checks for an update for the bot{0}" +
+                 ";save{0}   Saves Paths, Server, and RPG Data manually```",
                  Environment.NewLine
                 );
                 await Context.Channel.SendMessageAsync(_helpArticle);
@@ -944,10 +945,10 @@ namespace PersonalDiscordBot.Classes
                  ";test change description{0}" +
                  ";test add loot{0}" +
                  ";test testing %Role/Group%{0}" +
-                 ";test log channel %MentionChannel%"+
-                 ";test check backpack" +
-                 ";test change color %color%" +
-                 "   (red, blue, black, green, yellow, brown, orange, gold, pink, purple, silver, slategray, white)" +
+                 ";test log channel %MentionChannel%{0}" +
+                 ";test check backpack{0}" +
+                 ";test change color %color%{0}" +
+                 "   (red, blue, black, green, yellow, brown, orange, gold, pink, purple, silver, slategray, white){0}" +
                  ";test change color 00,00,00 (r,g,b)```",
                  Environment.NewLine
                 );
@@ -1089,30 +1090,70 @@ namespace PersonalDiscordBot.Classes
         [Command(""), Summary("Default Entry")]
         public async Task Update()
         {
-            var admin = Permissions.AdminPermissions(Context);
-            if (!admin)
+            try
             {
-                await Context.Channel.SendMessageAsync($"{Context.User.Mention} You don't have permissions to run this command");
-                return;
+                var admin = Permissions.AdminPermissions(Context);
+                if (!admin)
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} You don't have permissions to run this command");
+                    return;
+                }
+                var gitClient = MainWindow.gitClient;
+                if (gitClient == null)
+                    gitClient = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("PDB"));
+                if (Toolbox._paths.CurrentVersion == null)
+                    Toolbox._paths.CurrentVersion = new Version("0.1.00.00");
+                var releases = await gitClient.Repository.Release.GetAll("rwobig93", "ServerRPGAdventure");
+                var release = releases[0];
+                Version releaseVersion = new Version(release.TagName);
+                var result = Toolbox._paths.CurrentVersion.CompareTo(releaseVersion);
+                if (result < 0)
+                {
+                    await Context.Channel.SendMessageAsync($"Newer release found, updating now... [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
+                    //var logChannel = await Context.Guild.GetChannelAsync(Permissions.GeneralPermissions.logChannel);
+                    //if (logChannel != null)
+                    //{
+                    //    await ((IMessageChannel)logChannel).SendMessageAsync($"Update command sent by {Context.User.Username} and a newer version was found, updating now...");
+                    //}
+                    Toolbox._paths.CurrentVersion = releaseVersion;
+                    Toolbox._paths.Updated = true;
+                    MainWindow.SaveConfig(MainWindow.ConfigType.Paths);
+                    MainWindow.StartUpdate();
+                }
+                else
+                {
+                    await Context.Channel.SendMessageAsync($"Release Version is the same version or older than running assembly. [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
+                }
             }
-            var gitClient = MainWindow.gitClient;
-            if (gitClient == null)
-                gitClient = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("PDB"));
-            if (Toolbox._paths.CurrentVersion == null)
-                Toolbox._paths.CurrentVersion = new Version("0.1.00.00");
-            var releases = await gitClient.Repository.Release.GetAll("rwobig93", "ServerRPGAdventure");
-            var release = releases[0];
-            Version releaseVersion = new Version(release.TagName);
-            var result = Toolbox._paths.CurrentVersion.CompareTo(releaseVersion);
-            if (result < 0)
+            catch (Exception ex)
             {
-                await Context.Channel.SendMessageAsync($"Newer release found, updating now... [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
-                Toolbox._paths.CurrentVersion = releaseVersion;
-                MainWindow.StartUpdate();
+                ServerModule.FullExceptionLog(ex);
             }
-            else
+        }
+    }
+
+    [Group("save"), Summary("Saves RPG and Bot Info")]
+    public class SaveModule : ModuleBase
+    {
+        [Command(""), Summary("Default Entry")]
+        public async Task Save()
+        {
+            try
             {
-                await Context.Channel.SendMessageAsync($"Release Version is the same version or older than running assembly. [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
+                var admin = Permissions.AdminPermissions(Context);
+                if (!admin)
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} You don't have permissions to run this command");
+                    return;
+                }
+                MainWindow.SaveConfig(MainWindow.ConfigType.Paths);
+                MainWindow.SaveConfig(MainWindow.ConfigType.Servers);
+                MainWindow.SaveRPGData();
+                await Context.Channel.SendMessageAsync($"{Context.User.Mention} Successfully saved Paths, Server, and RPG Data");
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
             }
         }
     }

@@ -20,10 +20,12 @@ namespace PDBUpdater
 
         public static GitHubClient gitClient = null;
         public static SaveData saveData = new SaveData();
+        public static WebClient webClient;
         public static string configFile = $@"{Directory.GetCurrentDirectory()}\Config\UpdaterConfig.json";
         public static string logPath = $@"{Directory.GetCurrentDirectory()}\Logs";
         public static bool downloadFinished = false;
         public static object _MessageLock = new object();
+        public static StringBuilder debugLog = new StringBuilder();
 
         #endregion
 
@@ -38,10 +40,10 @@ namespace PDBUpdater
             await CheckNewRelease();
         }
 
-        private async Task Cleanup()
+        private void Cleanup()
         {
             uStatusWriteLine("Starting bot...", ConsoleColor.Green);
-            await StartPDB();
+            StartPDB();
             Exit();
         }
 
@@ -56,13 +58,13 @@ namespace PDBUpdater
                 if (result < 0)
                 {
                     uStatusWriteLine($"Newer release found, updating now... [Current]{saveData.CurrentVersion} [Release]{releaseVersion}");
-                    UpdateToNewVersion(releaseVersion);
+                    UpdateToNewVersion(release.TagName, releaseVersion);
                     while (!downloadFinished)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(3));
                         uStatusWriteLine(".");
                     }
-                    await Cleanup();
+                    Cleanup();
                 }
                 else
                 {
@@ -76,7 +78,7 @@ namespace PDBUpdater
             }
         }
 
-        private async Task StartPDB()
+        private void StartPDB()
         {
             try
             {
@@ -86,17 +88,8 @@ namespace PDBUpdater
                 if (started == null)
                 {
                     uStatusWriteLine($"Process {startPDB.ProcessName} didn't start successfully, couldn't find process ID {startPDB.Id}, would you like to try again? (y/n)", ConsoleColor.Red);
-                    string response = Console.ReadLine();
-                    if (response.ToLower() == "y")
-                    {
-                        await CheckNewRelease();
-                    }
-                    else
-                    {
-                        uStatusWriteLine("Cancelling update, press enter to close...");
-                        Console.ReadLine();
-                        Exit();
-                    }
+                    uStatusWriteLine("Cancelling update...");
+                    Exit();
                 }
                 else
                 {
@@ -136,8 +129,7 @@ namespace PDBUpdater
                 using (StreamWriter sw = new StreamWriter(fileName))
                     sw.WriteLine(exceptionLog);
             uStatusWriteLine($@"EXCEPTION: [Caller]{caller} at {line} | [Type]{ex.GetType().Name} | [Msg]{ex.Message}", ConsoleColor.Red);
-            uStatusWriteLine("An exception occured, please press enter to continue...");
-            Console.ReadLine();
+            uStatusWriteLine("An exception occured...");
         }
 
         #endregion
@@ -158,7 +150,7 @@ namespace PDBUpdater
                     saveData.CurrentVersion = new Version("0.1.00.00");
                     saveData.BackupFolder = $@"{Directory.GetCurrentDirectory()}\Backup";
                     saveData.InstallDirectory = $@"{Directory.GetCurrentDirectory()}";
-                    saveData.DownloadBaseURL = $@"https://github.com/rwobig93/ServerRPGAdventure/releases/download/";
+                    saveData.DownloadBaseURL = $@"https://github.com/rwobig93/ServerRPGAdventure/releases/download";
                     SerializeConfig();
                     uStatusWriteLine($@"Config file wasn't found, created default", ConsoleColor.DarkGray);
                 }
@@ -209,8 +201,7 @@ namespace PDBUpdater
             try
             {
                 gitClient = new GitHubClient(new ProductHeaderValue("PDB_Updater"));
-                uStatusWriteLine("Successfully setup gitclient, press enter to continue...", ConsoleColor.Green);
-                Console.ReadLine();
+                uStatusWriteLine("Successfully setup gitclient...", ConsoleColor.Green);
             }
             catch (Exception ex)
             {
@@ -218,14 +209,15 @@ namespace PDBUpdater
             }
         }
 
-        private void UpdateToNewVersion(Version releaseVerNum)
+        private void UpdateToNewVersion(string tagName, Version releaseVerNum)
         {
             KillRunningProcesses();
             saveData.CurrentVersion = releaseVerNum;
-            string releaseURI = $@"{saveData.DownloadBaseURL}/{releaseVerNum}/";
             string exeName = "PersonalDiscordBot.exe";
+            string releaseURI = $@"{saveData.DownloadBaseURL}/{tagName}/{exeName}";
+            uStatusWriteLine($"Full URI: {releaseURI}", ConsoleColor.DarkGray);
             BackupPreviousVersion();
-            WebClient webClient = new WebClient();
+            webClient = new WebClient();
             webClient.DownloadProgressChanged += (sender2, e2) => { uStatusWriteLine($"Download Progress: {e2.ProgressPercentage}% ({e2.BytesReceived}/{e2.TotalBytesToReceive})", ConsoleColor.Yellow); };
             webClient.DownloadFileCompleted += (sender2, e2) => { uStatusWriteLine($"Download complete, now starting updated version {releaseVerNum}"); downloadFinished = true; saveData.CurrentVersion = releaseVerNum; };
             uStatusWriteLine($"Starting download for v{releaseVerNum}...");
@@ -236,7 +228,7 @@ namespace PDBUpdater
         {
             try
             {
-                var procs = Process.GetProcessesByName("PersonalDiscordBot.exe");
+                var procs = Process.GetProcessesByName("PersonalDiscordBot");
                 if (procs.Length <= 0)
                     uStatusWriteLine($"{procs.Length} processes were found running", ConsoleColor.DarkGray);
                 else
@@ -282,6 +274,7 @@ namespace PDBUpdater
         {
             SerializeConfig();
             uStatusWriteLine("Closing process...", ConsoleColor.DarkRed);
+            SaveDebugLog();
             var thisProc = Process.GetCurrentProcess();
             thisProc.Close();
         }
@@ -295,6 +288,15 @@ namespace PDBUpdater
                 else
                     Console.ResetColor();
                 Console.WriteLine(status);
+            }
+            debugLog.Append($"{status}{Environment.NewLine}");
+        }
+
+        private void SaveDebugLog()
+        {
+            using (StreamWriter sw = File.AppendText($@"{logPath}\{DateTime.Now.ToString("MM-dd-yy_ConsoleOutput.log")}"))
+            {
+                sw.WriteLine(debugLog.ToString());
             }
         }
 
