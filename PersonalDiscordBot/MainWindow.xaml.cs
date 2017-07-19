@@ -125,7 +125,6 @@ namespace PersonalDiscordBot
             try
             {
                 await UpdateApplication();
-                _activeSession = true;
                 if (string.IsNullOrEmpty(Toolbox._paths.BotToken))
                 {
                     Toolbox.uDebugAddLog("Token wasn't found in LocalSettings, prompting for token and sending notification");
@@ -139,6 +138,7 @@ namespace PersonalDiscordBot
                 string _senderText = sender.ToString();
                 Thread _updateConn = new Thread(tUpdateConnectionStatus);
                 _updateConn.Start();
+                _activeSession = true;
                 await SendConnectedMsg();
             }
             catch (Exception ex)
@@ -934,7 +934,6 @@ namespace PersonalDiscordBot
                 string prevVersion = sGeneral.Default.CurrentVersion;
                 string dateUpdate = $"{DateTime.Now.ToLocalTime().ToString("MM-dd-yyyy")} {DateTime.Now.ToLocalTime().ToLongTimeString()}";
                 sGeneral.Default.LastUpdate = dateUpdate;
-                sGeneral.Default.CurrentVersion = verNum;
                 sGeneral.Default.Save();
                 lblUpdateTime.Text = sGeneral.Default.LastUpdate;
                 lblVersionNumber.Text = $"Version {sGeneral.Default.CurrentVersion}";
@@ -950,11 +949,24 @@ namespace PersonalDiscordBot
             {
                 Toolbox._paths.Updated = false;
                 uStatusUpdate($"Updated to github version {Toolbox._paths.CurrentVersion}");
-                if (Permissions.GeneralPermissions.logChannel != 0)
+                object sender = null;
+                RoutedEventArgs e = null;
+
+                btnConnect_Click(sender, e);
+
+                Thread sendUpdate = new Thread(() =>
                 {
-                    var channel = (IMessageChannel)client.GetChannel(Permissions.GeneralPermissions.logChannel);
-                    channel.SendMessageAsync($"Bot upgraded to github v{Toolbox._paths.CurrentVersion}");
-                }
+                    while (!_activeSession)
+                    {
+                        Thread.Sleep(1000);
+                    }
+                    if (Permissions.GeneralPermissions.logChannel != 0)
+                    {
+                        var channel = (IMessageChannel)client.GetChannel(Permissions.GeneralPermissions.logChannel);
+                        channel.SendMessageAsync($"Bot upgraded to github v{Toolbox._paths.CurrentVersion}");
+                    }
+                });
+                sendUpdate.Start();
             }
         }
 
@@ -1326,6 +1338,7 @@ namespace PersonalDiscordBot
                 {
                     uStatusUpdate($"Newer release found, updating now... [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
                     Toolbox._paths.CurrentVersion = releaseVersion;
+                    Toolbox._paths.Updated = true;
                     SaveConfig(ConfigType.Paths);
                     StartUpdate();
                 }
@@ -1375,7 +1388,7 @@ namespace PersonalDiscordBot
             //RPG.Owners.Add(owner);
             //uStatusUpdate(Testing.EmulateFight(owner));
             List<int> lvlList = new List<int>();
-            for (var i = 1; i <= 15; i++)
+            for (var i = 1; i <= 150; i++)
             {
                 int exp = 0;
                 uStatusUpdate($"Experience lvl {i}: {exp = Management.CalculateExperience(i)}");

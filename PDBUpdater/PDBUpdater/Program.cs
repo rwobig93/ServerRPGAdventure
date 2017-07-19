@@ -20,10 +20,12 @@ namespace PDBUpdater
 
         public static GitHubClient gitClient = null;
         public static SaveData saveData = new SaveData();
+        public static WebClient webClient;
         public static string configFile = $@"{Directory.GetCurrentDirectory()}\Config\UpdaterConfig.json";
         public static string logPath = $@"{Directory.GetCurrentDirectory()}\Logs";
         public static bool downloadFinished = false;
         public static object _MessageLock = new object();
+        public static StringBuilder debugLog = new StringBuilder();
 
         #endregion
 
@@ -56,7 +58,7 @@ namespace PDBUpdater
                 if (result < 0)
                 {
                     uStatusWriteLine($"Newer release found, updating now... [Current]{saveData.CurrentVersion} [Release]{releaseVersion}");
-                    UpdateToNewVersion(releaseVersion);
+                    UpdateToNewVersion(release.TagName, releaseVersion);
                     while (!downloadFinished)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(3));
@@ -218,14 +220,15 @@ namespace PDBUpdater
             }
         }
 
-        private void UpdateToNewVersion(Version releaseVerNum)
+        private void UpdateToNewVersion(string tagName, Version releaseVerNum)
         {
             KillRunningProcesses();
             saveData.CurrentVersion = releaseVerNum;
-            string releaseURI = $@"{saveData.DownloadBaseURL}/{releaseVerNum}/";
             string exeName = "PersonalDiscordBot.exe";
+            string releaseURI = $@"{saveData.DownloadBaseURL}/{tagName}/{exeName}";
+            uStatusWriteLine($"Full URI: {releaseURI}", ConsoleColor.DarkGray);
             BackupPreviousVersion();
-            WebClient webClient = new WebClient();
+            webClient = new WebClient();
             webClient.DownloadProgressChanged += (sender2, e2) => { uStatusWriteLine($"Download Progress: {e2.ProgressPercentage}% ({e2.BytesReceived}/{e2.TotalBytesToReceive})", ConsoleColor.Yellow); };
             webClient.DownloadFileCompleted += (sender2, e2) => { uStatusWriteLine($"Download complete, now starting updated version {releaseVerNum}"); downloadFinished = true; saveData.CurrentVersion = releaseVerNum; };
             uStatusWriteLine($"Starting download for v{releaseVerNum}...");
@@ -282,6 +285,7 @@ namespace PDBUpdater
         {
             SerializeConfig();
             uStatusWriteLine("Closing process...", ConsoleColor.DarkRed);
+            SaveDebugLog();
             var thisProc = Process.GetCurrentProcess();
             thisProc.Close();
         }
@@ -295,6 +299,15 @@ namespace PDBUpdater
                 else
                     Console.ResetColor();
                 Console.WriteLine(status);
+            }
+            debugLog.Append($"{status}{Environment.NewLine}");
+        }
+
+        private void SaveDebugLog()
+        {
+            using (StreamWriter sw = File.AppendText($@"{logPath}\{DateTime.Now.ToString("MM-dd-yy_ConsoleOutput.log")}"))
+            {
+                sw.WriteLine(debugLog.ToString());
             }
         }
 
