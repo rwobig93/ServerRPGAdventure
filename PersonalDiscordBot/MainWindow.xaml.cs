@@ -102,8 +102,7 @@ namespace PersonalDiscordBot
 
         private void winMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Management.SerializeData();
-            Permissions.SerializePermissions();
+            SaveRPGData();
             Toolbox.uDebugAddLog(string.Format("{0}########################## Application Stop ##########################{0}", Environment.NewLine));
             Toolbox.DumpDebugLog();
             DumpStatusLog();
@@ -1069,6 +1068,12 @@ namespace PersonalDiscordBot
             }
         }
 
+        public static void SaveRPGData()
+        {
+            Management.SerializeData();
+            Permissions.SerializePermissions();
+        }
+
         #endregion
 
         #region Threaded Methods
@@ -1340,6 +1345,7 @@ namespace PersonalDiscordBot
                     Toolbox._paths.CurrentVersion = releaseVersion;
                     Toolbox._paths.Updated = true;
                     SaveConfig(ConfigType.Paths);
+                    SaveRPGData();
                     StartUpdate();
                 }
                 else
