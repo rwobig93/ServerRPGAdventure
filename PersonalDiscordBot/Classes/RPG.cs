@@ -435,8 +435,6 @@ namespace PersonalDiscordBot.Classes
 
     #endregion
 
-    //THIS IS THE TEST CODE
-
     public static class RPG
     {
         #region Variables
