@@ -1089,30 +1089,44 @@ namespace PersonalDiscordBot.Classes
         [Command(""), Summary("Default Entry")]
         public async Task Update()
         {
-            var admin = Permissions.AdminPermissions(Context);
-            if (!admin)
+            try
             {
-                await Context.Channel.SendMessageAsync($"{Context.User.Mention} You don't have permissions to run this command");
-                return;
+                var admin = Permissions.AdminPermissions(Context);
+                if (!admin)
+                {
+                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} You don't have permissions to run this command");
+                    return;
+                }
+                var gitClient = MainWindow.gitClient;
+                if (gitClient == null)
+                    gitClient = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("PDB"));
+                if (Toolbox._paths.CurrentVersion == null)
+                    Toolbox._paths.CurrentVersion = new Version("0.1.00.00");
+                var releases = await gitClient.Repository.Release.GetAll("rwobig93", "ServerRPGAdventure");
+                var release = releases[0];
+                Version releaseVersion = new Version(release.TagName);
+                var result = Toolbox._paths.CurrentVersion.CompareTo(releaseVersion);
+                if (result < 0)
+                {
+                    await Context.Channel.SendMessageAsync($"Newer release found, updating now... [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
+                    var logChannel = await Context.Guild.GetChannelAsync(Permissions.GeneralPermissions.logChannel);
+                    if (logChannel != null)
+                    {
+                        await ((IMessageChannel)logChannel).SendMessageAsync($"Update command sent by {Context.User.Username} and a newer version was found, updating now...");
+                    }
+                    Toolbox._paths.CurrentVersion = releaseVersion;
+                    Toolbox._paths.Updated = true;
+                    MainWindow.SaveConfig(MainWindow.ConfigType.Paths);
+                    MainWindow.StartUpdate();
+                }
+                else
+                {
+                    await Context.Channel.SendMessageAsync($"Release Version is the same version or older than running assembly. [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
+                }
             }
-            var gitClient = MainWindow.gitClient;
-            if (gitClient == null)
-                gitClient = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("PDB"));
-            if (Toolbox._paths.CurrentVersion == null)
-                Toolbox._paths.CurrentVersion = new Version("0.1.00.00");
-            var releases = await gitClient.Repository.Release.GetAll("rwobig93", "ServerRPGAdventure");
-            var release = releases[0];
-            Version releaseVersion = new Version(release.TagName);
-            var result = Toolbox._paths.CurrentVersion.CompareTo(releaseVersion);
-            if (result < 0)
+            catch (Exception ex)
             {
-                await Context.Channel.SendMessageAsync($"Newer release found, updating now... [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
-                Toolbox._paths.CurrentVersion = releaseVersion;
-                MainWindow.StartUpdate();
-            }
-            else
-            {
-                await Context.Channel.SendMessageAsync($"Release Version is the same version or older than running assembly. [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
+                ServerModule.FullExceptionLog(ex);
             }
         }
     }
