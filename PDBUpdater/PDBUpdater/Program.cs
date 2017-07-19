@@ -40,10 +40,10 @@ namespace PDBUpdater
             await CheckNewRelease();
         }
 
-        private async Task Cleanup()
+        private void Cleanup()
         {
             uStatusWriteLine("Starting bot...", ConsoleColor.Green);
-            await StartPDB();
+            StartPDB();
             Exit();
         }
 
@@ -64,7 +64,7 @@ namespace PDBUpdater
                         await Task.Delay(TimeSpan.FromSeconds(3));
                         uStatusWriteLine(".");
                     }
-                    await Cleanup();
+                    Cleanup();
                 }
                 else
                 {
@@ -78,7 +78,7 @@ namespace PDBUpdater
             }
         }
 
-        private async Task StartPDB()
+        private void StartPDB()
         {
             try
             {
@@ -88,17 +88,8 @@ namespace PDBUpdater
                 if (started == null)
                 {
                     uStatusWriteLine($"Process {startPDB.ProcessName} didn't start successfully, couldn't find process ID {startPDB.Id}, would you like to try again? (y/n)", ConsoleColor.Red);
-                    string response = Console.ReadLine();
-                    if (response.ToLower() == "y")
-                    {
-                        await CheckNewRelease();
-                    }
-                    else
-                    {
-                        uStatusWriteLine("Cancelling update, press enter to close...");
-                        Console.ReadLine();
-                        Exit();
-                    }
+                    uStatusWriteLine("Cancelling update...");
+                    Exit();
                 }
                 else
                 {
@@ -138,8 +129,7 @@ namespace PDBUpdater
                 using (StreamWriter sw = new StreamWriter(fileName))
                     sw.WriteLine(exceptionLog);
             uStatusWriteLine($@"EXCEPTION: [Caller]{caller} at {line} | [Type]{ex.GetType().Name} | [Msg]{ex.Message}", ConsoleColor.Red);
-            uStatusWriteLine("An exception occured, please press enter to continue...");
-            Console.ReadLine();
+            uStatusWriteLine("An exception occured...");
         }
 
         #endregion
@@ -211,8 +201,7 @@ namespace PDBUpdater
             try
             {
                 gitClient = new GitHubClient(new ProductHeaderValue("PDB_Updater"));
-                uStatusWriteLine("Successfully setup gitclient, press enter to continue...", ConsoleColor.Green);
-                Console.ReadLine();
+                uStatusWriteLine("Successfully setup gitclient...", ConsoleColor.Green);
             }
             catch (Exception ex)
             {
@@ -239,7 +228,7 @@ namespace PDBUpdater
         {
             try
             {
-                var procs = Process.GetProcessesByName("PersonalDiscordBot.exe");
+                var procs = Process.GetProcessesByName("PersonalDiscordBot");
                 if (procs.Length <= 0)
                     uStatusWriteLine($"{procs.Length} processes were found running", ConsoleColor.DarkGray);
                 else

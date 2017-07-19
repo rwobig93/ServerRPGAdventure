@@ -948,14 +948,14 @@ namespace PersonalDiscordBot
             if (Toolbox._paths.Updated)
             {
                 Toolbox._paths.Updated = false;
+                SaveConfig(ConfigType.Paths);
                 uStatusUpdate($"Updated to github version {Toolbox._paths.CurrentVersion}");
-                object sender = null;
-                RoutedEventArgs e = null;
 
-                btnConnect_Click(sender, e);
-
-                Thread sendUpdate = new Thread(() =>
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += (sender, e) =>
                 {
+                    RoutedEventArgs e2 = new RoutedEventArgs();
+                    btnConnect_Click(sender, e2);
                     while (!_activeSession)
                     {
                         Thread.Sleep(1000);
@@ -965,8 +965,8 @@ namespace PersonalDiscordBot
                         var channel = (IMessageChannel)client.GetChannel(Permissions.GeneralPermissions.logChannel);
                         channel.SendMessageAsync($"Bot upgraded to github v{Toolbox._paths.CurrentVersion}");
                     }
-                });
-                sendUpdate.Start();
+                };
+                worker.RunWorkerAsync();
             }
         }
 
@@ -1206,6 +1206,9 @@ namespace PersonalDiscordBot
         {
             try
             {
+                // Define the DiscordSocketClient
+                client = new DiscordSocketClient();
+
                 Thread loginUpdate = new Thread(() =>
                 {
                     uStatusUpdate("Starting login updater");
@@ -1216,9 +1219,6 @@ namespace PersonalDiscordBot
                     uStatusUpdate("Updated Name and Playing Value");
                 });
                 loginUpdate.Start();
-
-                // Define the DiscordSocketClient
-                client = new DiscordSocketClient();
 
                 var token = Toolbox._paths.BotToken;
                 commands = new CommandService();
