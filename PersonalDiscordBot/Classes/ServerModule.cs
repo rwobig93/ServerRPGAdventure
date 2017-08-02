@@ -158,7 +158,7 @@ namespace PersonalDiscordBot.Classes
                     Toolbox.serversRebooted.Add(rebServ);
                     Toolbox.RemoveRebootedServer(rebServ);
                     await Context.Channel.SendMessageAsync(string.Format("Successfully started the game server {0}, please wait for the server to boot up. I will check on the status automatically and let you know what I find, otherwise you can manually check the status by using the command ;server status {1}", chosenServ.ServerName, chosenServ.Game));
-                    await CheckOnServer(chosenServ);
+                    CheckOnServer(chosenServ);
                 }
                 #endregion
 
@@ -177,8 +177,9 @@ namespace PersonalDiscordBot.Classes
                         {
                             if (rebSrv.Server.ServerName == chosenServ.ServerName)
                             {
-                                TimeSpan timeLeft = DateTime.Now.ToLocalTime() - rebSrv.Rebooted;
-                                await Context.Channel.SendMessageAsync(string.Format("The game server {0} was rebooted {1}min ago, please wait another {1}min before attempting to reboot again", rebSrv.Server.ServerName, timeLeft.Minutes));
+                                TimeSpan timeRebooted = DateTime.Now.ToLocalTime() - rebSrv.Rebooted;
+                                var timeLeft = 15 - timeRebooted.Minutes;
+                                await Context.Channel.SendMessageAsync(string.Format("The game server {0} was rebooted {1}min ago, please wait another {2}min before attempting to reboot again", rebSrv.Server.ServerName, timeRebooted.Minutes, timeLeft));
                                 return;
                             }
                         }
@@ -207,7 +208,7 @@ namespace PersonalDiscordBot.Classes
                     Toolbox.serversRebooted.Add(rebServ);
                     Toolbox.RemoveRebootedServer(rebServ);
                     await Context.Channel.SendMessageAsync(string.Format("Successfully started the game server {0}, please wait for the server to boot up. I will check on the status automatically and let you know what I find, otherwise you can manually check the status by using the command ;server status {1}", chosenServ.ServerName, chosenServ.Game));
-                    await CheckOnServer(chosenServ);
+                    CheckOnServer(chosenServ);
                 } 
                 #endregion
             }
@@ -715,27 +716,51 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        private async Task CheckOnServer(GameServer game)
+        private void CheckOnServer(GameServer game)
         {
             try
             {
-                TimeSpan totalTime = TimeSpan.FromMinutes(15);
-                IPEndPoint endpoint = CreateIPEndPoint(string.Format("{0}:{1}", game.IPAddress, game.QueryPort));
-                QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out ReadOnlyCollection<Player> playerList);
-                while (servInfo == null)
+                DateTime timeStart = DateTime.Now;
+                TimeSpan waitTime = TimeSpan.FromMinutes(30);
+                Toolbox.uDebugAddLog("Got timestamp, now starting server check thread");
+                Thread startCheck = new Thread(() =>
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(30));
-                    Toolbox.uDebugAddLog(string.Format("Waited 30 seconds after rebooting the {0} game server", game.ServerName));
-                    totalTime = totalTime - TimeSpan.FromSeconds(30);
-                    if (totalTime <= TimeSpan.FromSeconds(0))
+                    try
                     {
-                        await Context.Channel.SendMessageAsync(string.Format("I tried checking on the {0} server for you but it never came up or I can't connect to it for some reason, its been 15min so I'm gonna stop checking...", game.ServerName));
-                        Toolbox.uDebugAddLog(string.Format("Waited the full 15 min after rebooting the {0} game server without connectivity", game.ServerName));
-                        return;
+                        var oneFollowup = false;
+                        var twoFollowup = false;
+                        ReadOnlyCollection<Player> playerList = null;
+                        IPEndPoint endpoint = CreateIPEndPoint(string.Format("{0}:{1}", game.IPAddress, game.QueryPort));
+                        Toolbox.uDebugAddLog($"Connection endpoint: {endpoint.ToString()}");
+                        QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out playerList);
+                        Toolbox.uDebugAddLog("Created servInfo variable");
+                        while (servInfo == null)
+                        {
+                            Toolbox.uDebugAddLog($"servInfo for {game.Game} server {game.ServerName} is null");
+                            servInfo = GetServerInfo(endpoint, out playerList);
+                            Thread.Sleep(TimeSpan.FromSeconds(15));
+                            Toolbox.uDebugAddLog(string.Format("Waited 15 seconds after rebooting the {0} game server", game.ServerName));
+                            if (timeStart + TimeSpan.FromMinutes(10) <= DateTime.Now && oneFollowup == false) { Events.SendDiscordMessage(Context, $"It has been {(DateTime.Now - timeStart).Minutes} min since rebooting the {game.Game} server \"{game.ServerName}\", I will keep checking for the next {(waitTime - (DateTime.Now - timeStart)).Minutes} min"); oneFollowup = true; }
+                            if (timeStart + TimeSpan.FromMinutes(20) <= DateTime.Now && twoFollowup == false) { Events.SendDiscordMessage(Context, $"It has been {(DateTime.Now - timeStart).Minutes} min since rebooting the {game.Game} server \"{game.ServerName}\", I will keep checking for the next {(waitTime - (DateTime.Now - timeStart)).Minutes} min"); twoFollowup = true; }
+                            if (timeStart + waitTime <= DateTime.Now)
+                            {
+                                Events.SendDiscordMessage(Context, $"I tried checking on the \"{game.ServerName}\" server for you but it never came up or I can't connect to it for some reason, its been {waitTime.Minutes} min so I'm gonna stop checking...");
+                                Toolbox.uDebugAddLog($"Waited the full {waitTime.Minutes} min after rebooting the {game.ServerName} game server without connectivity, stopping thread");
+                                return;
+                            }
+                        }
+                        TimeSpan timeTaken = DateTime.Now - timeStart;
+                        Toolbox.uDebugAddLog($"servInfo for {game.Game} server {game.ServerName} was found");
+                        Events.SendDiscordMessage(Context, $"The {game.Game} server \"{game.ServerName}\" is now up and running after {timeTaken.Minutes} min");
+                        Toolbox.uDebugAddLog(string.Format("Successfully alerted when the {0} game server came back up, took {1} min", game.ServerName, timeTaken.Minutes));
                     }
-                }
-                await Context.Channel.SendMessageAsync(string.Format("The server {0} is now up and running", game.ServerName));
-                Toolbox.uDebugAddLog(string.Format("Successfully alerted when the {0} game server came back up, took {1} min", game.ServerName, totalTime.Minutes));
+                    catch (Exception ex)
+                    {
+                        FullExceptionLog(ex);
+                    }
+                });
+                startCheck.Start();
+                Toolbox.uDebugAddLog("Started server check thread");
             }
             catch (Exception ex)
             {
@@ -760,18 +785,31 @@ namespace PersonalDiscordBot.Classes
 
         private static QueryMaster.ServerInfo GetServerInfo(IPEndPoint endpoint, out ReadOnlyCollection<QueryMaster.Player> players)
         {
-            players = null;
-
             QueryMaster.ServerInfo serverInfo = null;
-            using (var server = ServerQuery.GetServerInstance(EngineType.Source, endpoint))
+            players = null;
+            try
             {
-                serverInfo = server.GetInfo();
-                players = server.GetPlayers();
-            }
-            if (players != null)
-                players = new ReadOnlyCollection<QueryMaster.Player>(players.Where(record => !string.IsNullOrWhiteSpace(record.Name)).ToList());
+                using (var server = ServerQuery.GetServerInstance(EngineType.Source, endpoint))
+                {
+                    serverInfo = server.GetInfo();
+                    players = server.GetPlayers();
+                }
+                if (players != null)
+                    players = new ReadOnlyCollection<QueryMaster.Player>(players.Where(record => !string.IsNullOrWhiteSpace(record.Name)).ToList());
 
-            return serverInfo;
+                return serverInfo;
+            }
+            catch (SocketException se)
+            {
+                if (se.HResult == -2147467259) { return serverInfo; } // A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+                FullExceptionLog(se);
+                return serverInfo;
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+                return serverInfo;
+            }
         }
 
         private List<FileInfo> GetServerLogs(string location, int logCount = 3)

@@ -93,6 +93,7 @@ namespace PersonalDiscordBot
             Management.DeSerializeData();
             Permissions.DeSerializePermissions();
             VerifyDebug();
+            Thread.Sleep(300);
             LoadWindowLocation();
             HideGrids();
             UpdateVerison();
@@ -159,9 +160,9 @@ namespace PersonalDiscordBot
                     if (channel != null)
                     {
 #if DEBUG
-                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has disconnected in DEBUG Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has **disconnected** in **DEBUG** Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
 #else
-                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has disconnected biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has **disconnected** biiiiiiiiiiiiiiiiiiiiiiatch!!!");
 #endif
                         ShowNotification($"Bot {client.CurrentUser.Username} Sent disconnected message to log channel {((IMessageChannel)channel).Name}", 6);
                     }
@@ -532,6 +533,37 @@ namespace PersonalDiscordBot
             {
                 Management.SerializeData();
                 Permissions.SerializePermissions();
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
+        }
+
+        private void btnShowDebug_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Toolbox.uDebugAddLog("Toggling Status/Debug textbox");
+                if (txtStatusValue.Visibility == Visibility.Visible)
+                {
+                    Toolbox.uDebugAddLog("Status window is currently visible, switching to debug window and changing button color");
+                    btnShowDebug.Background = new SolidColorBrush((System.Windows.Media.Color)ColorConverter.ConvertFromString("#FF4F1515"));
+                    txtStatusValue.Visibility = Visibility.Hidden;
+                    txtDebugValue.Visibility = Visibility.Visible;
+                    txtDebugValue.Text = Toolbox.statusUpdater.DebugLog;
+                    Toolbox.uDebugAddLog("Finished toggling to debug window");
+                    ShowNotification("Changed status window to debug information", 5);
+                }
+                else
+                {
+                    Toolbox.uDebugAddLog("Debug window is currently visible, switching to status window and changing button color");
+                    btnShowDebug.Background = new SolidColorBrush((System.Windows.Media.Color)ColorConverter.ConvertFromString("#FF202020"));
+                    txtStatusValue.Visibility = Visibility.Visible;
+                    txtDebugValue.Visibility = Visibility.Hidden;
+                    Toolbox.uDebugAddLog("Finished toggling to status window");
+                    ShowNotification("Changed status window to standard status information", 6);
+                }
             }
             catch (Exception ex)
             {
@@ -950,11 +982,11 @@ namespace PersonalDiscordBot
                 SaveConfig(ConfigType.Paths);
                 uStatusUpdate($"Updated to github version {Toolbox._paths.CurrentVersion}");
 
-                BackgroundWorker worker = new BackgroundWorker();
+                BackgroundWorker worker = new BackgroundWorker() { WorkerReportsProgress = true };
+                worker.ProgressChanged += (sender2, e2) => { if (e2.ProgressPercentage == 1) { RoutedEventArgs e3 = new RoutedEventArgs(); btnConnect_Click(sender2, e3); } };
                 worker.DoWork += (sender, e) =>
                 {
-                    RoutedEventArgs e2 = new RoutedEventArgs();
-                    btnConnect_Click(sender, e2);
+                    worker.ReportProgress(1);
                     while (!_activeSession)
                     {
                         Thread.Sleep(1000);
@@ -1088,19 +1120,28 @@ namespace PersonalDiscordBot
                 };
                 worker.ProgressChanged += (sender, e) => 
                 {
-                    ThicknessAnimation slideOut = new ThicknessAnimation() { AccelerationRatio = .9, Duration = new Duration(TimeSpan.FromSeconds(.3)), To = new Thickness(0, 42, 0, 0) };
-                    ThicknessAnimation slideIn = new ThicknessAnimation() { AccelerationRatio = .9, Duration = new Duration(TimeSpan.FromSeconds(.3)), To = new Thickness(0, 42, -734, 0) };
-                    switch (e.ProgressPercentage)
+                    try
                     {
-                        case 1:
-                            grdNotification.BeginAnimation(Grid.MarginProperty, slideOut);
-                            break;
-                        case 2:
-                            grdNotification.BeginAnimation(Grid.MarginProperty, slideIn);
-                            break;
-                        default:
-                            Toolbox.uDebugAddLog("Something happened and the incorrect notification state was used, accepted states: 1 or 2");
-                            break;
+                        ThicknessAnimation slideOut = new ThicknessAnimation() { AccelerationRatio = .9, Duration = new Duration(TimeSpan.FromSeconds(.3)), To = new Thickness(0, 42, 0, 0) };
+                        ThicknessAnimation slideIn = new ThicknessAnimation() { AccelerationRatio = .9, Duration = new Duration(TimeSpan.FromSeconds(.3)), To = new Thickness(0, 42, -734, 0) };
+                        switch (e.ProgressPercentage)
+                        {
+                            case 1:
+                                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { try { grdNotification.BeginAnimation(Grid.MarginProperty, slideOut); } catch (InvalidOperationException ioe) { uStatusUpdate($"Notification wasn't shown due to an exception: {ioe.Message}"); return; } catch (Exception ex) { FullExceptionLog(ex); } });
+                                break;
+                            case 2:
+                                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { try { grdNotification.BeginAnimation(Grid.MarginProperty, slideIn); } catch (InvalidOperationException ioe) { uStatusUpdate($"Notification wasn't shown due to an exception: {ioe.Message}"); return; } catch (Exception ex) { FullExceptionLog(ex); } });
+                                break;
+                            default:
+                                Toolbox.uDebugAddLog($"Something happened and the incorrect notification state was used ({e.ProgressPercentage}), accepted states: 1 or 2");
+                                break;
+                        }
+                    }
+                    catch (InvalidOperationException ioe) { uStatusUpdate($"Notification wasn't shown due to an exception: {ioe.Message}"); return; }
+                    catch (Exception ex)
+                    {
+                        FullExceptionLog(ex);
+                        return;
                     }
                 };
                 worker.DoWork += (sender, e) =>
@@ -1129,16 +1170,20 @@ namespace PersonalDiscordBot
                         notificationPlaying = false;
                         Toolbox.uDebugAddLog("Finished playing all notifications");
                     }
+                    catch (InvalidOperationException ioe) { uStatusUpdate($"Notification wasn't shown due to an exception: {ioe.Message}"); return; }
                     catch (Exception ex)
                     {
                         FullExceptionLog(ex);
+                        return;
                     }
                 };
                 worker.RunWorkerAsync();
             }
+            catch (InvalidOperationException ioe) { uStatusUpdate($"Notification wasn't shown due to an exception: {ioe.Message}"); return; }
             catch (Exception ex)
             {
                 FullExceptionLog(ex);
+                return;
             }
         }
 
@@ -1234,7 +1279,7 @@ namespace PersonalDiscordBot
                 await client.LoginAsync(TokenType.Bot, token);
                 await client.StartAsync();
 
-                ShowNotification($"Bot {client.CurrentUser.Username} Successfully Connected", 4);
+                ShowNotification("Bot Successfully Connected", 4);
             }
             catch (Exception ex)
             {
@@ -1334,7 +1379,7 @@ namespace PersonalDiscordBot
                 if (gitClient == null)
                     gitClient = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("PDB"));
                 if (Toolbox._paths.CurrentVersion == null)
-                    Toolbox._paths.CurrentVersion = new Version("0.1.00.00");
+                    Toolbox._paths.CurrentVersion = new Version("0.1.0.0");
                 var releases = await gitClient.Repository.Release.GetAll("rwobig93", "ServerRPGAdventure");
                 var release = releases[0];
                 Version releaseVersion = new Version(release.TagName);
@@ -1343,7 +1388,6 @@ namespace PersonalDiscordBot
                 {
                     uStatusUpdate($"Newer release found, updating now... [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
                     Toolbox._paths.CurrentVersion = releaseVersion;
-                    Toolbox._paths.Updated = true;
                     SaveConfig(ConfigType.Paths);
                     SaveRPGData();
                     StartUpdate();
@@ -1368,10 +1412,10 @@ namespace PersonalDiscordBot
                 if (channel != null)
                 {
 #if DEBUG
-                    await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has connected in DEBUG Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+                    await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has **connected** in **DEBUG Mode** biiiiiiiiiiiiiiiiiiiiiiatch!!!");
                     Toolbox.uDebugAddLog($"Sent connected debug message to channel {channel.Id}");
 #else
-                    await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has connected biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+                    await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has **connected** biiiiiiiiiiiiiiiiiiiiiiatch!!!");
                     Toolbox.uDebugAddLog($"Sent connected message to channel {channel.Id}");
 #endif
                     ShowNotification($"Bot {client.CurrentUser.Username} Sent connected message to log channel {((IMessageChannel)channel).Name}", 6);
@@ -1413,7 +1457,7 @@ namespace PersonalDiscordBot
             uStatusUpdate("Testing setup");
         }
 
-#endregion
+        #endregion
     }
 
     public class Notification

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using PersonalDiscordBot.Classes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -92,20 +93,37 @@ namespace PersonalDiscordBot.Classes
         }
     }
 
+    public class StatusUpdater : INotifyPropertyChanged
+    {
+        public StringBuilder debugLog = new StringBuilder();
+        public string DebugLog
+        {
+            get { return debugLog.ToString(); }
+            set { if (value == "CLDL") { debugLog.Clear(); } else debugLog.AppendLine(value); OnPropertyChanged("DebugLog"); }
+        }
+        public void OnPropertyChanged(string propertyName)
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+    }
+
     public static class Toolbox
     {
-        public static StringBuilder debugLog = new StringBuilder();
         public static Classes.LocalSettings _paths = new Classes.LocalSettings();
+        public static StatusUpdater statusUpdater = new StatusUpdater();
 
         public static void uDebugAddLog(string _log, [CallerMemberName] string caller = null)
         {
             try
             {
-                string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
-                string _timeNow = DateTime.Now.ToLocalTime().ToLongTimeString();
-                debugLog.AppendLine(string.Format($"{_dateNow}_{_timeNow} :: {caller.ToUpper()}: {_log}"));
-                if (debugLog.Length >= 5000)
+                statusUpdater.DebugLog = $"{DateTime.Now.ToLocalTime().ToString("MM-dd-yy")}_{DateTime.Now.ToLocalTime().ToLongTimeString()} :: {caller.ToUpper()}: {_log}";
+                if (statusUpdater.DebugLog.Length >= 5000)
+                {
                     DumpDebugLog();
+                }
             }
             catch (Exception ex)
             {
@@ -121,17 +139,17 @@ namespace PersonalDiscordBot.Classes
                 string _debugLocation = string.Format(@"{0}\DebugLog_{1}.txt", _paths.LogLocation, _dateNow);
                 if (!File.Exists(_debugLocation))
                     using (StreamWriter _sw = new StreamWriter(_debugLocation))
-                        _sw.WriteLine(debugLog.ToString());
+                        _sw.WriteLine(statusUpdater.DebugLog);
                 else
                     using (StreamWriter _sw = File.AppendText(_debugLocation))
-                        _sw.WriteLine(debugLog.ToString());
-                debugLog.Clear();
+                        _sw.WriteLine(statusUpdater.DebugLog);
+                statusUpdater.DebugLog = "CLDL";
                 DirectoryInfo _dI = new DirectoryInfo(_paths.LogLocation);
                 foreach (FileInfo _fI in _dI.GetFiles())
                 {
                     if (_fI.Name.StartsWith("DebugLog") && _fI.CreationTime.ToLocalTime() <= DateTime.Now.AddDays(-14).ToLocalTime())
                     {
-                        _fI.Delete(); uDebugAddLog(string.Format("Deleted old DebugLog: {0}", _fI.Name));
+                        _fI.Delete(); statusUpdater.DebugLog = (string.Format("Deleted old DebugLog: {0}", _fI.Name));
                     }
                 }
             }
@@ -206,8 +224,6 @@ namespace PersonalDiscordBot.Classes
                 return true;
             }
         }
-
-
     }
 
     /// <summary>

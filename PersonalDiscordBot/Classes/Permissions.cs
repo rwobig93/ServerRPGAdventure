@@ -112,8 +112,9 @@ namespace PersonalDiscordBot.Classes
                             Toolbox.uDebugAddLog("Deserialized GeneralPermissions.perm");
                         }
                     }
-                    else
-                        Toolbox.uDebugAddLog($"GeneralPermissions.perm doesn't exist: {genPerm}");
+                    if (Administrators == null) Administrators = new List<ulong>();
+                    if (AllowedChannels == null) AllowedChannels = new List<ulong>();
+                    if (GeneralPermissions == null) GeneralPermissions = new GeneralPermissions();
                 }
                 catch (Exception ex)
                 {
