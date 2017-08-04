@@ -95,7 +95,7 @@ namespace PersonalDiscordBot.Classes
 
     public class StatusUpdater : INotifyPropertyChanged
     {
-        public StringBuilder debugLog = new StringBuilder();
+        private StringBuilder debugLog = new StringBuilder();
         public string DebugLog
         {
             get { return debugLog.ToString(); }
@@ -114,6 +114,7 @@ namespace PersonalDiscordBot.Classes
     {
         public static Classes.LocalSettings _paths = new Classes.LocalSettings();
         public static StatusUpdater statusUpdater = new StatusUpdater();
+        public enum GlobalAction { AdminChanged };
 
         public static void uDebugAddLog(string _log, [CallerMemberName] string caller = null)
         {
@@ -133,10 +134,10 @@ namespace PersonalDiscordBot.Classes
 
         public static void DumpDebugLog()
         {
+            string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
+            string _debugLocation = string.Format(@"{0}\DebugLog_{1}.log", _paths.LogLocation, _dateNow);
             try
             {
-                string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
-                string _debugLocation = string.Format(@"{0}\DebugLog_{1}.txt", _paths.LogLocation, _dateNow);
                 if (!File.Exists(_debugLocation))
                     using (StreamWriter _sw = new StreamWriter(_debugLocation))
                         _sw.WriteLine(statusUpdater.DebugLog);
@@ -144,15 +145,8 @@ namespace PersonalDiscordBot.Classes
                     using (StreamWriter _sw = File.AppendText(_debugLocation))
                         _sw.WriteLine(statusUpdater.DebugLog);
                 statusUpdater.DebugLog = "CLDL";
-                DirectoryInfo _dI = new DirectoryInfo(_paths.LogLocation);
-                foreach (FileInfo _fI in _dI.GetFiles())
-                {
-                    if (_fI.Name.StartsWith("DebugLog") && _fI.CreationTime.ToLocalTime() <= DateTime.Now.AddDays(-14).ToLocalTime())
-                    {
-                        _fI.Delete(); statusUpdater.DebugLog = (string.Format("Deleted old DebugLog: {0}", _fI.Name));
-                    }
-                }
             }
+            catch (IOException) { SaveFileRetry(_debugLocation, statusUpdater.DebugLog); statusUpdater.DebugLog = "CLDL"; return; }
             catch (Exception ex)
             {
                 FullExceptionLog(ex);
@@ -162,14 +156,22 @@ namespace PersonalDiscordBot.Classes
         public static void FullExceptionLog(Exception ex, [CallerLineNumber] int lineNumber = 0, [CallerMemberName] string caller = null, [CallerFilePath] string filePath = null)
         {
             string exString = string.Format("TimeStamp: {1}{0}Exception Type: {2}{0}Caller: {3} at {4}{0}Message: {5}{0}HR: {6}{0}StackTrace:{0}{7}{0}", Environment.NewLine, string.Format("{0}_{1}", DateTime.Now.ToLocalTime().ToString("MM-dd-yy"), DateTime.Now.ToLocalTime().ToLongTimeString()), ex.GetType().Name, caller, lineNumber, ex.Message, ex.HResult, ex.StackTrace);
-            uDebugAddLog(string.Format("EXCEPTION: {0} at {1}", caller, lineNumber));
             string _logLocation = string.Format(@"{0}\Exceptions.log", _paths.LogLocation);
-            if (!File.Exists(_logLocation))
-                using (StreamWriter _sw = new StreamWriter(_logLocation))
-                    _sw.WriteLine(exString + Environment.NewLine);
-            else
-                using (StreamWriter _sw = File.AppendText(_logLocation))
-                    _sw.WriteLine(exString + Environment.NewLine);
+            try
+            {
+                uDebugAddLog(string.Format("EXCEPTION: {0} at {1}", caller, lineNumber));
+                if (!File.Exists(_logLocation))
+                    using (StreamWriter _sw = new StreamWriter(_logLocation))
+                        _sw.WriteLine(exString + Environment.NewLine);
+                else
+                    using (StreamWriter _sw = File.AppendText(_logLocation))
+                        _sw.WriteLine(exString + Environment.NewLine);
+            }
+            catch (IOException)
+            {
+                SaveFileRetry(_logLocation, exString);
+                return;
+            }
         }
 
         public static List<RebootedServer> serversRebooted = new List<RebootedServer>();
@@ -223,6 +225,52 @@ namespace PersonalDiscordBot.Classes
                 }
                 return true;
             }
+        }
+
+        public static void SaveFileRetry(string filePath, string writeString)
+        {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += (sender, e) =>
+            {
+                try
+                {
+                    string newPath = $@"{filePath.Replace(".", "rt.")}";
+                    int tryAttempts = 10;
+                    for (int t = 1; t <= tryAttempts; t++)
+                    {
+                        try
+                        {
+                            using (StreamWriter sw = File.AppendText(filePath))
+                                sw.WriteLine(writeString);
+                            Toolbox.uDebugAddLog($"Successfully saved to file after {t} attempts: {filePath}");
+                        }
+                        catch (IOException)
+                        {
+                            if (t == tryAttempts)
+                            {
+                                try
+                                {
+                                    Toolbox.uDebugAddLog($"Max attempts reached saving to \"{filePath}\", now saving to {newPath}");
+                                    using (StreamWriter sw = File.AppendText(newPath))
+                                        sw.WriteLine(writeString);
+                                    return;
+                                }
+                                catch (IOException)
+                                {
+                                    Toolbox.uDebugAddLog($"Saving to new file also failed, starting new retry method: {newPath}");
+                                    SaveFileRetry(newPath, writeString);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    FullExceptionLog(ex);
+                }
+            };
+            worker.RunWorkerAsync();
         }
     }
 
