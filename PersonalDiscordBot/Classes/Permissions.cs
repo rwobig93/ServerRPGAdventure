@@ -16,9 +16,9 @@ namespace PersonalDiscordBot.Classes
     {
         #region Permission Lists
 
-        public static List<ulong> Administrators = new List<ulong>();
-        public static List<ulong> AllowedChannels = new List<ulong>();
-        public static List<ulong> TestingGroups = new List<ulong>();
+        public static List<Administrator> Administrators = new List<Administrator>();
+        public static List<DiscordChannel> AllowedChannels = new List<DiscordChannel>();
+        public static List<DiscordUser> TestingGroups = new List<DiscordUser>();
         public static GeneralPermissions GeneralPermissions = new GeneralPermissions();
 
         #endregion
@@ -86,7 +86,7 @@ namespace PersonalDiscordBot.Classes
                         Toolbox.uDebugAddLog($"Found Administrators.perm file: {adminPerm}");
                         using (StreamReader sr = File.OpenText(adminPerm))
                         {
-                            Administrators = JsonConvert.DeserializeObject<List<ulong>>(sr.ReadToEnd());
+                            Administrators = JsonConvert.DeserializeObject<List<Administrator>>(sr.ReadToEnd());
                             Toolbox.uDebugAddLog("Deserialized Administrators.perm");
                         }
                     }
@@ -97,7 +97,7 @@ namespace PersonalDiscordBot.Classes
                         Toolbox.uDebugAddLog($"Found RPGChannels.perm file: {rpgPerm}");
                         using (StreamReader sr = File.OpenText(rpgPerm))
                         {
-                            AllowedChannels = JsonConvert.DeserializeObject<List<ulong>>(sr.ReadToEnd());
+                            AllowedChannels = JsonConvert.DeserializeObject<List<DiscordChannel>>(sr.ReadToEnd());
                             Toolbox.uDebugAddLog("Deserialized RPGChannels.perm");
                         }
                     }
@@ -112,8 +112,9 @@ namespace PersonalDiscordBot.Classes
                             Toolbox.uDebugAddLog("Deserialized GeneralPermissions.perm");
                         }
                     }
-                    else
-                        Toolbox.uDebugAddLog($"GeneralPermissions.perm doesn't exist: {genPerm}");
+                    if (Administrators == null) Administrators = new List<Administrator>();
+                    if (AllowedChannels == null) AllowedChannels = new List<DiscordChannel>();
+                    if (GeneralPermissions == null) GeneralPermissions = new GeneralPermissions();
                 }
                 catch (Exception ex)
                 {
@@ -125,12 +126,23 @@ namespace PersonalDiscordBot.Classes
 
         public static bool AdminPermissions(ICommandContext context)
         {
-            return Administrators.Contains(context.Message.Author.Id);
+            var admProfile = Administrators.Find(x => x.ID == context.User.Id);
+            if (admProfile != null)
+            {
+                try { if (string.IsNullOrWhiteSpace(admProfile.Username)) { admProfile.Username = context.User.Username; Toolbox.uDebugAddLog($"Admin profile username was null or empty, added username: {admProfile.Username} | {admProfile.ID}"); Events.UseGlblAction(Toolbox.GlobalAction.AdminChanged); } } catch (Exception ex) { Toolbox.FullExceptionLog(ex); }
+                return true;
+            }
+            else
+                return false;
         }
 
         public static bool RPGChannelPermission(ICommandContext context)
         {
-            return AllowedChannels.Contains(context.Channel.Id);
+            var rpgChannel = AllowedChannels.Find(x => x.ID == context.Channel.Id);
+            if (rpgChannel != null)
+                return true;
+            else
+                return false;
         }
 
         #endregion
@@ -138,6 +150,24 @@ namespace PersonalDiscordBot.Classes
 
     public class GeneralPermissions
     {
-        public ulong logChannel = 0;
+        public ulong logChannel { get; set; } = 0;
+    }
+
+    public class DiscordUser
+    {
+        public ulong ID { get; set; }
+        public string Username { get; set; }
+    }
+
+    public class DiscordChannel
+    {
+        public ulong ID { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class Administrator : DiscordUser
+    {
+        public DateTime Added { get; set; } = DateTime.Now.ToLocalTime();
+        public string AddedBy { get; set; } = "Gui - Local";
     }
 }
