@@ -974,7 +974,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static async Task CheckCharacterBackpak(ICommandContext context)
+        public static async Task CheckCharacterBackpack(ICommandContext context)
         {
             try
             {
@@ -986,8 +986,27 @@ namespace PersonalDiscordBot.Classes
                 List<IMessage> respondeded = new List<IMessage>();
                 Toolbox.uDebugAddLog($"Asking [Owner]{owner.CurrentCharacter.Loot.Count} [ID]{owner.OwnerID} what to see");
                 var backpackMsg = await context.Channel.SendMessageAsync($"What would you like to see? (armor, items, weapons, all, cancel)");
-                List<IBackPackItem> backPack = new List<IBackPackItem>();
-                var chosenLootType = LootDrop.LootType.Armor;
+                var armorLootType = LootDrop.LootType.Armor;                
+                List<Armor> armorPack = new List<Armor>();
+                var itemLootType = LootDrop.LootType.Item;
+                List<Item> itemPack = new List<Item>();
+                var weaponLootType = LootDrop.LootType.Weapon;
+                List<Weapon> weaponPack = new List<Weapon>();
+                foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored) 
+                    {
+                        if (i.GetLootType() == armorLootType)
+                            {
+                                armorPack.Add(i);
+                            }
+                        else if (i.GetLootType() == itemLootType)
+                            {
+                                itemPack.Add(i);
+                            }
+                        else if (i.GetLootType() == weaponLootType)
+                            {
+                                weaponPack.Add(i);
+                            }
+                    }
                 bool msgResp = false;
                 while (!msgResp)
                 {
@@ -1002,15 +1021,7 @@ namespace PersonalDiscordBot.Classes
                             switch (answer)
                             {
                                 case "armor":
-                                    chosenLootType = LootDrop.LootType.Armor;
-                                    foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
-                                    {
-                                        if (i.GetLootType() == chosenLootType)
-                                        {
-                                            backPack.Add(i);
-                                        }
-                                    }
-                                    foreach (Armor a in backPack)
+                                    foreach (Armor a in armorPack)
                                     {
                                         itemList = $"{itemList}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
                                         number++;
@@ -1018,15 +1029,7 @@ namespace PersonalDiscordBot.Classes
                                     msgResp = true;
                                     break;
                                 case "items":
-                                    chosenLootType = LootDrop.LootType.Item;
-                                    foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
-                                    {
-                                        if (i.GetLootType() == chosenLootType)
-                                        {
-                                            backPack.Add(i);
-                                        }
-                                    }
-                                    foreach (Item i in backPack)
+                                    foreach (Item i in itemPack)
                                     {
                                         itemList = $"{itemList}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
                                         number++;
@@ -1034,15 +1037,7 @@ namespace PersonalDiscordBot.Classes
                                     msgResp = true;
                                     break;
                                 case "weapons":
-                                    chosenLootType = LootDrop.LootType.Weapon;
-                                    foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
-                                    {
-                                        if (i.GetLootType() == chosenLootType)
-                                        {
-                                            backPack.Add(i);
-                                        }
-                                    }
-                                    foreach (Weapon w in backPack)
+                                    foreach (Weapon w in weaponPack)
                                     {
                                         itemList = $"{itemList}[{number}]:     Name: {w.Name}     Description: {w.Desc}     Worth: {w.Worth}{line}";
                                         number++;
@@ -1050,15 +1045,27 @@ namespace PersonalDiscordBot.Classes
                                     msgResp = true;
                                     break;
                                 case "all":
-                                    foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
-                                    {
-                                        backPack.Add(i);
-                                    }
-                                    foreach (IBackPackItem i in backPack)
-                                    {
-                                        itemList = $"{itemList}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
-                                        number++;
-                                    }
+                                    List<IBackPackItem> allPack = new List<IBackPackItem>();
+                                    foreach (Armor a in armorPack)
+                                        {
+                                            allPack.Add(a);
+                                            itemList = $"{itemList}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
+                                            number++;
+                                        }
+                                    foreach (Weapon w in weaponPack)
+                                        {
+                                            weaponPack.Add(w);
+                                            itemList = $"{itemList}[{number}]:     Name: {w.Name}     Description: {w.Desc}     Worth: {w.Worth}{line}";
+                                            number++;
+                                        }
+                                    foreach (Item i in itemPack)
+                                        {
+                                            itemPack.Add(i);
+                                            itemList = $"{itemList}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
+                                            number++;
+                                        }
+
+
                                     msgResp = true;
                                     break;
                                 case "cancel":

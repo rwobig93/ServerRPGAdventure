@@ -1524,13 +1524,6 @@ namespace PersonalDiscordBot
             //OwnerProfile owner = new OwnerProfile() { OwnerID = 123456789, Currency = 696969, OwnerUN = "That one Guy", TotalPebbles = 99 };
             //RPG.Owners.Add(owner);
             //uStatusUpdate(Testing.EmulateFight(owner));
-            List<int> lvlList = new List<int>();
-            for (var i = 1; i <= 150; i++)
-            {
-                int exp = 0;
-                uStatusUpdate($"Experience lvl {i}: {exp = Management.CalculateExperience(i)}");
-                lvlList.Add(exp);
-            }
         }
 
         private void SetupTest()
@@ -1543,7 +1536,7 @@ namespace PersonalDiscordBot
             Permissions.Administrators.Add(new Administrator() { ID = owner.OwnerID, Username = owner.OwnerUN });
             uStatusUpdate("Testing setup");
         }
-
+        
         #endregion
     }
 

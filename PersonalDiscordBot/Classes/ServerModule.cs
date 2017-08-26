@@ -2432,7 +2432,7 @@ namespace PersonalDiscordBot.Classes
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have any characters, please create one before trying to view your phat loot");
                     return;
                 }
-                Management.CheckCharacterStats(Context);
+                Management.CheckCharacterBackpak(Context);
             }
             catch (Exception ex)
             {
