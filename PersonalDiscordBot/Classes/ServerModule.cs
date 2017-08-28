@@ -158,7 +158,7 @@ namespace PersonalDiscordBot.Classes
                     Toolbox.serversRebooted.Add(rebServ);
                     Toolbox.RemoveRebootedServer(rebServ);
                     await Context.Channel.SendMessageAsync(string.Format("Successfully started the game server {0}, please wait for the server to boot up. I will check on the status automatically and let you know what I find, otherwise you can manually check the status by using the command ;server status {1}", chosenServ.ServerName, chosenServ.Game));
-                    await CheckOnServer(chosenServ);
+                    CheckOnServer(chosenServ);
                 }
                 #endregion
 
@@ -177,8 +177,9 @@ namespace PersonalDiscordBot.Classes
                         {
                             if (rebSrv.Server.ServerName == chosenServ.ServerName)
                             {
-                                TimeSpan timeLeft = DateTime.Now.ToLocalTime() - rebSrv.Rebooted;
-                                await Context.Channel.SendMessageAsync(string.Format("The game server {0} was rebooted {1}min ago, please wait another {1}min before attempting to reboot again", rebSrv.Server.ServerName, timeLeft.Minutes));
+                                TimeSpan timeRebooted = DateTime.Now.ToLocalTime() - rebSrv.Rebooted;
+                                var timeLeft = 15 - timeRebooted.Minutes;
+                                await Context.Channel.SendMessageAsync(string.Format("The game server {0} was rebooted {1}min ago, please wait another {2}min before attempting to reboot again", rebSrv.Server.ServerName, timeRebooted.Minutes, timeLeft));
                                 return;
                             }
                         }
@@ -207,7 +208,7 @@ namespace PersonalDiscordBot.Classes
                     Toolbox.serversRebooted.Add(rebServ);
                     Toolbox.RemoveRebootedServer(rebServ);
                     await Context.Channel.SendMessageAsync(string.Format("Successfully started the game server {0}, please wait for the server to boot up. I will check on the status automatically and let you know what I find, otherwise you can manually check the status by using the command ;server status {1}", chosenServ.ServerName, chosenServ.Game));
-                    await CheckOnServer(chosenServ);
+                    CheckOnServer(chosenServ);
                 } 
                 #endregion
             }
@@ -715,27 +716,51 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        private async Task CheckOnServer(GameServer game)
+        private void CheckOnServer(GameServer game)
         {
             try
             {
-                TimeSpan totalTime = TimeSpan.FromMinutes(15);
-                IPEndPoint endpoint = CreateIPEndPoint(string.Format("{0}:{1}", game.IPAddress, game.QueryPort));
-                QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out ReadOnlyCollection<Player> playerList);
-                while (servInfo == null)
+                DateTime timeStart = DateTime.Now;
+                TimeSpan waitTime = TimeSpan.FromMinutes(30);
+                Toolbox.uDebugAddLog("Got timestamp, now starting server check thread");
+                Thread startCheck = new Thread(() =>
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(30));
-                    Toolbox.uDebugAddLog(string.Format("Waited 30 seconds after rebooting the {0} game server", game.ServerName));
-                    totalTime = totalTime - TimeSpan.FromSeconds(30);
-                    if (totalTime <= TimeSpan.FromSeconds(0))
+                    try
                     {
-                        await Context.Channel.SendMessageAsync(string.Format("I tried checking on the {0} server for you but it never came up or I can't connect to it for some reason, its been 15min so I'm gonna stop checking...", game.ServerName));
-                        Toolbox.uDebugAddLog(string.Format("Waited the full 15 min after rebooting the {0} game server without connectivity", game.ServerName));
-                        return;
+                        var oneFollowup = false;
+                        var twoFollowup = false;
+                        ReadOnlyCollection<Player> playerList = null;
+                        IPEndPoint endpoint = CreateIPEndPoint(string.Format("{0}:{1}", game.IPAddress, game.QueryPort));
+                        Toolbox.uDebugAddLog($"Connection endpoint: {endpoint.ToString()}");
+                        QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out playerList);
+                        Toolbox.uDebugAddLog("Created servInfo variable");
+                        while (servInfo == null)
+                        {
+                            Toolbox.uDebugAddLog($"servInfo for {game.Game} server {game.ServerName} is null");
+                            servInfo = GetServerInfo(endpoint, out playerList);
+                            Thread.Sleep(TimeSpan.FromSeconds(15));
+                            Toolbox.uDebugAddLog(string.Format("Waited 15 seconds after rebooting the {0} game server", game.ServerName));
+                            if (timeStart + TimeSpan.FromMinutes(10) <= DateTime.Now && oneFollowup == false) { Events.SendDiscordMessage(Context, $"It has been **{(DateTime.Now - timeStart).Minutes} min** since rebooting the **{game.Game}** server \"**{game.ServerName}**\", I will keep checking for the next **{(waitTime - (DateTime.Now - timeStart)).Minutes} min**"); oneFollowup = true; }
+                            if (timeStart + TimeSpan.FromMinutes(20) <= DateTime.Now && twoFollowup == false) { Events.SendDiscordMessage(Context, $"It has been **{(DateTime.Now - timeStart).Minutes} min** since rebooting the **{game.Game}** server \"**{game.ServerName}**\", I will keep checking for the next **{(waitTime - (DateTime.Now - timeStart)).Minutes} min**"); twoFollowup = true; }
+                            if (timeStart + waitTime <= DateTime.Now)
+                            {
+                                Events.SendDiscordMessage(Context, $"I tried checking on the \"**{game.ServerName}**\" server for you but it never came up or I can't connect to it for some reason, its been **{waitTime.Minutes} min** so I'm gonna stop checking...");
+                                Toolbox.uDebugAddLog($"Waited the full {waitTime.Minutes} min after rebooting the {game.ServerName} game server without connectivity, stopping thread");
+                                return;
+                            }
+                        }
+                        TimeSpan timeTaken = DateTime.Now - timeStart;
+                        Toolbox.uDebugAddLog($"servInfo for {game.Game} server {game.ServerName} was found");
+                        Events.SendDiscordMessage(Context, $"The **{game.Game}** server \"**{game.ServerName}**\" is now up and running after **{timeTaken.Minutes} min**");
+                        Toolbox.uDebugAddLog(string.Format("Successfully alerted when the {0} game server came back up, took {1} min", game.ServerName, timeTaken.Minutes));
                     }
-                }
-                await Context.Channel.SendMessageAsync(string.Format("The server {0} is now up and running", game.ServerName));
-                Toolbox.uDebugAddLog(string.Format("Successfully alerted when the {0} game server came back up, took {1} min", game.ServerName, totalTime.Minutes));
+                    catch (Exception ex)
+                    {
+                        FullExceptionLog(ex);
+                    }
+                });
+                startCheck.Start();
+                Toolbox.uDebugAddLog("Started server check thread");
             }
             catch (Exception ex)
             {
@@ -760,18 +785,31 @@ namespace PersonalDiscordBot.Classes
 
         private static QueryMaster.ServerInfo GetServerInfo(IPEndPoint endpoint, out ReadOnlyCollection<QueryMaster.Player> players)
         {
-            players = null;
-
             QueryMaster.ServerInfo serverInfo = null;
-            using (var server = ServerQuery.GetServerInstance(EngineType.Source, endpoint))
+            players = null;
+            try
             {
-                serverInfo = server.GetInfo();
-                players = server.GetPlayers();
-            }
-            if (players != null)
-                players = new ReadOnlyCollection<QueryMaster.Player>(players.Where(record => !string.IsNullOrWhiteSpace(record.Name)).ToList());
+                using (var server = ServerQuery.GetServerInstance(EngineType.Source, endpoint))
+                {
+                    serverInfo = server.GetInfo();
+                    players = server.GetPlayers();
+                }
+                if (players != null)
+                    players = new ReadOnlyCollection<QueryMaster.Player>(players.Where(record => !string.IsNullOrWhiteSpace(record.Name)).ToList());
 
-            return serverInfo;
+                return serverInfo;
+            }
+            catch (SocketException se)
+            {
+                if (se.HResult == -2147467259) { return serverInfo; } // A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+                FullExceptionLog(se);
+                return serverInfo;
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+                return serverInfo;
+            }
         }
 
         private List<FileInfo> GetServerLogs(string location, int logCount = 3)
@@ -793,12 +831,19 @@ namespace PersonalDiscordBot.Classes
             string exString = string.Format("TimeStamp: {1}{0}Exception Type: {2}{0}Caller: {3} at {4}{0}Message: {5}{0}HR: {6}{0}StackTrace:{0}{7}{0}", Environment.NewLine, $"{DateTime.Now.ToLocalTime().ToShortDateString()} {DateTime.Now.ToLocalTime().ToShortTimeString()}", ex.GetType().Name, caller, lineNumber, ex.Message, ex.HResult, ex.StackTrace);
             Toolbox.uDebugAddLog(string.Format("EXCEPTION: {0} at {1}", caller, lineNumber));
             string _logLocation = string.Format(@"{0}\Exceptions.log", Toolbox._paths.LogLocation);
-            if (!File.Exists(_logLocation))
-                using (StreamWriter _sw = new StreamWriter(_logLocation))
-                    _sw.WriteLine(exString + Environment.NewLine);
-            else
-                using (StreamWriter _sw = File.AppendText(_logLocation))
-                    _sw.WriteLine(exString + Environment.NewLine);
+            try
+            {
+                if (!File.Exists(_logLocation))
+                    using (StreamWriter _sw = new StreamWriter(_logLocation))
+                        _sw.WriteLine(exString + Environment.NewLine);
+                else
+                    using (StreamWriter _sw = File.AppendText(_logLocation))
+                        _sw.WriteLine(exString + Environment.NewLine);
+            }
+            catch (IOException)
+            {
+                Toolbox.SaveFileRetry(_logLocation, exString);
+            }
         }
     }
     #endregion
@@ -1248,7 +1293,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!Permissions.Administrators.Contains(Context.Message.Author.Id))
+                if (!Permissions.AdminPermissions(Context))
                 {
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have rights to run this command");
                     return;
@@ -1277,7 +1322,7 @@ namespace PersonalDiscordBot.Classes
                     int foundUsers = 0;
                     foreach (var admin in Permissions.Administrators)
                     {
-                        if (userFound.Id == admin)
+                        if (Permissions.Administrators.Find(x => x.ID == userFound.Id) != null)
                         {
                             Events.uStatusUpdateExt($"Found {userFound.Username} in Admin List | {userFound.Id}");
                             await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} {userFound.Mention} is already an Admin. You can't just give them Admin power twice. That's not how you create Super Admins.");
@@ -1286,12 +1331,14 @@ namespace PersonalDiscordBot.Classes
                     }
                     if (foundUsers == 0)
                     {
-                        Toolbox.uDebugAddLog($"No admins found matching ID: {userFound.Id} Admins: {foundUsers}");
-                        Permissions.Administrators.Add(userFound.Id);
+                        Toolbox.uDebugAddLog($"No admins found matching ID: {userFound.Id} MatchedAdmins: {foundUsers}");
+                        Administrator newAdmin = new Administrator() { ID = userFound.Id, Username = userFound.Username, AddedBy = Context.User.Username };
+                        Permissions.Administrators.Add(newAdmin);
                         await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} Added {userFound.Mention} as an Admin. I hope you know what you're doing.");
+                        Toolbox.uDebugAddLog($"Added Admin: {newAdmin.Username} | {newAdmin.ID} | By: {Context.User.Username}");
                         return;
                     }
-
+                    Events.UseGlblAction(Toolbox.GlobalAction.AdminChanged);
                 }
             }
             catch (Exception ex)
@@ -1305,7 +1352,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!Permissions.Administrators.Contains(Context.Message.Author.Id))
+                if (!Permissions.AdminPermissions(Context))
                 {
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have rights to run this command");
                     return;
@@ -1334,10 +1381,11 @@ namespace PersonalDiscordBot.Classes
                     int foundUsers = 0;
                     foreach (var admin in Permissions.Administrators)
                     {
-                        if (userFound.Id == admin)
+                        var foundAdmin = Permissions.Administrators.Find(x => x.ID == userFound.Id);
+                        if (foundAdmin != null)
                         {
-                            Events.uStatusUpdateExt($"Removed {userFound.Username} from Admin List | {userFound.Id}");
-                            Permissions.Administrators.Remove(userFound.Id);
+                            Events.uStatusUpdateExt($"Removed {foundAdmin.Username} from Admin List | {foundAdmin.ID}");
+                            Permissions.Administrators.Remove(foundAdmin);
                             await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} Removed {userFound.Mention}'s power. They are no longer an Admin.");
                             foundUsers++;
                         }
@@ -1345,11 +1393,10 @@ namespace PersonalDiscordBot.Classes
                     if (foundUsers == 0)
                     {
                         Toolbox.uDebugAddLog($"No admins found matching ID: {userFound.Id} Admins: {foundUsers}");
-                        Permissions.Administrators.Add(userFound.Id);
                         await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} {userFound.Mention} is not currently an Admin. You can't take away something they don't even have.");
                         return;
                     }
-
+                    Events.UseGlblAction(Toolbox.GlobalAction.AdminChanged);
                 }
             }
             catch (Exception ex)
@@ -1775,7 +1822,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!Permissions.Administrators.Contains(Context.Message.Author.Id))
+                if (!Permissions.AdminPermissions(Context))
                 {
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have rights to run this command");
                     return;
@@ -1941,7 +1988,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!Permissions.Administrators.Contains(Context.Message.Author.Id))
+                if (!Permissions.AdminPermissions(Context))
                 {
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have rights to run this command");
                     return;
@@ -1972,7 +2019,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!Permissions.Administrators.Contains(Context.Message.Author.Id))
+                if (!Permissions.AdminPermissions(Context))
                 {
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have rights to run this command");
                     return;
@@ -1997,7 +2044,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (!Permissions.Administrators.Contains(Context.Message.Author.Id))
+                if (!Permissions.AdminPermissions(Context))
                 {
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have rights to run this command");
                     return;
@@ -2046,17 +2093,19 @@ namespace PersonalDiscordBot.Classes
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have rights to run this command");
                     return;
                 }
-                if (!Permissions.AllowedChannels.Contains(Context.Channel.Id))
+                if (Permissions.AllowedChannels.Find(x => x.ID == Context.Channel.Id) == null)
                 {
                     Toolbox.uDebugAddLog($"Channel isn't an RPG channel, attempting to add RPG Channel: {Context.Channel.Name} | {Context.Channel.Id}");
-                    Permissions.AllowedChannels.Add(Context.Channel.Id);
-                    Events.uStatusUpdateExt($"RPG Channel Added: {Context.Channel.Name} | {Context.Channel.Id}");
-                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} **Added** RPG Channel **{Context.Channel.Name}**");
+                    DiscordChannel newChannel = new DiscordChannel() { ID = Context.Channel.Id, Name = Context.Channel.Name };
+                    Permissions.AllowedChannels.Add(newChannel);
+                    Events.uStatusUpdateExt($"RPG Channel Added: {newChannel.Name} | {newChannel.ID}");
+                    await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} **Added** RPG Channel **{newChannel.Name}**");
                 }
                 else
                 {
-                    Toolbox.uDebugAddLog($"Channel is already an RPG channel, attempting to remove RPG Channel: {Context.Channel.Name} | {Context.Channel.Id}");
-                    Permissions.AllowedChannels.Remove(Context.Channel.Id);
+                    var chnl = Permissions.AllowedChannels.Find(x => x.ID == Context.Channel.Id);
+                    Toolbox.uDebugAddLog($"Channel is already an RPG channel, attempting to remove RPG Channel: {chnl.Name} | {chnl.ID}");
+                    Permissions.AllowedChannels.Remove(chnl);
                     Events.uStatusUpdateExt($"RPG Channel Removed: {Context.Channel.Name} | {Context.Channel.Id}");
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention}  **Removed** RPG Channel **{Context.Channel.Name}**");
                 }
@@ -2279,15 +2328,16 @@ namespace PersonalDiscordBot.Classes
                 var testingRole = await GetDiscordRole(testingRoleString);
                 if (testingRole == null)
                     return;
-                if (!Permissions.TestingGroups.Contains(testingRole.Id))
+                var tstChannel = Permissions.TestingGroups.Find(x => x.ID == testingRole.Id);
+                if (tstChannel == null)
                 {
-                    Permissions.TestingGroups.Add(testingRole.Id);
+                    Permissions.TestingGroups.Add(new DiscordUser() { ID = testingRole.Id, Username = testingRole.Name });
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} **Added** testing permission to **{testingRole.Name}**");
                     Toolbox.uDebugAddLog($"Added role as a testing group: {testingRole.Name} | {testingRole.Id} [ID]{Context.Message.Author.Id}");
                 }
                 else
                 {
-                    Permissions.TestingGroups.Remove(testingRole.Id);
+                    Permissions.TestingGroups.Remove(tstChannel);
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} **Removed** testing permission from **{testingRole.Name}**");
                     Toolbox.uDebugAddLog($"Removed role as a testing group: {testingRole.Name} | {testingRole.Id} [ID]{Context.Message.Author.Id}");
                 }
@@ -2382,7 +2432,7 @@ namespace PersonalDiscordBot.Classes
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have any characters, please create one before trying to view your phat loot");
                     return;
                 }
-                Management.CheckCharacterStats(Context);
+                Management.CheckCharacterBackpak(Context);
             }
             catch (Exception ex)
             {

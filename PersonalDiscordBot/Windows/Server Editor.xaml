@@ -18,9 +18,9 @@
         <TextBlock x:Name="lblServPort" HorizontalAlignment="Left" Margin="287,148,0,0" TextWrapping="Wrap" Text="Game Port #:" VerticalAlignment="Top" Foreground="#FF0FB3C3" FontSize="22"/>
         <TextBox x:Name="txtServPortValue" Margin="418,150,0,0" Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="29" VerticalAlignment="Top" FontSize="18" HorizontalAlignment="Left" Width="74" TabIndex="5"/>
         <TextBlock x:Name="lblServModded" HorizontalAlignment="Left" Margin="716,150,0,0" TextWrapping="Wrap" Text="Modded:" VerticalAlignment="Top" Foreground="#FF0FB3C3" FontSize="22"/>
-        <ComboBox x:Name="comboServModded" IsEditable="True" HorizontalAlignment="Left" Text="false" Margin="809,151,0,0" VerticalAlignment="Top" Width="70" Height="29" FontSize="18" MinHeight="0" MinWidth="0" Foreground="#FF0FB3C3" TabIndex="7">
-            <ComboBoxItem Content="true" FontSize="18" />
-            <ComboBoxItem Content="false" FontSize="18" />
+        <ComboBox x:Name="comboServModded" IsEditable="True" HorizontalAlignment="Left" Text="False" Margin="809,151,0,0" VerticalAlignment="Top" Width="70" Height="29" FontSize="18" MinHeight="0" MinWidth="0" Foreground="#FF0FB3C3" TabIndex="7">
+            <ComboBoxItem Content="True" FontSize="18" />
+            <ComboBoxItem Content="False" FontSize="18" />
         </ComboBox>
         <Button x:Name="btnServSave" Click="btnServSave_Click" Content="Apply" Padding="0" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="88" Height="32" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="20" Margin="0,0,103,94" TabIndex="13"/>
         <Button x:Name="btnServCancel" Click="btnServCancel_Click" Content="Cancel" Padding="0" BorderThickness="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="88" Height="32" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="20" Margin="0,0,10,94" TabIndex="14"/>

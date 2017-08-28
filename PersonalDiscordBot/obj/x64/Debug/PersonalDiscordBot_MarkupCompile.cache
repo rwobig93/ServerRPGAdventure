@@ -4,11 +4,11 @@
 winexe
 C#
 .cs
-C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\obj\x64\Release\
+C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\obj\x64\Debug\
 PersonalDiscordBot
 none
 false
-TRACE
+DEBUG;TRACE
 C:\Users\Rick\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\App.xaml
 2-946423739
 

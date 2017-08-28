@@ -50,6 +50,7 @@ namespace PersonalDiscordBot
             Events.MessagePromptShown += (e) => { uStatusUpdate(e.Content); };
             Events.MatchCompleted += async (e) => { await Management.EndOfMatchLootAsync(e); };
             Events.DiscordMessageSend += async (e, b) => { if (b) { await e.Context.Channel.SendMessageAsync(e.Context.Message.Author.Mention, false, e.Embed); } else { string resp = $"{e.Context.Message.Author.Mention} {e.Message}"; await e.Context.Channel.SendMessageAsync(resp); Toolbox.uDebugAddLog($"DCRDMSGSNT: {resp}"); } };
+            Events.UseGlobalAction += (e) => { HandleGlobalAction(e.Action); };
         }
 
         #region Global Variables
@@ -93,11 +94,14 @@ namespace PersonalDiscordBot
             Management.DeSerializeData();
             Permissions.DeSerializePermissions();
             VerifyDebug();
+            Thread.Sleep(300);
             LoadWindowLocation();
             HideGrids();
             UpdateVerison();
             tSaveRPGData();
             tRefreshAdminList();
+            CleanupLogDir();
+            btnCheckForUpdates_Click(sender, e);
         }
 
         private void winMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -123,7 +127,6 @@ namespace PersonalDiscordBot
         {
             try
             {
-                await UpdateApplication();
                 if (string.IsNullOrEmpty(Toolbox._paths.BotToken))
                 {
                     Toolbox.uDebugAddLog("Token wasn't found in LocalSettings, prompting for token and sending notification");
@@ -159,9 +162,9 @@ namespace PersonalDiscordBot
                     if (channel != null)
                     {
 #if DEBUG
-                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has disconnected in DEBUG Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has **disconnected** in **DEBUG** Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
 #else
-                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has disconnected biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has **disconnected** biiiiiiiiiiiiiiiiiiiiiiatch!!!");
 #endif
                         ShowNotification($"Bot {client.CurrentUser.Username} Sent disconnected message to log channel {((IMessageChannel)channel).Name}", 6);
                     }
@@ -458,6 +461,7 @@ namespace PersonalDiscordBot
                 Toolbox._paths.LogLocation = txtLogDirectory.Text;
                 SaveConfig(ConfigType.Paths);
                 uStatusUpdate("Saved Settings Successfully");
+                ShowNotification("Saved Application Settings", 3);
             }
             catch (Exception ex)
             {
@@ -471,6 +475,7 @@ namespace PersonalDiscordBot
             {
                 Toolbox.DumpDebugLog();
                 uStatusUpdate("Manually Dumped Debug Log");
+                ShowNotification("Successfully Dumped Debug Log", 3);
             }
             catch (Exception ex)
             {
@@ -489,12 +494,14 @@ namespace PersonalDiscordBot
                     ShowNotification("Admin Id entered was invalid, please try again", 5);
                     return;
                 }
-                if (Permissions.Administrators.Contains(adminID))
+                if (Permissions.Administrators.Find(x => x.ID == adminID) != null)
                 {
                     uStatusUpdate($"{adminID} is already in the admin list, canceling...");
                     return;
                 }
-                Permissions.Administrators.Add(adminID);
+                Administrator newAdmin = new Administrator() { ID = adminID };
+                Permissions.Administrators.Add(newAdmin);
+                ShowNotification($"Added admin ID: {adminID}", 4);
                 Events.uStatusUpdateExt($"Added admin ID: {adminID}");
                 tRefreshAdminList();
             }
@@ -509,15 +516,23 @@ namespace PersonalDiscordBot
             try
             {
                 ulong adminID = 0;
-                var isUlong = ulong.TryParse(comboAdmins.SelectedItem.ToString(), out adminID);
+                var isUlong = ulong.TryParse(((Administrator)comboAdmins.SelectedItem).ID.ToString(), out adminID);
                 if (!isUlong)
                 {
                     ShowNotification("Admin ID selected from combobox is invalid", 5);
                     uStatusUpdate($"Combobox Admin ID invalid: {adminID}");
                     return;
                 }
-                Permissions.Administrators.Remove(adminID);
-                uStatusUpdate($"Removed admin ID: {adminID}");
+                var foundAdmin = Permissions.Administrators.Find(x => x.ID == adminID);
+                if (foundAdmin == null)
+                {
+                    ShowNotification($"Admin profile not found for {adminID}", 5);
+                    uStatusUpdate($"Admin profile not found for requested removal: {adminID}");
+                    return;
+                }
+                Permissions.Administrators.Remove(foundAdmin);
+                ShowNotification($"Removed admin: {foundAdmin.Username} | {foundAdmin.ID}", 4);
+                uStatusUpdate($"Removed admin: {foundAdmin.Username} | {foundAdmin.ID}");
                 tRefreshAdminList();
             }
             catch (Exception ex)
@@ -532,11 +547,48 @@ namespace PersonalDiscordBot
             {
                 Management.SerializeData();
                 Permissions.SerializePermissions();
+                ShowNotification("Saved RPG Data", 3);
             }
             catch (Exception ex)
             {
                 FullExceptionLog(ex);
             }
+        }
+
+        private void btnShowDebug_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Toolbox.uDebugAddLog("Toggling Status/Debug textbox");
+                if (txtStatusValue.Visibility == Visibility.Visible)
+                {
+                    Toolbox.uDebugAddLog("Status window is currently visible, switching to debug window and changing button color");
+                    btnShowDebug.Background = new SolidColorBrush((System.Windows.Media.Color)ColorConverter.ConvertFromString("#FF4F1515"));
+                    txtStatusValue.Visibility = Visibility.Hidden;
+                    txtDebugValue.Visibility = Visibility.Visible;
+                    txtDebugValue.Text = Toolbox.statusUpdater.DebugLog;
+                    Toolbox.uDebugAddLog("Finished toggling to debug window");
+                    ShowNotification("Changed status window to debug information", 5);
+                }
+                else
+                {
+                    Toolbox.uDebugAddLog("Debug window is currently visible, switching to status window and changing button color");
+                    btnShowDebug.Background = new SolidColorBrush((System.Windows.Media.Color)ColorConverter.ConvertFromString("#FF202020"));
+                    txtStatusValue.Visibility = Visibility.Visible;
+                    txtDebugValue.Visibility = Visibility.Hidden;
+                    Toolbox.uDebugAddLog("Finished toggling to status window");
+                    ShowNotification("Changed status window to standard status information", 6);
+                }
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
+        }
+
+        private async void btnCheckForUpdates_Click(object sender, RoutedEventArgs e)
+        {
+            await UpdateApplication();
         }
 
         #endregion
@@ -683,11 +735,10 @@ namespace PersonalDiscordBot
                 switch (confType)
                 {
                     case ConfigType.Paths:
-                        List<LocalSettings> _pathsT = new List<LocalSettings>();
                         FileInfo _fI = new FileInfo(Toolbox._paths.PathsConfig);
                         if (File.Exists(_fI.FullName))
                             _fI.Delete();
-                        _pathsT.Add(new LocalSettings
+                        LocalSettings _pathsT = new LocalSettings()
                         {
                             LogLocation = Toolbox._paths.LogLocation,
                             ConfigLocation = Toolbox._paths.ConfigLocation,
@@ -695,9 +746,11 @@ namespace PersonalDiscordBot
                             ServerConfig = Toolbox._paths.ServerConfig,
                             BotToken = Toolbox._paths.BotToken,
                             Updated = Toolbox._paths.Updated,
-                            CurrentVersion = Toolbox._paths.CurrentVersion
-                        });
-                        string jSon = JsonConvert.SerializeObject(_pathsT.ToArray(), Newtonsoft.Json.Formatting.Indented);
+                            CurrentVersion = Toolbox._paths.CurrentVersion,
+                        };
+                        if (!string.IsNullOrWhiteSpace(Toolbox._paths.BotName)) _pathsT.BotName = Toolbox._paths.BotName;
+                        if (!string.IsNullOrWhiteSpace(Toolbox._paths.BotPlaying)) _pathsT.BotPlaying = Toolbox._paths.BotPlaying;
+                        string jSon = JsonConvert.SerializeObject(_pathsT, Newtonsoft.Json.Formatting.Indented);
                         File.WriteAllText(Toolbox._paths.PathsConfig, jSon);
                         Toolbox.uDebugAddLog("Saved current config to Paths.json");
                         break;
@@ -788,12 +841,19 @@ namespace PersonalDiscordBot
             Toolbox.uDebugAddLog(string.Format("EXCEPTION: {0} at {1}", caller, lineNumber));
             uStatusUpdate(string.Format("An Exception Occured: {0} at {1}{2}Msg: {3}", caller, lineNumber, Environment.NewLine, ex.Message));
             string _logLocation = string.Format(@"{0}\Exceptions.log", Toolbox._paths.LogLocation);
-            if (!File.Exists(_logLocation))
-                using (StreamWriter _sw = new StreamWriter(_logLocation))
-                    _sw.WriteLine(exString + Environment.NewLine);
-            else
-                using (StreamWriter _sw = File.AppendText(_logLocation))
-                    _sw.WriteLine(exString + Environment.NewLine);
+            try
+            {
+                if (!File.Exists(_logLocation))
+                    using (StreamWriter _sw = new StreamWriter(_logLocation))
+                        _sw.WriteLine(exString + Environment.NewLine);
+                else
+                    using (StreamWriter _sw = File.AppendText(_logLocation))
+                        _sw.WriteLine(exString + Environment.NewLine);
+            }
+            catch (IOException)
+            {
+                Toolbox.SaveFileRetry(_logLocation, exString);
+            }
         }
 
         private void ResultLog(IResult ex, [CallerLineNumber] int lineNumber = 0, [CallerMemberName] string caller = null, [CallerFilePath] string filePath = null)
@@ -803,12 +863,19 @@ namespace PersonalDiscordBot
             Toolbox.uDebugAddLog(string.Format("RSLTFAIL: {0}", exString));
             uStatusUpdate(string.Format("A result failed: {0}", exString));
             string _logLocation = string.Format(@"{0}\Exceptions.log", Toolbox._paths.LogLocation);
-            if (!File.Exists(_logLocation))
-                using (StreamWriter _sw = new StreamWriter(_logLocation))
-                    _sw.WriteLine(exString);
-            else
-                using (StreamWriter _sw = File.AppendText(_logLocation))
-                    _sw.WriteLine(exString);
+            try
+            {
+                if (!File.Exists(_logLocation))
+                    using (StreamWriter _sw = new StreamWriter(_logLocation))
+                        _sw.WriteLine(exString);
+                else
+                    using (StreamWriter _sw = File.AppendText(_logLocation))
+                        _sw.WriteLine(exString);
+            }
+            catch (IOException)
+            {
+                Toolbox.SaveFileRetry(_logLocation, exString);
+            }
         }
 
         private void SlideGrid(Thickness from, Thickness to, Grid _grd)
@@ -950,11 +1017,11 @@ namespace PersonalDiscordBot
                 SaveConfig(ConfigType.Paths);
                 uStatusUpdate($"Updated to github version {Toolbox._paths.CurrentVersion}");
 
-                BackgroundWorker worker = new BackgroundWorker();
+                BackgroundWorker worker = new BackgroundWorker() { WorkerReportsProgress = true };
+                worker.ProgressChanged += (sender2, e2) => { if (e2.ProgressPercentage == 1) { RoutedEventArgs e3 = new RoutedEventArgs(); btnConnect_Click(sender2, e3); } };
                 worker.DoWork += (sender, e) =>
                 {
-                    RoutedEventArgs e2 = new RoutedEventArgs();
-                    btnConnect_Click(sender, e2);
+                    worker.ReportProgress(1);
                     while (!_activeSession)
                     {
                         Thread.Sleep(1000);
@@ -1019,22 +1086,21 @@ namespace PersonalDiscordBot
         private void DumpStatusLog()
         {
             string _dateNow = DateTime.Now.ToLocalTime().ToString("MM-dd-yy");
-            string _logLocation = string.Format(@"{0}\StatusLog_{1}.txt", Toolbox._paths.LogLocation, _dateNow);
+            string _logLocation = string.Format(@"{0}\StatusLog_{1}.log", Toolbox._paths.LogLocation, _dateNow);
             string textDump = string.Empty;
             Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { textDump = txtStatusValue.Text; txtStatusValue.Text = string.Empty; });
-            if (!File.Exists(_logLocation))
-                using (StreamWriter _sw = new StreamWriter(_logLocation))
-                    _sw.WriteLine(textDump);
-            else
-                using (StreamWriter _sw = File.AppendText(_logLocation))
-                    _sw.WriteLine(textDump);
-            DirectoryInfo _dI = new DirectoryInfo(Toolbox._paths.LogLocation);
-            foreach (FileInfo _fI in _dI.GetFiles())
+            try
             {
-                if (_fI.Name.StartsWith("StatusLog") && _fI.CreationTime.ToLocalTime() <= DateTime.Now.AddDays(-14).ToLocalTime())
-                {
-                    _fI.Delete(); Toolbox.uDebugAddLog(string.Format("Deleted old StatusLog: {0}", _fI.Name));
-                }
+                if (!File.Exists(_logLocation))
+                    using (StreamWriter _sw = new StreamWriter(_logLocation))
+                        _sw.WriteLine(textDump);
+                else
+                    using (StreamWriter _sw = File.AppendText(_logLocation))
+                        _sw.WriteLine(textDump);
+            }
+            catch (IOException)
+            {
+                Toolbox.SaveFileRetry(_logLocation, textDump);
             }
             uStatusUpdate($"Dumped status log to: {_logLocation}");
         }
@@ -1074,6 +1140,54 @@ namespace PersonalDiscordBot
             Permissions.SerializePermissions();
         }
 
+        private static void CleanupLogDir()
+        {
+            try
+            {
+                Toolbox.uDebugAddLog($"Cleaning up Log Directory: {Toolbox._paths.LogLocation}");
+                DirectoryInfo _dI = new DirectoryInfo(Toolbox._paths.LogLocation);
+                foreach (FileInfo _fI in _dI.GetFiles())
+                {
+                    if (_fI.CreationTime.ToLocalTime() <= DateTime.Now.AddDays(-14).ToLocalTime())
+                    {
+                        try
+                        {
+                            _fI.Delete(); Toolbox.uDebugAddLog(string.Format("Deleted old log file: {0}", _fI.Name));
+                        }
+                        catch (IOException ioe)
+                        {
+                            Toolbox.uDebugAddLog($"Unable to delete old log file: {_fI.Name} | {ioe.Message}");
+                        }
+                    }
+                }
+                Toolbox.uDebugAddLog("Finished cleaning up Log directory");
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
+        private void HandleGlobalAction(Toolbox.GlobalAction action)
+        {
+            try
+            {
+                switch (action)
+                {
+                    case Toolbox.GlobalAction.AdminChanged:
+                        tRefreshAdminList();
+                        break;
+                    default:
+                        uStatusUpdate($"Something went wrong and a Global Action wasn't handled, action: {action.ToString()}");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
+        }
+
         #endregion
 
         #region Threaded Methods
@@ -1088,19 +1202,28 @@ namespace PersonalDiscordBot
                 };
                 worker.ProgressChanged += (sender, e) => 
                 {
-                    ThicknessAnimation slideOut = new ThicknessAnimation() { AccelerationRatio = .9, Duration = new Duration(TimeSpan.FromSeconds(.3)), To = new Thickness(0, 42, 0, 0) };
-                    ThicknessAnimation slideIn = new ThicknessAnimation() { AccelerationRatio = .9, Duration = new Duration(TimeSpan.FromSeconds(.3)), To = new Thickness(0, 42, -734, 0) };
-                    switch (e.ProgressPercentage)
+                    try
                     {
-                        case 1:
-                            grdNotification.BeginAnimation(Grid.MarginProperty, slideOut);
-                            break;
-                        case 2:
-                            grdNotification.BeginAnimation(Grid.MarginProperty, slideIn);
-                            break;
-                        default:
-                            Toolbox.uDebugAddLog("Something happened and the incorrect notification state was used, accepted states: 1 or 2");
-                            break;
+                        ThicknessAnimation slideOut = new ThicknessAnimation() { AccelerationRatio = .9, Duration = new Duration(TimeSpan.FromSeconds(.3)), To = new Thickness(0, 42, 0, 0) };
+                        ThicknessAnimation slideIn = new ThicknessAnimation() { AccelerationRatio = .9, Duration = new Duration(TimeSpan.FromSeconds(.3)), To = new Thickness(0, 42, -734, 0) };
+                        switch (e.ProgressPercentage)
+                        {
+                            case 1:
+                                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { try { grdNotification.BeginAnimation(Grid.MarginProperty, slideOut); } catch (InvalidOperationException ioe) { uStatusUpdate($"Notification wasn't shown due to an exception: {ioe.Message}"); return; } catch (Exception ex) { FullExceptionLog(ex); } });
+                                break;
+                            case 2:
+                                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { try { grdNotification.BeginAnimation(Grid.MarginProperty, slideIn); } catch (InvalidOperationException ioe) { uStatusUpdate($"Notification wasn't shown due to an exception: {ioe.Message}"); return; } catch (Exception ex) { FullExceptionLog(ex); } });
+                                break;
+                            default:
+                                Toolbox.uDebugAddLog($"Something happened and the incorrect notification state was used ({e.ProgressPercentage}), accepted states: 1 or 2");
+                                break;
+                        }
+                    }
+                    catch (InvalidOperationException ioe) { uStatusUpdate($"Notification wasn't shown due to an exception: {ioe.Message}"); return; }
+                    catch (Exception ex)
+                    {
+                        FullExceptionLog(ex);
+                        return;
                     }
                 };
                 worker.DoWork += (sender, e) =>
@@ -1129,16 +1252,20 @@ namespace PersonalDiscordBot
                         notificationPlaying = false;
                         Toolbox.uDebugAddLog("Finished playing all notifications");
                     }
+                    catch (InvalidOperationException ioe) { uStatusUpdate($"Notification wasn't shown due to an exception: {ioe.Message}"); return; }
                     catch (Exception ex)
                     {
                         FullExceptionLog(ex);
+                        return;
                     }
                 };
                 worker.RunWorkerAsync();
             }
+            catch (InvalidOperationException ioe) { uStatusUpdate($"Notification wasn't shown due to an exception: {ioe.Message}"); return; }
             catch (Exception ex)
             {
                 FullExceptionLog(ex);
+                return;
             }
         }
 
@@ -1172,7 +1299,7 @@ namespace PersonalDiscordBot
             save.Start();
         }
 
-        private void tRefreshAdminList()
+        public void tRefreshAdminList()
         {
             BackgroundWorker worker = new BackgroundWorker();
             worker.DoWork += (s, e) =>
@@ -1181,7 +1308,8 @@ namespace PersonalDiscordBot
                 {
                     Toolbox.uDebugAddLog("Refreshing admin list");
                     Thread.Sleep(TimeSpan.FromSeconds(3));
-                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { comboAdmins.Items.Clear(); });
+                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { try { comboAdmins.Items.Clear(); } catch (Exception ex) { FullExceptionLog(ex); } });
+                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { try { txtAdminUlong.Text = ""; } catch (Exception ex) { FullExceptionLog(ex); } });
                     int count = 0;
                     if (Permissions.Administrators.Count <= 0)
                     {
@@ -1214,11 +1342,15 @@ namespace PersonalDiscordBot
                 // Define the DiscordSocketClient
                 client = new DiscordSocketClient();
 
-                Thread loginUpdate = new Thread(() =>
+                Thread loginUpdate = new Thread(async () =>
                 {
+                    string userName = Toolbox._paths.BotName;
+                    string playingValue = Toolbox._paths.BotPlaying;
                     uStatusUpdate("Starting login updater");
                     while (client.ConnectionState != ConnectionState.Connected)
                         Thread.Sleep(500);
+                    if (!string.IsNullOrWhiteSpace(userName)) { await ChangeName(userName); Toolbox.uDebugAddLog($"Previous bot name used from config: {userName}"); }
+                    if (!string.IsNullOrEmpty(playingValue)) { await SetPlaying(playingValue); Toolbox.uDebugAddLog($"Previous bot playing status used from config: {playingValue}"); }
                     Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { txtNameValue.Text = client.CurrentUser.Username; });
                     Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { txtPlayingValue.Text = client.CurrentUser.Game.HasValue ? client.CurrentUser.Game.Value.Name : string.Empty; });
                     uStatusUpdate("Updated Name and Playing Value");
@@ -1234,7 +1366,7 @@ namespace PersonalDiscordBot
                 await client.LoginAsync(TokenType.Bot, token);
                 await client.StartAsync();
 
-                ShowNotification($"Bot {client.CurrentUser.Username} Successfully Connected", 4);
+                ShowNotification("Bot Successfully Connected", 4);
             }
             catch (Exception ex)
             {
@@ -1334,7 +1466,7 @@ namespace PersonalDiscordBot
                 if (gitClient == null)
                     gitClient = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("PDB"));
                 if (Toolbox._paths.CurrentVersion == null)
-                    Toolbox._paths.CurrentVersion = new Version("0.1.00.00");
+                    Toolbox._paths.CurrentVersion = new Version("0.1.0.0");
                 var releases = await gitClient.Repository.Release.GetAll("rwobig93", "ServerRPGAdventure");
                 var release = releases[0];
                 Version releaseVersion = new Version(release.TagName);
@@ -1343,7 +1475,6 @@ namespace PersonalDiscordBot
                 {
                     uStatusUpdate($"Newer release found, updating now... [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
                     Toolbox._paths.CurrentVersion = releaseVersion;
-                    Toolbox._paths.Updated = true;
                     SaveConfig(ConfigType.Paths);
                     SaveRPGData();
                     StartUpdate();
@@ -1368,10 +1499,10 @@ namespace PersonalDiscordBot
                 if (channel != null)
                 {
 #if DEBUG
-                    await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has connected in DEBUG Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+                    await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has **connected** in **DEBUG Mode** biiiiiiiiiiiiiiiiiiiiiiatch!!!");
                     Toolbox.uDebugAddLog($"Sent connected debug message to channel {channel.Id}");
 #else
-                    await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has connected biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+                    await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has **connected** biiiiiiiiiiiiiiiiiiiiiiatch!!!");
                     Toolbox.uDebugAddLog($"Sent connected message to channel {channel.Id}");
 #endif
                     ShowNotification($"Bot {client.CurrentUser.Username} Sent connected message to log channel {((IMessageChannel)channel).Name}", 6);
@@ -1393,13 +1524,6 @@ namespace PersonalDiscordBot
             //OwnerProfile owner = new OwnerProfile() { OwnerID = 123456789, Currency = 696969, OwnerUN = "That one Guy", TotalPebbles = 99 };
             //RPG.Owners.Add(owner);
             //uStatusUpdate(Testing.EmulateFight(owner));
-            List<int> lvlList = new List<int>();
-            for (var i = 1; i <= 150; i++)
-            {
-                int exp = 0;
-                uStatusUpdate($"Experience lvl {i}: {exp = Management.CalculateExperience(i)}");
-                lvlList.Add(exp);
-            }
         }
 
         private void SetupTest()
@@ -1409,11 +1533,11 @@ namespace PersonalDiscordBot
             var chara = Testing.testiculeesCharacter;
             owner.CharacterList.Add(chara);
             owner.CurrentCharacter = chara;
-            Permissions.Administrators.Add(127561010893553664);
+            Permissions.Administrators.Add(new Administrator() { ID = owner.OwnerID, Username = owner.OwnerUN });
             uStatusUpdate("Testing setup");
         }
-
-#endregion
+        
+        #endregion
     }
 
     public class Notification

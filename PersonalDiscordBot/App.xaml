@@ -137,7 +137,7 @@
                 <Path 
                   x:Name="Arrow"
                   Grid.Column="1"     
-                  Fill="White"
+                  Fill="#FF0FB3C3"
                   HorizontalAlignment="Center"
                   VerticalAlignment="Center"
                   Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"
@@ -160,7 +160,7 @@
         </ControlTemplate>
 
         <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
-            <Border x:Name="PART_ContentHost" Focusable="False" Background="{TemplateBinding Background}" />
+            <Border x:Name="PART_ContentHost" Focusable="False" Background="#FF202020" />
         </ControlTemplate>
 
         <Style x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}">
@@ -200,7 +200,7 @@
                             Background="#FF202020"
                             Foreground="#FF0FB3C3"
                             Visibility="Hidden"
-                            IsReadOnly="{TemplateBinding IsReadOnly}"/>
+                            IsReadOnly="{TemplateBinding IsReadOnly}" BorderBrush="#FF5D5F64"/>
                             <Popup 
                             Name="Popup"
                             Placement="Bottom"
@@ -215,7 +215,7 @@
                               MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                     <Border 
                                 x:Name="DropDownBorder"
-                                Background="#FF6E6E6E"
+                                Background="#FF202020"
 
                                 BorderThickness="1"
                                 BorderBrush="#FF6E6E6E"/>
@@ -256,6 +256,7 @@
         <Style x:Key="{x:Type ComboBoxItem}" TargetType="{x:Type ComboBoxItem}">
             <Setter Property="SnapsToDevicePixels" Value="true"/>
             <Setter Property="Foreground" Value="#FF0FB3C3"/>
+            <Setter Property="Background" Value="#FF202020"/>
             <Setter Property="OverridesDefaultStyle" Value="true"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -267,7 +268,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsHighlighted" Value="true">
-                                <Setter TargetName="Border" Property="Background" Value="#FF4F4F4F"/>
+                                <Setter TargetName="Border" Property="Background" Value="#FFB4ACAC"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="false">
                                 <Setter Property="Foreground" Value="#FF0FB3C3"/>

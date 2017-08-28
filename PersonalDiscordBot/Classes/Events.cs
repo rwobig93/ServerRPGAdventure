@@ -22,6 +22,18 @@ namespace PersonalDiscordBot.Classes
 
         #endregion
 
+        #region GlobalAction Event
+
+        public delegate void UseAction(ActionArgs args);
+        public static event UseAction UseGlobalAction;
+        public static void UseGlblAction(Toolbox.GlobalAction action)
+        {
+            ActionArgs args = new ActionArgs(action);
+            UseGlobalAction(args);
+        }
+
+        #endregion
+
         #region DiscordMessage Event
 
         public delegate void DiscordMessage(MessageArgs args, bool isEmbed);
@@ -84,6 +96,16 @@ namespace PersonalDiscordBot.Classes
             this.content = msgContent;
         }
         public string Content { get { return content; } }
+    }
+
+    public class ActionArgs : EventArgs
+    {
+        private Toolbox.GlobalAction action;
+        public ActionArgs(Toolbox.GlobalAction useAction)
+        {
+            this.action = useAction;
+        }
+        public Toolbox.GlobalAction Action { get { return action; } }
     }
 
     public class MatchArgs : EventArgs
