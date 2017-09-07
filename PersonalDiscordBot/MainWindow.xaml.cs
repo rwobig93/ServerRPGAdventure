@@ -1518,12 +1518,12 @@ namespace PersonalDiscordBot
 
         private void btnTest_Click(object sender, RoutedEventArgs e)
         {
-            //Permissions.SerializePermissions();
-            //Management.SerializeData();
-            //uStatusUpdate(Testing.ShowBackPackItems());
-            //OwnerProfile owner = new OwnerProfile() { OwnerID = 123456789, Currency = 696969, OwnerUN = "That one Guy", TotalPebbles = 99 };
-            //RPG.Owners.Add(owner);
-            //uStatusUpdate(Testing.EmulateFight(owner));
+            Permissions.SerializePermissions();
+            Management.SerializeData();
+            uStatusUpdate(Testing.ShowBackPackItems());
+            OwnerProfile owner = new OwnerProfile() { OwnerID = 123456789, Currency = 696969, OwnerUN = "That one Guy", TotalPebbles = 99 };
+            RPG.Owners.Add(owner);
+            uStatusUpdate(Testing.EmulateFight(owner));
         }
 
         private void SetupTest()

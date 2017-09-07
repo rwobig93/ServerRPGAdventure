@@ -981,32 +981,33 @@ namespace PersonalDiscordBot.Classes
                 var line = Environment.NewLine;
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
                 string itemList = "";
+                string answer = "";
                 int number = 1;
                 var timestamp = DateTime.Now;
                 List<IMessage> respondeded = new List<IMessage>();
                 Toolbox.uDebugAddLog($"Asking [Owner]{owner.CurrentCharacter.Loot.Count} [ID]{owner.OwnerID} what to see");
                 var backpackMsg = await context.Channel.SendMessageAsync($"What would you like to see? (armor, items, weapons, all, cancel)");
-                var armorLootType = LootDrop.LootType.Armor;                
+                var armorLootType = LootDrop.LootType.Armor;
                 List<Armor> armorPack = new List<Armor>();
                 var itemLootType = LootDrop.LootType.Item;
                 List<Item> itemPack = new List<Item>();
                 var weaponLootType = LootDrop.LootType.Weapon;
                 List<Weapon> weaponPack = new List<Weapon>();
-                foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored) 
+                foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
+                {
+                    if (i.GetLootType() == armorLootType)
                     {
-                        if (i.GetLootType() == armorLootType)
-                            {
-                                armorPack.Add(i);
-                            }
-                        else if (i.GetLootType() == itemLootType)
-                            {
-                                itemPack.Add(i);
-                            }
-                        else if (i.GetLootType() == weaponLootType)
-                            {
-                                weaponPack.Add(i);
-                            }
+                        armorPack.Add((Armor)i);
                     }
+                    else if (i.GetLootType() == itemLootType)
+                    {
+                        itemPack.Add((Item)i);
+                    }
+                    else if (i.GetLootType() == weaponLootType)
+                    {
+                        weaponPack.Add((Weapon)i);
+                    }
+                }
                 bool msgResp = false;
                 while (!msgResp)
                 {
@@ -1016,8 +1017,9 @@ namespace PersonalDiscordBot.Classes
                         if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (!respondeded.Contains(msg)))
                         {
                             respondeded.Add(msg);
-                            string answer = msg.Content.ToString().ToLower();
+                            answer = msg.Content.ToString().ToLower();
                             Toolbox.uDebugAddLog($"Response recieved from same author and a newer message. [Resp]{answer} [ID]{owner.OwnerID}");
+                            msgResp = true;
                             switch (answer)
                             {
                                 case "armor":
@@ -1026,7 +1028,6 @@ namespace PersonalDiscordBot.Classes
                                         itemList = $"{itemList}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
                                         number++;
                                     }
-                                    msgResp = true;
                                     break;
                                 case "items":
                                     foreach (Item i in itemPack)
@@ -1034,7 +1035,6 @@ namespace PersonalDiscordBot.Classes
                                         itemList = $"{itemList}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
                                         number++;
                                     }
-                                    msgResp = true;
                                     break;
                                 case "weapons":
                                     foreach (Weapon w in weaponPack)
@@ -1042,37 +1042,31 @@ namespace PersonalDiscordBot.Classes
                                         itemList = $"{itemList}[{number}]:     Name: {w.Name}     Description: {w.Desc}     Worth: {w.Worth}{line}";
                                         number++;
                                     }
-                                    msgResp = true;
                                     break;
                                 case "all":
                                     List<IBackPackItem> allPack = new List<IBackPackItem>();
                                     foreach (Armor a in armorPack)
-                                        {
-                                            allPack.Add(a);
-                                            itemList = $"{itemList}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
-                                            number++;
-                                        }
+                                    {
+                                        allPack.Add(a);
+                                        itemList = $"{itemList}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
+                                        number++;
+                                    }
                                     foreach (Weapon w in weaponPack)
-                                        {
-                                            weaponPack.Add(w);
-                                            itemList = $"{itemList}[{number}]:     Name: {w.Name}     Description: {w.Desc}     Worth: {w.Worth}{line}";
-                                            number++;
-                                        }
+                                    {
+                                        allPack.Add(w);
+                                        itemList = $"{itemList}[{number}]:     Name: {w.Name}     Description: {w.Desc}     Worth: {w.Worth}{line}";
+                                        number++;
+                                    }
                                     foreach (Item i in itemPack)
-                                        {
-                                            itemPack.Add(i);
-                                            itemList = $"{itemList}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
-                                            number++;
-                                        }
-
-
-                                    msgResp = true;
+                                    {
+                                        allPack.Add(i);
+                                        itemList = $"{itemList}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
+                                        number++;
+                                    }
                                     break;
                                 case "cancel":
-                                    msgResp = true;
                                     break;
                             }
-
                         }
                     }
                     await Task.Delay(1000);
@@ -1082,6 +1076,55 @@ namespace PersonalDiscordBot.Classes
                         return;
                     }
                 }
+                Toolbox.uDebugAddLog($"Asking [Owner]{owner.CurrentCharacter.Loot.Count} [ID]{owner.OwnerID} what item to inspect");
+                var whichitemMsg = await context.Channel.SendMessageAsync($"Which item would you like to inspect? (Please type the item number)");
+                int itemNum = (Convert.ToInt32(whichitemMsg)-1);
+                string pickedItem = "";
+                switch (answer)
+                {
+                    case "armor":
+                        pickedItem = $"Level: {armorPack[itemNum].Lvl}{line}" +
+                            $"Rarity: {armorPack[itemNum].Rarity}{line}" +
+                            $"Name: {armorPack[itemNum].Name}{line}" +
+                            $"Description: {armorPack[itemNum].Desc}{line}" +
+                            $"Durability: {armorPack[itemNum].CurrentDurability}/{armorPack[itemNum].MaxDurability}{line}" +
+                            $"Value: {armorPack[itemNum].Worth}{line}" +
+                            $"Phsyical: {armorPack[itemNum].Physical}{line}" +
+                            $"Speed: {armorPack[itemNum].Speed}{line}" +
+                            $"Magic: {armorPack[itemNum].Magic}{line}" +
+                            $"Fire: {armorPack[itemNum].Fire}{line}" +
+                            $"Ice: {armorPack[itemNum].Ice}{line}" +
+                            $"Lightning: {armorPack[itemNum].Lightning}{line}" +
+                            $"Wind: {armorPack[itemNum].Wind}{line}";
+                        msgResp = true;
+                        break;
+                    case "items":
+
+                        msgResp = true;
+                        break;
+                    case "weapons":
+
+                        msgResp = true;
+                        break;
+                    case "all":
+                        List<IBackPackItem> allPack = new List<IBackPackItem>();
+                        foreach (Armor a in armorPack)
+                        {
+                            allPack.Add(a);
+                        }
+                        foreach (Weapon w in weaponPack)
+                        {
+                            allPack.Add(w);
+                        }
+                        foreach (Item i in itemPack)
+                        {
+                            allPack.Add(i);
+                        }
+
+                        msgResp = true;
+                        break;
+                }
+
                 //ask if they want to equip, use, trash, sell, cancel
                 //case(all)
                 //foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
@@ -1112,7 +1155,7 @@ namespace PersonalDiscordBot.Classes
                         if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (!respondeded.Contains(msg)))
                         {
                             respondeded.Add(msg);
-                            string answer = msg.Content.ToString().ToLower();
+                            answer = msg.Content.ToString().ToLower();
                             Toolbox.uDebugAddLog($"Response recieved from same author and a newer message. [Resp]{answer} [ID]{owner.OwnerID}");
 
                             if (string.IsNullOrWhiteSpace(answer))
@@ -1154,8 +1197,6 @@ namespace PersonalDiscordBot.Classes
             {
                 Toolbox.FullExceptionLog(ex);
             }
-
-
         }
 
         public static void ChangeArmor(ICommandContext context, Armor armor)

@@ -1,19 +1,25 @@
-TimeStamp: 07-18-17_12:19:14 PM
+TimeStamp: 09-07-17_1:12:43 PM
 Exception Type: Win32Exception
-Caller: StartUpdate at 1056
+Caller: StartUpdate at 1133
 Message: The system cannot find the file specified
 HR: -2147467259
 StackTrace:
    at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
-   at PersonalDiscordBot.MainWindow.StartUpdate() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1052
+   at PersonalDiscordBot.MainWindow.StartUpdate() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1129
 
 
-TimeStamp: 07-18-17_12:20:10 PM
-Exception Type: NullReferenceException
-Caller: Start at 1224
-Message: Object reference not set to an instance of an object.
-HR: -2147467261
+TimeStamp: 09-07-17_1:12:43 PM
+Exception Type: IOException
+Caller: SerializePermissions at 57
+Message: The process cannot access the file 'C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions\Administrators.perm' because it is being used by another process.
+HR: -2147024864
 StackTrace:
-   at PersonalDiscordBot.MainWindow.<Start>d__71.MoveNext() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1220
+   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   at System.IO.StreamWriter.CreateFile(String path, Boolean append, Boolean checkHost)
+   at System.IO.StreamWriter..ctor(String path, Boolean append, Encoding encoding, Int32 bufferSize, Boolean checkHost)
+   at System.IO.File.InternalWriteAllText(String path, String contents, Encoding encoding, Boolean checkHost)
+   at PersonalDiscordBot.Classes.Permissions.<>c.<SerializePermissions>b__4_1(Object sender, DoWorkEventArgs e) in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\Classes\Permissions.cs:line 46
 
 
