@@ -1,4 +1,4 @@
-TimeStamp: 09-07-17_1:12:43 PM
+TimeStamp: 10-06-17_5:00:07 PM
 Exception Type: Win32Exception
 Caller: StartUpdate at 1133
 Message: The system cannot find the file specified
@@ -8,7 +8,7 @@ StackTrace:
    at PersonalDiscordBot.MainWindow.StartUpdate() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1129
 
 
-TimeStamp: 09-07-17_1:12:43 PM
+TimeStamp: 10-06-17_5:00:07 PM
 Exception Type: IOException
 Caller: SerializePermissions at 57
 Message: The process cannot access the file 'C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions\Administrators.perm' because it is being used by another process.
