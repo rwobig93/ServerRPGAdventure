@@ -1323,62 +1323,7 @@ namespace PersonalDiscordBot.Classes
                                                     break;
                                                 case "sell":
                                                     Toolbox.uDebugAddLog($"[SELL]{chosenThing} is trying to be sold by [ID]{owner.OwnerID}");
-                                                    if (chosenThing.GetLootType() == LootDrop.LootType.Item)
-                                                    {
-                                                        Item tmpItem = (Item)chosenThing;
-                                                        if (tmpItem.Count > 1)
-                                                        {
-                                                            Toolbox.uDebugAddLog($"[THING]{chosenThing} is an [ITEM]. There are [COUNT]{tmpItem.Count} instances of [THING]{chosenThing}." +
-                                                                $"Asking [ID]{owner.OwnerID} how many to sell.");
-                                                            EmbedBuilder embeded = new EmbedBuilder()
-                                                            {
-                                                                Author = new EmbedAuthorBuilder()
-                                                                {
-                                                                    Name = owner.CurrentCharacter.Name
-                                                                },
-                                                                Color = owner.CurrentCharacter.Color,
-                                                                Title = owner.CurrentCharacter.Desc,
-                                                                Description = $"{chosenThing}"
-                                                            };
-                                                            Events.SendDiscordMessage(context, embeded);
-                                                            var howManyToSell = await context.Channel.SendMessageAsync($"There are {tmpItem.Count} {tmpItem.Name}s. How many would you like to sell?");
-                                                            int howManyToSellAnswer = 0;
-                                                            bool pickedHowManyToSell = false;
-                                                            var timestamp4 = DateTime.Now;
-                                                            while (!pickedHowManyToSell)
-                                                            {
-                                                                var msgList3 = await context.Channel.GetMessagesAsync(5).Flatten();
-                                                                foreach (var msg3 in msgList3)
-                                                                {
-                                                                    if ((msg3.Author == context.Message.Author) && (msg3.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (!respondeded.Contains(msg3)))
-                                                                    {
-                                                                        respondeded.Add(msg3);
-                                                                        var answered = msg3.Content.ToString().ToLower();
-                                                                        if (Int32.TryParse(answered, out howManyToSellAnswer))
-                                                                        {
-                                                                            if (howManyToSellAnswer > tmpItem.Count)
-                                                                            {
-                                                                                Toolbox.uDebugAddLog($"[AMOUNT]{howManyToSellAnswer} from [OWNER]{owner.OwnerID} exceeds [COUNT]{tmpItem.Count} [ITEM]{tmpItem.Name}(s).");
-                                                                                await context.Channel.SendMessageAsync($"{howManyToSellAnswer} is more than you actually have.");
-                                                                                return;
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                
-                                                                            }
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            Toolbox.uDebugAddLog($"[RESPONSE]{answered} from [OWNER]{owner.OwnerID} is not a valid INT.");
-                                                                            await context.Channel.SendMessageAsync($"{answered} is not a valid number.");
-                                                                            return;
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    Sell(context, chosenThing);                                                    
+                                                    await Sell(context, chosenThing);
                                                     break;
                                                 case "trash":
                                                     break;
@@ -1460,40 +1405,148 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static void Sell(ICommandContext context, IBackPackItem thing)
+        /// <summary>
+        /// Selling an amount of items
+        /// </summary>
+        /// <param name="context">I think the owner?</param>
+        /// <param name="thing">Item you want to sell</param>
+        public static async Task Sell(ICommandContext context, IBackPackItem thing)
         {
             try
             {
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
+                List<IMessage> respondeded = new List<IMessage>();
+                if (thing.GetLootType() == LootDrop.LootType.Item)
+                {
+                    Item tmpItem = (Item)thing;
+                    if (tmpItem.Count > 1)
+                    {
+                        Toolbox.uDebugAddLog($"[THING]{thing} is an [ITEM]. There are [COUNT]{tmpItem.Count} instances of [THING]{tmpItem.Name}." +
+                            $"Asking [ID]{owner.OwnerID} how many to sell.");
+                        EmbedBuilder embeded = new EmbedBuilder()
+                        {
+                            Author = new EmbedAuthorBuilder()
+                            {
+                                Name = owner.CurrentCharacter.Name
+                            },
+                            Color = owner.CurrentCharacter.Color,
+                            Title = owner.CurrentCharacter.Desc,
+                            Description = $"{tmpItem.Desc}"
+                        };
+                        Events.SendDiscordMessage(context, embeded);
+                        var howManyToSell = await context.Channel.SendMessageAsync($"There are {tmpItem.Count} {tmpItem.Name}s. How many would you like to sell?");
+                        int howManyToSellAnswer = 0;
+                        bool pickedHowManyToSell = false;
+                        var timeStamp4 = DateTime.Now;
+                        while (!pickedHowManyToSell)
+                        {
+                            var msgList3 = await context.Channel.GetMessagesAsync(5).Flatten();
+                            foreach (var msg3 in msgList3)
+                            {
+                                if ((msg3.Author == context.Message.Author) && (msg3.Timestamp.DateTime > howManyToSell.Timestamp.DateTime) && (!respondeded.Contains(msg3)))
+                                {
+                                    respondeded.Add(msg3);
+                                    var answered = msg3.Content.ToString().ToLower();
+                                    pickedHowManyToSell = true;
+                                    if (Int32.TryParse(answered, out howManyToSellAnswer))
+                                    {
+                                        if (howManyToSellAnswer > tmpItem.Count)
+                                        {
+                                            Toolbox.uDebugAddLog($"[AMOUNT]{howManyToSellAnswer} from [OWNER]{owner.OwnerID} exceeds [COUNT]{tmpItem.Count} [ITEM]{tmpItem.Name}(s).");
+                                            await context.Channel.SendMessageAsync($"{howManyToSellAnswer} is more than you actually have.");
+                                            return;
+                                        }
+                                        else if (howManyToSellAnswer < 0)
+                                        {
+                                            Toolbox.uDebugAddLog($"[AMOUNT]{howManyToSellAnswer} from [OWNER]{owner.OwnerID} is less than zero.");
+                                            await context.Channel.SendMessageAsync($"{howManyToSellAnswer} is less than zero.");
+                                            return;
+                                        }
+                                        else
+                                        {
+                                            if (howManyToSellAnswer > 1)
+                                            {
+                                                Item sellItem = (Item)thing;
+                                                if (sellItem == null)
+                                                {
+                                                    Toolbox.uDebugAddLog($"ERROR: Item wasn't found in backpack when it was pulled from backpack [Name] {sellItem.Name} [Count] {sellItem.Count}");
+                                                    Events.SendDiscordMessage(context, $"An error occured and the item you want to sell wasn't found in your backpack after finding it... I know confusing but you should let the developer know.");
+                                                    return;
+                                                }
+                                                if (sellItem.Count - howManyToSellAnswer == 0)
+                                                {
+                                                    Toolbox.uDebugAddLog($"Selling [AMOUNT]{howManyToSellAnswer} of [ITEM]{sellItem.Name} from [ID]{owner.OwnerID}. [COUNT]{sellItem.Count} [CURRENCY]{owner.Currency}");
+                                                    owner.Currency = (howManyToSellAnswer * sellItem.Worth) + owner.Currency;
+                                                    Toolbox.uDebugAddLog($"Sold [AMOUNT]{howManyToSellAnswer} of [ITEM]{sellItem.Name} from [ID]{owner.OwnerID}. [COUNT]{sellItem.Count} [CURRENCY]{owner.Currency}");
+                                                    Events.SendDiscordMessage(context, $"{howManyToSellAnswer} {sellItem.Name}s have been sold for {sellItem.Worth}. ");
+                                                    Toolbox.uDebugAddLog($"Removing [ITEM]{sellItem.Name} from [ID]{owner.OwnerID}");
+                                                    owner.CurrentCharacter.Backpack.Stored.Remove(sellItem);
+                                                }
+                                                else
+                                                {
+                                                    Toolbox.uDebugAddLog($"Removing [AMOUNT]{howManyToSellAnswer} from count on [ITEM]{sellItem.Name}. [COUNT]{sellItem.Count} [ID]{owner.OwnerID}");
+                                                    sellItem.Count -= howManyToSellAnswer;
+                                                    Toolbox.uDebugAddLog($"Removed [AMOUNT]{howManyToSellAnswer} from count on [ITEM]{sellItem.Name}. [COUNT]{sellItem.Count} [ID]{owner.OwnerID}");
+                                                    Toolbox.uDebugAddLog($"Adding [CURRENCY]{sellItem.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
+                                                    owner.Currency = (howManyToSellAnswer * sellItem.Worth) + owner.Currency;
+                                                    Toolbox.uDebugAddLog($"Added [CURRENCY]{sellItem.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current howManyToSellAnswer of Currency: {owner.Currency}");
+                                                    Events.SendDiscordMessage(context, $"{howManyToSellAnswer} {sellItem.Name}s have been sold for {sellItem.Worth}. ");
+                                                    owner.CurrentCharacter.Backpack.Stored.Remove(sellItem);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Toolbox.uDebugAddLog($"Adding [CURRENCY]{thing.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
+                                                owner.Currency = (howManyToSellAnswer * thing.Worth) + owner.Currency;
+                                                Toolbox.uDebugAddLog($"Added [CURRENCY]{thing.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
+                                                Events.SendDiscordMessage(context, $"{thing.Name} was sold for {thing.Worth}.");
+                                                Toolbox.uDebugAddLog($"Removing [ITEM]{thing.Name} from [ID]{owner.OwnerID}");
+                                                owner.CurrentCharacter.Backpack.Stored.Remove(thing);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Toolbox.uDebugAddLog($"[RESPONSE]{answered} from [OWNER]{owner.OwnerID} is not a valid INT.");
+                                        await context.Channel.SendMessageAsync($"{answered} is not a valid number.");
+                                        return;
+                                    }
+                                }
 
-                Toolbox.uDebugAddLog($"[NAME]{owner.CurrentCharacter.Name} is selling [AMOUNT] of [THING]{thing} for [WORTH]{thing.Worth} and they have [CURRENCY]{owner.Currency}.");
-                owner.Currency = owner.Currency + thing.Worth;
-                
+                            }
+                            if (timeStamp4 + TimeSpan.FromMinutes(5) <= DateTime.Now)
+                            {
+                                await context.Channel.SendMessageAsync($"{context.User.Mention} A response hasn't been received within 5 min, description change canceled");
+                                Toolbox.uDebugAddLog($"5min passed, canceling request [ID]{owner.OwnerID}");
+                                return;
+                            }
+                            await Task.Delay(1000);
+                        }
+                    }
+                    else
+                    {
+                        Toolbox.uDebugAddLog($"Adding [CURRENCY]{thing.Worth} times [AMOUNT]1 to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
+                        owner.Currency = thing.Worth + owner.Currency;
+                        Toolbox.uDebugAddLog($"Added [CURRENCY]{thing.Worth} times [AMOUNT]1 to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
+                        Events.SendDiscordMessage(context, $"{thing.Name} was sold for {thing.Worth}.");
+                        Toolbox.uDebugAddLog($"Removing [ITEM]{thing.Name} from [ID]{owner.OwnerID}");
+                        owner.CurrentCharacter.Backpack.Stored.Remove(thing);
+                    }
+                }
+                else
+                {
+                    Toolbox.uDebugAddLog($"Adding [CURRENCY]{thing.Worth} times [AMOUNT]1 to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
+                    owner.Currency = thing.Worth + owner.Currency;
+                    Toolbox.uDebugAddLog($"Added [CURRENCY]{thing.Worth} times [AMOUNT]1 to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
+                    Events.SendDiscordMessage(context, $"{thing.Name} was sold for {thing.Worth}.");
+                    Toolbox.uDebugAddLog($"Removing [ITEM]{thing.Name} from [ID]{owner.OwnerID}");
+                    owner.CurrentCharacter.Backpack.Stored.Remove(thing);
+                }
             }
-            catch (Exception ex)
-            {
-                Toolbox.FullExceptionLog(ex);
-            }
-        }
-
-        public static void Sell(ICommandContext context, IBackPackItem thing, int amount)
-        {
-            try
-            {
-                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
-                Item bpItem = (Item)owner.CurrentCharacter.Backpack.Stored.Find(x => x == thing);
-                Toolbox.uDebugAddLog($"Removing [NUM]{amount} from count on [ITEM]{bpItem.Name}. [COUNT]{bpItem.Count} [ID]{owner.OwnerID}");
-                bpItem.Count -= amount;
-                Toolbox.uDebugAddLog($"Removed [NUM]{amount} from count on [ITEM]{bpItem.Name}. [COUNT]{bpItem.Count} [ID]{owner.OwnerID}");
-                Toolbox.uDebugAddLog($"Adding [CURRENCY]{bpItem.Worth} times [NUM]{amount} to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
-                owner.Currency = (amount * bpItem.Worth) + owner.Currency;
-                Toolbox.uDebugAddLog($"Added [CURRENCY]{bpItem.Worth} times [NUM]{amount} to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
-                Events.SendDiscordMessage(context, $"{amount} {bpItem.Name}(s) have been sold. You have been given {bpItem.Worth * amount} monies for your trouble.");
-            }
-            catch (Exception ex)
-            {
-                Toolbox.FullExceptionLog(ex);
-            }
+		    catch (Exception ex)
+		    {
+			    Toolbox.FullExceptionLog(ex);
+		    }
         }
 
         public static string GetCharacterImgDefault(Character chara)
