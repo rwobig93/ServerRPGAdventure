@@ -1473,7 +1473,7 @@ namespace PersonalDiscordBot.Classes
                                                     Events.SendDiscordMessage(context, $"An error occured and the item you want to sell wasn't found in your backpack after finding it... I know confusing but you should let the developer know.");
                                                     return;
                                                 }
-                                                if (sellItem.Count - howManyToSellAnswer == 0)
+                                                if (sellItem.Count - howManyToSellAnswer <= 0)
                                                 {
                                                     Toolbox.uDebugAddLog($"Selling [AMOUNT]{howManyToSellAnswer} of [ITEM]{sellItem.Name} from [ID]{owner.OwnerID}. [COUNT]{sellItem.Count} [CURRENCY]{owner.Currency}");
                                                     owner.Currency = (howManyToSellAnswer * sellItem.Worth) + owner.Currency;
@@ -1491,7 +1491,6 @@ namespace PersonalDiscordBot.Classes
                                                     owner.Currency = (howManyToSellAnswer * sellItem.Worth) + owner.Currency;
                                                     Toolbox.uDebugAddLog($"Added [CURRENCY]{sellItem.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current howManyToSellAnswer of Currency: {owner.Currency}");
                                                     Events.SendDiscordMessage(context, $"{howManyToSellAnswer} {sellItem.Name}s have been sold for {sellItem.Worth}. ");
-                                                    owner.CurrentCharacter.Backpack.Stored.Remove(sellItem);
                                                 }
                                             }
                                             else
