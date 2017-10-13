@@ -980,7 +980,7 @@ namespace PersonalDiscordBot.Classes
             {
                 var line = Environment.NewLine;
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
-                string itemList = "";
+                string itemList = line;
                 string answer = "";
                 int number = 1;
                 var timestamp = DateTime.Now;
@@ -1013,12 +1013,12 @@ namespace PersonalDiscordBot.Classes
                 while (!msgResp)
                 {
                     var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
-                    foreach (var msg in msgList)
+                    foreach (var msg7 in msgList)
                     {
-                        if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (!respondeded.Contains(msg)))
+                        if ((msg7.Author == context.Message.Author) && (msg7.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (!respondeded.Contains(msg7)))
                         {
-                            respondeded.Add(msg);
-                            answer = msg.Content.ToString().ToLower();
+                            respondeded.Add(msg7);
+                            answer = msg7.Content.ToString().ToLower();
                             Toolbox.uDebugAddLog($"Response recieved from same author and a newer message. [Resp]{answer} [ID]{owner.OwnerID}");
                             msgResp = true;
                             switch (answer)
@@ -1026,21 +1026,21 @@ namespace PersonalDiscordBot.Classes
                                 case "armor":
                                     foreach (Armor a in armorPack)
                                     {
-                                        itemList = $"{itemList}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
+                                        itemList = itemList + $"{line}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
                                         number++;
                                     }
                                     break;
                                 case "items":
                                     foreach (Item i in itemPack)
                                     {
-                                        itemList = $"{itemList}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
+                                        itemList = itemList + $"{line}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
                                         number++;
                                     }
                                     break;
                                 case "weapons":
                                     foreach (Weapon w in weaponPack)
                                     {
-                                        itemList = $"{itemList}[{number}]:     Name: {w.Name}     Description: {w.Desc}     Worth: {w.Worth}{line}";
+                                        itemList = itemList + $"{line}[{number}]:     Name: {w.Name}     Description: {w.Desc}     Worth: {w.Worth}{line}";
                                         number++;
                                     }
                                     break;
@@ -1048,19 +1048,19 @@ namespace PersonalDiscordBot.Classes
                                     foreach (Armor a in armorPack)
                                     {
                                         allPack.Add(a);
-                                        itemList = $"{itemList}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
+                                        itemList = itemList + $"{line}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
                                         number++;
                                     }
                                     foreach (Weapon w in weaponPack)
                                     {
                                         allPack.Add(w);
-                                        itemList = $"{itemList}[{number}]:     Name: {w.Name}     Description: {w.Desc}     Worth: {w.Worth}{line}";
+                                        itemList = itemList + $"{line}[{number}]:     Name: {w.Name}     Description: {w.Desc}     Worth: {w.Worth}{line}";
                                         number++;
                                     }
                                     foreach (Item i in itemPack)
                                     {
                                         allPack.Add(i);
-                                        itemList = $"{itemList}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
+                                        itemList = itemList + $"{line}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
                                         number++;
                                     }
                                     break;

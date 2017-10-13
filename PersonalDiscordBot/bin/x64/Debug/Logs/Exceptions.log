@@ -1,4 +1,4 @@
-TimeStamp: 10-12-17_10:27:14 AM
+TimeStamp: 10-13-17_10:13:43 AM
 Exception Type: Win32Exception
 Caller: StartUpdate at 1133
 Message: The system cannot find the file specified
@@ -8,18 +8,15 @@ StackTrace:
    at PersonalDiscordBot.MainWindow.StartUpdate() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1129
 
 
-TimeStamp: 10-12-17_10:27:14 AM
-Exception Type: IOException
-Caller: SerializePermissions at 57
-Message: The process cannot access the file 'C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions\Administrators.perm' because it is being used by another process.
-HR: -2147024864
+TimeStamp: 10-13-17_10:13:43 AM
+Exception Type: ArgumentOutOfRangeException
+Caller: uDebugAddLog at 131
+Message: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: chunkLength
+HR: -2146233086
 StackTrace:
-   at System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
-   at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
-   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
-   at System.IO.StreamWriter.CreateFile(String path, Boolean append, Boolean checkHost)
-   at System.IO.StreamWriter..ctor(String path, Boolean append, Encoding encoding, Int32 bufferSize, Boolean checkHost)
-   at System.IO.File.InternalWriteAllText(String path, String contents, Encoding encoding, Boolean checkHost)
-   at PersonalDiscordBot.Classes.Permissions.<>c.<SerializePermissions>b__4_1(Object sender, DoWorkEventArgs e) in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\Classes\Permissions.cs:line 46
+   at System.Text.StringBuilder.ToString()
+   at PersonalDiscordBot.Classes.StatusUpdater.get_DebugLog() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\Classes\Toolbox.cs:line 101
+   at PersonalDiscordBot.Classes.Toolbox.uDebugAddLog(String _log, String caller) in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\Classes\Toolbox.cs:line 124
 
 
