@@ -595,7 +595,7 @@ namespace PersonalDiscordBot
         {
             try
             {
-                SwitchGrids(grdRGPData);
+                SwitchGrids(grdRPGData);
             }
             catch (Exception ex)
             {

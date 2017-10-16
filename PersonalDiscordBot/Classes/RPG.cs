@@ -982,7 +982,7 @@ namespace PersonalDiscordBot.Classes
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
                 string itemList = line;
                 string answer = "";
-                int number = 1;
+                int number = 0;
                 var timestamp = DateTime.Now;
                 List<IMessage> respondeded = new List<IMessage>();
                 Toolbox.uDebugAddLog($"Asking [OwnerCharacter]{owner.CurrentCharacter} [OwnerID]{owner.OwnerID} what to see");
@@ -1026,42 +1026,42 @@ namespace PersonalDiscordBot.Classes
                                 case "armor":
                                     foreach (Armor a in armorPack)
                                     {
-                                        itemList = itemList + $"{line}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
                                         number++;
+                                        itemList = itemList + $"{line}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
                                     }
                                     break;
                                 case "items":
                                     foreach (Item i in itemPack)
                                     {
-                                        itemList = itemList + $"{line}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
                                         number++;
+                                        itemList = itemList + $"{line}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
                                     }
                                     break;
                                 case "weapons":
                                     foreach (Weapon w in weaponPack)
                                     {
-                                        itemList = itemList + $"{line}[{number}]:     Name: {w.Name}     Description: {w.Desc}     Worth: {w.Worth}{line}";
                                         number++;
+                                        itemList = itemList + $"{line}[{number}]:     Name: {w.Name}     Description: {w.Desc}     Worth: {w.Worth}{line}";
                                     }
                                     break;
                                 case "all":
                                     foreach (Armor a in armorPack)
                                     {
                                         allPack.Add(a);
-                                        itemList = itemList + $"{line}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
                                         number++;
+                                        itemList = itemList + $"{line}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
                                     }
                                     foreach (Weapon w in weaponPack)
                                     {
                                         allPack.Add(w);
-                                        itemList = itemList + $"{line}[{number}]:     Name: {w.Name}     Description: {w.Desc}     Worth: {w.Worth}{line}";
                                         number++;
+                                        itemList = itemList + $"{line}[{number}]:     Name: {w.Name}     Description: {w.Desc}     Worth: {w.Worth}{line}";
                                     }
                                     foreach (Item i in itemPack)
                                     {
                                         allPack.Add(i);
-                                        itemList = itemList + $"{line}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
                                         number++;
+                                        itemList = itemList + $"{line}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
                                     }
                                     break;
                                 case "cancel":
@@ -1094,23 +1094,24 @@ namespace PersonalDiscordBot.Classes
                 bool itemPicked = false;
                 var timestamp2 = DateTime.Now;
                 string pickedItem = "";
+                string pickedAnswer = "";
                 IBackPackItem chosenThing = null;
                 while (!itemPicked)
                 {
                     var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
                     foreach (var msg in msgList)
                     {
-                        if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (!respondeded.Contains(msg)))
+                        if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (respondeded.Any(x => x.Content != msg.Content)))
                         {
                             respondeded.Add(msg);
-                            answer = msg.Content.ToString().ToLower();
-                            Toolbox.uDebugAddLog($"Response recieved from same author and a newer message. [Resp]{answer} [ID]{owner.OwnerID}");
-                            if (string.IsNullOrWhiteSpace(answer))
+                            pickedAnswer = msg.Content.ToString().ToLower();
+                            Toolbox.uDebugAddLog($"Response recieved from same author and a newer message. [Resp]{pickedAnswer} [ID]{owner.OwnerID}");
+                            if (string.IsNullOrWhiteSpace(pickedAnswer))
                             {
-                                Toolbox.uDebugAddLog($"Answer was null or white space. [Resp]{answer} [ID]{owner.OwnerID}");
+                                Toolbox.uDebugAddLog($"Answer was null or white space. [Resp]{pickedAnswer} [ID]{owner.OwnerID}");
                                 await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Your answer was not a valid number.");
                             }
-                            else if (answer.ToLower() == "cancel")
+                            else if (pickedAnswer.ToLower() == "cancel")
                             {
                                 itemPicked = true;
                                 return;
@@ -1118,16 +1119,16 @@ namespace PersonalDiscordBot.Classes
                             else
                             {
                                 int numAnswer = 0;
-                                var boolAnswer = int.TryParse(answer, out numAnswer);
+                                var boolAnswer = int.TryParse(pickedAnswer, out numAnswer);
                                 if (!boolAnswer)
                                 {
-                                    Toolbox.uDebugAddLog($"Answer didn't parse to Int. [Resp]{answer} [ID]{owner.OwnerID}");
+                                    Toolbox.uDebugAddLog($"Answer didn't parse to Int. [Resp]{pickedAnswer} [ID]{owner.OwnerID}");
                                     await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Your answer was not a valid number.");
                                     return;
                                 }
                                 if (numAnswer > number || numAnswer < number)
                                 {
-                                    Toolbox.uDebugAddLog($"Answer was less than or greater than number of items. [Resp]{answer} [ID]{owner.OwnerID}");
+                                    Toolbox.uDebugAddLog($"Answer was less than or greater than number of items. [Resp]{pickedAnswer} [ID]{owner.OwnerID}");
                                     await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Your answer was less than or greater than the number of items listed.");
                                     return;
                                 }
@@ -1271,7 +1272,7 @@ namespace PersonalDiscordBot.Classes
                                 var msgList2 = await context.Channel.GetMessagesAsync(5).Flatten();
                                 foreach (var msg2 in msgList2)
                                 {
-                                    if ((msg2.Author == context.Message.Author) && (msg2.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (!respondeded.Contains(msg2)))
+                                    if ((msg2.Author == context.Message.Author) && (msg2.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (respondeded.Any(x => x.Content != msg2.Content)))
                                     {
                                         respondeded.Add(msg2);
                                         answer2 = msg2.Content.ToString().ToLower();
@@ -1478,7 +1479,7 @@ namespace PersonalDiscordBot.Classes
                                                     Toolbox.uDebugAddLog($"Selling [AMOUNT]{howManyToSellAnswer} of [ITEM]{sellItem.Name} from [ID]{owner.OwnerID}. [COUNT]{sellItem.Count} [CURRENCY]{owner.Currency}");
                                                     owner.Currency = (howManyToSellAnswer * sellItem.Worth) + owner.Currency;
                                                     Toolbox.uDebugAddLog($"Sold [AMOUNT]{howManyToSellAnswer} of [ITEM]{sellItem.Name} from [ID]{owner.OwnerID}. [COUNT]{sellItem.Count} [CURRENCY]{owner.Currency}");
-                                                    Events.SendDiscordMessage(context, $"{howManyToSellAnswer} {sellItem.Name}s have been sold for {sellItem.Worth}. ");
+                                                    Events.SendDiscordMessage(context, $"{howManyToSellAnswer} {sellItem.Name}s have been sold for {sellItem.Worth * howManyToSellAnswer}. ");
                                                     Toolbox.uDebugAddLog($"Removing [ITEM]{sellItem.Name} from [ID]{owner.OwnerID}");
                                                     owner.CurrentCharacter.Backpack.Stored.Remove(sellItem);
                                                 }
@@ -1490,7 +1491,7 @@ namespace PersonalDiscordBot.Classes
                                                     Toolbox.uDebugAddLog($"Adding [CURRENCY]{sellItem.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
                                                     owner.Currency = (howManyToSellAnswer * sellItem.Worth) + owner.Currency;
                                                     Toolbox.uDebugAddLog($"Added [CURRENCY]{sellItem.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current howManyToSellAnswer of Currency: {owner.Currency}");
-                                                    Events.SendDiscordMessage(context, $"{howManyToSellAnswer} {sellItem.Name}s have been sold for {sellItem.Worth}. ");
+                                                    Events.SendDiscordMessage(context, $"{howManyToSellAnswer} {sellItem.Name}s have been sold for {sellItem.Worth * howManyToSellAnswer}. ");
                                                 }
                                             }
                                             else
