@@ -1,19 +1,22 @@
-TimeStamp: 07-18-17_12:19:14 PM
+TimeStamp: 10-13-17_10:13:43 AM
 Exception Type: Win32Exception
-Caller: StartUpdate at 1056
+Caller: StartUpdate at 1133
 Message: The system cannot find the file specified
 HR: -2147467259
 StackTrace:
    at System.Diagnostics.Process.StartWithShellExecuteEx(ProcessStartInfo startInfo)
-   at PersonalDiscordBot.MainWindow.StartUpdate() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1052
+   at PersonalDiscordBot.MainWindow.StartUpdate() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1129
 
 
-TimeStamp: 07-18-17_12:20:10 PM
-Exception Type: NullReferenceException
-Caller: Start at 1224
-Message: Object reference not set to an instance of an object.
-HR: -2147467261
+TimeStamp: 10-13-17_10:13:43 AM
+Exception Type: ArgumentOutOfRangeException
+Caller: uDebugAddLog at 131
+Message: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: chunkLength
+HR: -2146233086
 StackTrace:
-   at PersonalDiscordBot.MainWindow.<Start>d__71.MoveNext() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1220
+   at System.Text.StringBuilder.ToString()
+   at PersonalDiscordBot.Classes.StatusUpdater.get_DebugLog() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\Classes\Toolbox.cs:line 101
+   at PersonalDiscordBot.Classes.Toolbox.uDebugAddLog(String _log, String caller) in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\Classes\Toolbox.cs:line 124
 
 

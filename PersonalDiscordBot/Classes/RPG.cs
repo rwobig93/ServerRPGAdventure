@@ -974,95 +974,97 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static async Task CheckCharacterBackpak(ICommandContext context)
+        public static async Task CheckCharacterBackpack(ICommandContext context)
         {
             try
             {
                 var line = Environment.NewLine;
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
-                string itemList = "";
+                string itemList = line;
+                string answer = "";
                 int number = 1;
                 var timestamp = DateTime.Now;
                 List<IMessage> respondeded = new List<IMessage>();
-                Toolbox.uDebugAddLog($"Asking [Owner]{owner.CurrentCharacter.Loot.Count} [ID]{owner.OwnerID} what to see");
+                Toolbox.uDebugAddLog($"Asking [OwnerCharacter]{owner.CurrentCharacter} [OwnerID]{owner.OwnerID} what to see");
                 var backpackMsg = await context.Channel.SendMessageAsync($"What would you like to see? (armor, items, weapons, all, cancel)");
-                List<IBackPackItem> backPack = new List<IBackPackItem>();
-                var chosenLootType = LootDrop.LootType.Armor;
+                var armorLootType = LootDrop.LootType.Armor;
+                List<Armor> armorPack = new List<Armor>();
+                var itemLootType = LootDrop.LootType.Item;
+                List<Item> itemPack = new List<Item>();
+                var weaponLootType = LootDrop.LootType.Weapon;
+                List<Weapon> weaponPack = new List<Weapon>();
+                List<IBackPackItem> allPack = new List<IBackPackItem>();
+                foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
+                {
+                    if (i.GetLootType() == armorLootType)
+                    {
+                        armorPack.Add((Armor)i);
+                    }
+                    else if (i.GetLootType() == itemLootType)
+                    {
+                        itemPack.Add((Item)i);
+                    }
+                    else if (i.GetLootType() == weaponLootType)
+                    {
+                        weaponPack.Add((Weapon)i);
+                    }
+                }
                 bool msgResp = false;
                 while (!msgResp)
                 {
                     var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
-                    foreach (var msg in msgList)
+                    foreach (var msg7 in msgList)
                     {
-                        if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (!respondeded.Contains(msg)))
+                        if ((msg7.Author == context.Message.Author) && (msg7.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (!respondeded.Contains(msg7)))
                         {
-                            respondeded.Add(msg);
-                            string answer = msg.Content.ToString().ToLower();
+                            respondeded.Add(msg7);
+                            answer = msg7.Content.ToString().ToLower();
                             Toolbox.uDebugAddLog($"Response recieved from same author and a newer message. [Resp]{answer} [ID]{owner.OwnerID}");
+                            msgResp = true;
                             switch (answer)
                             {
                                 case "armor":
-                                    chosenLootType = LootDrop.LootType.Armor;
-                                    foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
+                                    foreach (Armor a in armorPack)
                                     {
-                                        if (i.GetLootType() == chosenLootType)
-                                        {
-                                            backPack.Add(i);
-                                        }
-                                    }
-                                    foreach (Armor a in backPack)
-                                    {
-                                        itemList = $"{itemList}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
+                                        itemList = itemList + $"{line}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
                                         number++;
                                     }
-                                    msgResp = true;
                                     break;
                                 case "items":
-                                    chosenLootType = LootDrop.LootType.Item;
-                                    foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
+                                    foreach (Item i in itemPack)
                                     {
-                                        if (i.GetLootType() == chosenLootType)
-                                        {
-                                            backPack.Add(i);
-                                        }
-                                    }
-                                    foreach (Item i in backPack)
-                                    {
-                                        itemList = $"{itemList}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
+                                        itemList = itemList + $"{line}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
                                         number++;
                                     }
-                                    msgResp = true;
                                     break;
                                 case "weapons":
-                                    chosenLootType = LootDrop.LootType.Weapon;
-                                    foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
+                                    foreach (Weapon w in weaponPack)
                                     {
-                                        if (i.GetLootType() == chosenLootType)
-                                        {
-                                            backPack.Add(i);
-                                        }
-                                    }
-                                    foreach (Weapon w in backPack)
-                                    {
-                                        itemList = $"{itemList}[{number}]:     Name: {w.Name}     Description: {w.Desc}     Worth: {w.Worth}{line}";
+                                        itemList = itemList + $"{line}[{number}]:     Name: {w.Name}     Description: {w.Desc}     Worth: {w.Worth}{line}";
                                         number++;
                                     }
-                                    msgResp = true;
                                     break;
                                 case "all":
-                                    foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
+                                    foreach (Armor a in armorPack)
                                     {
-                                        backPack.Add(i);
-                                    }
-                                    foreach (IBackPackItem i in backPack)
-                                    {
-                                        itemList = $"{itemList}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
+                                        allPack.Add(a);
+                                        itemList = itemList + $"{line}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
                                         number++;
                                     }
-                                    msgResp = true;
+                                    foreach (Weapon w in weaponPack)
+                                    {
+                                        allPack.Add(w);
+                                        itemList = itemList + $"{line}[{number}]:     Name: {w.Name}     Description: {w.Desc}     Worth: {w.Worth}{line}";
+                                        number++;
+                                    }
+                                    foreach (Item i in itemPack)
+                                    {
+                                        allPack.Add(i);
+                                        itemList = itemList + $"{line}[{number}]:     Name: {i.Name}     Description: {i.Desc}     Worth: {i.Worth}{line}";
+                                        number++;
+                                    }
                                     break;
                                 case "cancel":
-                                    msgResp = true;
                                     break;
                             }
 
@@ -1075,13 +1077,6 @@ namespace PersonalDiscordBot.Classes
                         return;
                     }
                 }
-                //ask if they want to equip, use, trash, sell, cancel
-                //case(all)
-                //foreach (IBackPackItem i in owner.CurrentCharacter.Backpack.Stored)
-                //{
-                //    itemList = $"{itemList}[{number}]:     Name: {a.Name}     Description: {a.Desc}     Worth: {a.Worth}{line}";
-                //    number++;
-                //}
                 EmbedBuilder embed = new EmbedBuilder()
                 {
                     Author = new EmbedAuthorBuilder()
@@ -1091,12 +1086,15 @@ namespace PersonalDiscordBot.Classes
                     Color = owner.CurrentCharacter.Color,
                     Title = owner.CurrentCharacter.Desc,
                     Description = $"Backpack Storage: {owner.CurrentCharacter.Backpack.Stored.Count}/{owner.CurrentCharacter.Backpack.Capacity}" +
-                    $"{itemList}"
+                        $"{itemList}"
                 };
                 Events.SendDiscordMessage(context, embed);
+                Toolbox.uDebugAddLog($"Asking [OwnerCharacter]{owner.CurrentCharacter} [OwnerID]{owner.OwnerID} which item to inspect");
                 var pickedItemMsg = await context.Channel.SendMessageAsync($"Please type the item number you wish to inspect or type cancel to exit.");
                 bool itemPicked = false;
                 var timestamp2 = DateTime.Now;
+                string pickedItem = "";
+                IBackPackItem chosenThing = null;
                 while (!itemPicked)
                 {
                     var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
@@ -1105,16 +1103,17 @@ namespace PersonalDiscordBot.Classes
                         if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (!respondeded.Contains(msg)))
                         {
                             respondeded.Add(msg);
-                            string answer = msg.Content.ToString().ToLower();
+                            answer = msg.Content.ToString().ToLower();
                             Toolbox.uDebugAddLog($"Response recieved from same author and a newer message. [Resp]{answer} [ID]{owner.OwnerID}");
-
                             if (string.IsNullOrWhiteSpace(answer))
                             {
-                                //tell them they didn't type anythign
+                                Toolbox.uDebugAddLog($"Answer was null or white space. [Resp]{answer} [ID]{owner.OwnerID}");
+                                await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Your answer was not a valid number.");
                             }
                             else if (answer.ToLower() == "cancel")
                             {
                                 itemPicked = true;
+                                return;
                             }
                             else
                             {
@@ -1122,33 +1121,241 @@ namespace PersonalDiscordBot.Classes
                                 var boolAnswer = int.TryParse(answer, out numAnswer);
                                 if (!boolAnswer)
                                 {
-                                    //send nasty message that you didn't enter a valid number.
+                                    Toolbox.uDebugAddLog($"Answer didn't parse to Int. [Resp]{answer} [ID]{owner.OwnerID}");
+                                    await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Your answer was not a valid number.");
+                                    return;
                                 }
                                 if (numAnswer > number || numAnswer < number)
                                 {
-                                    //send nasty message that you didn't enter a valid number.
+                                    Toolbox.uDebugAddLog($"Answer was less than or greater than number of items. [Resp]{answer} [ID]{owner.OwnerID}");
+                                    await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Your answer was less than or greater than the number of items listed.");
+                                    return;
                                 }
-                                //use number give to return item that has the same number from List of items and ask "what do fam?"
+                                itemPicked = true;
+                                int itemNum = (numAnswer - 1);
+                                switch (answer)
+                                {
+                                    case "armor":
+                                        chosenThing = armorPack[itemNum];
+                                        Armor chosenThingWasArmor = (Armor)chosenThing;
+                                        //foreach (var p in chosenThingWasArmor.GetType().GetProperties())
+                                        //{
+                                        //    if (p.Name == "CurrentDurability")
+                                        //    {
+                                        //        pickedItem = pickedItem + $"{pickedItem}{p.Name}: {p.GetValue(p.Name)}/{chosenThingWasArmor.GetType().GetProperty("MaxDurability").GetValue(chosenThingWasArmor, null)}{line}";
+                                        //    }
+                                        //    else if (p.Name == "MaxDurability") { }
+                                        //    else pickedItem = pickedItem + $"{pickedItem}{p.Name}: {p.GetValue(p.Name)}{line}";
+                                        //}
+                                        pickedItem = $"Level: {chosenThingWasArmor.Lvl}{line}" +
+                                            $"Rarity: {chosenThingWasArmor.Rarity}{line}" +
+                                            $"Name: {chosenThingWasArmor.Name}{line}" +
+                                            $"Description: {chosenThingWasArmor.Desc}{line}" +
+                                            $"Durability: {chosenThingWasArmor.CurrentDurability}/{chosenThingWasArmor.MaxDurability}{line}" +
+                                            $"Value: {chosenThingWasArmor.Worth}{line}" +
+                                            $"Phsyical: {chosenThingWasArmor.Physical}{line}" +
+                                            $"Speed: {chosenThingWasArmor.Speed}{line}" +
+                                            $"Magic: {chosenThingWasArmor.Magic}{line}" +
+                                            $"Fire: {chosenThingWasArmor.Fire}{line}" +
+                                            $"Ice: {chosenThingWasArmor.Ice}{line}" +
+                                            $"Lightning: {chosenThingWasArmor.Lightning}{line}" +
+                                            $"Wind: {chosenThingWasArmor.Wind}{line}";
+                                        break;
+                                    case "items":
+                                        chosenThing = itemPack[itemNum];
+                                        Item chosenThingWasItem = (Item)chosenThing;
+                                        pickedItem = $"Quantity: {chosenThingWasItem.Count}{line}" +
+                                            $"Level: {chosenThingWasItem.Lvl}{line}" +
+                                            $"Rarity: {chosenThingWasItem.Rarity}{line}" +
+                                            $"Name: {chosenThingWasItem.Name}{line}" +
+                                            $"Description: {chosenThingWasItem.Desc}{line}" +
+                                            $"Value: {chosenThingWasItem.Worth}{line}" +
+                                            $"Phsyical: {chosenThingWasItem.Physical}{line}" +
+                                            $"Magic: {chosenThingWasItem.Magic}{line}" +
+                                            $"Fire: {chosenThingWasItem.Fire}{line}" +
+                                            $"Ice: {chosenThingWasItem.Ice}{line}" +
+                                            $"Lightning: {chosenThingWasItem.Lightning}{line}" +
+                                            $"Wind: {chosenThingWasItem.Wind}{line}";
+                                        break;
+                                    case "weapons":
+                                        chosenThing = weaponPack[itemNum];
+                                        Weapon chosenThingWasWeapon = (Weapon)chosenThing;
+                                        pickedItem = $"Level: {chosenThingWasWeapon.Lvl}{line}" +
+                                            $"Rarity: {chosenThingWasWeapon.Rarity}{line}" +
+                                            $"Name: {chosenThingWasWeapon.Name}{line}" +
+                                            $"Description: {chosenThingWasWeapon.Desc}{line}" +
+                                            $"Durability: {chosenThingWasWeapon.CurrentDurability}/{chosenThingWasWeapon.MaxDurability}{line}" +
+                                            $"Value: {chosenThingWasWeapon.Worth}{line}" +
+                                            $"Phsyical: {chosenThingWasWeapon.PhysicalDamage}{line}" +
+                                            $"Speed: {chosenThingWasWeapon.Speed}{line}" +
+                                            $"Magic: {chosenThingWasWeapon.MagicDamage}{line}" +
+                                            $"Fire: {chosenThingWasWeapon.FireDamage}{line}" +
+                                            $"Ice: {chosenThingWasWeapon.IceDamage}{line}" +
+                                            $"Lightning: {chosenThingWasWeapon.LightningDamage}{line}" +
+                                            $"Wind: {chosenThingWasWeapon.WindDamage}{line}";
+                                        break;
+                                    case "all":
+                                        chosenThing = allPack[itemNum];
+                                        switch (chosenThing.GetLootType())
+                                        {
+                                            case LootDrop.LootType.Armor:
+                                                Armor chosenThingWasArmorAll = (Armor)chosenThing;
+                                                //foreach (Properties p in chosenThing)
+                                                pickedItem = $"Level: {chosenThingWasArmorAll.Lvl}{line}" +
+                                                    $"Rarity: {chosenThingWasArmorAll.Rarity}{line}" +
+                                                    $"Name: {chosenThingWasArmorAll.Name}{line}" +
+                                                    $"Description: {chosenThingWasArmorAll.Desc}{line}" +
+                                                    $"Durability: {chosenThingWasArmorAll.CurrentDurability}/{chosenThingWasArmorAll.MaxDurability}{line}" +
+                                                    $"Value: {chosenThingWasArmorAll.Worth}{line}" +
+                                                    $"Phsyical: {chosenThingWasArmorAll.Physical}{line}" +
+                                                    $"Speed: {chosenThingWasArmorAll.Speed}{line}" +
+                                                    $"Magic: {chosenThingWasArmorAll.Magic}{line}" +
+                                                    $"Fire: {chosenThingWasArmorAll.Fire}{line}" +
+                                                    $"Ice: {chosenThingWasArmorAll.Ice}{line}" +
+                                                    $"Lightning: {chosenThingWasArmorAll.Lightning}{line}" +
+                                                    $"Wind: {chosenThingWasArmorAll.Wind}{line}";
+                                                break;
+                                            case LootDrop.LootType.Item:
+                                                Item chosenThingWasItemAll = (Item)chosenThing;
+                                                pickedItem = $"Quantity: {chosenThingWasItemAll.Count}{line}" +
+                                                    $"Level: {chosenThingWasItemAll.Lvl}{line}" +
+                                                    $"Rarity: {chosenThingWasItemAll.Rarity}{line}" +
+                                                    $"Name: {chosenThingWasItemAll.Name}{line}" +
+                                                    $"Description: {chosenThingWasItemAll.Desc}{line}" +
+                                                    $"Value: {chosenThingWasItemAll.Worth}{line}" +
+                                                    $"Phsyical: {chosenThingWasItemAll.Physical}{line}" +
+                                                    $"Magic: {chosenThingWasItemAll.Magic}{line}" +
+                                                    $"Fire: {chosenThingWasItemAll.Fire}{line}" +
+                                                    $"Ice: {chosenThingWasItemAll.Ice}{line}" +
+                                                    $"Lightning: {chosenThingWasItemAll.Lightning}{line}" +
+                                                    $"Wind: {chosenThingWasItemAll.Wind}{line}";
+                                                break;
+                                            case LootDrop.LootType.Weapon:
+                                                Weapon chosenThingWasWeaponAll = (Weapon)chosenThing;
+                                                pickedItem = $"Level: {chosenThingWasWeaponAll.Lvl}{line}" +
+                                                    $"Rarity: {chosenThingWasWeaponAll.Rarity}{line}" +
+                                                    $"Name: {chosenThingWasWeaponAll.Name}{line}" +
+                                                    $"Description: {chosenThingWasWeaponAll.Desc}{line}" +
+                                                    $"Durability: {chosenThingWasWeaponAll.CurrentDurability}/{chosenThingWasWeaponAll.MaxDurability}{line}" +
+                                                    $"Value: {chosenThingWasWeaponAll.Worth}{line}" +
+                                                    $"Phsyical: {chosenThingWasWeaponAll.PhysicalDamage}{line}" +
+                                                    $"Speed: {chosenThingWasWeaponAll.Speed}{line}" +
+                                                    $"Magic: {chosenThingWasWeaponAll.MagicDamage}{line}" +
+                                                    $"Fire: {chosenThingWasWeaponAll.FireDamage}{line}" +
+                                                    $"Ice: {chosenThingWasWeaponAll.IceDamage}{line}" +
+                                                    $"Lightning: {chosenThingWasWeaponAll.LightningDamage}{line}" +
+                                                    $"Wind: {chosenThingWasWeaponAll.WindDamage}{line}";
+                                                break;
+                                        }
+                                        break;
+                                }
                             }
-
+                            EmbedBuilder embed2 = new EmbedBuilder()
+                            {
+                                Author = new EmbedAuthorBuilder()
+                                {
+                                    Name = owner.CurrentCharacter.Name
+                                },
+                                Color = owner.CurrentCharacter.Color,
+                                Title = owner.CurrentCharacter.Desc,
+                                Description = $"{pickedItem}"
+                            };
+                            Events.SendDiscordMessage(context, embed2);
+                            Toolbox.uDebugAddLog($"Asking [Owner]{owner.CurrentCharacter.Loot.Count} [ID]{owner.OwnerID} what to do with the item.");
+                            var whatToDo = await context.Channel.SendMessageAsync($"What would you like to do with {chosenThing.Name}? Equip, Use, Sell, Trash, Cancel");
+                            bool decidedWhatToDo = false;
+                            var timestamp3 = DateTime.Now;
+                            string answer2 = ""; //answer for question 'What would you like to do?'
+                            while (!decidedWhatToDo)
+                            {
+                                var msgList2 = await context.Channel.GetMessagesAsync(5).Flatten();
+                                foreach (var msg2 in msgList2)
+                                {
+                                    if ((msg2.Author == context.Message.Author) && (msg2.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (!respondeded.Contains(msg2)))
+                                    {
+                                        respondeded.Add(msg2);
+                                        answer2 = msg2.Content.ToString().ToLower();
+                                        Toolbox.uDebugAddLog($"Response recieved from same author and a newer message. [Resp]{answer2} [ID]{owner.OwnerID}");
+                                        if (string.IsNullOrWhiteSpace(answer2))
+                                        {
+                                            Toolbox.uDebugAddLog($"Answer was null or white space. [Resp]{answer2} [ID]{owner.OwnerID}");
+                                            await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Your answer was not valid.");
+                                        }
+                                        else if (answer2.ToLower() == "cancel")
+                                        {
+                                            decidedWhatToDo = true;
+                                            return;
+                                        }
+                                        else
+                                        {
+                                            var typeItIs = chosenThing.GetLootType();
+                                            switch (answer2)
+                                            {
+                                                case "equip":
+                                                    if (typeItIs == LootDrop.LootType.Armor)
+                                                    {
+                                                        Armor tmpArmor = (Armor)chosenThing;
+                                                        Toolbox.uDebugAddLog($"[ARMOR]{tmpArmor} is trying to be equipped by [ID]{owner.OwnerID}");
+                                                        ChangeArmor(context, tmpArmor);
+                                                    }
+                                                    else if (typeItIs == LootDrop.LootType.Weapon)
+                                                    {
+                                                        Weapon tmpWeapon = (Weapon)chosenThing;
+                                                        Toolbox.uDebugAddLog($"[Weapon]{tmpWeapon} is trying to be equipped by [ID]{owner.OwnerID}");
+                                                        ChangeWeapon(context, tmpWeapon);
+                                                    }
+                                                    else
+                                                        Toolbox.uDebugAddLog($"[ITEM]{typeItIs} is not a weapon or armor that can be equipped by [ID]{owner.OwnerID}");
+                                                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Please choose the 'use' command when interacting with an item.");
+                                                    break;
+                                                case "use":
+                                                    if (typeItIs == LootDrop.LootType.Item)
+                                                    {
+                                                        Item tmpItem = (Item)chosenThing;
+                                                        Toolbox.uDebugAddLog($"[ITEM]{tmpItem} is trying to be used by [ID]{owner.OwnerID}");
+                                                        UseItem(context, owner, tmpItem);
+                                                    }
+                                                    else
+                                                    {
+                                                        Toolbox.uDebugAddLog($"[TYPE]{typeItIs} is not an item. [ID]{owner.OwnerID}");
+                                                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Please choose the 'equip' command when interacting with a weapon or armor.");
+                                                    }
+                                                    break;
+                                                case "sell":
+                                                    Toolbox.uDebugAddLog($"[SELL]{chosenThing} is trying to be sold by [ID]{owner.OwnerID}");
+                                                    await Sell(context, chosenThing);
+                                                    break;
+                                                case "trash":
+                                                    break;
+                                                case "cancel":
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                    if (timestamp3 + TimeSpan.FromMinutes(5) <= DateTime.Now)
+                                    {
+                                        Toolbox.uDebugAddLog($"timestamp3 reached 5 minutes [ID]{owner.OwnerID}");
+                                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} A response hasn't been received in 5 minutes, you can go through your backpack later by using ;test check backpack");
+                                        return;
+                                    }
+                                    await Task.Delay(1000);
+                                }
+                            }
                         }
+                        if (timestamp2 + TimeSpan.FromMinutes(5) <= DateTime.Now)
+                        {
+                            Toolbox.uDebugAddLog($"timestamp2 reached 5 minutes [ID]{owner.OwnerID}");
+                            await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} A response hasn't been received in 5 minutes, you can go through your backpack later by using ;test check backpack");
+                            return;
+                        }
+                        await Task.Delay(1000);
                     }
-                    if (timestamp2 + TimeSpan.FromMinutes(5) <= DateTime.Now)
-                    {
-                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} A response hasn't been received in 5 minutes, you can go through your backpack later by using ;test check backpack");
-                        return;
-                    }
-                    await Task.Delay(1000);
                 }
-
-
             }
             catch (Exception ex)
             {
                 Toolbox.FullExceptionLog(ex);
             }
-
-
         }
 
         public static void ChangeArmor(ICommandContext context, Armor armor)
@@ -1196,6 +1403,149 @@ namespace PersonalDiscordBot.Classes
             {
                 Toolbox.FullExceptionLog(ex);
             }
+        }
+
+        /// <summary>
+        /// Selling an amount of items
+        /// </summary>
+        /// <param name="context">I think the owner?</param>
+        /// <param name="thing">Item you want to sell</param>
+        public static async Task Sell(ICommandContext context, IBackPackItem thing)
+        {
+            try
+            {
+                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
+                List<IMessage> respondeded = new List<IMessage>();
+                if (thing.GetLootType() == LootDrop.LootType.Item)
+                {
+                    Item tmpItem = (Item)thing;
+                    if (tmpItem.Count > 1)
+                    {
+                        Toolbox.uDebugAddLog($"[THING]{thing} is an [ITEM]. There are [COUNT]{tmpItem.Count} instances of [THING]{tmpItem.Name}." +
+                            $"Asking [ID]{owner.OwnerID} how many to sell.");
+                        EmbedBuilder embeded = new EmbedBuilder()
+                        {
+                            Author = new EmbedAuthorBuilder()
+                            {
+                                Name = owner.CurrentCharacter.Name
+                            },
+                            Color = owner.CurrentCharacter.Color,
+                            Title = owner.CurrentCharacter.Desc,
+                            Description = $"{tmpItem.Desc}"
+                        };
+                        Events.SendDiscordMessage(context, embeded);
+                        var howManyToSell = await context.Channel.SendMessageAsync($"There are {tmpItem.Count} {tmpItem.Name}s. How many would you like to sell?");
+                        int howManyToSellAnswer = 0;
+                        bool pickedHowManyToSell = false;
+                        var timeStamp4 = DateTime.Now;
+                        while (!pickedHowManyToSell)
+                        {
+                            var msgList3 = await context.Channel.GetMessagesAsync(5).Flatten();
+                            foreach (var msg3 in msgList3)
+                            {
+                                if ((msg3.Author == context.Message.Author) && (msg3.Timestamp.DateTime > howManyToSell.Timestamp.DateTime) && (!respondeded.Contains(msg3)))
+                                {
+                                    respondeded.Add(msg3);
+                                    var answered = msg3.Content.ToString().ToLower();
+                                    pickedHowManyToSell = true;
+                                    if (Int32.TryParse(answered, out howManyToSellAnswer))
+                                    {
+                                        if (howManyToSellAnswer > tmpItem.Count)
+                                        {
+                                            Toolbox.uDebugAddLog($"[AMOUNT]{howManyToSellAnswer} from [OWNER]{owner.OwnerID} exceeds [COUNT]{tmpItem.Count} [ITEM]{tmpItem.Name}(s).");
+                                            await context.Channel.SendMessageAsync($"{howManyToSellAnswer} is more than you actually have.");
+                                            return;
+                                        }
+                                        else if (howManyToSellAnswer < 0)
+                                        {
+                                            Toolbox.uDebugAddLog($"[AMOUNT]{howManyToSellAnswer} from [OWNER]{owner.OwnerID} is less than zero.");
+                                            await context.Channel.SendMessageAsync($"{howManyToSellAnswer} is less than zero.");
+                                            return;
+                                        }
+                                        else
+                                        {
+                                            if (howManyToSellAnswer > 1)
+                                            {
+                                                Item sellItem = (Item)thing;
+                                                if (sellItem == null)
+                                                {
+                                                    Toolbox.uDebugAddLog($"ERROR: Item wasn't found in backpack when it was pulled from backpack [Name] {sellItem.Name} [Count] {sellItem.Count}");
+                                                    Events.SendDiscordMessage(context, $"An error occured and the item you want to sell wasn't found in your backpack after finding it... I know confusing but you should let the developer know.");
+                                                    return;
+                                                }
+                                                if (sellItem.Count - howManyToSellAnswer <= 0)
+                                                {
+                                                    Toolbox.uDebugAddLog($"Selling [AMOUNT]{howManyToSellAnswer} of [ITEM]{sellItem.Name} from [ID]{owner.OwnerID}. [COUNT]{sellItem.Count} [CURRENCY]{owner.Currency}");
+                                                    owner.Currency = (howManyToSellAnswer * sellItem.Worth) + owner.Currency;
+                                                    Toolbox.uDebugAddLog($"Sold [AMOUNT]{howManyToSellAnswer} of [ITEM]{sellItem.Name} from [ID]{owner.OwnerID}. [COUNT]{sellItem.Count} [CURRENCY]{owner.Currency}");
+                                                    Events.SendDiscordMessage(context, $"{howManyToSellAnswer} {sellItem.Name}s have been sold for {sellItem.Worth}. ");
+                                                    Toolbox.uDebugAddLog($"Removing [ITEM]{sellItem.Name} from [ID]{owner.OwnerID}");
+                                                    owner.CurrentCharacter.Backpack.Stored.Remove(sellItem);
+                                                }
+                                                else
+                                                {
+                                                    Toolbox.uDebugAddLog($"Removing [AMOUNT]{howManyToSellAnswer} from count on [ITEM]{sellItem.Name}. [COUNT]{sellItem.Count} [ID]{owner.OwnerID}");
+                                                    sellItem.Count -= howManyToSellAnswer;
+                                                    Toolbox.uDebugAddLog($"Removed [AMOUNT]{howManyToSellAnswer} from count on [ITEM]{sellItem.Name}. [COUNT]{sellItem.Count} [ID]{owner.OwnerID}");
+                                                    Toolbox.uDebugAddLog($"Adding [CURRENCY]{sellItem.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
+                                                    owner.Currency = (howManyToSellAnswer * sellItem.Worth) + owner.Currency;
+                                                    Toolbox.uDebugAddLog($"Added [CURRENCY]{sellItem.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current howManyToSellAnswer of Currency: {owner.Currency}");
+                                                    Events.SendDiscordMessage(context, $"{howManyToSellAnswer} {sellItem.Name}s have been sold for {sellItem.Worth}. ");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Toolbox.uDebugAddLog($"Adding [CURRENCY]{thing.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
+                                                owner.Currency = (howManyToSellAnswer * thing.Worth) + owner.Currency;
+                                                Toolbox.uDebugAddLog($"Added [CURRENCY]{thing.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
+                                                Events.SendDiscordMessage(context, $"{thing.Name} was sold for {thing.Worth}.");
+                                                Toolbox.uDebugAddLog($"Removing [ITEM]{thing.Name} from [ID]{owner.OwnerID}");
+                                                owner.CurrentCharacter.Backpack.Stored.Remove(thing);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Toolbox.uDebugAddLog($"[RESPONSE]{answered} from [OWNER]{owner.OwnerID} is not a valid INT.");
+                                        await context.Channel.SendMessageAsync($"{answered} is not a valid number.");
+                                        return;
+                                    }
+                                }
+
+                            }
+                            if (timeStamp4 + TimeSpan.FromMinutes(5) <= DateTime.Now)
+                            {
+                                await context.Channel.SendMessageAsync($"{context.User.Mention} A response hasn't been received within 5 min, description change canceled");
+                                Toolbox.uDebugAddLog($"5min passed, canceling request [ID]{owner.OwnerID}");
+                                return;
+                            }
+                            await Task.Delay(1000);
+                        }
+                    }
+                    else
+                    {
+                        Toolbox.uDebugAddLog($"Adding [CURRENCY]{thing.Worth} times [AMOUNT]1 to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
+                        owner.Currency = thing.Worth + owner.Currency;
+                        Toolbox.uDebugAddLog($"Added [CURRENCY]{thing.Worth} times [AMOUNT]1 to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
+                        Events.SendDiscordMessage(context, $"{thing.Name} was sold for {thing.Worth}.");
+                        Toolbox.uDebugAddLog($"Removing [ITEM]{thing.Name} from [ID]{owner.OwnerID}");
+                        owner.CurrentCharacter.Backpack.Stored.Remove(thing);
+                    }
+                }
+                else
+                {
+                    Toolbox.uDebugAddLog($"Adding [CURRENCY]{thing.Worth} times [AMOUNT]1 to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
+                    owner.Currency = thing.Worth + owner.Currency;
+                    Toolbox.uDebugAddLog($"Added [CURRENCY]{thing.Worth} times [AMOUNT]1 to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
+                    Events.SendDiscordMessage(context, $"{thing.Name} was sold for {thing.Worth}.");
+                    Toolbox.uDebugAddLog($"Removing [ITEM]{thing.Name} from [ID]{owner.OwnerID}");
+                    owner.CurrentCharacter.Backpack.Stored.Remove(thing);
+                }
+            }
+		    catch (Exception ex)
+		    {
+			    Toolbox.FullExceptionLog(ex);
+		    }
         }
 
         public static string GetCharacterImgDefault(Character chara)
