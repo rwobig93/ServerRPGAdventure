@@ -591,6 +591,18 @@ namespace PersonalDiscordBot
             await UpdateApplication();
         }
 
+        private void btnOpenRPGData_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SwitchGrids(grdRGPData);
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
+        }
+
         #endregion
 
         #region Methods
