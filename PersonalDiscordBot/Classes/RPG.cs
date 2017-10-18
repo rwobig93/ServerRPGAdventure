@@ -1118,15 +1118,14 @@ namespace PersonalDiscordBot.Classes
                             }
                             else
                             {
-                                int numAnswer = 0;
-                                var boolAnswer = int.TryParse(pickedAnswer, out numAnswer);
+                                var boolAnswer = int.TryParse(pickedAnswer, out int numAnswer);
                                 if (!boolAnswer)
                                 {
                                     Toolbox.uDebugAddLog($"Answer didn't parse to Int. [Resp]{pickedAnswer} [ID]{owner.OwnerID}");
                                     await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Your answer was not a valid number.");
                                     return;
                                 }
-                                if (numAnswer > number || numAnswer < number)
+                                if (numAnswer > number || numAnswer <= 0)
                                 {
                                     Toolbox.uDebugAddLog($"Answer was less than or greater than number of items. [Resp]{pickedAnswer} [ID]{owner.OwnerID}");
                                     await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Your answer was less than or greater than the number of items listed.");
@@ -1138,116 +1137,19 @@ namespace PersonalDiscordBot.Classes
                                 {
                                     case "armor":
                                         chosenThing = armorPack[itemNum];
-                                        Armor chosenThingWasArmor = (Armor)chosenThing;
-                                        //foreach (var p in chosenThingWasArmor.GetType().GetProperties())
-                                        //{
-                                        //    if (p.Name == "CurrentDurability")
-                                        //    {
-                                        //        pickedItem = pickedItem + $"{pickedItem}{p.Name}: {p.GetValue(p.Name)}/{chosenThingWasArmor.GetType().GetProperty("MaxDurability").GetValue(chosenThingWasArmor, null)}{line}";
-                                        //    }
-                                        //    else if (p.Name == "MaxDurability") { }
-                                        //    else pickedItem = pickedItem + $"{pickedItem}{p.Name}: {p.GetValue(p.Name)}{line}";
-                                        //}
-                                        pickedItem = $"Level: {chosenThingWasArmor.Lvl}{line}" +
-                                            $"Rarity: {chosenThingWasArmor.Rarity}{line}" +
-                                            $"Name: {chosenThingWasArmor.Name}{line}" +
-                                            $"Description: {chosenThingWasArmor.Desc}{line}" +
-                                            $"Durability: {chosenThingWasArmor.CurrentDurability}/{chosenThingWasArmor.MaxDurability}{line}" +
-                                            $"Value: {chosenThingWasArmor.Worth}{line}" +
-                                            $"Phsyical: {chosenThingWasArmor.Physical}{line}" +
-                                            $"Speed: {chosenThingWasArmor.Speed}{line}" +
-                                            $"Magic: {chosenThingWasArmor.Magic}{line}" +
-                                            $"Fire: {chosenThingWasArmor.Fire}{line}" +
-                                            $"Ice: {chosenThingWasArmor.Ice}{line}" +
-                                            $"Lightning: {chosenThingWasArmor.Lightning}{line}" +
-                                            $"Wind: {chosenThingWasArmor.Wind}{line}";
+                                        pickedItem = chosenThing.EnumItemProperties();
                                         break;
                                     case "items":
                                         chosenThing = itemPack[itemNum];
-                                        Item chosenThingWasItem = (Item)chosenThing;
-                                        pickedItem = $"Quantity: {chosenThingWasItem.Count}{line}" +
-                                            $"Level: {chosenThingWasItem.Lvl}{line}" +
-                                            $"Rarity: {chosenThingWasItem.Rarity}{line}" +
-                                            $"Name: {chosenThingWasItem.Name}{line}" +
-                                            $"Description: {chosenThingWasItem.Desc}{line}" +
-                                            $"Value: {chosenThingWasItem.Worth}{line}" +
-                                            $"Phsyical: {chosenThingWasItem.Physical}{line}" +
-                                            $"Magic: {chosenThingWasItem.Magic}{line}" +
-                                            $"Fire: {chosenThingWasItem.Fire}{line}" +
-                                            $"Ice: {chosenThingWasItem.Ice}{line}" +
-                                            $"Lightning: {chosenThingWasItem.Lightning}{line}" +
-                                            $"Wind: {chosenThingWasItem.Wind}{line}";
+                                        pickedItem = chosenThing.EnumItemProperties();
                                         break;
                                     case "weapons":
                                         chosenThing = weaponPack[itemNum];
-                                        Weapon chosenThingWasWeapon = (Weapon)chosenThing;
-                                        pickedItem = $"Level: {chosenThingWasWeapon.Lvl}{line}" +
-                                            $"Rarity: {chosenThingWasWeapon.Rarity}{line}" +
-                                            $"Name: {chosenThingWasWeapon.Name}{line}" +
-                                            $"Description: {chosenThingWasWeapon.Desc}{line}" +
-                                            $"Durability: {chosenThingWasWeapon.CurrentDurability}/{chosenThingWasWeapon.MaxDurability}{line}" +
-                                            $"Value: {chosenThingWasWeapon.Worth}{line}" +
-                                            $"Phsyical: {chosenThingWasWeapon.PhysicalDamage}{line}" +
-                                            $"Speed: {chosenThingWasWeapon.Speed}{line}" +
-                                            $"Magic: {chosenThingWasWeapon.MagicDamage}{line}" +
-                                            $"Fire: {chosenThingWasWeapon.FireDamage}{line}" +
-                                            $"Ice: {chosenThingWasWeapon.IceDamage}{line}" +
-                                            $"Lightning: {chosenThingWasWeapon.LightningDamage}{line}" +
-                                            $"Wind: {chosenThingWasWeapon.WindDamage}{line}";
+                                        pickedItem = chosenThing.EnumItemProperties();
                                         break;
                                     case "all":
                                         chosenThing = allPack[itemNum];
-                                        switch (chosenThing.GetLootType())
-                                        {
-                                            case LootDrop.LootType.Armor:
-                                                Armor chosenThingWasArmorAll = (Armor)chosenThing;
-                                                //foreach (Properties p in chosenThing)
-                                                pickedItem = $"Level: {chosenThingWasArmorAll.Lvl}{line}" +
-                                                    $"Rarity: {chosenThingWasArmorAll.Rarity}{line}" +
-                                                    $"Name: {chosenThingWasArmorAll.Name}{line}" +
-                                                    $"Description: {chosenThingWasArmorAll.Desc}{line}" +
-                                                    $"Durability: {chosenThingWasArmorAll.CurrentDurability}/{chosenThingWasArmorAll.MaxDurability}{line}" +
-                                                    $"Value: {chosenThingWasArmorAll.Worth}{line}" +
-                                                    $"Phsyical: {chosenThingWasArmorAll.Physical}{line}" +
-                                                    $"Speed: {chosenThingWasArmorAll.Speed}{line}" +
-                                                    $"Magic: {chosenThingWasArmorAll.Magic}{line}" +
-                                                    $"Fire: {chosenThingWasArmorAll.Fire}{line}" +
-                                                    $"Ice: {chosenThingWasArmorAll.Ice}{line}" +
-                                                    $"Lightning: {chosenThingWasArmorAll.Lightning}{line}" +
-                                                    $"Wind: {chosenThingWasArmorAll.Wind}{line}";
-                                                break;
-                                            case LootDrop.LootType.Item:
-                                                Item chosenThingWasItemAll = (Item)chosenThing;
-                                                pickedItem = $"Quantity: {chosenThingWasItemAll.Count}{line}" +
-                                                    $"Level: {chosenThingWasItemAll.Lvl}{line}" +
-                                                    $"Rarity: {chosenThingWasItemAll.Rarity}{line}" +
-                                                    $"Name: {chosenThingWasItemAll.Name}{line}" +
-                                                    $"Description: {chosenThingWasItemAll.Desc}{line}" +
-                                                    $"Value: {chosenThingWasItemAll.Worth}{line}" +
-                                                    $"Phsyical: {chosenThingWasItemAll.Physical}{line}" +
-                                                    $"Magic: {chosenThingWasItemAll.Magic}{line}" +
-                                                    $"Fire: {chosenThingWasItemAll.Fire}{line}" +
-                                                    $"Ice: {chosenThingWasItemAll.Ice}{line}" +
-                                                    $"Lightning: {chosenThingWasItemAll.Lightning}{line}" +
-                                                    $"Wind: {chosenThingWasItemAll.Wind}{line}";
-                                                break;
-                                            case LootDrop.LootType.Weapon:
-                                                Weapon chosenThingWasWeaponAll = (Weapon)chosenThing;
-                                                pickedItem = $"Level: {chosenThingWasWeaponAll.Lvl}{line}" +
-                                                    $"Rarity: {chosenThingWasWeaponAll.Rarity}{line}" +
-                                                    $"Name: {chosenThingWasWeaponAll.Name}{line}" +
-                                                    $"Description: {chosenThingWasWeaponAll.Desc}{line}" +
-                                                    $"Durability: {chosenThingWasWeaponAll.CurrentDurability}/{chosenThingWasWeaponAll.MaxDurability}{line}" +
-                                                    $"Value: {chosenThingWasWeaponAll.Worth}{line}" +
-                                                    $"Phsyical: {chosenThingWasWeaponAll.PhysicalDamage}{line}" +
-                                                    $"Speed: {chosenThingWasWeaponAll.Speed}{line}" +
-                                                    $"Magic: {chosenThingWasWeaponAll.MagicDamage}{line}" +
-                                                    $"Fire: {chosenThingWasWeaponAll.FireDamage}{line}" +
-                                                    $"Ice: {chosenThingWasWeaponAll.IceDamage}{line}" +
-                                                    $"Lightning: {chosenThingWasWeaponAll.LightningDamage}{line}" +
-                                                    $"Wind: {chosenThingWasWeaponAll.WindDamage}{line}";
-                                                break;
-                                        }
+                                        pickedItem = chosenThing.EnumItemProperties();
                                         break;
                                 }
                             }

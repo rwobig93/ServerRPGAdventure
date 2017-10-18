@@ -91,6 +91,22 @@ namespace PersonalDiscordBot.Classes
                 retString = $"{retString} [{prop.Name}]{prop.GetValue(obj)}";
             return retString;
         }
+
+        public static string EnumItemProperties(this object thing)
+        {
+            string itemProperties = "";
+            var line = Environment.NewLine;
+            foreach (var p in thing.GetType().GetProperties())
+            {
+                if (p.Name == "CurrentDurability")
+                {
+                    itemProperties = itemProperties + $"{p.Name}: {p.GetValue(thing, null)}/{thing.GetType().GetProperty("MaxDurability").GetValue(thing, null)}{line}";
+                }
+                else if (p.GetValue(thing, null).ToString() == "0" || p.Name == "IsUnique" || p.Name == "MaxDurability") { }
+                else itemProperties = itemProperties + $"{p.Name}: {p.GetValue(thing, null)}{line}";
+            }
+            return itemProperties;
+        }
     }
 
     public class StatusUpdater : INotifyPropertyChanged
