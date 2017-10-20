@@ -1125,7 +1125,7 @@ namespace PersonalDiscordBot.Classes
                                     await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Your answer was not a valid number.");
                                     return;
                                 }
-                                if (numAnswer > number || numAnswer <= 0)
+                                if (numAnswer > number || numAnswer < 1)
                                 {
                                     Toolbox.uDebugAddLog($"Answer was less than or greater than number of items. [Resp]{pickedAnswer} [ID]{owner.OwnerID}");
                                     await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Your answer was less than or greater than the number of items listed.");
