@@ -8,10 +8,10 @@
     "MinorRevision": 9
   },
   "Updated": true,
-  "LogLocation": "C:\\Users\\mpegler\\Source\\Repos\\ServerRPGAdventure\\PersonalDiscordBot\\bin\\x64\\Debug\\Logs",
-  "ConfigLocation": "C:\\Users\\mpegler\\Source\\Repos\\ServerRPGAdventure\\PersonalDiscordBot\\bin\\x64\\Debug\\Config",
-  "PathsConfig": "C:\\Users\\mpegler\\Source\\Repos\\ServerRPGAdventure\\PersonalDiscordBot\\bin\\x64\\Debug\\Config\\Paths.json",
-  "ServerConfig": "C:\\Users\\mpegler\\Source\\Repos\\ServerRPGAdventure\\PersonalDiscordBot\\bin\\x64\\Debug\\Config\\ServerConfig.xml",
+  "LogLocation": "C:\\Users\\mathe\\Source\\Repos\\ServerRPGAdventure\\ServerRPGAdventure\\PersonalDiscordBot\\bin\\x64\\Debug\\Logs",
+  "ConfigLocation": "C:\\Users\\mathe\\Source\\Repos\\ServerRPGAdventure\\ServerRPGAdventure\\PersonalDiscordBot\\bin\\x64\\Debug\\Config",
+  "PathsConfig": "C:\\Users\\mathe\\Source\\Repos\\ServerRPGAdventure\\ServerRPGAdventure\\PersonalDiscordBot\\bin\\x64\\Debug\\Config\\Paths.json",
+  "ServerConfig": "C:\\Users\\mathe\\Source\\Repos\\ServerRPGAdventure\\ServerRPGAdventure\\PersonalDiscordBot\\bin\\x64\\Debug\\Config\\ServerConfig.xml",
   "BotToken": "MzEzNjk0ODc3MTM5MzM3MjE3.DMFPyQ.RoTKPud3dCvc7_ELzQV94VwMbQs",
   "BotPlaying": null,
   "BotName": null

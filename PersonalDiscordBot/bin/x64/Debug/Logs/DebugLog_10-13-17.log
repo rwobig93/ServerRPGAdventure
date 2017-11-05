@@ -769,3 +769,159 @@
 10-13-17_10:13:43 AM :: USTATUSUPDATE: STATUS: Admin Serialization Complete
 10-13-17_10:13:43 AM :: SERIALIZEDATA: SaveData already exists: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\SaveData
 
+10-13-17_9:00:06 PM :: .CTOR: 
+########################## Application Start ##########################
+
+10-13-17_9:00:06 PM :: SETUPCONFIG: Found Log Directory at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Logs
+10-13-17_9:00:06 PM :: SETUPCONFIG: Found Config Directory at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Config
+10-13-17_9:00:06 PM :: SETUPCONFIG: Found Paths.json at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Config\Paths.json
+10-13-17_9:00:06 PM :: SETUPCONFIG: Found ServerConfig.xml at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Config\ServerConfig.xml
+10-13-17_9:00:06 PM :: FULLEXCEPTIONLOG: EXCEPTION: ReadConfig at 727
+10-13-17_9:00:06 PM :: SETUPCONFIG: Finished reading config
+10-13-17_9:00:07 PM :: USTATUSUPDATE: STATUS: Deserializing Sava Data
+10-13-17_9:00:07 PM :: USTATUSUPDATE: STATUS: Deserializing Permission Data
+10-13-17_9:00:07 PM :: USTATUSUPDATE: STATUS: Running DEBUG Mode
+10-13-17_9:00:07 PM :: DESERIALIZEDATA: Found .owner file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\SaveData\123913308498690051.owner
+10-13-17_9:00:07 PM :: DESERIALIZEPERMISSIONS: Cleared Administrators and AllowedChannels
+10-13-17_9:00:07 PM :: DESERIALIZEPERMISSIONS: Found Administrators.perm file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions\Administrators.perm
+10-13-17_9:00:07 PM :: DESERIALIZEPERMISSIONS: Deserialized Administrators.perm
+10-13-17_9:00:07 PM :: DESERIALIZEPERMISSIONS: Found RPGChannels.perm file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions\RPGChannels.perm
+10-13-17_9:00:07 PM :: DESERIALIZEPERMISSIONS: Deserialized RPGChannels.perm
+10-13-17_9:00:07 PM :: DESERIALIZEPERMISSIONS: Found GeneralPermissions.perm file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions\GeneralPermissions.perm
+10-13-17_9:00:07 PM :: DESERIALIZEPERMISSIONS: Deserialized GeneralPermissions.perm
+10-13-17_9:00:07 PM :: DESERIALIZEDATA: Added Owner 123913308498690051 to Owners List
+10-13-17_9:00:07 PM :: LOADWINDOWLOCATION: Loading window location
+10-13-17_9:00:07 PM :: LOADWINDOWLOCATION: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+10-13-17_9:00:07 PM :: HIDEGRIDS: Set Grid grdStatus to Hidden on launch
+10-13-17_9:00:07 PM :: HIDEGRIDS: Set Grid grdSettings to Hidden on launch
+10-13-17_9:00:07 PM :: HIDEGRIDS: Set Grid grdServers to Hidden on launch
+10-13-17_9:00:07 PM :: HIDEGRIDS: Set Grid grdBotInfo to Hidden on launch
+10-13-17_9:00:08 PM :: USTATUSUPDATE: STATUS: Owner Deserialization Complete
+10-13-17_9:00:08 PM :: USTATUSUPDATE: STATUS: Admin Deserialization Complete
+10-13-17_9:00:08 PM :: USTATUSUPDATE: STATUS: Version updated to 
+10-13-17_9:00:08 PM :: TREFRESHADMINLIST: Refreshing admin list
+10-13-17_9:00:08 PM :: CLEANUPLOGDIR: Cleaning up Log Directory: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Logs
+10-13-17_9:00:08 PM :: CLEANUPLOGDIR: Finished cleaning up Log directory
+10-13-17_9:00:08 PM :: USTATUSUPDATE: STATUS: Newer release found, updating now... [Current]0.1.0.0 [Release]0.1.0.9
+10-13-17_9:00:08 PM :: SAVECONFIG: Saved current config to Paths.json
+10-13-17_9:00:08 PM :: SAVECONFIG: Saved current config to Paths.json
+10-13-17_9:00:08 PM :: SAVECONFIG: Saved current game server list to ServerConfig.xml
+10-13-17_9:00:08 PM :: FULLEXCEPTIONLOG: EXCEPTION: StartUpdate at 1133
+10-13-17_9:00:08 PM :: USTATUSUPDATE: STATUS: Serializing Save Data
+10-13-17_9:00:08 PM :: USTATUSUPDATE: STATUS: Serializing Save Data
+10-13-17_9:00:08 PM :: USTATUSUPDATE: STATUS: Serializing Permission Data
+10-13-17_9:00:08 PM :: USTATUSUPDATE: STATUS: Serializing Permission Data
+10-13-17_9:00:08 PM :: SERIALIZEDATA: SaveData already exists: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\SaveData
+10-13-17_9:00:08 PM :: SERIALIZEDATA: SaveData already exists: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\SaveData
+10-13-17_9:00:08 PM :: SERIALIZEPERMISSIONS: Permissions already exists: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions
+10-13-17_9:00:08 PM :: SERIALIZEPERMISSIONS: Permissions already exists: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions
+10-13-17_9:00:08 PM :: SERIALIZEPERMISSIONS: Serialized Administrators.perm
+10-13-17_9:00:08 PM :: SERIALIZEPERMISSIONS: Serialized RPGChannels.perm
+10-13-17_9:00:08 PM :: FULLEXCEPTIONLOG: EXCEPTION: SerializePermissions at 57
+10-13-17_9:00:08 PM :: SERIALIZEPERMISSIONS: Serialized GeneralPermissions.perm
+
+
+
+
+
+
+
+
+
+
+
+10-13-17_9:00:08 PM :: USTATUSUPDATE: STATUS: Admin Serialization Complete
+10-13-17_9:00:08 PM :: SAVEFILERETRY: Successfully saved to file after 1 attempts: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Logs\DebugLog_10-13-17.log
+10-13-17_9:00:08 PM :: USTATUSUPDATE: STATUS: Admin Serialization Complete
+10-13-17_9:00:08 PM :: SAVEFILERETRY: Successfully saved to file after 2 attempts: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Logs\DebugLog_10-13-17.log
+10-13-17_9:00:08 PM :: SAVEFILERETRY: Successfully saved to file after 3 attempts: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Logs\DebugLog_10-13-17.log
+10-13-17_9:00:08 PM :: SAVEFILERETRY: Successfully saved to file after 4 attempts: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Logs\DebugLog_10-13-17.log
+10-13-17_9:00:08 PM :: SAVEFILERETRY: Successfully saved to file after 5 attempts: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Logs\DebugLog_10-13-17.log
+10-13-17_9:00:08 PM :: SAVEFILERETRY: Successfully saved to file after 6 attempts: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Logs\DebugLog_10-13-17.log
+10-13-17_9:00:08 PM :: SERIALIZEDATA: Serialized Owner: 123913308498690051
+10-13-17_9:00:08 PM :: FULLEXCEPTIONLOG: EXCEPTION: SerializeData at 704
+10-13-17_9:00:08 PM :: USTATUSUPDATE: STATUS: Owner Serializing Complete
+10-13-17_9:00:08 PM :: SAVEFILERETRY: Successfully saved to file after 7 attempts: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Logs\DebugLog_10-13-17.log
+10-13-17_9:00:08 PM :: USTATUSUPDATE: STATUS: Owner Serializing Complete
+10-13-17_9:00:08 PM :: SAVEFILERETRY: Successfully saved to file after 8 attempts: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Logs\DebugLog_10-13-17.log
+10-13-17_9:00:08 PM :: SAVEFILERETRY: Successfully saved to file after 9 attempts: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Logs\DebugLog_10-13-17.log
+10-13-17_9:00:08 PM :: SAVEFILERETRY: Successfully saved to file after 10 attempts: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Logs\DebugLog_10-13-17.log
+10-13-17_9:00:10 PM :: BTNCONNECT_CLICK: Token wasn't found in LocalSettings, prompting for token and sending notification
+10-13-17_9:00:10 PM :: SLIDEGRID: Slid Grid grdToken from -734,97,0,0 to 0,97,0,0
+10-13-17_9:00:10 PM :: SHOWNOTIFICATION: New Notification: A previous token wasn't found, please enter a bot token, save, then try again., 4sec(s)
+10-13-17_9:00:10 PM :: SHOWNOTIFICATION: Notification wasn't playing, starting notification play cycles
+10-13-17_9:00:11 PM :: USTATUSUPDATE: STATUS: Refreshed admin list, total admins: 0
+10-13-17_9:00:14 PM :: SHOWNOTIFICATION: Removed notification: A previous token wasn't found, please enter a bot token, save, then try again.
+10-13-17_9:00:14 PM :: SHOWNOTIFICATION: Notifications left: 0
+10-13-17_9:00:14 PM :: SHOWNOTIFICATION: Finished playing all notifications
+10-13-17_9:00:16 PM :: SAVECONFIG: Saved current config to Paths.json
+10-13-17_9:00:16 PM :: BTNSAVETOKEN_CLICK: Saved new token: MzEzNjk0ODc3MTM5MzM3MjE3.DMFPyQ.RoTKPud3dCvc7_ELzQV94VwMbQs
+10-13-17_9:00:16 PM :: SLIDEGRID: Slid Grid grdToken from 0,97,0,0 to -734,97,0,0
+10-13-17_9:00:16 PM :: BTNSAVETOKEN_CLICK: Slid grdToken back out of view
+10-13-17_9:00:16 PM :: SHOWNOTIFICATION: New Notification: Successfully saved new token!, 3sec(s)
+10-13-17_9:00:16 PM :: SHOWNOTIFICATION: Notification wasn't playing, starting notification play cycles
+10-13-17_9:00:18 PM :: USTATUSUPDATE: STATUS: Starting login updater
+10-13-17_9:00:18 PM :: SHOWNOTIFICATION: New Notification: Bot Successfully Connected, 4sec(s)
+10-13-17_9:00:18 PM :: SHOWNOTIFICATION: Notification is currently playing, returning
+10-13-17_9:00:19 PM :: USTATUSUPDATE: STATUS: Updated Name and Playing Value
+10-13-17_9:00:19 PM :: SHOWNOTIFICATION: Removed notification: Successfully saved new token!
+10-13-17_9:00:19 PM :: SHOWNOTIFICATION: Notifications left: 1
+10-13-17_9:00:23 PM :: SHOWNOTIFICATION: Removed notification: Bot Successfully Connected
+10-13-17_9:00:23 PM :: SHOWNOTIFICATION: Notifications left: 0
+10-13-17_9:00:23 PM :: SHOWNOTIFICATION: Finished playing all notifications
+10-13-17_9:00:43 PM :: USTATUSUPDATE: STATUS: User: Bygonjin ◥◤ Command: ;test check backpack
+10-13-17_9:00:43 PM :: MESSAGEHANDLER: COMMAND: User: Bygonjin ◥◤ Command: ;test check backpack
+10-13-17_9:00:43 PM :: VERIFYOWNERPROFILEANDIFHASCHARACTERS: Owner profile was found for Bygonjin | 123913308498690051
+10-13-17_9:00:43 PM :: CHECKCHARACTERBACKPACK: Asking [OwnerCharacter]PersonalDiscordBot.Classes.Character [OwnerID]123913308498690051 what to see
+
+10-13-17_9:02:15 PM :: .CTOR: 
+########################## Application Start ##########################
+
+10-13-17_9:02:15 PM :: SETUPCONFIG: Found Log Directory at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Logs
+10-13-17_9:02:15 PM :: SETUPCONFIG: Found Config Directory at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Config
+10-13-17_9:02:15 PM :: SETUPCONFIG: Found Paths.json at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Config\Paths.json
+10-13-17_9:02:15 PM :: SETUPCONFIG: Found ServerConfig.xml at: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Config\ServerConfig.xml
+10-13-17_9:02:16 PM :: FULLEXCEPTIONLOG: EXCEPTION: ReadConfig at 727
+10-13-17_9:02:16 PM :: SETUPCONFIG: Finished reading config
+10-13-17_9:02:16 PM :: USTATUSUPDATE: STATUS: Deserializing Sava Data
+10-13-17_9:02:16 PM :: USTATUSUPDATE: STATUS: Running DEBUG Mode
+10-13-17_9:02:16 PM :: USTATUSUPDATE: STATUS: Deserializing Permission Data
+10-13-17_9:02:16 PM :: DESERIALIZEDATA: Found .owner file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\SaveData\123913308498690051.owner
+10-13-17_9:02:17 PM :: DESERIALIZEDATA: Added Owner 123913308498690051 to Owners List
+10-13-17_9:02:17 PM :: LOADWINDOWLOCATION: Loading window location
+10-13-17_9:02:17 PM :: LOADWINDOWLOCATION: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+10-13-17_9:02:17 PM :: HIDEGRIDS: Set Grid grdStatus to Hidden on launch
+10-13-17_9:02:17 PM :: HIDEGRIDS: Set Grid grdSettings to Hidden on launch
+10-13-17_9:02:17 PM :: HIDEGRIDS: Set Grid grdServers to Hidden on launch
+10-13-17_9:02:17 PM :: HIDEGRIDS: Set Grid grdBotInfo to Hidden on launch
+10-13-17_9:02:17 PM :: DESERIALIZEPERMISSIONS: Cleared Administrators and AllowedChannels
+10-13-17_9:02:17 PM :: DESERIALIZEPERMISSIONS: Found Administrators.perm file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions\Administrators.perm
+10-13-17_9:02:17 PM :: DESERIALIZEPERMISSIONS: Deserialized Administrators.perm
+10-13-17_9:02:17 PM :: DESERIALIZEPERMISSIONS: Found RPGChannels.perm file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions\RPGChannels.perm
+10-13-17_9:02:17 PM :: DESERIALIZEPERMISSIONS: Deserialized RPGChannels.perm
+10-13-17_9:02:17 PM :: DESERIALIZEPERMISSIONS: Found GeneralPermissions.perm file: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions\GeneralPermissions.perm
+10-13-17_9:02:17 PM :: DESERIALIZEPERMISSIONS: Deserialized GeneralPermissions.perm
+10-13-17_9:02:17 PM :: USTATUSUPDATE: STATUS: Admin Deserialization Complete
+10-13-17_9:02:17 PM :: USTATUSUPDATE: STATUS: Owner Deserialization Complete
+10-13-17_9:02:17 PM :: USTATUSUPDATE: STATUS: Version updated to 
+10-13-17_9:02:17 PM :: TREFRESHADMINLIST: Refreshing admin list
+10-13-17_9:02:17 PM :: CLEANUPLOGDIR: Cleaning up Log Directory: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Logs
+10-13-17_9:02:17 PM :: CLEANUPLOGDIR: Finished cleaning up Log directory
+10-13-17_9:02:17 PM :: USTATUSUPDATE: STATUS: Newer release found, updating now... [Current]0.1.0.0 [Release]0.1.0.9
+10-13-17_9:02:17 PM :: SAVECONFIG: Saved current config to Paths.json
+10-13-17_9:02:17 PM :: SAVECONFIG: Saved current config to Paths.json
+10-13-17_9:02:17 PM :: SAVECONFIG: Saved current game server list to ServerConfig.xml
+10-13-17_9:02:17 PM :: FULLEXCEPTIONLOG: EXCEPTION: StartUpdate at 1133
+10-13-17_9:02:17 PM :: USTATUSUPDATE: STATUS: Serializing Save Data
+10-13-17_9:02:17 PM :: USTATUSUPDATE: STATUS: Serializing Permission Data
+10-13-17_9:02:17 PM :: USTATUSUPDATE: STATUS: Serializing Save Data
+10-13-17_9:02:17 PM :: USTATUSUPDATE: STATUS: Serializing Permission Data
+10-13-17_9:02:17 PM :: SERIALIZEDATA: SaveData already exists: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\SaveData
+10-13-17_9:02:17 PM :: SERIALIZEPERMISSIONS: Permissions already exists: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions
+10-13-17_9:02:17 PM :: SERIALIZEDATA: SaveData already exists: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\SaveData
+10-13-17_9:02:17 PM :: SERIALIZEPERMISSIONS: Permissions already exists: C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions
+10-13-17_9:02:17 PM :: SERIALIZEPERMISSIONS: Serialized Administrators.perm
+10-13-17_9:02:17 PM :: SERIALIZEPERMISSIONS: Serialized RPGChannels.perm
+10-13-17_9:02:17 PM :: FULLEXCEPTIONLOG: EXCEPTION: SerializePermissions at 57
+
+

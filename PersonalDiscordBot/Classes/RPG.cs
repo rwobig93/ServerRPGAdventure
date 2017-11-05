@@ -1100,7 +1100,7 @@ namespace PersonalDiscordBot.Classes
                     var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
                     foreach (var msg in msgList)
                     {
-                        if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (!respondeded.Contains(msg)))
+                        if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (respondeded.Any(x => x.Content != msg.Content)))
                         {
                             respondeded.Add(msg);
                             answer = msg.Content.ToString().ToLower();
