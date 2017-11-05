@@ -1616,6 +1616,11 @@ namespace PersonalDiscordBot.Classes
                                 Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
                                 Toolbox.uDebugAddLog($"Response: {response}");
                                 costResponseRecvd = true;
+                                if (response.ToLower() == "no")
+                                {
+                                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} Operation cancelled");
+                                    return;
+                                }
                             }
                         }
                         if (costTimeStamp + TimeSpan.FromSeconds(60) <= DateTime.Now)
@@ -1784,7 +1789,7 @@ namespace PersonalDiscordBot.Classes
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} This first character is on us, enjoy");
                 else
                 {
-                    if (!hasCharacters) ownerProfile.Currency -= cost;
+                    ownerProfile.Currency -= cost;
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You have been charged {cost} currency, you now have: {ownerProfile.Currency}");
                 }
                 Character newChar = Management.CreateNewCharacter(Context.Message.Author.Id, chosenClass, charName);
@@ -2145,7 +2150,51 @@ namespace PersonalDiscordBot.Classes
                 }
                 Toolbox.uDebugAddLog($"Starting match command");
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
-                Management.CreateMatch(Context, owner);
+                try
+                {
+                    var match = RPG.MatchList.Find(x => x.Owner == owner);
+                    if (match == null)
+                    {
+                        if (owner.CurrentCharacter.Loot.Count > 0)
+                        {
+                            await Context.Channel.SendMessageAsync($"You still have {owner.CurrentCharacter.Loot.Count} pieces of loot to go through before you can start another match");
+                            return;
+                        }
+                        Toolbox.uDebugAddLog($"Generating new match for {owner.OwnerID}");
+                        Match newMatch = new Match() { Owner = owner, MatchStart = DateTime.Now };
+                        int enemyCount = RPG.rng.Next(1, 5);
+                        Toolbox.uDebugAddLog($"Enemy Count chosen: {enemyCount}");
+                        for (int i = 0; i == enemyCount; i++)
+                        {
+                            Enemy newEnemy = Enemies.EnemyRanGen(LootDrop.ChooseLevel(owner.CurrentCharacter.Lvl));
+                            if (i == 0) { newMatch.CurrentEnemy = newEnemy; Toolbox.uDebugAddLog($"Set {newEnemy.Name} as the current enemy for {owner.OwnerID}"); }
+                            newMatch.EnemyList.Add(newEnemy);
+                            Toolbox.uDebugAddLog($"Generated enemy {newEnemy.Name} and added to the enemy list for {owner.OwnerID}");
+                            Toolbox.uDebugAddLog($"Generating Enemies Progress: [current]{i} [enemyCount]{enemyCount}");
+                        }
+                        RPG.MatchList.Add(newMatch);
+                        Toolbox.uDebugAddLog($"Successfully generated new match with {newMatch.EnemyList.Count} enemies");
+                        EmbedBuilder embed = new EmbedBuilder() { Title = $"A new match was generated with **{newMatch.EnemyList.Count}** enemies", Color = owner.CurrentCharacter.Color, Description = $"{owner.CurrentCharacter.Name} vs. {match.CurrentEnemy.Name}" };
+                        //embed.AddField(x => { x.Name = "Player Img"; x.IsInline = true; x.Value = owner.CurrentCharacter.ImgURL; });
+                        //embed.AddField(x => { x.Name = "Enemy Img"; x.IsInline = true; x.Value = newEnemy.ImgURL; });
+                        await Context.Channel.SendMessageAsync(string.Empty, false, embed);
+                        Toolbox.uDebugAddLog($"Successfully sent new match message to {Context.User.Username} | {Context.User.Id}");
+                        await Management.CalculateTurn(Context, owner);
+                        return;
+                    }
+                    else
+                    {
+                        Toolbox.uDebugAddLog($"Attempt to generate new match, existing match found for {owner.OwnerID}");
+                        TimeSpan time = DateTime.Now - match.MatchStart;
+                        TimeSpan timeLeft = (match.LastPlayerTurn + match.TurnTimeLimit) - match.LastPlayerTurn;
+                        await Context.Channel.SendMessageAsync($"You currently have an active match with **{match.CurrentEnemy.Name}** that was started **{time.Days}D {time.Hours}H {time.Minutes}M {time.Seconds}Secs** ago, please attack your current enemy, you have **{timeLeft.Days}D {timeLeft.Hours}H {timeLeft.Minutes}M {timeLeft.Seconds}Secs** left before you **forfeit**");
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Toolbox.FullExceptionLog(ex);
+                }
             }
             catch (Exception ex)
             {

@@ -1,0 +1,139 @@
+10-17-17_8:27:36 AM :: .CTOR: 
+########################## Application Start ##########################
+
+10-17-17_8:27:36 AM :: SETUPCONFIG: Found Log Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Logs
+10-17-17_8:27:36 AM :: SETUPCONFIG: Found Config Directory at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Config
+10-17-17_8:27:36 AM :: SETUPCONFIG: Found Paths.json at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Config\Paths.json
+10-17-17_8:27:36 AM :: SETUPCONFIG: Found ServerConfig.xml at: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Config\ServerConfig.xml
+10-17-17_8:27:37 AM :: FULLEXCEPTIONLOG: EXCEPTION: ReadConfig at 739
+10-17-17_8:27:37 AM :: SETUPCONFIG: Finished reading config
+10-17-17_8:27:39 AM :: USTATUSUPDATE: STATUS: Running DEBUG Mode
+10-17-17_8:27:39 AM :: USTATUSUPDATE: STATUS: Deserializing Sava Data
+10-17-17_8:27:39 AM :: USTATUSUPDATE: STATUS: Deserializing Permission Data
+10-17-17_8:27:39 AM :: LOADWINDOWLOCATION: Loading window location
+10-17-17_8:27:39 AM :: LOADWINDOWLOCATION: Window Location Loaded and applied: [L]0 [T]0 [R]0 [B]0
+10-17-17_8:27:39 AM :: HIDEGRIDS: Set Grid grdStatus to Hidden on launch
+10-17-17_8:27:39 AM :: HIDEGRIDS: Set Grid grdSettings to Hidden on launch
+10-17-17_8:27:39 AM :: HIDEGRIDS: Set Grid grdServers to Hidden on launch
+10-17-17_8:27:39 AM :: HIDEGRIDS: Set Grid grdBotInfo to Hidden on launch
+10-17-17_8:27:39 AM :: DESERIALIZEPERMISSIONS: Cleared Administrators and AllowedChannels
+10-17-17_8:27:39 AM :: DESERIALIZEPERMISSIONS: Found Administrators.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions\Administrators.perm
+10-17-17_8:27:39 AM :: DESERIALIZEDATA: Found .owner file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\SaveData\123913308498690051.owner
+10-17-17_8:27:39 AM :: USTATUSUPDATE: STATUS: Version updated to 
+10-17-17_8:27:39 AM :: CLEANUPLOGDIR: Cleaning up Log Directory: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Logs
+10-17-17_8:27:39 AM :: TREFRESHADMINLIST: Refreshing admin list
+10-17-17_8:27:39 AM :: CLEANUPLOGDIR: Deleted old log file: Exceptions.log
+10-17-17_8:27:39 AM :: CLEANUPLOGDIR: Finished cleaning up Log directory
+10-17-17_8:27:39 AM :: DESERIALIZEPERMISSIONS: Deserialized Administrators.perm
+10-17-17_8:27:39 AM :: DESERIALIZEPERMISSIONS: Found RPGChannels.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions\RPGChannels.perm
+10-17-17_8:27:40 AM :: DESERIALIZEPERMISSIONS: Deserialized RPGChannels.perm
+10-17-17_8:27:40 AM :: DESERIALIZEPERMISSIONS: Found GeneralPermissions.perm file: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions\GeneralPermissions.perm
+10-17-17_8:27:40 AM :: DESERIALIZEPERMISSIONS: Deserialized GeneralPermissions.perm
+10-17-17_8:27:40 AM :: DESERIALIZEDATA: Added Owner 123913308498690051 to Owners List
+10-17-17_8:27:40 AM :: USTATUSUPDATE: STATUS: Owner Deserialization Complete
+10-17-17_8:27:40 AM :: USTATUSUPDATE: STATUS: Admin Deserialization Complete
+10-17-17_8:27:42 AM :: BTNCONNECT_CLICK: Token wasn't found in LocalSettings, prompting for token and sending notification
+10-17-17_8:27:42 AM :: SLIDEGRID: Slid Grid grdToken from -734,97,0,0 to 0,97,0,0
+10-17-17_8:27:42 AM :: SHOWNOTIFICATION: New Notification: A previous token wasn't found, please enter a bot token, save, then try again., 4sec(s)
+10-17-17_8:27:42 AM :: SHOWNOTIFICATION: Notification wasn't playing, starting notification play cycles
+10-17-17_8:27:42 AM :: USTATUSUPDATE: STATUS: Newer release found, updating now... [Current]0.1.0.0 [Release]0.1.0.9
+10-17-17_8:27:42 AM :: SAVECONFIG: Saved current config to Paths.json
+10-17-17_8:27:42 AM :: SAVECONFIG: Saved current config to Paths.json
+10-17-17_8:27:42 AM :: SAVECONFIG: Saved current game server list to ServerConfig.xml
+10-17-17_8:27:42 AM :: FULLEXCEPTIONLOG: EXCEPTION: StartUpdate at 1145
+10-17-17_8:27:42 AM :: USTATUSUPDATE: STATUS: Serializing Save Data
+10-17-17_8:27:42 AM :: USTATUSUPDATE: STATUS: Serializing Permission Data
+10-17-17_8:27:42 AM :: SERIALIZEDATA: SaveData already exists: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\SaveData
+10-17-17_8:27:42 AM :: SERIALIZEPERMISSIONS: Permissions already exists: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions
+10-17-17_8:27:42 AM :: SERIALIZEPERMISSIONS: Serialized Administrators.perm
+10-17-17_8:27:42 AM :: SERIALIZEPERMISSIONS: Serialized RPGChannels.perm
+10-17-17_8:27:42 AM :: SERIALIZEPERMISSIONS: Serialized GeneralPermissions.perm
+10-17-17_8:27:42 AM :: USTATUSUPDATE: STATUS: Serializing Permission Data
+10-17-17_8:27:42 AM :: USTATUSUPDATE: STATUS: Admin Serialization Complete
+
+10-17-17_8:27:42 AM :: SERIALIZEPERMISSIONS: Permissions already exists: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\Permissions
+10-17-17_8:27:42 AM :: SERIALIZEPERMISSIONS: Serialized Administrators.perm
+10-17-17_8:27:42 AM :: SERIALIZEPERMISSIONS: Serialized RPGChannels.perm
+10-17-17_8:27:42 AM :: SERIALIZEPERMISSIONS: Serialized GeneralPermissions.perm
+10-17-17_8:27:42 AM :: USTATUSUPDATE: STATUS: Serializing Save Data
+10-17-17_8:27:42 AM :: USTATUSUPDATE: STATUS: Admin Serialization Complete
+10-17-17_8:27:42 AM :: SERIALIZEDATA: SaveData already exists: C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\SaveData
+10-17-17_8:27:42 AM :: SERIALIZEDATA: Serialized Owner: 123913308498690051
+10-17-17_8:27:42 AM :: USTATUSUPDATE: STATUS: Owner Serializing Complete
+10-17-17_8:27:42 AM :: FULLEXCEPTIONLOG: EXCEPTION: SerializeData at 704
+10-17-17_8:27:42 AM :: USTATUSUPDATE: STATUS: Owner Serializing Complete
+10-17-17_8:27:42 AM :: USTATUSUPDATE: STATUS: Refreshed admin list, total admins: 0
+10-17-17_8:27:43 AM :: SAVECONFIG: Saved current config to Paths.json
+10-17-17_8:27:43 AM :: BTNSAVETOKEN_CLICK: Saved new token: MzEzNjk0ODc3MTM5MzM3MjE3.DMFPyQ.RoTKPud3dCvc7_ELzQV94VwMbQs
+10-17-17_8:27:43 AM :: SLIDEGRID: Slid Grid grdToken from 0,97,0,0 to -734,97,0,0
+10-17-17_8:27:43 AM :: BTNSAVETOKEN_CLICK: Slid grdToken back out of view
+10-17-17_8:27:43 AM :: SHOWNOTIFICATION: New Notification: Successfully saved new token!, 3sec(s)
+10-17-17_8:27:43 AM :: SHOWNOTIFICATION: Notification is currently playing, returning
+10-17-17_8:27:46 AM :: SHOWNOTIFICATION: Removed notification: A previous token wasn't found, please enter a bot token, save, then try again.
+10-17-17_8:27:46 AM :: SHOWNOTIFICATION: Notifications left: 1
+10-17-17_8:27:46 AM :: USTATUSUPDATE: STATUS: Starting login updater
+10-17-17_8:27:46 AM :: SHOWNOTIFICATION: New Notification: Bot Successfully Connected, 4sec(s)
+10-17-17_8:27:46 AM :: SHOWNOTIFICATION: Notification is currently playing, returning
+10-17-17_8:27:48 AM :: USTATUSUPDATE: STATUS: Updated Name and Playing Value
+10-17-17_8:27:49 AM :: SHOWNOTIFICATION: Removed notification: Successfully saved new token!
+10-17-17_8:27:49 AM :: SHOWNOTIFICATION: Notifications left: 1
+10-17-17_8:27:53 AM :: SHOWNOTIFICATION: Removed notification: Bot Successfully Connected
+10-17-17_8:27:53 AM :: SHOWNOTIFICATION: Notifications left: 0
+10-17-17_8:27:53 AM :: SHOWNOTIFICATION: Finished playing all notifications
+10-17-17_8:27:56 AM :: USTATUSUPDATE: STATUS: User: Bygonjin ◥◤ Command: ;test check backpack
+10-17-17_8:27:56 AM :: MESSAGEHANDLER: COMMAND: User: Bygonjin ◥◤ Command: ;test check backpack
+10-17-17_8:27:56 AM :: VERIFYOWNERPROFILEANDIFHASCHARACTERS: Owner profile was found for Bygonjin | 123913308498690051
+10-17-17_8:27:56 AM :: CHECKCHARACTERBACKPACK: Asking [OwnerCharacter]PersonalDiscordBot.Classes.Character [OwnerID]123913308498690051 what to see
+10-17-17_8:28:05 AM :: CHECKCHARACTERBACKPACK: Response recieved from same author and a newer message. [Resp]all [ID]123913308498690051
+10-17-17_8:28:06 AM :: SENDDISCORDMESSAGE: Sent Discord Message via Event with Embed: [UN]Bygonjin [Embed] [ID]123913308498690051
+10-17-17_8:28:06 AM :: CHECKCHARACTERBACKPACK: Asking [OwnerCharacter]PersonalDiscordBot.Classes.Character [OwnerID]123913308498690051 which item to inspect
+10-17-17_8:28:12 AM :: CHECKCHARACTERBACKPACK: Response recieved from same author and a newer message. [Resp]1 [ID]123913308498690051
+10-17-17_8:28:12 AM :: SENDDISCORDMESSAGE: Sent Discord Message via Event with Embed: [UN]Bygonjin [Embed] [ID]123913308498690051
+10-17-17_8:28:12 AM :: CHECKCHARACTERBACKPACK: Asking [Owner]0 [ID]123913308498690051 what to do with the item.
+10-17-17_8:28:14 AM :: CHECKCHARACTERBACKPACK: Response recieved from same author and a newer message. [Resp]1 [ID]123913308498690051
+10-17-17_8:28:19 AM :: CHECKCHARACTERBACKPACK: Response recieved from same author and a newer message. [Resp]1 [ID]123913308498690051
+10-17-17_8:28:22 AM :: CHECKCHARACTERBACKPACK: Response recieved from same author and a newer message. [Resp]sell [ID]123913308498690051
+10-17-17_8:28:22 AM :: CHECKCHARACTERBACKPACK: [SELL]PersonalDiscordBot.Classes.Item is trying to be sold by [ID]123913308498690051
+10-17-17_8:28:22 AM :: SELL: Adding [CURRENCY]2 times [AMOUNT]1 to [ID]123913308498690051. Current amount of Currency: 108
+10-17-17_8:28:22 AM :: SELL: Added [CURRENCY]2 times [AMOUNT]1 to [ID]123913308498690051. Current amount of Currency: 110
+10-17-17_8:28:22 AM :: SENDDISCORDMESSAGE: Sent Discord Message via Event: [UN]Bygonjin [MSG]Small Health Potion Pack was sold for 2. [ID]123913308498690051
+10-17-17_8:28:22 AM :: SELL: Removing [ITEM]Small Health Potion Pack from [ID]123913308498690051
+10-17-17_8:28:23 AM :: .CTOR: DCRDMSGSNT: <@!123913308498690051> Small Health Potion Pack was sold for 2.
+10-17-17_8:28:25 AM :: CHECKCHARACTERBACKPACK: Response recieved from same author and a newer message. [Resp]1 [ID]123913308498690051
+
+10-17-17_8:28:29 AM :: CHECKCHARACTERBACKPACK: Response recieved from same author and a newer message. [Resp]sell [ID]123913308498690051
+10-17-17_8:28:29 AM :: CHECKCHARACTERBACKPACK: [SELL]PersonalDiscordBot.Classes.Item is trying to be sold by [ID]123913308498690051
+10-17-17_8:28:29 AM :: SELL: Adding [CURRENCY]2 times [AMOUNT]1 to [ID]123913308498690051. Current amount of Currency: 110
+10-17-17_8:28:29 AM :: SELL: Added [CURRENCY]2 times [AMOUNT]1 to [ID]123913308498690051. Current amount of Currency: 112
+10-17-17_8:28:29 AM :: SENDDISCORDMESSAGE: Sent Discord Message via Event: [UN]Bygonjin [MSG]Small Health Potion Pack was sold for 2. [ID]123913308498690051
+10-17-17_8:28:29 AM :: SELL: Removing [ITEM]Small Health Potion Pack from [ID]123913308498690051
+10-17-17_8:28:29 AM :: .CTOR: DCRDMSGSNT: <@!123913308498690051> Small Health Potion Pack was sold for 2.
+10-17-17_8:28:32 AM :: CHECKCHARACTERBACKPACK: Response recieved from same author and a newer message. [Resp]1 [ID]123913308498690051
+10-17-17_8:28:35 AM :: CHECKCHARACTERBACKPACK: Response recieved from same author and a newer message. [Resp]sell [ID]123913308498690051
+10-17-17_8:28:35 AM :: CHECKCHARACTERBACKPACK: [SELL]PersonalDiscordBot.Classes.Item is trying to be sold by [ID]123913308498690051
+10-17-17_8:28:35 AM :: SELL: Adding [CURRENCY]2 times [AMOUNT]1 to [ID]123913308498690051. Current amount of Currency: 112
+10-17-17_8:28:35 AM :: SELL: Added [CURRENCY]2 times [AMOUNT]1 to [ID]123913308498690051. Current amount of Currency: 114
+10-17-17_8:28:35 AM :: SENDDISCORDMESSAGE: Sent Discord Message via Event: [UN]Bygonjin [MSG]Small Health Potion Pack was sold for 2. [ID]123913308498690051
+10-17-17_8:28:35 AM :: SELL: Removing [ITEM]Small Health Potion Pack from [ID]123913308498690051
+10-17-17_8:28:35 AM :: .CTOR: DCRDMSGSNT: <@!123913308498690051> Small Health Potion Pack was sold for 2.
+10-17-17_8:28:41 AM :: CHECKCHARACTERBACKPACK: Response recieved from same author and a newer message. [Resp]sell [ID]123913308498690051
+10-17-17_8:28:41 AM :: CHECKCHARACTERBACKPACK: [SELL]PersonalDiscordBot.Classes.Item is trying to be sold by [ID]123913308498690051
+10-17-17_8:28:41 AM :: SELL: Adding [CURRENCY]2 times [AMOUNT]1 to [ID]123913308498690051. Current amount of Currency: 114
+10-17-17_8:28:41 AM :: SELL: Added [CURRENCY]2 times [AMOUNT]1 to [ID]123913308498690051. Current amount of Currency: 116
+10-17-17_8:28:41 AM :: SENDDISCORDMESSAGE: Sent Discord Message via Event: [UN]Bygonjin [MSG]Small Health Potion Pack was sold for 2. [ID]123913308498690051
+10-17-17_8:28:41 AM :: SELL: Removing [ITEM]Small Health Potion Pack from [ID]123913308498690051
+10-17-17_8:28:41 AM :: .CTOR: DCRDMSGSNT: <@!123913308498690051> Small Health Potion Pack was sold for 2.
+10-17-17_8:28:47 AM :: CHECKCHARACTERBACKPACK: Response recieved from same author and a newer message. [Resp]sell [ID]123913308498690051
+10-17-17_8:28:47 AM :: CHECKCHARACTERBACKPACK: [SELL]PersonalDiscordBot.Classes.Item is trying to be sold by [ID]123913308498690051
+10-17-17_8:28:47 AM :: SELL: Adding [CURRENCY]2 times [AMOUNT]1 to [ID]123913308498690051. Current amount of Currency: 116
+10-17-17_8:28:47 AM :: SELL: Added [CURRENCY]2 times [AMOUNT]1 to [ID]123913308498690051. Current amount of Currency: 118
+10-17-17_8:28:47 AM :: SENDDISCORDMESSAGE: Sent Discord Message via Event: [UN]Bygonjin [MSG]Small Health Potion Pack was sold for 2. [ID]123913308498690051
+10-17-17_8:28:47 AM :: SELL: Removing [ITEM]Small Health Potion Pack from [ID]123913308498690051
+10-17-17_8:28:47 AM :: .CTOR: DCRDMSGSNT: <@!123913308498690051> Small Health Potion Pack was sold for 2.
+10-17-17_8:28:58 AM :: CHECKCHARACTERBACKPACK: Response recieved from same author and a newer message. [Resp];test help [ID]123913308498690051
+10-17-17_8:29:04 AM :: CHECKCHARACTERBACKPACK: Response recieved from same author and a newer message. [Resp];test help [ID]123913308498690051
+10-17-17_8:29:09 AM :: CHECKCHARACTERBACKPACK: Response recieved from same author and a newer message. [Resp];test help [ID]123913308498690051
+10-17-17_8:29:11 AM :: WINMAIN_CLOSING: 
+########################## Application Stop ##########################
+
+
