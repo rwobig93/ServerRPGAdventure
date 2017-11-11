@@ -22,7 +22,6 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Windows.Media.Animation;
 using PersonalDiscordBot.Classes;
-using PersonalDiscordBot.Settings;
 using System.Reflection;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
@@ -49,7 +48,7 @@ namespace PersonalDiscordBot
             txtLogDirectory.Text = Toolbox._paths.LogLocation;
             Events.MessagePromptShown += (e) => { uStatusUpdate(e.Content); };
             Events.MatchCompleted += async (e) => { await Management.EndOfMatchLootAsync(e); };
-            Events.DiscordMessageSend += async (e, b) => { if (b) { await e.Context.Channel.SendMessageAsync(e.Context.Message.Author.Mention, false, e.Embed); } else { string resp = $"{e.Context.Message.Author.Mention} {e.Message}"; await e.Context.Channel.SendMessageAsync(resp); Toolbox.uDebugAddLog($"DCRDMSGSNT: {resp}"); } };
+            Events.DiscordMessageSend += async (e, b) => { if (b) { await e.Context.Channel.SendMessageAsync(e.Context.Message.Author.Mention, false, e.Embed.Build()); } else { string resp = $"{e.Context.Message.Author.Mention} {e.Message}"; await e.Context.Channel.SendMessageAsync(resp); Toolbox.uDebugAddLog($"DCRDMSGSNT: {resp}"); } };
             Events.UseGlobalAction += (e) => { HandleGlobalAction(e.Action); };
         }
 
@@ -97,7 +96,7 @@ namespace PersonalDiscordBot
             Thread.Sleep(300);
             LoadWindowLocation();
             HideGrids();
-            UpdateVerison();
+            CheckVersion();
             tSaveRPGData();
             tRefreshAdminList();
             CleanupLogDir();
@@ -640,7 +639,10 @@ namespace PersonalDiscordBot
                 string _confDir = string.Format(@"{0}\Config", _currDir);
                 string _pathConfig = string.Format(@"{0}\Paths.json", _confDir);
                 string _servConfig = string.Format(@"{0}\ServerConfig.xml", _confDir);
-                Toolbox._paths.ConfigLocation = _confDir; Toolbox._paths.LogLocation = _logDir; Toolbox._paths.PathsConfig = _pathConfig; Toolbox._paths.ServerConfig = _servConfig;
+                Toolbox._paths.ConfigLocation = _confDir;
+                Toolbox._paths.LogLocation = _logDir;
+                Toolbox._paths.PathsConfig = _pathConfig;
+                Toolbox._paths.ServerConfig = _servConfig;
                 if (!Directory.Exists(_logDir))
                 {
                     Directory.CreateDirectory(_logDir); Toolbox.uDebugAddLog(string.Format("Didn't find Log Directory, created at: {0}", _logDir));
@@ -684,7 +686,7 @@ namespace PersonalDiscordBot
                             LocalSettings pathsCopy = Toolbox._paths;
                             string _origPath = Toolbox._paths.PathsConfig;
                             string _json = _sr.ReadToEnd();
-                            Toolbox._paths = JsonConvert.DeserializeObject<List<LocalSettings>>(_json)[0];
+                            Toolbox._paths = JsonConvert.DeserializeObject<LocalSettings>(_json);
                             if (!Directory.Exists(Toolbox._paths.ConfigLocation))
                                 Toolbox._paths.ConfigLocation = pathsCopy.ConfigLocation;
                             if (!Directory.Exists(Toolbox._paths.LogLocation))
@@ -694,7 +696,6 @@ namespace PersonalDiscordBot
                             if (!File.Exists(Toolbox._paths.ServerConfig))
                                 Toolbox._paths.ServerConfig = pathsCopy.ServerConfig;
                             Toolbox.uDebugAddLog(string.Format("{0} Deserialized:{1} LogLocation[{2}]{1} ConfigLocation[{3}]{1} PathsConfig[{4}]{1} ServerConfig[{5}]", _origPath, Environment.NewLine, Toolbox._paths.LogLocation, Toolbox._paths.ConfigLocation, Toolbox._paths.PathsConfig, Toolbox._paths.ServerConfig));
-                            
                         }
                         break;
                     case ConfigType.Servers:
@@ -747,22 +748,7 @@ namespace PersonalDiscordBot
                 switch (confType)
                 {
                     case ConfigType.Paths:
-                        FileInfo _fI = new FileInfo(Toolbox._paths.PathsConfig);
-                        if (File.Exists(_fI.FullName))
-                            _fI.Delete();
-                        LocalSettings _pathsT = new LocalSettings()
-                        {
-                            LogLocation = Toolbox._paths.LogLocation,
-                            ConfigLocation = Toolbox._paths.ConfigLocation,
-                            PathsConfig = Toolbox._paths.PathsConfig,
-                            ServerConfig = Toolbox._paths.ServerConfig,
-                            BotToken = Toolbox._paths.BotToken,
-                            Updated = Toolbox._paths.Updated,
-                            CurrentVersion = Toolbox._paths.CurrentVersion,
-                        };
-                        if (!string.IsNullOrWhiteSpace(Toolbox._paths.BotName)) _pathsT.BotName = Toolbox._paths.BotName;
-                        if (!string.IsNullOrWhiteSpace(Toolbox._paths.BotPlaying)) _pathsT.BotPlaying = Toolbox._paths.BotPlaying;
-                        string jSon = JsonConvert.SerializeObject(_pathsT, Newtonsoft.Json.Formatting.Indented);
+                        string jSon = JsonConvert.SerializeObject(Toolbox._paths, Newtonsoft.Json.Formatting.Indented);
                         File.WriteAllText(Toolbox._paths.PathsConfig, jSon);
                         Toolbox.uDebugAddLog("Saved current config to Paths.json");
                         break;
@@ -821,14 +807,13 @@ namespace PersonalDiscordBot
                 switch (confType)
                 {
                     case ConfigType.Paths:
-                        List<Classes.LocalSettings> _pathsT = new List<Classes.LocalSettings>();
-                        _pathsT.Add(new Classes.LocalSettings
+                        LocalSettings _pathsT = new LocalSettings()
                         {
                             LogLocation = _logDir,
                             ConfigLocation = _confDir,
                             PathsConfig = _pathConfig,
                             ServerConfig = _servConfig
-                        });
+                        };
                         Toolbox._paths.LogLocation = _logDir; Toolbox._paths.ConfigLocation = _confDir; Toolbox._paths.PathsConfig = _pathConfig; Toolbox._paths.ServerConfig = _servConfig;
                         string _json = JsonConvert.SerializeObject(_pathsT, Newtonsoft.Json.Formatting.Indented);
                         File.WriteAllText(_pathConfig, _json);
@@ -1004,53 +989,47 @@ namespace PersonalDiscordBot
             }
         }
 
-        private void UpdateVerison()
+        private void CheckVersion()
         {
-            string verNum = GetVersionNumber();
-            if (verNum != sGeneral.Default.CurrentVersion)
-            {
-                string prevVersion = sGeneral.Default.CurrentVersion;
-                string dateUpdate = $"{DateTime.Now.ToLocalTime().ToString("MM-dd-yyyy")} {DateTime.Now.ToLocalTime().ToLongTimeString()}";
-                sGeneral.Default.LastUpdate = dateUpdate;
-                sGeneral.Default.Save();
-                lblUpdateTime.Text = sGeneral.Default.LastUpdate;
-                lblVersionNumber.Text = $"Version {sGeneral.Default.CurrentVersion}";
-                uStatusUpdate($"Version updated to {sGeneral.Default.CurrentVersion}");
-            }
-            else
-            {
-                lblUpdateTime.Text = sGeneral.Default.LastUpdate;
-                lblVersionNumber.Text = $"Version {verNum}";
-                uStatusUpdate($"Current Version: {sGeneral.Default.CurrentVersion}");
-            }
+            Toolbox._paths.CurrentVersion = GetVersionNumber();
+            lblUpdateTime.Text = Toolbox._paths.LastUpdated;
+            lblVersionNumber.Text = $"Version {Toolbox._paths.CurrentVersion}";
+            uStatusUpdate($"Current Version: {Toolbox._paths.CurrentVersion}");
             if (Toolbox._paths.Updated)
             {
+                Version prevVersion = Toolbox._paths.PreviousVersion;
                 Toolbox._paths.Updated = false;
+                uStatusUpdate($"Updated to github v{Toolbox._paths.CurrentVersion} from v{prevVersion}");
+                Toolbox._paths.PreviousVersion = Toolbox._paths.CurrentVersion;
+
                 SaveConfig(ConfigType.Paths);
-                uStatusUpdate($"Updated to github version {Toolbox._paths.CurrentVersion}");
 
                 BackgroundWorker worker = new BackgroundWorker() { WorkerReportsProgress = true };
                 worker.ProgressChanged += (sender2, e2) => { if (e2.ProgressPercentage == 1) { RoutedEventArgs e3 = new RoutedEventArgs(); btnConnect_Click(sender2, e3); } };
                 worker.DoWork += (sender, e) =>
                 {
                     worker.ReportProgress(1);
-                    while (!_activeSession)
+                    while (client == null)
+                    {
+                        Thread.Sleep(1000);
+                    }
+                    while (client.ConnectionState != ConnectionState.Connected)
                     {
                         Thread.Sleep(1000);
                     }
                     if (Permissions.GeneralPermissions.logChannel != 0)
                     {
                         var channel = (IMessageChannel)client.GetChannel(Permissions.GeneralPermissions.logChannel);
-                        channel.SendMessageAsync($"Bot upgraded to github v{Toolbox._paths.CurrentVersion}");
+                        channel.SendMessageAsync($"Bot upgraded to github v{Toolbox._paths.CurrentVersion} from v{prevVersion}");
                     }
                 };
                 worker.RunWorkerAsync();
             }
         }
 
-        private string GetVersionNumber()
+        private Version GetVersionNumber()
         {
-            return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            return Assembly.GetExecutingAssembly().GetName().Version;
         }
 
         private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
@@ -1079,15 +1058,15 @@ namespace PersonalDiscordBot
         {
             Toolbox.uDebugAddLog("Saving window location");
             Thickness winLocation = new Thickness(this.Left, this.Top, this.Width, this.Height);
-            sGeneral.Default.WindowLocation = winLocation;
-            sGeneral.Default.Save();
+            Toolbox._paths.WindowLocation = winLocation;
+            SaveConfig(ConfigType.Paths);
             Toolbox.uDebugAddLog($"Window Location Saved: [L]{winLocation.Left} [T]{winLocation.Top} [R]{winLocation.Right} [B]{winLocation.Bottom}");
         }
 
         private void LoadWindowLocation()
         {
             Toolbox.uDebugAddLog("Loading window location");
-            Thickness savedLocation = sGeneral.Default.WindowLocation;
+            Thickness savedLocation = Toolbox._paths.WindowLocation;
             this.Left = savedLocation.Left;
             this.Top = savedLocation.Top;
             this.Width = savedLocation.Right;
@@ -1131,7 +1110,6 @@ namespace PersonalDiscordBot
         {
             try
             {
-                Toolbox._paths.Updated = true;
                 Permissions.SerializePermissions();
                 Management.SerializeData();
                 SaveConfig(ConfigType.Paths);
@@ -1139,6 +1117,7 @@ namespace PersonalDiscordBot
                 string updaterLocation = $@"{Directory.GetCurrentDirectory()}\PDBUpdater.exe";
                 Process updater = new Process() { StartInfo = new ProcessStartInfo { FileName = updaterLocation } };
                 updater.Start();
+                Toolbox._paths.Updated = true;
             }
             catch (Exception ex)
             {
@@ -1445,7 +1424,7 @@ namespace PersonalDiscordBot
                 SocketUserMessage msg = arg as SocketUserMessage;
                 if (msg == null) return;
                 int argPos = 0;
-                if (!(msg.Author.Username == client.CurrentUser.Username) && sGeneral.Default.Snooping && !msg.HasCharPrefix(';', ref argPos))
+                if (!(msg.Author.Username == client.CurrentUser.Username) && Toolbox._paths.Snooping && !msg.HasCharPrefix(';', ref argPos))
                 {
                     await msg.DeleteAsync();
                     await msg.Channel.SendMessageAsync(string.Format("{0}{1}{2}", msg.Author.Mention, Environment.NewLine, msg.Content.ToSnoopification()));

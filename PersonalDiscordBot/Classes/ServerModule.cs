@@ -10,12 +10,9 @@ using System.IO;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading;
-using System.Windows;
 using System.Net;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Windows.Controls;
-using PersonalDiscordBot.Settings;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Discord;
@@ -1016,10 +1013,9 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (sGeneral.Default.Snooping) sGeneral.Default.Snooping = false;
-                else sGeneral.Default.Snooping = true;
-                sGeneral.Default.Save();
-                await Context.Channel.SendMessageAsync(string.Format("Snooping all messages in this channel: {0}", sGeneral.Default.Snooping));
+                if (Toolbox._paths.Snooping) Toolbox._paths.Snooping = false;
+                else Toolbox._paths.Snooping = true;
+                await Context.Channel.SendMessageAsync(string.Format("Snooping all messages in this channel: {0}", Toolbox._paths.Snooping));
             }
             catch (Exception ex)
             {
@@ -1088,7 +1084,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                await Context.Channel.SendMessageAsync(string.Format("Snoopify All: {0}", sGeneral.Default.Snooping));
+                await Context.Channel.SendMessageAsync(string.Format("Snoopify All: {0}", Toolbox._paths.Snooping));
             }
             catch (Exception ex)
             {
@@ -1147,7 +1143,7 @@ namespace PersonalDiscordBot.Classes
                 if (gitClient == null)
                     gitClient = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("PDB"));
                 if (Toolbox._paths.CurrentVersion == null)
-                    Toolbox._paths.CurrentVersion = new Version("0.1.00.00");
+                    Toolbox._paths.CurrentVersion = new Version("0.1.0.0");
                 var releases = await gitClient.Repository.Release.GetAll("rwobig93", "ServerRPGAdventure");
                 var release = releases[0];
                 Version releaseVersion = new Version(release.TagName);
@@ -2177,7 +2173,7 @@ namespace PersonalDiscordBot.Classes
                         EmbedBuilder embed = new EmbedBuilder() { Title = $"A new match was generated with **{newMatch.EnemyList.Count}** enemies", Color = owner.CurrentCharacter.Color, Description = $"{owner.CurrentCharacter.Name} vs. {match.CurrentEnemy.Name}" };
                         //embed.AddField(x => { x.Name = "Player Img"; x.IsInline = true; x.Value = owner.CurrentCharacter.ImgURL; });
                         //embed.AddField(x => { x.Name = "Enemy Img"; x.IsInline = true; x.Value = newEnemy.ImgURL; });
-                        await Context.Channel.SendMessageAsync(string.Empty, false, embed);
+                        await Context.Channel.SendMessageAsync(string.Empty, false, embed.Build());
                         Toolbox.uDebugAddLog($"Successfully sent new match message to {Context.User.Username} | {Context.User.Id}");
                         await Management.CalculateTurn(Context, owner);
                         return;

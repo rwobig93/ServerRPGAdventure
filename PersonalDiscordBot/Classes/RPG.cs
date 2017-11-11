@@ -1655,7 +1655,7 @@ namespace PersonalDiscordBot.Classes
                 {
                     if (owner.CurrentCharacter.CurrentHP - enemyTotal <= 0)
                     {
-                        CharacterDied(context, enemy, owner);
+                        await CharacterDied(context, enemy, owner);
                         return;
                     }
                     else
@@ -1667,7 +1667,7 @@ namespace PersonalDiscordBot.Classes
                             Color = enemy.Color,
                             Description = $"**{enemy.Name}** attacked **{owner.CurrentCharacter.Name}** and dealt **{enemyTotal}** damage ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)"
                         };
-                        await context.Channel.SendMessageAsync(string.Empty, false, embed);
+                        await context.Channel.SendMessageAsync(string.Empty, false, embed.Build());
                         return;
                     }
                 }
@@ -1679,7 +1679,7 @@ namespace PersonalDiscordBot.Classes
                         Color = enemy.Color,
                         Description = $"**{enemy.Name}** attacked **{owner.CurrentCharacter.Name}** and didn't deal any damage ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)"
                     };
-                    await context.Channel.SendMessageAsync(string.Empty, false, embed);
+                    await context.Channel.SendMessageAsync(string.Empty, false, embed.Build());
                     return;
                 }
                 else
@@ -1694,7 +1694,7 @@ namespace PersonalDiscordBot.Classes
                         Color = enemy.Color,
                         Description = $"**{enemy.Name}** attacked, **{owner.CurrentCharacter.Name}** absorbed **{enemyTotal}** damage and was healed ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)"
                     };
-                    await context.Channel.SendMessageAsync(string.Empty, false, embed);
+                    await context.Channel.SendMessageAsync(string.Empty, false, embed.Build());
                     return;
                 }
             }
@@ -1955,7 +1955,7 @@ namespace PersonalDiscordBot.Classes
                                 Description = $"Level: {copyChara.Lvl} > {character.Lvl}{line}MaxHP: {copyChara.MaxHP} > {character.MaxHP}{line}MaxMana: {copyChara.MaxMana} > {character.MaxMana}{line}Strength: {copyChara.Str} > {character.Str}{line}Defense: {copyChara.Def} > {character.Def}{line}Dexterity: {copyChara.Dex} > {character.Dex}{line}Intelligence: {copyChara.Int} > {character.Int}{line}Speed: {copyChara.Spd} > {character.Spd}{line}Luck: {copyChara.Lck} > {character.Lck}",
                                 ImageUrl = character.ImgURL
                             };
-                            await context.Channel.SendMessageAsync(string.Empty, false, embed);
+                            await context.Channel.SendMessageAsync(string.Empty, false, embed.Build());
                         }
                         Toolbox.uDebugAddLog($"Lootdrop lootcount after filter: {character.Loot.Count} [ID]{owner.OwnerID}");
                         await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} You earned {pebbles} pebbles,{currency} currency, and earned {match.ExperienceEarned} experience!");

@@ -103,7 +103,7 @@
             </Grid>
             <Button x:Name="btnOpenRPGData" Click="btnOpenRPGData_Click" Content="RPG Data" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="89" Height="25" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" FontSize="14" Margin="282,0,0,0"/>
         </Grid>
-        <Grid x:Name="grdToken" Margin="-734,97,0,0" Background="#FF191919" HorizontalAlignment="Left" Width="734" Height="67" VerticalAlignment="Top" d:IsHidden="True" d:IsLocked="True">
+        <Grid x:Name="grdToken" Margin="-734,97,0,0" Background="#FF191919" HorizontalAlignment="Left" Width="734" Height="67" VerticalAlignment="Top">
             <TextBox x:Name="txtTokenValue" Margin="10,10,10,0" TextWrapping="NoWrap"  Background="#FF202020" Foreground="#FF0FB3C3" BorderBrush="#FF6E6E6E" Height="21" VerticalAlignment="Top"/>
             <Button x:Name="btnSaveToken" Click="btnSaveToken_Click" Content="Save Token" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="89" Height="22" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" Margin="233,36,0,0"/>
             <Button x:Name="btnClearToken" Click="btnClearToken_Click" Content="Clear Token" Padding="0" BorderThickness="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="89" Height="22" Background="#FF202020" BorderBrush="#FF6E6E6E" Foreground="#FF0FB3C3" Margin="327,36,0,0"/>
