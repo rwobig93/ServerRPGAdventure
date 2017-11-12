@@ -84,6 +84,14 @@ namespace PersonalDiscordBot.Classes
             return array.Length - 1;
         }
 
+        public static string EnumProps(this object obj)
+        {
+            string retString = string.Empty;
+            foreach (var prop in obj.GetType().GetProperties())
+                retString = $"{retString} [{prop.Name}]{prop.GetValue(obj)}{Environment.NewLine}";
+            return retString;
+        }
+
         public static string EnumPropsLogging(this object obj)
         {
             string retString = string.Empty;
@@ -137,10 +145,11 @@ namespace PersonalDiscordBot.Classes
             try
             {
                 statusUpdater.DebugLog = $"{DateTime.Now.ToLocalTime().ToString("MM-dd-yy")}_{DateTime.Now.ToLocalTime().ToLongTimeString()} :: {caller.ToUpper()}: {_log}";
-                if (statusUpdater.DebugLog.Length >= 5000)
-                {
-                    DumpDebugLog();
-                }
+                if (statusUpdater.DebugLog.Length >= 0)
+                    if (statusUpdater.DebugLog.Length >= 5000)
+                    {
+                        DumpDebugLog();
+                    }
             }
             catch (Exception ex)
             {

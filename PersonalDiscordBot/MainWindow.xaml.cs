@@ -105,11 +105,35 @@ namespace PersonalDiscordBot
 
         private void winMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            SaveRPGData();
+            Thread sendDisco = new Thread(async () =>
+            {
+                try
+                {
+                    if (Permissions.GeneralPermissions.logChannel != 0)
+                    {
+                        var channel = client.GetChannel(Permissions.GeneralPermissions.logChannel);
+                        if (channel != null)
+                        {
+#if DEBUG
+                            await ((IMessageChannel)channel).SendMessageAsync($"**{client.CurrentUser.Username}** has **disconnected** in **DEBUG** Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+#else
+                        await ((IMessageChannel)channel).SendMessageAsync($"**{client.CurrentUser.Username}** has **disconnected** biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+#endif
+                            ShowNotification($"Bot {client.CurrentUser.Username} Sent disconnected message to log channel {((IMessageChannel)channel).Name}", 6);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Toolbox.FullExceptionLog(ex);
+                }
+            });
+            sendDisco.Start();
+            SaveWindowLocation();
+            SaveAllData();
             Toolbox.uDebugAddLog(string.Format("{0}########################## Application Stop ##########################{0}", Environment.NewLine));
             Toolbox.DumpDebugLog();
             DumpStatusLog();
-            SaveWindowLocation();
         }
 
         private void winMain_Closed(object sender, EventArgs e)
@@ -161,9 +185,9 @@ namespace PersonalDiscordBot
                     if (channel != null)
                     {
 #if DEBUG
-                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has **disconnected** in **DEBUG** Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+                        await ((IMessageChannel)channel).SendMessageAsync($"**{client.CurrentUser.Username}** has **disconnected** in **DEBUG** Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
 #else
-                        await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has **disconnected** biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+                        await ((IMessageChannel)channel).SendMessageAsync($"**{client.CurrentUser.Username}** has **disconnected** biiiiiiiiiiiiiiiiiiiiiiatch!!!");
 #endif
                         ShowNotification($"Bot {client.CurrentUser.Username} Sent disconnected message to log channel {((IMessageChannel)channel).Name}", 6);
                     }
@@ -1127,8 +1151,42 @@ namespace PersonalDiscordBot
 
         public static void SaveRPGData()
         {
-            Management.SerializeData();
-            Permissions.SerializePermissions();
+            try
+            {
+                Management.SerializeData();
+                Permissions.SerializePermissions();
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
+        public static void SaveAppData()
+        {
+            try
+            {
+                SaveConfig(ConfigType.Paths);
+                SaveConfig(ConfigType.Servers);
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
+        public static void SaveAllData()
+        {
+            try
+            {
+                SaveRPGData();
+                SaveAppData();
+                Toolbox.uDebugAddLog("Successfully saved all data");
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
         }
 
         private static void CleanupLogDir()
@@ -1172,6 +1230,20 @@ namespace PersonalDiscordBot
                         uStatusUpdate($"Something went wrong and a Global Action wasn't handled, action: {action.ToString()}");
                         break;
                 }
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
+        }
+
+        private void lblVersionNumber_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                var verText = lblVersionNumber.Text.Replace("Version ", "").ToString();
+                Clipboard.SetText(verText);
+                Toolbox.uDebugAddLog($"Copied \"{verText}\" to the clipboard");
             }
             catch (Exception ex)
             {
@@ -1264,6 +1336,8 @@ namespace PersonalDiscordBot
         {
             try
             {
+                while (client == null)
+                    Thread.Sleep(TimeSpan.FromSeconds(1));
                 while (_activeSession)
                 {
                     Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { lblConnectionValue.Text = string.Format("Connection: {0}", client.ConnectionState.ToString()); });
@@ -1490,10 +1564,10 @@ namespace PersonalDiscordBot
                 if (channel != null)
                 {
 #if DEBUG
-                    await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has **connected** in **DEBUG Mode** biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+                    await ((IMessageChannel)channel).SendMessageAsync($"**{client.CurrentUser.Username}** has **connected** in **DEBUG** Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
                     Toolbox.uDebugAddLog($"Sent connected debug message to channel {channel.Id}");
 #else
-                    await ((IMessageChannel)channel).SendMessageAsync($"{client.CurrentUser.Username} has **connected** biiiiiiiiiiiiiiiiiiiiiiatch!!!");
+                    await ((IMessageChannel)channel).SendMessageAsync($"**{client.CurrentUser.Username}** has **connected** biiiiiiiiiiiiiiiiiiiiiiatch!!!");
                     Toolbox.uDebugAddLog($"Sent connected message to channel {channel.Id}");
 #endif
                     ShowNotification($"Bot {client.CurrentUser.Username} Sent connected message to log channel {((IMessageChannel)channel).Name}", 6);
@@ -1527,7 +1601,7 @@ namespace PersonalDiscordBot
             Permissions.Administrators.Add(new Administrator() { ID = owner.OwnerID, Username = owner.OwnerUN });
             uStatusUpdate("Testing setup");
         }
-        
+
         #endregion
     }
 

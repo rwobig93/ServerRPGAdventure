@@ -49,19 +49,19 @@ namespace PersonalDiscordBot.Classes
         public Discord.Color Color { get; set; } = new Discord.Color(21, 96, 216);
         public PriorityFactors PF { get { if (this.Name != "Testiculees teh Great") { return PriorityFactors.GetPF(this); } else { return PriorityFactors.SetPF(10, 10, 10, 10, 10, 10); } } }
         public int Pebbles { get; set; } = 0;
-        public int Lvl { get; set; }
-        public int Exp { get; set; }
-        public int ExpToLvl { get; set; } = Management.CalculateExperience(2);
-        public int MaxHP { get { return RPG.HPStatCalc(this, this.Def, this.PF.Def); } }
-        public int CurrentHP { get; set; }
-        public int MaxMana { get { return RPG.MPStatCalc(this, this.Int, this.PF.Int);} }
-        public int CurrentMana { get; set; }
         public int Str { get { return RPG.VitalStatCalc(this, this.PF.Str); } }
         public int Def { get { return RPG.VitalStatCalc(this, this.PF.Def); } }
         public int Dex { get { return RPG.VitalStatCalc(this, this.PF.Dex); } }
         public int Int { get { return RPG.VitalStatCalc(this, this.PF.Int); } }
         public int Spd { get { return RPG.VitalStatCalc(this, this.PF.Spd); } }
         public int Lck { get { return RPG.VitalStatCalc(this, this.PF.Lck); } }
+        public int Lvl { get; set; }
+        public int Exp { get; set; }
+        public int ExpToLvl { get; set; } = Management.CalculateExperience(2);
+        public int MaxHP { get { return RPG.HPStatCalc(this, this.Def, this.PF.Def); } }
+        public int CurrentHP { get; set; }
+        public int MaxMana { get { return RPG.MPStatCalc(this, this.Int, this.PF.Int); } }
+        public int CurrentMana { get; set; }
     }
 
     public class Match
@@ -103,6 +103,12 @@ namespace PersonalDiscordBot.Classes
         public List<Affliction> StatusEffects = new List<Affliction>();
         public Discord.Color Color { get; set; } = new Discord.Color(219, 0, 0);
         public PriorityFactors PF { get; set; } = PriorityFactors.SetPF(4, 3, 3, 1, 4, 1);
+        public int Str { get { return RPG.VitalStatCalc(this, this.PF.Str); } }
+        public int Def { get { return RPG.VitalStatCalc(this, this.PF.Def); } }
+        public int Dex { get { return RPG.VitalStatCalc(this, this.PF.Dex); } }
+        public int Int { get { return RPG.VitalStatCalc(this, this.PF.Int); } }
+        public int Spd { get { return RPG.VitalStatCalc(this, this.PF.Spd); } }
+        public int Lck { get { return RPG.VitalStatCalc(this, this.PF.Lck); } }
         public int Lvl { get; set; }
         public int ExpLoot { get; set; }
         public int MaxHP { get { return RPG.HPMPStatCalc(this, this.Def, this.PF.Def); } }
@@ -111,12 +117,6 @@ namespace PersonalDiscordBot.Classes
         public int MaxMana { get { return RPG.HPMPStatCalc(this, this.Int, this.PF.Int); } }
         private int currentMana { get; set; } = -1;
         public int CurrentMana { get { if (currentHP == -1) { return this.MaxMana; } else { return currentMana; } } set { currentMana = value; } }
-        public int Str { get { return RPG.VitalStatCalc(this, this.PF.Str); } }
-        public int Def { get { return RPG.VitalStatCalc(this, this.PF.Def); } }
-        public int Dex { get { return RPG.VitalStatCalc(this, this.PF.Dex); } }
-        public int Int { get { return RPG.VitalStatCalc(this, this.PF.Int); } }
-        public int Spd { get { return RPG.VitalStatCalc(this, this.PF.Spd); } }
-        public int Lck { get { return RPG.VitalStatCalc(this, this.PF.Lck); } }
     }
 
     public class Boss : Enemy
@@ -504,7 +504,7 @@ namespace PersonalDiscordBot.Classes
         /// <returns></returns>
         public static int HPStatCalc(Character chara, int stat, int statPF)
         {
-            return (((stat / 2) + (statPF * chara.Lvl) + (statPF * 4)) + ((chara.Lvl * statPF * stat) / 3));
+            return (((stat / 2) + (statPF * chara.Lvl) + (statPF * 4)) + ((chara.Lvl * statPF * stat)));
         }
 
         /// <summary>
@@ -754,7 +754,30 @@ namespace PersonalDiscordBot.Classes
             return newMatch;
         }
 
-        public static bool VerifyProfile(ICommandContext context)
+        public static string CheckMatchDetails(ICommandContext context)
+        {
+            string matchDetails = string.Empty;
+            try
+            {
+                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
+                Toolbox.uDebugAddLog($"Checking if owner has profile, if not returned [{context.Message.Author.Id}]");
+                if (owner == null) return "You don't currently have a profile, please create a character.";
+                var match = RPG.MatchList.Find(x => x.Owner == owner);
+                Toolbox.uDebugAddLog($"Checking if owner has a match, if not returned [{context.Message.Author.Id}]");
+                if (match == null) return "You aren't currently in a match, please start a match to view it's details";
+                Toolbox.uDebugAddLog($"Starting property enum of found match [{context.Message.Author.Id}]");
+                matchDetails = match.EnumProps();
+                Toolbox.uDebugAddLog($"Finished property enum of found match [{context.Message.Author.Id}]");
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+                return matchDetails;
+            }
+            return matchDetails;
+        }
+
+        public static async Task<bool> VerifyProfile(ICommandContext context)
         {
             bool hasProfile = false;
             OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
@@ -762,17 +785,17 @@ namespace PersonalDiscordBot.Classes
             {
                 hasProfile = false;
                 Toolbox.uDebugAddLog($"{context.Message.Author.Id} doesn't currently have a profile");
-                Events.SendDiscordMessage(context, "You don't currently have a profile, please create a character first");
+                await context.Channel.SendMessageAsync("You don't currently have a profile, please create a character first");
             }
             else
                 hasProfile = true;
             return hasProfile;
         }
 
-        public static bool VerifyProfileAndHasCharacter(ICommandContext context)
+        public static async Task<bool> VerifyProfileAndHasCharacter(ICommandContext context)
         {
             bool hasBoth = false;
-            hasBoth = VerifyProfile(context);
+            hasBoth = await VerifyProfile(context);
             if (!hasBoth)
                 return hasBoth;
             OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
@@ -780,7 +803,7 @@ namespace PersonalDiscordBot.Classes
             if (!hasBoth)
             {
                 Toolbox.uDebugAddLog($"{owner.OwnerID} doesn't currently have a character created");
-                Events.SendDiscordMessage(context, "You don't currently have a character created, please create a character first");
+                await context.Channel.SendMessageAsync("You don't currently have a character created, please create a character first");
             }
             return hasBoth;
         }
@@ -935,7 +958,7 @@ namespace PersonalDiscordBot.Classes
             return cost;
         }
 
-        public static void CheckCharacterStats(ICommandContext context)
+        public static async Task CheckCharacterStats(ICommandContext context)
         {
             try
             {
@@ -943,12 +966,12 @@ namespace PersonalDiscordBot.Classes
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
                 if (owner == null)
                 {
-                    Events.SendDiscordMessage(context, "You don't currently have a profile, please create a character first");
+                    await context.Channel.SendMessageAsync("You don't currently have a profile, please create a character first");
                     return;
                 }
                 else if (owner.CharacterList.Count <= 0)
                 {
-                    Events.SendDiscordMessage(context, "You don't currently have any characters, create one yo");
+                    await context.Channel.SendMessageAsync("You don't currently have any characters, create one yo");
                     return;
                 }
                 EmbedBuilder embed = new EmbedBuilder()
@@ -966,7 +989,7 @@ namespace PersonalDiscordBot.Classes
                         Text = owner.CurrentCharacter.Class.ToString()
                     }
                 };
-                Events.SendDiscordMessage(context, embed);
+                await context.Channel.SendMessageAsync("", false, embed.Build());
             }
             catch (Exception ex)
             {
@@ -1088,7 +1111,7 @@ namespace PersonalDiscordBot.Classes
                     Description = $"Backpack Storage: {owner.CurrentCharacter.Backpack.Stored.Count}/{owner.CurrentCharacter.Backpack.Capacity}" +
                         $"{itemList}"
                 };
-                Events.SendDiscordMessage(context, embed);
+                await context.Channel.SendMessageAsync("", false, embed.Build());
                 Toolbox.uDebugAddLog($"Asking [OwnerCharacter]{owner.CurrentCharacter} [OwnerID]{owner.OwnerID} which item to inspect");
                 var pickedItemMsg = await context.Channel.SendMessageAsync($"Please type the item number you wish to inspect or type cancel to exit.");
                 bool itemPicked = false;
@@ -1163,7 +1186,7 @@ namespace PersonalDiscordBot.Classes
                                 Title = owner.CurrentCharacter.Desc,
                                 Description = $"{pickedItem}"
                             };
-                            Events.SendDiscordMessage(context, embed2);
+                            await context.Channel.SendMessageAsync("", false, embed2.Build());
                             Toolbox.uDebugAddLog($"Asking [Owner]{owner.CurrentCharacter.Loot.Count} [ID]{owner.OwnerID} what to do with the item.");
                             var whatToDo = await context.Channel.SendMessageAsync($"What would you like to do with {chosenThing.Name}? Equip, Use, Sell, Trash, Cancel");
                             bool decidedWhatToDo = false;
@@ -1199,13 +1222,13 @@ namespace PersonalDiscordBot.Classes
                                                     {
                                                         Armor tmpArmor = (Armor)chosenThing;
                                                         Toolbox.uDebugAddLog($"[ARMOR]{tmpArmor} is trying to be equipped by [ID]{owner.OwnerID}");
-                                                        ChangeArmor(context, tmpArmor);
+                                                        await ChangeArmor(context, tmpArmor);
                                                     }
                                                     else if (typeItIs == LootDrop.LootType.Weapon)
                                                     {
                                                         Weapon tmpWeapon = (Weapon)chosenThing;
                                                         Toolbox.uDebugAddLog($"[Weapon]{tmpWeapon} is trying to be equipped by [ID]{owner.OwnerID}");
-                                                        ChangeWeapon(context, tmpWeapon);
+                                                        await ChangeWeapon(context, tmpWeapon);
                                                     }
                                                     else
                                                         Toolbox.uDebugAddLog($"[ITEM]{typeItIs} is not a weapon or armor that can be equipped by [ID]{owner.OwnerID}");
@@ -1216,7 +1239,7 @@ namespace PersonalDiscordBot.Classes
                                                     {
                                                         Item tmpItem = (Item)chosenThing;
                                                         Toolbox.uDebugAddLog($"[ITEM]{tmpItem} is trying to be used by [ID]{owner.OwnerID}");
-                                                        UseItem(context, owner, tmpItem);
+                                                        await UseItem(context, owner, tmpItem);
                                                     }
                                                     else
                                                     {
@@ -1261,7 +1284,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static void ChangeArmor(ICommandContext context, Armor armor)
+        public static async Task ChangeArmor(ICommandContext context, Armor armor)
         {
             try
             {
@@ -1269,7 +1292,7 @@ namespace PersonalDiscordBot.Classes
                 Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} is changing armors, [Current]{owner.CurrentCharacter.Armor.Name} [ChangeTo]{armor.Name} [ID]{owner.OwnerID}");
                 owner.CurrentCharacter.Armor = armor;
                 Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} equipped {armor.Name} [ID]{owner.OwnerID}");
-                Events.SendDiscordMessage(context, $"{owner.CurrentCharacter.Name} is now wearing a(n) {armor.Name}");
+                await context.Channel.SendMessageAsync($"{owner.CurrentCharacter.Name} is now wearing a(n) {armor.Name}");
             }
             catch (Exception ex)
             {
@@ -1277,7 +1300,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static void ChangeWeapon(ICommandContext context, Weapon weapon)
+        public static async Task ChangeWeapon(ICommandContext context, Weapon weapon)
         {
             try
             {
@@ -1285,7 +1308,7 @@ namespace PersonalDiscordBot.Classes
                 Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} is changing weapons [Current]{owner.CurrentCharacter.Weapon.Name} [ChangeTo]{weapon.Name} [ID]{owner.OwnerID}");
                 owner.CurrentCharacter.Weapon = weapon;
                 Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} has equipped {weapon.Name} [ID]{owner.OwnerID}");
-                Events.SendDiscordMessage(context, $"{owner.CurrentCharacter.Name} has equipped a(n) {weapon.Name}");
+                await context.Channel.SendMessageAsync($"{owner.CurrentCharacter.Name} has equipped a(n) {weapon.Name}");
             }
             catch (Exception ex)
             {
@@ -1293,14 +1316,14 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static void ChangeColor(ICommandContext context, Discord.Color color)
+        public static async Task ChangeColor(ICommandContext context, Discord.Color color)
         {
             try
             {
                 var chara = RPG.Owners.Find(x => x.OwnerID == context.User.Id).CurrentCharacter;
                 chara.Color = color;
                 EmbedBuilder embed = new EmbedBuilder() { Color = chara.Color, Description = "Your color has been updated!" };
-                Events.SendDiscordMessage(context, embed);
+                await context.Channel.SendMessageAsync("", false, embed.Build());
             }
             catch (Exception ex)
             {
@@ -1336,7 +1359,7 @@ namespace PersonalDiscordBot.Classes
                             Title = owner.CurrentCharacter.Desc,
                             Description = $"{tmpItem.Desc}"
                         };
-                        Events.SendDiscordMessage(context, embeded);
+                        await context.Channel.SendMessageAsync("", false, embeded.Build());
                         var howManyToSell = await context.Channel.SendMessageAsync($"There are {tmpItem.Count} {tmpItem.Name}s. How many would you like to sell?");
                         int howManyToSellAnswer = 0;
                         bool pickedHowManyToSell = false;
@@ -1373,7 +1396,7 @@ namespace PersonalDiscordBot.Classes
                                                 if (sellItem == null)
                                                 {
                                                     Toolbox.uDebugAddLog($"ERROR: Item wasn't found in backpack when it was pulled from backpack [Name] {sellItem.Name} [Count] {sellItem.Count}");
-                                                    Events.SendDiscordMessage(context, $"An error occured and the item you want to sell wasn't found in your backpack after finding it... I know confusing but you should let the developer know.");
+                                                    await context.Channel.SendMessageAsync($"An error occured and the item you want to sell wasn't found in your backpack after finding it... I know confusing but you should let the developer know.");
                                                     return;
                                                 }
                                                 if (sellItem.Count - howManyToSellAnswer <= 0)
@@ -1381,7 +1404,7 @@ namespace PersonalDiscordBot.Classes
                                                     Toolbox.uDebugAddLog($"Selling [AMOUNT]{howManyToSellAnswer} of [ITEM]{sellItem.Name} from [ID]{owner.OwnerID}. [COUNT]{sellItem.Count} [CURRENCY]{owner.Currency}");
                                                     owner.Currency = (howManyToSellAnswer * sellItem.Worth) + owner.Currency;
                                                     Toolbox.uDebugAddLog($"Sold [AMOUNT]{howManyToSellAnswer} of [ITEM]{sellItem.Name} from [ID]{owner.OwnerID}. [COUNT]{sellItem.Count} [CURRENCY]{owner.Currency}");
-                                                    Events.SendDiscordMessage(context, $"{howManyToSellAnswer} {sellItem.Name}s have been sold for {sellItem.Worth * howManyToSellAnswer}. ");
+                                                    await context.Channel.SendMessageAsync($"{howManyToSellAnswer} {sellItem.Name}s have been sold for {sellItem.Worth * howManyToSellAnswer}. ");
                                                     Toolbox.uDebugAddLog($"Removing [ITEM]{sellItem.Name} from [ID]{owner.OwnerID}");
                                                     owner.CurrentCharacter.Backpack.Stored.Remove(sellItem);
                                                 }
@@ -1393,7 +1416,7 @@ namespace PersonalDiscordBot.Classes
                                                     Toolbox.uDebugAddLog($"Adding [CURRENCY]{sellItem.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
                                                     owner.Currency = (howManyToSellAnswer * sellItem.Worth) + owner.Currency;
                                                     Toolbox.uDebugAddLog($"Added [CURRENCY]{sellItem.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current howManyToSellAnswer of Currency: {owner.Currency}");
-                                                    Events.SendDiscordMessage(context, $"{howManyToSellAnswer} {sellItem.Name}s have been sold for {sellItem.Worth * howManyToSellAnswer}. ");
+                                                    await context.Channel.SendMessageAsync($"{howManyToSellAnswer} {sellItem.Name}s have been sold for {sellItem.Worth * howManyToSellAnswer}. ");
                                                 }
                                             }
                                             else
@@ -1401,7 +1424,7 @@ namespace PersonalDiscordBot.Classes
                                                 Toolbox.uDebugAddLog($"Adding [CURRENCY]{thing.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
                                                 owner.Currency = (howManyToSellAnswer * thing.Worth) + owner.Currency;
                                                 Toolbox.uDebugAddLog($"Added [CURRENCY]{thing.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
-                                                Events.SendDiscordMessage(context, $"{thing.Name} was sold for {thing.Worth}.");
+                                                await context.Channel.SendMessageAsync($"{thing.Name} was sold for {thing.Worth}.");
                                                 Toolbox.uDebugAddLog($"Removing [ITEM]{thing.Name} from [ID]{owner.OwnerID}");
                                                 owner.CurrentCharacter.Backpack.Stored.Remove(thing);
                                             }
@@ -1430,7 +1453,7 @@ namespace PersonalDiscordBot.Classes
                         Toolbox.uDebugAddLog($"Adding [CURRENCY]{thing.Worth} times [AMOUNT]1 to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
                         owner.Currency = thing.Worth + owner.Currency;
                         Toolbox.uDebugAddLog($"Added [CURRENCY]{thing.Worth} times [AMOUNT]1 to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
-                        Events.SendDiscordMessage(context, $"{thing.Name} was sold for {thing.Worth}.");
+                        await context.Channel.SendMessageAsync($"{thing.Name} was sold for {thing.Worth}.");
                         Toolbox.uDebugAddLog($"Removing [ITEM]{thing.Name} from [ID]{owner.OwnerID}");
                         owner.CurrentCharacter.Backpack.Stored.Remove(thing);
                     }
@@ -1440,7 +1463,7 @@ namespace PersonalDiscordBot.Classes
                     Toolbox.uDebugAddLog($"Adding [CURRENCY]{thing.Worth} times [AMOUNT]1 to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
                     owner.Currency = thing.Worth + owner.Currency;
                     Toolbox.uDebugAddLog($"Added [CURRENCY]{thing.Worth} times [AMOUNT]1 to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
-                    Events.SendDiscordMessage(context, $"{thing.Name} was sold for {thing.Worth}.");
+                    await context.Channel.SendMessageAsync($"{thing.Name} was sold for {thing.Worth}.");
                     Toolbox.uDebugAddLog($"Removing [ITEM]{thing.Name} from [ID]{owner.OwnerID}");
                     owner.CurrentCharacter.Backpack.Stored.Remove(thing);
                 }
@@ -1520,14 +1543,14 @@ namespace PersonalDiscordBot.Classes
 
         #region Combat Methods
 
-        public static void AttackEnemy(ICommandContext context, OwnerProfile owner, Enemy enemy)
+        public static async Task AttackEnemy(ICommandContext context, OwnerProfile owner, Enemy enemy)
         {
             try
             {
                 var match = RPG.MatchList.Find(x => x.Owner == owner);
                 if (match.CurrentTurn != Turn.Player)
                 {
-                    Events.SendDiscordMessage(context, $"It isn't {owner.CurrentCharacter.Name}'s turn, it's {enemy.Name}'s turn");
+                    await context.Channel.SendMessageAsync($"It isn't {owner.CurrentCharacter.Name}'s turn, it's {enemy.Name}'s turn");
                     return;
                 }
                 Toolbox.uDebugAddLog($"Attacking enemy [C]{owner.CurrentCharacter.Name} [E]{enemy.Name} [ID]{owner.OwnerID}");
@@ -1540,7 +1563,7 @@ namespace PersonalDiscordBot.Classes
                 {
                     if (enemy.CurrentHP - totalDamage <= 0)
                     {
-                        EnemyDied(context, owner, enemy);
+                        await EnemyDied(context, owner, enemy);
                         return;
                     }
                     else
@@ -1552,7 +1575,7 @@ namespace PersonalDiscordBot.Classes
                             Color = owner.CurrentCharacter.Color,
                             Description = $"**{owner.CurrentCharacter.Name}** attacked **{enemy.Name}** and dealt **{totalDamage}** damage ({enemy.CurrentHP}/{enemy.MaxHP} left)"
                         };
-                        Events.SendDiscordMessage(context, embed);
+                        await context.Channel.SendMessageAsync("", false, embed.Build());
                         return;
                     }
                 }
@@ -1564,7 +1587,7 @@ namespace PersonalDiscordBot.Classes
                         Color = owner.CurrentCharacter.Color,
                         Description = $"**{owner.CurrentCharacter.Name}** attacked **{enemy.Name}** and didn't deal any damage ({enemy.CurrentHP}/{enemy.MaxHP} left)"
                     };
-                    Events.SendDiscordMessage(context, embed);
+                    await context.Channel.SendMessageAsync("", false, embed.Build());
                     return;
                 }
                 else
@@ -1579,7 +1602,7 @@ namespace PersonalDiscordBot.Classes
                         Color = owner.CurrentCharacter.Color,
                         Description = $"**{owner.CurrentCharacter.Name}** attacked, **{enemy.Name}** absorbed **{totalDamage}** damage and was healed ({enemy.CurrentHP}/{enemy.MaxHP} left)"
                     };
-                    Events.SendDiscordMessage(context, embed);
+                    await context.Channel.SendMessageAsync("", false, embed.Build());
                     return;
                 }
             }
@@ -1704,7 +1727,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static void EnemyDied(ICommandContext context, OwnerProfile owner, Enemy enemy)
+        public static async Task EnemyDied(ICommandContext context, OwnerProfile owner, Enemy enemy)
         {
             try
             {
@@ -1721,13 +1744,13 @@ namespace PersonalDiscordBot.Classes
                         Color = owner.CurrentCharacter.Color,
                         Description = $"You have defeated **{enemy.Name}** and earned **{enemy.ExpLoot} EXP!**"
                     };
-                    Events.SendDiscordMessage(context, embed);
-                    MatchOver(context, owner, enemy, MatchCompleteResult.Won);
+                    await context.Channel.SendMessageAsync("", false, embed.Build());
+                    await MatchOver(context, owner, enemy, MatchCompleteResult.Won);
                     return;
                 }
                 else
                 {
-                    NextEnemy(context, owner, enemy);
+                    await NextEnemy(context, owner, enemy);
                     return;
                 }
             }
@@ -1901,14 +1924,14 @@ namespace PersonalDiscordBot.Classes
                                 Description = $"Level: {copyChara.Lvl} > {character.Lvl}{line}MaxHP: {copyChara.MaxHP} > {character.MaxHP}{line}MaxMana: {copyChara.MaxMana} > {character.MaxMana}{line}Strength: {copyChara.Str} > {character.Str}{line}Defense: {copyChara.Def} > {character.Def}{line}Dexterity: {copyChara.Dex} > {character.Dex}{line}Intelligence: {copyChara.Int} > {character.Int}{line}Speed: {copyChara.Spd} > {character.Spd}{line}Luck: {copyChara.Lck} > {character.Lck}",
                                 ImageUrl = character.ImgURL
                             };
-                            Events.SendDiscordMessage(args.Context, embed);
+                            await args.Context.Channel.SendMessageAsync("", false, embed.Build());
                         }
                         Toolbox.uDebugAddLog($"Lootdrop lootcount after filter: {character.Loot.Count} [ID]{args.Owner.OwnerID}");
                         await args.Context.Channel.SendMessageAsync($"{args.Context.Message.Author.Mention} You earned {pebbles} pebbles,{currency} currency, and earned {args.Match.ExperienceEarned} experience!");
                         await EmptyLoot(args.Context);
                         break;
                     case MatchCompleteResult.Lost:
-                        await args.Context.Channel.SendMessageAsync($"You were defeated in combat by {args.Match.CurrentEnemy.Name} after defeating **{args.Match.DefeatedEnemies.Count} enemies**");
+                        await args.Context.Channel.SendMessageAsync($"{args.Context.User.Mention} You were defeated in combat by **{args.Match.CurrentEnemy.Name}** after defeating **{args.Match.DefeatedEnemies.Count}** enemies");
                         break;
                     case MatchCompleteResult.Forfeit:
                         await args.Context.Channel.SendMessageAsync($"You forefeited the match after going beyond teh match time limit of **{args.Match.TurnTimeLimit.Days}D {args.Match.TurnTimeLimit.Hours}H {args.Match.TurnTimeLimit.Minutes}M {args.Match.TurnTimeLimit.Seconds}Secs**, you lost **{args.Match.ExperienceEarned} experience**");
@@ -1982,7 +2005,7 @@ namespace PersonalDiscordBot.Classes
                 var owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
                 var timeStamp = DateTime.Now;
                 List<IMessage> responded = new List<IMessage>();
-                bool emptiedLoot = owner.CurrentCharacter.Loot.Count >= 0 ? true : false;
+                bool emptiedLoot = owner.CurrentCharacter.Loot.Count > 0 ? false : true;
                 Toolbox.uDebugAddLog($"Emptying Loot: [emptiedLoot]{emptiedLoot} [Count]{owner.CurrentCharacter.Loot.Count} [ID]{owner.OwnerID}");
                 while (!emptiedLoot)
                 {
@@ -2087,7 +2110,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                bool hasSetup = VerifyProfileAndHasCharacter(context);
+                bool hasSetup = await VerifyProfileAndHasCharacter(context);
                 if (!hasSetup)
                     return;
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
@@ -2135,7 +2158,7 @@ namespace PersonalDiscordBot.Classes
                             {
                                 itemResp = true;
                                 Item chosenItem = itemList[itemNum - 1];
-                                UseItem(context, owner, chosenItem);
+                                await UseItem(context, owner, chosenItem);
                             }
                         }
                     }
@@ -2156,7 +2179,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                bool hasSetup = VerifyProfileAndHasCharacter(context);
+                bool hasSetup = await VerifyProfileAndHasCharacter(context);
                 if (!hasSetup)
                     return;
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
@@ -2207,7 +2230,7 @@ namespace PersonalDiscordBot.Classes
                     await Task.Delay(TimeSpan.FromSeconds(1));
                 }
                 Armor chosenArmor = armorList[chosenNum - 1];
-                ChangeArmor(context, chosenArmor);
+                await ChangeArmor(context, chosenArmor);
             }
             catch (Exception ex)
             {
@@ -2219,7 +2242,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                bool hasSetup = VerifyProfileAndHasCharacter(context);
+                bool hasSetup = await VerifyProfileAndHasCharacter(context);
                 if (!hasSetup)
                     return;
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
@@ -2271,7 +2294,7 @@ namespace PersonalDiscordBot.Classes
                     await Task.Delay(TimeSpan.FromSeconds(1));
                 }
                 Weapon chosenWeapon = weapList[chosenNum - 1];
-                ChangeWeapon(context, chosenWeapon);
+                await ChangeWeapon(context, chosenWeapon);
             }
             catch (Exception ex)
             {
@@ -2281,7 +2304,7 @@ namespace PersonalDiscordBot.Classes
 
         public static async Task CharacterChangeDescription(ICommandContext context)
         {
-            var isSetup = VerifyProfileAndHasCharacter(context);
+            var isSetup = await VerifyProfileAndHasCharacter(context);
             if (!isSetup)
                 return;
             OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.User.Id);
@@ -2319,7 +2342,7 @@ namespace PersonalDiscordBot.Classes
             }
         } 
 
-        public static void UseItem(ICommandContext context, OwnerProfile owner, Item item)
+        public static async Task UseItem(ICommandContext context, OwnerProfile owner, Item item)
         {
             try
             {
@@ -2327,14 +2350,14 @@ namespace PersonalDiscordBot.Classes
                 if (iItem == null)
                 {
                     Toolbox.uDebugAddLog($"ERROR: Item wasn't found in backpack when it was pulled from backpack [Name] {item.Name} [Count] {item.Count}");
-                    Events.SendDiscordMessage(context, $"An error occured and the item you want to use wasn't found in your backpack after finding it... I know confusing but you should let the developer know (don't worry, I left it as your turn, I'm not heartless)");
+                    await context.Channel.SendMessageAsync($"An error occured and the item you want to use wasn't found in your backpack after finding it... I know confusing but you should let the developer know (don't worry, I left it as your turn, I'm not heartless)");
                     return;
                 }
                 var match = RPG.MatchList.Find(x => x.Owner == owner);
                 if (match == null)
                 {
                     Toolbox.uDebugAddLog($"Match wasn't found for {owner.CurrentCharacter.Name}, canceling item use [ID]{owner.OwnerID}");
-                    Events.SendDiscordMessage(context, "You aren't currently in an active match, please start a match then try again");
+                    await context.Channel.SendMessageAsync("You aren't currently in an active match, please start a match then try again");
                     return;
                 }
                 Item tmpItem = (Item)iItem;
@@ -2355,7 +2378,7 @@ namespace PersonalDiscordBot.Classes
                         };
                         owner.CurrentCharacter.StatusEffects.Add(bff);
                         Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} added affliction to themself [ID]{owner.OwnerID} {bff.EnumPropsLogging()}");
-                        Events.SendDiscordMessage(context, $"{owner.CurrentCharacter.Name} used {tmpItem.Name} on themself which will last {bff.TurnsActive} turns");
+                        await context.Channel.SendMessageAsync($"{owner.CurrentCharacter.Name} used {tmpItem.Name} on themself which will last {bff.TurnsActive} turns");
                         if (tmpItem.Count > 1)
                         {
                             Item bpItem = (Item)owner.CurrentCharacter.Backpack.Stored.Find(x => x == item);
@@ -2368,7 +2391,7 @@ namespace PersonalDiscordBot.Classes
                             owner.CurrentCharacter.Backpack.Stored.Remove(iItem);
                             Toolbox.uDebugAddLog($"Removed {iItem.Name} from {owner.CurrentCharacter}'s backpack as it had a count of {tmpItem.Count}");
                         }
-                        CalculateTurn(context, owner);
+                        await CalculateTurn(context, owner);
                         break;
                     case ItemType.Damaging:
                         Affliction dmg = new Affliction()
@@ -2385,7 +2408,7 @@ namespace PersonalDiscordBot.Classes
                         };
                         match.CurrentEnemy.StatusEffects.Add(dmg);
                         Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} added affliction to {match.CurrentEnemy.Name} [ID]{owner.OwnerID} {dmg.EnumPropsLogging()}");
-                        Events.SendDiscordMessage(context, $"{owner.CurrentCharacter.Name} used {tmpItem.Name} on {match.CurrentEnemy.Name} which will last {dmg.TurnsActive} turns");
+                        await context.Channel.SendMessageAsync($"{owner.CurrentCharacter.Name} used {tmpItem.Name} on {match.CurrentEnemy.Name} which will last {dmg.TurnsActive} turns");
                         if (tmpItem.Count > 1)
                         {
                             Item bpItem = (Item)owner.CurrentCharacter.Backpack.Stored.Find(x => x == item);
@@ -2398,13 +2421,13 @@ namespace PersonalDiscordBot.Classes
                             owner.CurrentCharacter.Backpack.Stored.Remove(iItem);
                             Toolbox.uDebugAddLog($"Removed {iItem.Name} from {owner.CurrentCharacter}'s backpack as it had a count of {tmpItem.Count}");
                         }
-                        CalculateTurn(context, owner);
+                        await CalculateTurn(context, owner);
                         break;
                     case ItemType.Repair:
                         Toolbox.uDebugAddLog($"Repairing {owner.CurrentCharacter.Name}'s {owner.CurrentCharacter.Weapon.Name}. [Current]{owner.CurrentCharacter.Weapon.CurrentDurability}/{owner.CurrentCharacter.Weapon.MaxDurability} [ID]{owner.OwnerID}");
                         owner.CurrentCharacter.Weapon.CurrentDurability = owner.CurrentCharacter.Weapon.MaxDurability;
                         Toolbox.uDebugAddLog($"Repaired {owner.CurrentCharacter.Name}'s {owner.CurrentCharacter.Weapon.Name}. [After]{owner.CurrentCharacter.Weapon.CurrentDurability}/{owner.CurrentCharacter.Weapon.MaxDurability} [ID]{owner.OwnerID}");
-                        Events.SendDiscordMessage(context, $"{owner.CurrentCharacter.Name}'s {owner.CurrentCharacter.Weapon.Name} has been repaired, current durability: {owner.CurrentCharacter.Weapon.CurrentDurability}/{owner.CurrentCharacter.Weapon.MaxDurability} [ID]{owner.OwnerID}");
+                        await context.Channel.SendMessageAsync($"{owner.CurrentCharacter.Name}'s {owner.CurrentCharacter.Weapon.Name} has been repaired, current durability: {owner.CurrentCharacter.Weapon.CurrentDurability}/{owner.CurrentCharacter.Weapon.MaxDurability} [ID]{owner.OwnerID}");
                         if (tmpItem.Count > 1)
                         {
                             Item bpItem = (Item)owner.CurrentCharacter.Backpack.Stored.Find(x => x == item);
@@ -2417,25 +2440,25 @@ namespace PersonalDiscordBot.Classes
                             owner.CurrentCharacter.Backpack.Stored.Remove(iItem);
                             Toolbox.uDebugAddLog($"Removed {iItem.Name} from {owner.CurrentCharacter}'s backpack as it had a count of {tmpItem.Count}");
                         }
-                        CalculateTurn(context, owner);
+                        await CalculateTurn(context, owner);
                         break;
                     case ItemType.Restorative:
                         if (item.Name.ToLower().Contains("health"))
                         {
                             owner.CurrentCharacter.CurrentHP += item.CalculateHealthPotion(owner.CurrentCharacter);
-                            Events.SendDiscordMessage(context, $"**{owner.CurrentCharacter.Name}** was health was restored by {item.CalculateHealthPotion(owner.CurrentCharacter)}, current health: {owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} ({item.Count - 1} left)");
-                            CalculateTurn(context, owner);
+                            await context.Channel.SendMessageAsync($"**{owner.CurrentCharacter.Name}** was health was restored by {item.CalculateHealthPotion(owner.CurrentCharacter)}, current health: {owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} ({item.Count - 1} left)");
+                            await CalculateTurn(context, owner);
                         }
                         else if (item.Name.ToLower().Contains("mana"))
                         {
                             owner.CurrentCharacter.CurrentMana += item.CalculateManaPotion(owner.CurrentCharacter);
-                            Events.SendDiscordMessage(context, $"**{owner.CurrentCharacter.Name}'s** mana was restored by {item.CalculateManaPotion(owner.CurrentCharacter)}, current mana: {owner.CurrentCharacter.CurrentMana}/{owner.CurrentCharacter.MaxMana} ({item.Count - 1} left)");
-                            CalculateTurn(context, owner);
+                            await context.Channel.SendMessageAsync($"**{owner.CurrentCharacter.Name}'s** mana was restored by {item.CalculateManaPotion(owner.CurrentCharacter)}, current mana: {owner.CurrentCharacter.CurrentMana}/{owner.CurrentCharacter.MaxMana} ({item.Count - 1} left)");
+                            await CalculateTurn(context, owner);
                         }
                         else
                         {
                             Toolbox.uDebugAddLog($"Something happened and the restorative item didn't contain health or mana: {LootDrop.GetLootInfo(iItem)} [ID]{owner.OwnerID}");
-                            Events.SendDiscordMessage(context, "Something happened and the restorative wasn't for health for mana, please let the dev know");
+                            await context.Channel.SendMessageAsync("Something happened and the restorative wasn't for health for mana, please let the dev know");
                             return;
                         }
                         if (item.Count > 1)
@@ -2451,11 +2474,11 @@ namespace PersonalDiscordBot.Classes
                             owner.CurrentCharacter.Backpack.Stored.Remove(iItem);
                             Toolbox.uDebugAddLog($"Removed item from backpack: {iItem.Name}, count was {_item.Count} [ID]{owner.OwnerID}");
                         }
-                        CalculateTurn(context, owner);
+                        await CalculateTurn(context, owner);
                         break;
                     default:
                         Toolbox.uDebugAddLog($"ERROR: Item was used and wasn't one of the 4 item types. [Char]{owner.CurrentCharacter.Name} [ID]{owner.OwnerID} [Item]{tmpItem.EnumPropsLogging()}");
-                        Events.SendDiscordMessage(context, $"Something happend and you couldn't use the item {tmpItem.Name}, please let the devs know. You still have your turn");
+                        await context.Channel.SendMessageAsync($"Something happend and you couldn't use the item {tmpItem.Name}, please let the devs know. You still have your turn");
                         break;
                 }
             }
@@ -2465,7 +2488,7 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static void NextEnemy(ICommandContext context, OwnerProfile owner, Enemy enemy)
+        public static async Task NextEnemy(ICommandContext context, OwnerProfile owner, Enemy enemy)
         {
             try
             {
@@ -2477,11 +2500,16 @@ namespace PersonalDiscordBot.Classes
                 RPG.MatchList.Find(x => x.Owner == owner).CurrentEnemy = newEnemy;
                 RPG.MatchList.Find(x => x.Owner == owner).CurrentTurn = Turn.NotChosen;
                 Toolbox.uDebugAddLog($"Changed {enemy.Name} to the current enemy");
-                EmbedBuilder embed = new EmbedBuilder() { Title = $"You have defeated **{enemy.Name}** and are now fighting **{newEnemy.Name}**. Enemies left: **{match.EnemyList.Count}**", Color = owner.CurrentCharacter.Color, Description = $"{owner.CurrentCharacter.Name} vs. {enemy.Name}" };
-                embed.AddField(x => { x.Name = "Player Img"; x.IsInline = true; x.Value = owner.CurrentCharacter.ImgURL; });
-                embed.AddField(x => { x.Name = "Enemy Img"; x.IsInline = true; x.Value = enemy.ImgURL; });
-                Events.SendDiscordMessage(context, embed);
-                CalculateTurn(context, owner);
+                EmbedBuilder embed = new EmbedBuilder()
+                {
+                    Title = $"**{enemy.Name}** defeated, now fighting **{newEnemy.Name}**. {Environment.NewLine}Enemies left: **{match.EnemyList.Count}**",
+                    Color = owner.CurrentCharacter.Color,
+                    Description = $"**{owner.CurrentCharacter.Name}** vs. **{enemy.Name}**"
+                };
+                //embed.AddField(x => { x.Name = "Player Img"; x.IsInline = true; x.Value = owner.CurrentCharacter.ImgURL; });
+                //embed.AddField(x => { x.Name = "Enemy Img"; x.IsInline = true; x.Value = enemy.ImgURL; });
+                await context.Channel.SendMessageAsync("", false, embed.Build());
+                await CalculateTurn(context, owner);
             }
             catch (Exception ex)
             {
@@ -2816,8 +2844,8 @@ namespace PersonalDiscordBot.Classes
                 Toolbox.uDebugAddLog($"attack = [weapon]{enemyPhys} * [str]{enemy.Str}");
                 var defense = physDamage * chara.Def;
                 Toolbox.uDebugAddLog($"defense = [armor]{physDamage} * [def]{chara.Def}");
-                enemyPhys = ((attack * attack) / (attack + defense)) / 5;
-                Toolbox.uDebugAddLog($"enemyPhys = (({attack} * {attack}) / ({attack} + {defense})) / 5");
+                enemyPhys = ((attack * attack) / (attack + defense)) / 15;
+                Toolbox.uDebugAddLog($"enemyPhys = (({attack} * {attack}) / ({attack} + {defense})) / 15");
                 if (enemyPhys <= 0) enemyPhys = 0;
                 Toolbox.uDebugAddLog("Calculating magiDamage");
                 enemyMagi = Management.CalculateElement(enemyMagi, magiDamage);
@@ -3043,7 +3071,8 @@ namespace PersonalDiscordBot.Classes
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == chara.OwnerID);
                 int filtered = 0;
                 int total = chara.Loot.Count;
-                foreach (var bpItem in chara.Loot)
+                var lootPack = chara.Loot;
+                foreach (var bpItem in lootPack)
                 {
                     var lootType = bpItem.GetLootType();
                     if (lootType == LootType.Nothing)
@@ -3052,7 +3081,7 @@ namespace PersonalDiscordBot.Classes
                         owner.TotalPebbles++;
                         pebblesAdded++;
                         Toolbox.uDebugAddLog($"Added pebble to {chara.Name} and {owner.OwnerID} and removing from loot list for type {lootType}");
-                        chara.Loot.Remove(bpItem);
+                        lootPack.Remove(bpItem);
                         Toolbox.uDebugAddLog($"Removed pebble from character loot");
                     }
                     else if (lootType == LootType.Item)
@@ -3063,11 +3092,12 @@ namespace PersonalDiscordBot.Classes
                             owner.Currency += item.Worth;
                             currencyAdded += item.Worth;
                             Toolbox.uDebugAddLog($"Added {item.Worth} currency to {owner.OwnerID} and removing from loot list for type {lootType}");
-                            chara.Loot.Remove(bpItem);
+                            lootPack.Remove(bpItem);
                             Toolbox.uDebugAddLog("Removed currency from character loot");
                         }
                     }
                 }
+                chara.Loot = lootPack;
                 Toolbox.uDebugAddLog($"Filtered loot:{filtered}/{total} [ID]{chara.OwnerID}");
             }
             catch (Exception ex)
@@ -5188,22 +5218,22 @@ namespace PersonalDiscordBot.Classes
             switch (enemType)
             {
                 case EnemyType.Bear:
-                    str = 6; def = 4; dex = 2; inT = 1; spd = 4; lck = 1;
+                    str = 3; def = 4; dex = 2; inT = 1; spd = 3; lck = 1;
                     break;
                 case EnemyType.ButterRobot:
                     str = 4; def = 3; dex = 3; inT = 1; spd = 4; lck = 2;
                     break;
                 case EnemyType.DarkKnight:
-                    str = 9; def = 7; dex = 5; inT = 4; spd = 4; lck = 5;
+                    str = 5; def = 5; dex = 4; inT = 4; spd = 3; lck = 5;
                     break;
                 case EnemyType.Goblin:
-                    str = 5; def = 4; dex = 3; inT = 1; spd = 3; lck = 1;
+                    str = 1; def = 1; dex = 1; inT = 1; spd = 2; lck = 1;
                     break;
                 case EnemyType.Knight:
-                    str = 6; def = 6; dex = 4; inT = 3; spd = 4; lck = 3;
+                    str = 3; def = 4; dex = 3; inT = 3; spd = 2; lck = 3;
                     break;
                 case EnemyType.Troll:
-                    str = 7; def = 5; dex = 3; inT = 2; spd = 5; lck = 2;
+                    str = 2; def = 3; dex = 2; inT = 1; spd = 4; lck = 2;
                     break;
             }
             return PriorityFactors.SetPF(str, def, dex, inT, spd, lck);
