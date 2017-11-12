@@ -2,4 +2,7 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/PersonalDiscordBot/bin/x64/Release
+/PersonalDiscordBot/bin
+/PersonalDiscordBot/obj
+/PDBUpdater/PDBUpdater/bin
+/PDBUpdater/PDBUpdater/obj
