@@ -36,6 +36,7 @@ namespace PDBUpdater
         public async Task MainAsync()
         {
             Initialize();
+            VerifyAppVersion();
             SetupClient();
             await CheckNewRelease();
         }
@@ -57,7 +58,7 @@ namespace PDBUpdater
                 var result = saveData.CurrentVersion.CompareTo(releaseVersion);
                 if (result < 0)
                 {
-                    uStatusWriteLine($"Newer release found, updating now... [Current]{saveData.CurrentVersion} [Release]{releaseVersion}");
+                    uStatusWriteLine($"Newer release found, updating now... [Current]{saveData.CurrentVersion} [Release]{releaseVersion}", ConsoleColor.Green);
                     UpdateToNewVersion(release.TagName, releaseVersion);
                     while (!downloadFinished)
                     {
@@ -68,7 +69,7 @@ namespace PDBUpdater
                 }
                 else
                 {
-                    uStatusWriteLine($"Release Version is the same version or older than running assembly. [Current]{saveData.CurrentVersion} [Release]{releaseVersion}");
+                    uStatusWriteLine($"Release Version is the same version or older than running assembly. [Current]{saveData.CurrentVersion} [Release]{releaseVersion}", ConsoleColor.Green);
                     Exit();
                 }
             }
@@ -136,6 +137,15 @@ namespace PDBUpdater
 
         #region Methods
 
+        private void CreateDefConfig()
+        {
+            saveData.CurrentVersion = new Version("0.1.00.00");
+            saveData.BackupFolder = $@"{Directory.GetCurrentDirectory()}\Backup";
+            saveData.InstallDirectory = $@"{Directory.GetCurrentDirectory()}";
+            saveData.DownloadBaseURL = $@"https://github.com/rwobig93/ServerRPGAdventure/releases/download";
+            SerializeConfig();
+        }
+
         private void VerifySaveData()
         {
             try
@@ -147,11 +157,7 @@ namespace PDBUpdater
                 }
                 if (!File.Exists(configFile))
                 {
-                    saveData.CurrentVersion = new Version("0.1.00.00");
-                    saveData.BackupFolder = $@"{Directory.GetCurrentDirectory()}\Backup";
-                    saveData.InstallDirectory = $@"{Directory.GetCurrentDirectory()}";
-                    saveData.DownloadBaseURL = $@"https://github.com/rwobig93/ServerRPGAdventure/releases/download";
-                    SerializeConfig();
+                    CreateDefConfig();
                     uStatusWriteLine($@"Config file wasn't found, created default", ConsoleColor.DarkGray);
                 }
                 else
@@ -188,12 +194,32 @@ namespace PDBUpdater
                     uStatusWriteLine($"Finished Deserializing config data from: {configFile}", ConsoleColor.DarkGray);
                 }
                 else
-                    uStatusWriteLine($"Didn't locate a config file at {configFile}, stopped deserialization", ConsoleColor.DarkGray);
+                {
+                    uStatusWriteLine($"Didn't locate a config file at {configFile}, stopped deserialization, creating default config", ConsoleColor.DarkGray);
+                    CreateDefConfig();
+                    uStatusWriteLine($"Created default config", ConsoleColor.DarkGray);
+                }
             }
             catch (Exception ex)
             {
                 FullExceptionLog(ex);
             }
+        }
+
+        private void VerifyAppVersion()
+        {
+            var appExecutable = $@"{Directory.GetCurrentDirectory()}\PersonalDiscordBot.exe";
+            if (!File.Exists(appExecutable))
+            {
+                uStatusWriteLine($"App executable wasn't found at \"{appExecutable}\", please reinstall or move the executable back to the current directory", ConsoleColor.Red);
+                uStatusWriteLine("Hit any key to exit...", ConsoleColor.White);
+                Console.ReadLine();
+            }
+            uStatusWriteLine("App executable found!", ConsoleColor.Green);
+            Version appVersion = Assembly.LoadFrom(appExecutable).GetName().Version;
+            saveData.CurrentVersion = appVersion;
+            uStatusWriteLine($"Current executable version: v{appVersion} - now saving...", ConsoleColor.DarkGray);
+            SerializeConfig();
         }
 
         private void SetupClient()

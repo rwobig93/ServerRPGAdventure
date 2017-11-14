@@ -84,12 +84,36 @@ namespace PersonalDiscordBot.Classes
             return array.Length - 1;
         }
 
+        public static string EnumProps(this object obj)
+        {
+            string retString = string.Empty;
+            foreach (var prop in obj.GetType().GetProperties())
+                retString = $"{retString} [{prop.Name}]{prop.GetValue(obj)}{Environment.NewLine}";
+            return retString;
+        }
+
         public static string EnumPropsLogging(this object obj)
         {
             string retString = string.Empty;
             foreach (var prop in obj.GetType().GetProperties())
                 retString = $"{retString} [{prop.Name}]{prop.GetValue(obj)}";
             return retString;
+        }
+
+        public static string EnumItemProperties(this object thing)
+        {
+            string itemProperties = "";
+            var line = Environment.NewLine;
+            foreach (var p in thing.GetType().GetProperties())
+            {
+                if (p.Name == "CurrentDurability")
+                {
+                    itemProperties = itemProperties + $"{p.Name}: {p.GetValue(thing, null)}/{thing.GetType().GetProperty("MaxDurability").GetValue(thing, null)}{line}";
+                }
+                else if (p.GetValue(thing, null).ToString() == "0" || p.Name == "IsUnique" || p.Name == "MaxDurability") { }
+                else itemProperties = itemProperties + $"{p.Name}: {p.GetValue(thing, null)}{line}";
+            }
+            return itemProperties;
         }
     }
 
@@ -121,10 +145,11 @@ namespace PersonalDiscordBot.Classes
             try
             {
                 statusUpdater.DebugLog = $"{DateTime.Now.ToLocalTime().ToString("MM-dd-yy")}_{DateTime.Now.ToLocalTime().ToLongTimeString()} :: {caller.ToUpper()}: {_log}";
-                if (statusUpdater.DebugLog.Length >= 5000)
-                {
-                    DumpDebugLog();
-                }
+                if (statusUpdater.DebugLog.Length >= 0)
+                    if (statusUpdater.DebugLog.Length >= 5000)
+                    {
+                        DumpDebugLog();
+                    }
             }
             catch (Exception ex)
             {

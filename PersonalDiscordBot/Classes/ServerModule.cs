@@ -10,12 +10,9 @@ using System.IO;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading;
-using System.Windows;
 using System.Net;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Windows.Controls;
-using PersonalDiscordBot.Settings;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Discord;
@@ -158,7 +155,7 @@ namespace PersonalDiscordBot.Classes
                     Toolbox.serversRebooted.Add(rebServ);
                     Toolbox.RemoveRebootedServer(rebServ);
                     await Context.Channel.SendMessageAsync(string.Format("Successfully started the game server {0}, please wait for the server to boot up. I will check on the status automatically and let you know what I find, otherwise you can manually check the status by using the command ;server status {1}", chosenServ.ServerName, chosenServ.Game));
-                    CheckOnServer(chosenServ);
+                    CheckOnServer(Context, chosenServ);
                 }
                 #endregion
 
@@ -208,7 +205,7 @@ namespace PersonalDiscordBot.Classes
                     Toolbox.serversRebooted.Add(rebServ);
                     Toolbox.RemoveRebootedServer(rebServ);
                     await Context.Channel.SendMessageAsync(string.Format("Successfully started the game server {0}, please wait for the server to boot up. I will check on the status automatically and let you know what I find, otherwise you can manually check the status by using the command ;server status {1}", chosenServ.ServerName, chosenServ.Game));
-                    CheckOnServer(chosenServ);
+                    CheckOnServer(Context, chosenServ);
                 } 
                 #endregion
             }
@@ -634,7 +631,7 @@ namespace PersonalDiscordBot.Classes
                     else
                         foreach (var player in playerList)
                         {
-                            response = string.Format("{0}```Name: {1}{7}Score: {2}{7}Time Connected: {3}D {4}H {5}M {6}S```", response, player.Name, player.Score.ToString(), player.Time.Days, player.Time.Hours, player.Time.Minutes, player.Time.Seconds, Environment.NewLine);
+                            response = string.Format("{0}```Name: {1}{7}Score: {2}{7}Time Connected: {3}D {4}H {5}M {6}S```", response, player.Name, player.Score.ToString(), player.Time.Days, player.Time.Hours, player.Time.Minutes, player.Time.Seconds, Environment.NewLine).Replace("Score: 0", "");
                         }
                     await Context.Channel.SendMessageAsync(response);
                 }
@@ -716,14 +713,14 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        private void CheckOnServer(GameServer game)
+        private void CheckOnServer(ICommandContext Context, GameServer game)
         {
             try
             {
                 DateTime timeStart = DateTime.Now;
                 TimeSpan waitTime = TimeSpan.FromMinutes(30);
                 Toolbox.uDebugAddLog("Got timestamp, now starting server check thread");
-                Thread startCheck = new Thread(() =>
+                Thread startCheck = new Thread(async () =>
                 {
                     try
                     {
@@ -740,18 +737,18 @@ namespace PersonalDiscordBot.Classes
                             servInfo = GetServerInfo(endpoint, out playerList);
                             Thread.Sleep(TimeSpan.FromSeconds(15));
                             Toolbox.uDebugAddLog(string.Format("Waited 15 seconds after rebooting the {0} game server", game.ServerName));
-                            if (timeStart + TimeSpan.FromMinutes(10) <= DateTime.Now && oneFollowup == false) { Events.SendDiscordMessage(Context, $"It has been **{(DateTime.Now - timeStart).Minutes} min** since rebooting the **{game.Game}** server \"**{game.ServerName}**\", I will keep checking for the next **{(waitTime - (DateTime.Now - timeStart)).Minutes} min**"); oneFollowup = true; }
-                            if (timeStart + TimeSpan.FromMinutes(20) <= DateTime.Now && twoFollowup == false) { Events.SendDiscordMessage(Context, $"It has been **{(DateTime.Now - timeStart).Minutes} min** since rebooting the **{game.Game}** server \"**{game.ServerName}**\", I will keep checking for the next **{(waitTime - (DateTime.Now - timeStart)).Minutes} min**"); twoFollowup = true; }
+                            if (timeStart + TimeSpan.FromMinutes(10) <= DateTime.Now && oneFollowup == false) { await Context.Channel.SendMessageAsync($"It has been **{(DateTime.Now - timeStart).Minutes} min** since rebooting the **{game.Game}** server \"**{game.ServerName}**\", I will keep checking for the next **{(waitTime - (DateTime.Now - timeStart)).Minutes} min**"); oneFollowup = true; }
+                            if (timeStart + TimeSpan.FromMinutes(20) <= DateTime.Now && twoFollowup == false) { await Context.Channel.SendMessageAsync($"It has been **{(DateTime.Now - timeStart).Minutes} min** since rebooting the **{game.Game}** server \"**{game.ServerName}**\", I will keep checking for the next **{(waitTime - (DateTime.Now - timeStart)).Minutes} min**"); twoFollowup = true; }
                             if (timeStart + waitTime <= DateTime.Now)
                             {
-                                Events.SendDiscordMessage(Context, $"I tried checking on the \"**{game.ServerName}**\" server for you but it never came up or I can't connect to it for some reason, its been **{waitTime.Minutes} min** so I'm gonna stop checking...");
+                                await Context.Channel.SendMessageAsync($"I tried checking on the \"**{game.ServerName}**\" server for you but it never came up or I can't connect to it for some reason, its been **{waitTime.Minutes} min** so I'm gonna stop checking...");
                                 Toolbox.uDebugAddLog($"Waited the full {waitTime.Minutes} min after rebooting the {game.ServerName} game server without connectivity, stopping thread");
                                 return;
                             }
                         }
                         TimeSpan timeTaken = DateTime.Now - timeStart;
                         Toolbox.uDebugAddLog($"servInfo for {game.Game} server {game.ServerName} was found");
-                        Events.SendDiscordMessage(Context, $"The **{game.Game}** server \"**{game.ServerName}**\" is now up and running after **{timeTaken.Minutes} min**");
+                        await Context.Channel.SendMessageAsync($"The **{game.Game}** server \"**{game.ServerName}**\" is now up and running after **{timeTaken.Minutes} min**");
                         Toolbox.uDebugAddLog(string.Format("Successfully alerted when the {0} game server came back up, took {1} min", game.ServerName, timeTaken.Minutes));
                     }
                     catch (Exception ex)
@@ -1016,10 +1013,9 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                if (sGeneral.Default.Snooping) sGeneral.Default.Snooping = false;
-                else sGeneral.Default.Snooping = true;
-                sGeneral.Default.Save();
-                await Context.Channel.SendMessageAsync(string.Format("Snooping all messages in this channel: {0}", sGeneral.Default.Snooping));
+                if (Toolbox._paths.Snooping) Toolbox._paths.Snooping = false;
+                else Toolbox._paths.Snooping = true;
+                await Context.Channel.SendMessageAsync(string.Format("Snooping all messages in this channel: {0}", Toolbox._paths.Snooping));
             }
             catch (Exception ex)
             {
@@ -1088,7 +1084,7 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                await Context.Channel.SendMessageAsync(string.Format("Snoopify All: {0}", sGeneral.Default.Snooping));
+                await Context.Channel.SendMessageAsync(string.Format("Snoopify All: {0}", Toolbox._paths.Snooping));
             }
             catch (Exception ex)
             {
@@ -1147,7 +1143,7 @@ namespace PersonalDiscordBot.Classes
                 if (gitClient == null)
                     gitClient = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("PDB"));
                 if (Toolbox._paths.CurrentVersion == null)
-                    Toolbox._paths.CurrentVersion = new Version("0.1.00.00");
+                    Toolbox._paths.CurrentVersion = new Version("0.1.0.0");
                 var releases = await gitClient.Repository.Release.GetAll("rwobig93", "ServerRPGAdventure");
                 var release = releases[0];
                 Version releaseVersion = new Version(release.TagName);
@@ -1616,6 +1612,11 @@ namespace PersonalDiscordBot.Classes
                                 Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
                                 Toolbox.uDebugAddLog($"Response: {response}");
                                 costResponseRecvd = true;
+                                if (response.ToLower() == "no")
+                                {
+                                    await Context.Channel.SendMessageAsync($"{Context.User.Mention} Operation cancelled");
+                                    return;
+                                }
                             }
                         }
                         if (costTimeStamp + TimeSpan.FromSeconds(60) <= DateTime.Now)
@@ -1784,7 +1785,7 @@ namespace PersonalDiscordBot.Classes
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} This first character is on us, enjoy");
                 else
                 {
-                    if (!hasCharacters) ownerProfile.Currency -= cost;
+                    ownerProfile.Currency -= cost;
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You have been charged {cost} currency, you now have: {ownerProfile.Currency}");
                 }
                 Character newChar = Management.CreateNewCharacter(Context.Message.Author.Id, chosenClass, charName);
@@ -2145,12 +2146,75 @@ namespace PersonalDiscordBot.Classes
                 }
                 Toolbox.uDebugAddLog($"Starting match command");
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
-                Management.CreateMatch(Context, owner);
+                try
+                {
+                    var match = RPG.MatchList.Find(x => x.Owner == owner);
+                    if (match == null)
+                    {
+                        if (owner.CurrentCharacter.Loot.Count > 0)
+                        {
+                            await Context.Channel.SendMessageAsync($"You still have {owner.CurrentCharacter.Loot.Count} pieces of loot to go through before you can start another match");
+                            return;
+                        }
+                        Toolbox.uDebugAddLog($"Generating new match for {owner.OwnerID}");
+                        Match newMatch = new Match() { Owner = owner, MatchStart = DateTime.Now };
+                        int enemyCount = RPG.rng.Next(1, 5);
+                        Toolbox.uDebugAddLog($"Enemy Count chosen: {enemyCount}");
+                        for (int i = 0; i < enemyCount; i++)
+                        {
+                            Enemy newEnemy = Enemies.EnemyRanGen(LootDrop.ChooseLevel(owner.CurrentCharacter.Lvl));
+                            if (i == 0) { newMatch.CurrentEnemy = newEnemy; Toolbox.uDebugAddLog($"Set {newEnemy.Name} as the current enemy for {owner.OwnerID}"); }
+                            newMatch.EnemyList.Add(newEnemy);
+                            Toolbox.uDebugAddLog($"Generated enemy {newEnemy.Name} and added to the enemy list for {owner.OwnerID}");
+                            Toolbox.uDebugAddLog($"Generating Enemies Progress: [current]{i} [enemyCount]{enemyCount}");
+                        }
+                        RPG.MatchList.Add(newMatch);
+                        Toolbox.uDebugAddLog($"Successfully generated new match with {newMatch.EnemyList.Count} enemies");
+                        EmbedBuilder embed = new EmbedBuilder()
+                        {
+                            Title = $"A new match was generated with **{newMatch.EnemyList.Count}** enemies",
+                            Color = owner.CurrentCharacter.Color,
+                            Description = $"{owner.CurrentCharacter.Name} vs. {newMatch.CurrentEnemy.Name}"
+                        };
+                        //embed.AddField(x => { x.Name = "Player Img"; x.IsInline = true; x.Value = owner.CurrentCharacter.ImgURL; });
+                        //embed.AddField(x => { x.Name = "Enemy Img"; x.IsInline = true; x.Value = newEnemy.ImgURL; });
+                        await Context.Channel.SendMessageAsync(string.Empty, false, embed.Build());
+                        Toolbox.uDebugAddLog($"Successfully sent new match message to {Context.User.Username} | {Context.User.Id}");
+                        await Management.CalculateTurn(Context, owner);
+                        return;
+                    }
+                    else
+                    {
+                        Toolbox.uDebugAddLog($"Attempt to generate new match, existing match found for {owner.OwnerID}");
+                        TimeSpan time = DateTime.Now - match.MatchStart;
+                        TimeSpan timeLeft = (match.LastPlayerTurn + match.TurnTimeLimit) - match.LastPlayerTurn;
+                        await Context.Channel.SendMessageAsync($"You currently have an active match with **{match.CurrentEnemy.Name}** that was started **{time.Days}D {time.Hours}H {time.Minutes}M {time.Seconds}Secs** ago, please attack your current enemy, you have **{timeLeft.Days}D {timeLeft.Hours}H {timeLeft.Minutes}M {timeLeft.Seconds}Secs** left before you **forfeit**");
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Toolbox.FullExceptionLog(ex);
+                }
             }
             catch (Exception ex)
             {
                 ServerModule.FullExceptionLog(ex);
             }
+        }
+
+        [Command("view match"), Summary("Testicules Match View Test")]
+        public async Task Testacules13a()
+        {
+            var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+            if (!hasChar)
+            {
+                await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have any characters, please create one before trying to start a match");
+                return;
+            }
+            Toolbox.uDebugAddLog($"Starting match view command [{Context.User.Id}]");
+            await Context.Message.Channel.SendMessageAsync($"{Context.User.Mention} Your current match details:{line}{Management.CheckMatchDetails(Context)}");
+            Toolbox.uDebugAddLog($"Finished match view command [{Context.User.Id}]");
         }
 
         [Command("attack"), Summary("Testicules Attack Test")]
@@ -2171,8 +2235,8 @@ namespace PersonalDiscordBot.Classes
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have an active match, please start a match before trying to attack nothing");
                     return; 
                 }
-                Management.AttackEnemy(Context, owner, match.CurrentEnemy);
-                Management.CalculateTurn(Context, owner);
+                await Management.AttackEnemy(Context, owner, match.CurrentEnemy);
+                await Management.CalculateTurn(Context, owner);
             }
             catch (Exception ex)
             {
@@ -2229,7 +2293,7 @@ namespace PersonalDiscordBot.Classes
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have any characters, please create one before trying to get some of that dank loot");
                     return;
                 }
-                Management.CheckCharacterStats(Context);
+                await Management.CheckCharacterStats(Context);
             }
             catch (Exception ex)
             {
@@ -2432,7 +2496,7 @@ namespace PersonalDiscordBot.Classes
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} you don't currently have any characters, please create one before trying to view your phat loot");
                     return;
                 }
-                Management.CheckCharacterStats(Context);
+                await Management.CheckCharacterBackpack(Context);
             }
             catch (Exception ex)
             {
@@ -2454,13 +2518,13 @@ namespace PersonalDiscordBot.Classes
                     var split = color.Split(',');
                     if (split.Length <= 2)
                     {
-                        Events.SendDiscordMessage(Context, $"You didn't enter enough numbers to make an RGB color, please try again [entered]{color}");
+                        await Context.Channel.SendMessageAsync($"You didn't enter enough numbers to make an RGB color, please try again [entered]{color}");
                         Toolbox.uDebugAddLog($"Incorrect arguments (split.Length <= 2) for RGB color entered: {color} [ID]{Context.User.Id}");
                         return;
                     }
                     if (split.Length > 3)
                     {
-                        Events.SendDiscordMessage(Context, $"You entered too many arguments to create an RGB color, you need 3 arguments, please try again [entered]{color}");
+                        await Context.Channel.SendMessageAsync($"You entered too many arguments to create an RGB color, you need 3 arguments, please try again [entered]{color}");
                         Toolbox.uDebugAddLog($"Incorrect arguments (split.Length > 3) for RGB color entered: {color} [ID]{Context.User.Id}");
                         return;
                     }
@@ -2470,26 +2534,26 @@ namespace PersonalDiscordBot.Classes
                     var isNum1 = int.TryParse(split[0], out num1);
                     if (!isNum1)
                     {
-                        Events.SendDiscordMessage(Context, $"The number you entered for argument 1 isn't a valid integer: {split[0]}");
+                        await Context.Channel.SendMessageAsync($"The number you entered for argument 1 isn't a valid integer: {split[0]}");
                         Toolbox.uDebugAddLog($"Argument 1 isn't a valid integer: {split[0]} [ID]{Context.User.Id}");
                         return;
                     }
                     var isNum2 = int.TryParse(split[1], out num2);
                     if (!isNum2)
                     {
-                        Events.SendDiscordMessage(Context, $"The number you entered for argument 2 isn't a valid integer: {split[1]}");
+                        await Context.Channel.SendMessageAsync($"The number you entered for argument 2 isn't a valid integer: {split[1]}");
                         Toolbox.uDebugAddLog($"Argument 2 isn't a valid integer: {split[1]} [ID]{Context.User.Id}");
                         return;
                     }
                     var isNum3 = int.TryParse(split[2], out num3);
                     if (!isNum3)
                     {
-                        Events.SendDiscordMessage(Context, $"The number you entered for argument 3 isn't a valid integer: {split[2]}");
+                        await Context.Channel.SendMessageAsync($"The number you entered for argument 3 isn't a valid integer: {split[2]}");
                         Toolbox.uDebugAddLog($"Argument 3 isn't a valid integer: {split[2]} [ID]{Context.User.Id}");
                         return;
                     }
                     Discord.Color newColor = new Discord.Color(num1, num2, num3);
-                    Management.ChangeColor(Context, newColor);
+                    await Management.ChangeColor(Context, newColor);
                 }
                 else
                 {
@@ -2539,11 +2603,11 @@ namespace PersonalDiscordBot.Classes
                             selColor = System.Windows.Media.Colors.White;
                             break;
                         default:
-                            Events.SendDiscordMessage(Context, $"{color} is an incorrect color, please try again");
+                            await Context.Channel.SendMessageAsync($"{color} is an incorrect color, please try again");
                             return;
                     }
                     newColor = new Color(selColor.R, selColor.G, selColor.B);
-                    Management.ChangeColor(Context, newColor);
+                    await Management.ChangeColor(Context, newColor);
                 }
             }
             catch (Exception ex)
