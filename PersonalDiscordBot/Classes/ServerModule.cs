@@ -2180,7 +2180,7 @@ namespace PersonalDiscordBot.Classes
                         //embed.AddField(x => { x.Name = "Enemy Img"; x.IsInline = true; x.Value = newEnemy.ImgURL; });
                         await Context.Channel.SendMessageAsync(string.Empty, false, embed.Build());
                         Toolbox.uDebugAddLog($"Successfully sent new match message to {Context.User.Username} | {Context.User.Id}");
-                        await Management.CalculateTurn(Context, owner);
+                        await TurnSystem.CalculateTurn(Context, owner);
                         return;
                     }
                     else
@@ -2236,7 +2236,7 @@ namespace PersonalDiscordBot.Classes
                     return; 
                 }
                 await Management.AttackEnemy(Context, owner, match.CurrentEnemy);
-                await Management.CalculateTurn(Context, owner);
+                await TurnSystem.CalculateTurn(Context, owner);
             }
             catch (Exception ex)
             {
