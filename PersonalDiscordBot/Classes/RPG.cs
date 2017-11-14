@@ -75,10 +75,8 @@ namespace PersonalDiscordBot.Classes
         public Enemy CurrentEnemy { get; set; }
         public Turn CurrentTurn { get; set; } = Turn.NotChosen;
         public int Turns { get; set; }
-        public int EnemyTurnTime { get; set; }
-        public int PlayerTurnTime { get; set; }
-        public int EnemySpeedTime { get; set; }
-        public int PlayerSpeedTime { get; set; }
+        public int EnemyTurnTotal { get; set; }
+        public int PlayerTurnTotal { get; set; }
         public int ExperienceEarned { get; set; }
     }
 
@@ -2517,120 +2515,107 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static void CalculateTurn(OwnerProfile owner)
-        {
-            try
-            {
-                string result = string.Empty;
-                var match = RPG.MatchList.Find(x => x.Owner == owner);
-                if (match != null)
-                {
-                    if (match.CurrentTurn == Turn.NotChosen)
-                    {
-                        Toolbox.uDebugAddLog($"Initial Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
-                        match.PlayerSpeedTime = owner.CurrentCharacter.CalculateSpeed();
-                        match.EnemySpeedTime = match.CurrentEnemy.CalculateSpeed();
-                        match.PlayerTurnTime = match.PlayerSpeedTime;
-                        match.EnemyTurnTime = match.EnemySpeedTime;
-                        Toolbox.uDebugAddLog($"Initial Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
-                    }
-                    if (match.PlayerTurnTime > match.EnemyTurnTime)
-                    {
-                        Toolbox.uDebugAddLog($"Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
-                        match.CurrentTurn = Turn.Enemy;
-                        match.PlayerTurnTime = match.PlayerTurnTime - match.EnemyTurnTime;
-                        match.EnemyTurnTime = match.EnemySpeedTime;
-                        Toolbox.uDebugAddLog($"Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
-                        AttackCharacter(match.CurrentEnemy, owner);
-                        match.Turns += 1;
-                        RemoveAfflictions(owner, match.CurrentEnemy);
-                        CalculateTurn(owner);
-                        return;
-                    }
-                    else
-                    {
-                        Toolbox.uDebugAddLog($"Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
-                        match.CurrentTurn = Turn.Player;
-                        match.Turns += 1;
-                        match.EnemyTurnTime = match.EnemyTurnTime - match.PlayerTurnTime;
-                        match.PlayerTurnTime = match.PlayerSpeedTime;
-                        Toolbox.uDebugAddLog($"Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
-                        RemoveAfflictions(owner, match.CurrentEnemy);
-                        return;
-                    }
-                }
-                else
-                    Toolbox.uDebugAddLog($"No active match was found for the current user {owner.OwnerUN} | {owner.OwnerID}");
-            }
-            catch (Exception ex)
-            {
-                Toolbox.FullExceptionLog(ex);
-            }
-        }
+        //public static void CalculateTurn(OwnerProfile owner)
+        //{
+        //    try
+        //    {
+        //        string result = string.Empty;
+        //        var match = RPG.MatchList.Find(x => x.Owner == owner);
+        //        if (match != null)
+        //        {
+        //            if (match.CurrentTurn == Turn.NotChosen)
+        //            {
+        //                Toolbox.uDebugAddLog($"Initial Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+        //                match.PlayerSpeedTime = owner.CurrentCharacter.CalculateSpeed();
+        //                match.EnemySpeedTime = match.CurrentEnemy.CalculateSpeed();
+        //                match.PlayerTurnTime = match.PlayerSpeedTime;
+        //                match.EnemyTurnTime = match.EnemySpeedTime;
+        //                Toolbox.uDebugAddLog($"Initial Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+        //            }
+        //            if (match.PlayerTurnTime > match.EnemyTurnTime)
+        //            {
+        //                Toolbox.uDebugAddLog($"Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+        //                match.CurrentTurn = Turn.Enemy;
+        //                match.PlayerTurnTime = match.PlayerTurnTime - match.EnemyTurnTime;
+        //                match.EnemyTurnTime = match.EnemySpeedTime;
+        //                Toolbox.uDebugAddLog($"Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+        //                AttackCharacter(match.CurrentEnemy, owner);
+        //                match.Turns += 1;
+        //                RemoveAfflictions(owner, match.CurrentEnemy);
+        //                CalculateTurn(owner);
+        //                return;
+        //            }
+        //            else
+        //            {
+        //                Toolbox.uDebugAddLog($"Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+        //                match.CurrentTurn = Turn.Player;
+        //                match.Turns += 1;
+        //                match.EnemyTurnTime = match.EnemyTurnTime - match.PlayerTurnTime;
+        //                match.PlayerTurnTime = match.PlayerSpeedTime;
+        //                Toolbox.uDebugAddLog($"Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+        //                RemoveAfflictions(owner, match.CurrentEnemy);
+        //                return;
+        //            }
+        //        }
+        //        else
+        //            Toolbox.uDebugAddLog($"No active match was found for the current user {owner.OwnerUN} | {owner.OwnerID}");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Toolbox.FullExceptionLog(ex);
+        //    }
+        //}
         
-        public static async Task CalculateTurn(ICommandContext context, OwnerProfile owner)
-        {
-            try
-            {
-                string result = string.Empty;
-                var match = RPG.MatchList.Find(x => x.Owner == owner);
-                Toolbox.uDebugAddLog($"Starting turn calculation [ID] {context.User.Id}");
-                if (match != null)
-                {
-                    Toolbox.uDebugAddLog($"Match wasn't null [ID] {context.User.Id}");
-                    if (match.CurrentTurn == Turn.NotChosen)
-                    {
-                        Toolbox.uDebugAddLog($"Initial Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
-                        match.PlayerSpeedTime = owner.CurrentCharacter.CalculateSpeed();
-                        match.EnemySpeedTime = match.CurrentEnemy.CalculateSpeed();
-                        match.PlayerTurnTime = match.PlayerSpeedTime;
-                        match.EnemyTurnTime = match.EnemySpeedTime;
-                        Toolbox.uDebugAddLog($"Initial Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
-                    }
-                    if (match.PlayerTurnTime > match.EnemyTurnTime)
-                    {
-                        Toolbox.uDebugAddLog($"Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
-                        match.CurrentTurn = Turn.Enemy;
-                        match.PlayerTurnTime = match.PlayerTurnTime - match.EnemyTurnTime;
-                        match.EnemyTurnTime = match.EnemySpeedTime;
-                        Toolbox.uDebugAddLog($"Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
-                        await AttackCharacter(context, match.CurrentEnemy, owner);
-                        match.Turns += 1;
-                        await RemoveAfflictions(context, owner, match.CurrentEnemy);
-                        await CalculateTurn(context, owner);
-                        return;
-                    }
-                    else
-                    {
-                        Toolbox.uDebugAddLog($"Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
-                        match.CurrentTurn = Turn.Player;
-                        match.Turns += 1;
-                        match.EnemyTurnTime = match.EnemyTurnTime - match.PlayerTurnTime;
-                        match.PlayerTurnTime = match.PlayerSpeedTime;
-                        Toolbox.uDebugAddLog($"Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
-                        await context.Channel.SendMessageAsync($"It is **{owner.CurrentCharacter.Name}'s** turn");
-                        await RemoveAfflictions(context, owner, match.CurrentEnemy);
-                        return;
-                    }
-                }
-                else
-                    Toolbox.uDebugAddLog($"No active match was found for the current user {owner.OwnerUN} | {owner.OwnerID}");
-            }
-            catch (Exception ex)
-            {
-                Toolbox.FullExceptionLog(ex);
-            }
-        }
-
-        public static int CalculateSpeed(this Character character)
-        {
-            return (10000 - (character.Spd + character.Armor.Speed + character.Weapon.Speed));
-        }
-
-        public static int CalculateSpeed(this Enemy enemy)
-        {
-            return (10000 - (enemy.Spd + enemy.Armor.Speed + enemy.Weapon.Speed));
-        }
+        //public static async Task CalculateTurn(ICommandContext context, OwnerProfile owner)
+        //{
+        //    try
+        //    {
+        //        string result = string.Empty;
+        //        var match = RPG.MatchList.Find(x => x.Owner == owner);
+        //        Toolbox.uDebugAddLog($"Starting turn calculation [ID] {context.User.Id}");
+        //        if (match != null)
+        //        {
+        //            Toolbox.uDebugAddLog($"Match wasn't null [ID] {context.User.Id}");
+        //            if (match.CurrentTurn == Turn.NotChosen)
+        //            {
+        //                Toolbox.uDebugAddLog($"Initial Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+        //                match.PlayerSpeedTime = owner.CurrentCharacter.CalculateSpeed();
+        //                match.EnemySpeedTime = match.CurrentEnemy.CalculateSpeed();
+        //                match.PlayerTurnTime = match.PlayerSpeedTime;
+        //                match.EnemyTurnTime = match.EnemySpeedTime;
+        //                Toolbox.uDebugAddLog($"Initial Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+        //            }
+        //            if (match.PlayerTurnTime > match.EnemyTurnTime)
+        //            {
+        //                Toolbox.uDebugAddLog($"Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+        //                match.CurrentTurn = Turn.Enemy;
+        //                match.PlayerTurnTime = match.PlayerTurnTime - match.EnemyTurnTime;
+        //                match.EnemyTurnTime = match.EnemySpeedTime;
+        //                Toolbox.uDebugAddLog($"Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+        //                await AttackCharacter(context, match.CurrentEnemy, owner);
+        //                await RemoveAfflictions(context, owner, match.CurrentEnemy);
+        //                await CalculateTurn(context, owner);
+        //            }
+        //            else
+        //            {
+        //                Toolbox.uDebugAddLog($"Calculate Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+        //                match.CurrentTurn = Turn.Player;
+        //                match.EnemyTurnTime = match.EnemyTurnTime - match.PlayerTurnTime;
+        //                match.PlayerTurnTime = match.PlayerSpeedTime;
+        //                Toolbox.uDebugAddLog($"Calculated Turn: [T]{match.CurrentTurn} [PST]{match.PlayerSpeedTime} [EST]{match.EnemySpeedTime} [PTT]{match.PlayerTurnTime} [ETT]{match.EnemyTurnTime} [ID]{owner.OwnerID}");
+        //                await context.Channel.SendMessageAsync($"It is **{owner.CurrentCharacter.Name}'s** turn");
+        //                await RemoveAfflictions(context, owner, match.CurrentEnemy);
+        //            }
+        //            match.Turns += 1;
+        //        }
+        //        else
+        //            Toolbox.uDebugAddLog($"No active match was found for the current user {owner.OwnerUN} | {owner.OwnerID}");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Toolbox.FullExceptionLog(ex);
+        //    }
+        //}
 
         public static int CalculateElement(int attackDmg, int armorDef)
         {
@@ -2871,7 +2856,77 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
+        public static void CalculateEnemyAction(Match match)
+        {
+            Toolbox.uDebugAddLog($"Calculating enemy action [ID]{match.Owner.OwnerID}");
+            AttackCharacter(match.CurrentEnemy, match.Owner);
+            Toolbox.uDebugAddLog($"Enemy action calculated: AttackCharacter [ID]{match.Owner.OwnerID}");
+        }
+
         #endregion
+    }
+
+    public static class TurnSystem
+    {
+        // Each turn add character speed, once 1000 is hit it is their turn
+        private const int turnActivation = 1000;
+        private const int turnCost = 1000;
+
+        public static void CalculateTurn(OwnerProfile owner)
+        {
+            Toolbox.uDebugAddLog($"Starting turn calculation [ID]{owner.OwnerID}");
+            var match = RPG.MatchList.Find(x => x.Owner == owner);
+            if (match != null)
+            {
+                Toolbox.uDebugAddLog($"match not null [ID]{owner.OwnerID}");
+                Toolbox.uDebugAddLog($"Turn is {match.CurrentTurn.ToString()} [ID]{owner.OwnerID}");
+                if (match.CurrentTurn == Turn.Player)
+                    match.PlayerTurnTotal -= turnCost;
+                while (match.PlayerTurnTotal < turnActivation && match.EnemyTurnTotal < turnActivation)
+                    UpdateTurnTotal(match);
+                if ((match.PlayerTurnTotal >= turnActivation && match.EnemyTurnTotal >= turnActivation) && (match.PlayerTurnTotal > match.EnemyTurnTotal))
+                    match.CurrentTurn = Turn.Player;
+                else if ((match.PlayerTurnTotal >= turnActivation && match.EnemyTurnTotal >= turnActivation) && (match.PlayerTurnTotal < match.EnemyTurnTotal))
+                    match.CurrentTurn = Turn.Enemy;
+                else if (match.PlayerTurnTotal >= turnActivation && match.EnemyTurnTotal < turnActivation)
+                    match.CurrentTurn = Turn.Player;
+                else if (match.EnemyTurnTotal >= turnActivation && match.PlayerTurnTotal < turnActivation)
+                    match.CurrentTurn = Turn.Enemy;
+                else
+                    Toolbox.uDebugAddLog($"The final else statement was hit in CalculateTurn [ID]{owner.OwnerID}");
+                Toolbox.uDebugAddLog($"Turn is now {match.CurrentTurn.ToString()} [ID]{owner.OwnerID}");
+                if (match.CurrentTurn == Turn.Enemy)
+                {
+                    Toolbox.uDebugAddLog($"It is the enemy's turn [ID]{owner.OwnerID}");
+                    Management.CalculateEnemyAction(match);
+                    Toolbox.uDebugAddLog($"Enemy action finished, calculating new EnemyTurnTotal, [Current]{match.EnemyTurnTotal} [turnCost]{turnCost} [ID]{owner.OwnerID}");
+                    match.EnemyTurnTotal -= turnCost;
+                    Toolbox.uDebugAddLog($"Enemy turn total calculated, [Current]{match.EnemyTurnTotal} [ID]{owner.OwnerID}");
+                }
+                if (match.CurrentTurn == Turn.Player)
+                    Toolbox.uDebugAddLog($"It is the player's turn [ID]{owner.OwnerID}");
+            }
+            else
+                Toolbox.uDebugAddLog($"CalculateTurn was called without a match being found for the owner [ID]{owner.OwnerID}");
+        }
+
+        private static void UpdateTurnTotal(Match match)
+        {
+            Toolbox.uDebugAddLog($"Updating turn totals: [EnemyTurnTotal]{match.EnemyTurnTotal} [PlayerTurnTotal]{match.PlayerTurnTotal} [ID]{match.Owner.OwnerID}");
+            match.PlayerTurnTotal += match.Owner.CurrentCharacter.CalculateSpeed();
+            match.EnemyTurnTotal += match.CurrentEnemy.CalculateSpeed();
+            Toolbox.uDebugAddLog($"Updated turn totals: [EnemyTurnTotal]{match.EnemyTurnTotal} [PlayerTurnTotal]{match.PlayerTurnTotal} [ID]{match.Owner.OwnerID}");
+        }
+
+        private static int CalculateSpeed(this Character character)
+        {
+            return (character.Spd + character.Armor.Speed + character.Weapon.Speed);
+        }
+
+        private static int CalculateSpeed(this Enemy enemy)
+        {
+            return (enemy.Spd + enemy.Armor.Speed + enemy.Weapon.Speed);
+        }
     }
 
     public class LootDrop
