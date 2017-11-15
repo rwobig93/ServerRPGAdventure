@@ -53,7 +53,7 @@ namespace PersonalDiscordBot
         }
 
         #region Global Variables
-        
+
         public static DiscordSocketClient client;
         private CommandService commands;
         private IServiceProvider services;
@@ -100,7 +100,11 @@ namespace PersonalDiscordBot
             tSaveRPGData();
             tRefreshAdminList();
             CleanupLogDir();
+#if DEBUG
+            uStatusUpdate("DEBUG mode running, skipping version update");
+#else
             btnCheckForUpdates_Click(sender, e);
+#endif
         }
 
         private void winMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -1019,6 +1023,8 @@ namespace PersonalDiscordBot
             Toolbox._paths.CurrentVersion = GetVersionNumber();
             if (Toolbox._paths.PreviousVersion == new Version("0.0.0.0"))
                 Toolbox._paths.LastUpdated = $"{DateTime.Now.ToLocalTime().ToString("MM-dd-yyyy hh:mm:ss tt")}";
+            if (Toolbox._paths.PreviousVersion < Toolbox._paths.CurrentVersion)
+                Toolbox._paths.Updated = true;
             lblUpdateTime.Text = Toolbox._paths.LastUpdated;
             lblVersionNumber.Text = $"Version {Toolbox._paths.CurrentVersion}";
             uStatusUpdate($"Current Version: {Toolbox._paths.CurrentVersion}");
@@ -1269,7 +1275,7 @@ namespace PersonalDiscordBot
                 {
                     WorkerReportsProgress = true
                 };
-                worker.ProgressChanged += (sender, e) => 
+                worker.ProgressChanged += (sender, e) =>
                 {
                     try
                     {
@@ -1396,7 +1402,7 @@ namespace PersonalDiscordBot
                 }
                 catch (Exception ex)
                 {
-                   FullExceptionLog(ex);
+                    FullExceptionLog(ex);
                 }
             };
             worker.RunWorkerAsync();
@@ -1511,7 +1517,7 @@ namespace PersonalDiscordBot
                     return;
                 }
                 if (!(msg.HasCharPrefix(';', ref argPos) || msg.HasMentionPrefix(client.CurrentUser, ref argPos))) return;
-                
+
                 CommandContext context = new CommandContext(client, msg);
                 var cmd = $"User: {arg.Author.Username} ◥◤ Command: {arg.ToString()}";
                 uStatusUpdate(cmd);
@@ -1583,7 +1589,7 @@ namespace PersonalDiscordBot
             }
         }
 
-#endregion
+        #endregion
 
         #region WIP
 
