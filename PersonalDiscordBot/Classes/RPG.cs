@@ -1574,7 +1574,6 @@ namespace PersonalDiscordBot.Classes
                             Description = $"**{owner.CurrentCharacter.Name}** attacked **{enemy.Name}** and dealt **{totalDamage}** damage ({enemy.CurrentHP}/{enemy.MaxHP} left)"
                         };
                         await context.Channel.SendMessageAsync("", false, embed.Build());
-                        return;
                     }
                 }
                 else if (totalDamage == 0)
@@ -1586,7 +1585,6 @@ namespace PersonalDiscordBot.Classes
                         Description = $"**{owner.CurrentCharacter.Name}** attacked **{enemy.Name}** and didn't deal any damage ({enemy.CurrentHP}/{enemy.MaxHP} left)"
                     };
                     await context.Channel.SendMessageAsync("", false, embed.Build());
-                    return;
                 }
                 else
                 {
@@ -1601,8 +1599,9 @@ namespace PersonalDiscordBot.Classes
                         Description = $"**{owner.CurrentCharacter.Name}** attacked, **{enemy.Name}** absorbed **{totalDamage}** damage and was healed ({enemy.CurrentHP}/{enemy.MaxHP} left)"
                     };
                     await context.Channel.SendMessageAsync("", false, embed.Build());
-                    return;
                 }
+                Toolbox.uDebugAddLog($"Finished attacking enemy [ID]{owner.OwnerID}");
+                await TurnSystem.PlayerActionComplete(context, match);
             }
             catch (Exception ex)
             {
@@ -1671,7 +1670,13 @@ namespace PersonalDiscordBot.Classes
             try
             {
                 int enemyTotal = AttackChara(enemy, owner.CurrentCharacter);
-
+                var match = RPG.MatchList.Find(x => x.Owner == owner);
+                if (match == null)
+                {
+                    Toolbox.uDebugAddLog($"Enemy attacked character when a match wasn't found, something went wrong [ID]{owner.OwnerID}");
+                    await context.Channel.SendMessageAsync($"{context.User.Mention} Something happened and an enemy attacked you when there isn't a match registered to your profile, please let the developers know");
+                    return;
+                }
                 if (enemyTotal > 0)
                 {
                     if (owner.CurrentCharacter.CurrentHP - enemyTotal <= 0)
@@ -1689,7 +1694,6 @@ namespace PersonalDiscordBot.Classes
                             Description = $"**{enemy.Name}** attacked **{owner.CurrentCharacter.Name}** and dealt **{enemyTotal}** damage ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)"
                         };
                         await context.Channel.SendMessageAsync(string.Empty, false, embed.Build());
-                        return;
                     }
                 }
                 else if (enemyTotal == 0)
@@ -1701,7 +1705,6 @@ namespace PersonalDiscordBot.Classes
                         Description = $"**{enemy.Name}** attacked **{owner.CurrentCharacter.Name}** and didn't deal any damage ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)"
                     };
                     await context.Channel.SendMessageAsync(string.Empty, false, embed.Build());
-                    return;
                 }
                 else
                 {
@@ -1716,8 +1719,9 @@ namespace PersonalDiscordBot.Classes
                         Description = $"**{enemy.Name}** attacked, **{owner.CurrentCharacter.Name}** absorbed **{enemyTotal}** damage and was healed ({owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} left)"
                     };
                     await context.Channel.SendMessageAsync(string.Empty, false, embed.Build());
-                    return;
                 }
+                Toolbox.uDebugAddLog($"Finished attacking player [ID]{owner.OwnerID}");
+                await TurnSystem.EnemyActionComplete(context, match);
             }
             catch (Exception ex)
             {
@@ -1908,11 +1912,17 @@ namespace PersonalDiscordBot.Classes
                         Toolbox.uDebugAddLog($"Lootdrop generated, lootcount before filter: {lootTimes} [ID]{args.Owner.OwnerID}");
                         int pebbles = 0;
                         int currency = 0;
+                        Toolbox.uDebugAddLog($"Starting loot filter [Pebbles]{args.Owner.TotalPebbles} [Currency]{args.Owner.Currency} [ID]{args.Owner.OwnerID}");
                         LootDrop.FilterLoot(character, out pebbles, out currency);
-                        var copyChara = character;
+                        Toolbox.uDebugAddLog($"Finished loot filter [Pebbles]{args.Owner.TotalPebbles} [Currency]{args.Owner.Currency} [ID]{args.Owner.OwnerID}");
+                        Toolbox.uDebugAddLog($"Copying character for level up tracking [ID]{args.Owner.OwnerID}");
+                        var copyChara = new Character();
+                        PropertyCopy.Copy(character, copyChara);
+                        Toolbox.uDebugAddLog($"Character copied, adding experience [ID]{args.Owner.OwnerID}");
                         character.Exp += args.Match.ExperienceEarned;
                         if (VerifyLvlUp(character))
                         {
+                            Toolbox.uDebugAddLog($"Character {character.Name} is leveling up, EXP: {character.Exp}/{character.ExpToLvl} [ID]{args.Owner.OwnerID}");
                             var owner = args.Owner;
                             var line = Environment.NewLine;
                             EmbedBuilder embed = new EmbedBuilder()
@@ -1923,15 +1933,18 @@ namespace PersonalDiscordBot.Classes
                                 ImageUrl = character.ImgURL
                             };
                             await args.Context.Channel.SendMessageAsync("", false, embed.Build());
+                            Toolbox.uDebugAddLog($"Character {character.Name} has leveled up, Level: {copyChara.Lvl} > {character.Lvl}{line}MaxHP: {copyChara.MaxHP} > {character.MaxHP}{line}MaxMana: {copyChara.MaxMana} > {character.MaxMana}{line}Strength: {copyChara.Str} > {character.Str}{line}Defense: {copyChara.Def} > {character.Def}{line}Dexterity: {copyChara.Dex} > {character.Dex}{line}Intelligence: {copyChara.Int} > {character.Int}{line}Speed: {copyChara.Spd} > {character.Spd}{line}Luck: {copyChara.Lck} > {character.Lck} [ID]{args.Owner.OwnerID}");
                         }
                         Toolbox.uDebugAddLog($"Lootdrop lootcount after filter: {character.Loot.Count} [ID]{args.Owner.OwnerID}");
                         await args.Context.Channel.SendMessageAsync($"{args.Context.Message.Author.Mention} You earned {pebbles} pebbles,{currency} currency, and earned {args.Match.ExperienceEarned} experience!");
                         await EmptyLoot(args.Context);
                         break;
                     case MatchCompleteResult.Lost:
+                        Toolbox.uDebugAddLog($"{args.Owner.CurrentCharacter.Name} lost the match [ID]{args.Owner.OwnerID}");
                         await args.Context.Channel.SendMessageAsync($"{args.Context.User.Mention} You were defeated in combat by **{args.Match.CurrentEnemy.Name}** after defeating **{args.Match.DefeatedEnemies.Count}** enemies");
                         break;
                     case MatchCompleteResult.Forfeit:
+                        Toolbox.uDebugAddLog($"{args.Owner.CurrentCharacter.Name} forefeit the match after {args.Match.TurnTimeLimit.Days}D {args.Match.TurnTimeLimit.Hours}H {args.Match.TurnTimeLimit.Minutes}M {args.Match.TurnTimeLimit.Seconds}Secs [ID]{args.Owner.OwnerID}");
                         await args.Context.Channel.SendMessageAsync($"You forefeited the match after going beyond teh match time limit of **{args.Match.TurnTimeLimit.Days}D {args.Match.TurnTimeLimit.Hours}H {args.Match.TurnTimeLimit.Minutes}M {args.Match.TurnTimeLimit.Seconds}Secs**, you lost **{args.Match.ExperienceEarned} experience**");
                         break;
                 }
@@ -2754,10 +2767,10 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
-        public static void CalculateEnemyAction(Match match)
+        public static async Task CalculateEnemyAction(ICommandContext context, Match match)
         {
             Toolbox.uDebugAddLog($"Calculating enemy action [ID]{match.Owner.OwnerID}");
-            AttackCharacter(match.CurrentEnemy, match.Owner);
+            await AttackCharacter(context, match.CurrentEnemy, match.Owner);
             Toolbox.uDebugAddLog($"Enemy action calculated: AttackCharacter [ID]{match.Owner.OwnerID}");
         }
 
@@ -2782,6 +2795,7 @@ namespace PersonalDiscordBot.Classes
                 {
                     Toolbox.uDebugAddLog($"Player and CurrentEnemy turn totals are both less than turnActivation, adding turn count [CurrentTurnCount]{match.Turns} [ID]{owner.OwnerID}");
                     match.Turns += 1;
+                    Management.RemoveAfflictions(owner, match.CurrentEnemy);
                     Toolbox.uDebugAddLog($"Added 1 to turn count [CurrentTurnCount]{match.Turns} [ID]{owner.OwnerID}");
                 }
                 if (match.CurrentTurn == Turn.Player)
@@ -2802,17 +2816,13 @@ namespace PersonalDiscordBot.Classes
                 if (match.CurrentTurn == Turn.Enemy)
                 {
                     Toolbox.uDebugAddLog($"It is the enemy's turn [ID]{owner.OwnerID}");
-                    Management.CalculateEnemyAction(match);
-                    Toolbox.uDebugAddLog($"Enemy action finished, calculating new EnemyTurnTotal, [Current]{match.EnemyTurnTotal} [turnCost]{turnCost} [ID]{owner.OwnerID}");
-                    match.EnemyTurnTotal -= turnCost;
-                    Toolbox.uDebugAddLog($"Enemy turn total calculated, [Current]{match.EnemyTurnTotal} [ID]{owner.OwnerID}");
+                    await Management.CalculateEnemyAction(context, match);
                 }
                 if (match.CurrentTurn == Turn.Player)
                 {
                     Toolbox.uDebugAddLog($"It is the player's turn [ID]{owner.OwnerID}");
                     await context.Channel.SendMessageAsync($"{context.User.Mention} It is {owner.CurrentCharacter.Name}'s turn");
                 }
-                Management.RemoveAfflictions(owner, match.CurrentEnemy);
             }
             else
                 Toolbox.uDebugAddLog($"CalculateTurn was called without a match being found for the owner [ID]{owner.OwnerID}");
@@ -2832,8 +2842,6 @@ namespace PersonalDiscordBot.Classes
                     match.Turns += 1;
                     Toolbox.uDebugAddLog($"Added 1 to turn count [CurrentTurnCount]{match.Turns} [ID]{owner.OwnerID}");
                 }
-                if (match.CurrentTurn == Turn.Player)
-                    match.PlayerTurnTotal -= turnCost;
                 while (match.PlayerTurnTotal < turnActivation && match.EnemyTurnTotal < turnActivation)
                     UpdateTurnTotal(match);
                 if ((match.PlayerTurnTotal >= turnActivation && match.EnemyTurnTotal >= turnActivation) && (match.PlayerTurnTotal > match.EnemyTurnTotal))
@@ -2850,7 +2858,7 @@ namespace PersonalDiscordBot.Classes
                 if (match.CurrentTurn == Turn.Enemy)
                 {
                     Toolbox.uDebugAddLog($"It is the enemy's turn [ID]{owner.OwnerID}");
-                    Management.CalculateEnemyAction(match);
+                    // Management.CalculateEnemyAction(match);
                     Toolbox.uDebugAddLog($"Enemy action finished, calculating new EnemyTurnTotal, [Current]{match.EnemyTurnTotal} [turnCost]{turnCost} [ID]{owner.OwnerID}");
                     match.EnemyTurnTotal -= turnCost;
                     Toolbox.uDebugAddLog($"Enemy turn total calculated, [Current]{match.EnemyTurnTotal} [ID]{owner.OwnerID}");
@@ -2881,6 +2889,24 @@ namespace PersonalDiscordBot.Classes
         private static int CalculateSpeed(this Enemy enemy)
         {
             return (enemy.Spd + enemy.Armor.Speed + enemy.Weapon.Speed);
+        }
+
+        public static async Task PlayerActionComplete(ICommandContext context, Match match)
+        {
+            Toolbox.uDebugAddLog($"Player action complete, now updating turn total [CurrentTotal]{match.PlayerTurnTotal} [ID]{match.Owner.OwnerID}");
+            match.PlayerTurnTotal -= turnCost;
+            Toolbox.uDebugAddLog($"Turn total calculated [CurrentTotal]{match.PlayerTurnTotal} [ID]{match.Owner.OwnerID}");
+            Toolbox.uDebugAddLog($"Calling CalculateTurn [ID]{match.Owner.OwnerID}");
+            await CalculateTurn(context, match.Owner);
+        }
+
+        public static async Task EnemyActionComplete(ICommandContext context, Match match)
+        {
+            Toolbox.uDebugAddLog($"Enemy action finished, calculating new EnemyTurnTotal, [Current]{match.EnemyTurnTotal} [turnCost]{turnCost} [ID]{match.Owner.OwnerID}");
+            match.EnemyTurnTotal -= turnCost;
+            Toolbox.uDebugAddLog($"Enemy turn total calculated, [Current]{match.EnemyTurnTotal} [ID]{match.Owner.OwnerID}");
+            Toolbox.uDebugAddLog($"Calling CalculateTurn [ID]{match.Owner.OwnerID}");
+            await CalculateTurn(context, match.Owner);
         }
     }
 
@@ -3081,7 +3107,7 @@ namespace PersonalDiscordBot.Classes
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == chara.OwnerID);
                 int filtered = 0;
                 int total = chara.Loot.Count;
-                var lootPack = chara.Loot;
+                var lootPack = chara.Loot.ToList();
                 foreach (var bpItem in lootPack)
                 {
                     var lootType = bpItem.GetLootType();

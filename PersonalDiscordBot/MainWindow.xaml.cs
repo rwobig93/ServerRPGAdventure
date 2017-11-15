@@ -112,7 +112,7 @@ namespace PersonalDiscordBot
                     if (Permissions.GeneralPermissions.logChannel != 0)
                     {
                         var channel = client.GetChannel(Permissions.GeneralPermissions.logChannel);
-                        if (channel != null)
+                        if (channel != null && client.CurrentUser.Username != null && ((IMessageChannel)channel).Name != null)
                         {
 #if DEBUG
                             await ((IMessageChannel)channel).SendMessageAsync($"**{client.CurrentUser.Username}** has **disconnected** in **DEBUG** Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
@@ -123,6 +123,7 @@ namespace PersonalDiscordBot
                         }
                     }
                 }
+                catch (NullReferenceException) { Toolbox.uDebugAddLog($"Disconnect message not sent to logchannel due to being null, [ChannelID]{Permissions.GeneralPermissions.logChannel}"); return; }
                 catch (Exception ex)
                 {
                     Toolbox.FullExceptionLog(ex);
@@ -182,7 +183,7 @@ namespace PersonalDiscordBot
                 if (Permissions.GeneralPermissions.logChannel != 0)
                 {
                     var channel = client.GetChannel(Permissions.GeneralPermissions.logChannel);
-                    if (channel != null)
+                    if (channel != null && client.CurrentUser.Username != null && ((IMessageChannel)channel).Name != null)
                     {
 #if DEBUG
                         await ((IMessageChannel)channel).SendMessageAsync($"**{client.CurrentUser.Username}** has **disconnected** in **DEBUG** Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
@@ -1016,6 +1017,8 @@ namespace PersonalDiscordBot
         private void CheckVersion()
         {
             Toolbox._paths.CurrentVersion = GetVersionNumber();
+            if (Toolbox._paths.PreviousVersion == new Version("0.0.0.0"))
+                Toolbox._paths.LastUpdated = $"{DateTime.Now.ToLocalTime().ToString("MM-dd-yyyy hh:mm:ss tt")}";
             lblUpdateTime.Text = Toolbox._paths.LastUpdated;
             lblVersionNumber.Text = $"Version {Toolbox._paths.CurrentVersion}";
             uStatusUpdate($"Current Version: {Toolbox._paths.CurrentVersion}");
@@ -1025,6 +1028,7 @@ namespace PersonalDiscordBot
                 Toolbox._paths.Updated = false;
                 uStatusUpdate($"Updated to github v{Toolbox._paths.CurrentVersion} from v{prevVersion}");
                 Toolbox._paths.PreviousVersion = Toolbox._paths.CurrentVersion;
+                Toolbox._paths.LastUpdated = $"{DateTime.Now.ToLocalTime().ToString("MM-dd-yyyy hh:mm:ss tt")}";
 
                 SaveConfig(ConfigType.Paths);
 
@@ -1049,6 +1053,8 @@ namespace PersonalDiscordBot
                 };
                 worker.RunWorkerAsync();
             }
+            else
+                SaveConfig(ConfigType.Paths);
         }
 
         private Version GetVersionNumber()
@@ -1546,7 +1552,7 @@ namespace PersonalDiscordBot
                 }
                 else
                 {
-                    uStatusUpdate($"Release Version is the same version or older than running assembly. [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
+                    uStatusUpdate($"Release Version is the same version or older than running assembly: {Environment.NewLine}[Current]{Toolbox._paths.CurrentVersion}{Environment.NewLine}[Release]{releaseVersion}");
                 }
             }
             catch (Exception ex)

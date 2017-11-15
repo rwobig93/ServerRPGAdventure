@@ -968,10 +968,9 @@ namespace PersonalDiscordBot.Classes
                  ";test rng spell %Number%{0}" +
                  ";test rng armor %Number%{0}" +
                  ";test rng thing %Number%{0}" +
-                 ";test lootdrop{0}" +
                  ";test create{0}" +
                  ";test give %Character% %CurrencyAmount%{0}" +
-                 ";test swtich{0}" +
+                 ";test switch{0}" +
                  ";test testiculees{0}" +
                  ";test delete{0}" +
                  ";test delete %USER%{0}" +
@@ -1163,7 +1162,7 @@ namespace PersonalDiscordBot.Classes
                 }
                 else
                 {
-                    await Context.Channel.SendMessageAsync($"Release Version is the same version or older than running assembly. [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
+                    await Context.Channel.SendMessageAsync($"Release Version is the same version or older than running assembly: {Environment.NewLine}[Current]{Toolbox._paths.CurrentVersion}{Environment.NewLine}[Release]{releaseVersion}");
                 }
             }
             catch (Exception ex)
@@ -1558,19 +1557,6 @@ namespace PersonalDiscordBot.Classes
                 }
                 else
                     await Context.Channel.SendMessageAsync($"{times} is not a valid number. Rethink your life choices and try again.");
-            }
-            catch (Exception ex)
-            {
-                ServerModule.FullExceptionLog(ex);
-            }
-        }
-
-        [Command("lootdrop"), Summary("Testicules Lootdrop")]
-        public async Task Testacules4()
-        {
-            try
-            {
-                await Context.Channel.SendMessageAsync($"```{Testing.LootDropGen()}```");
             }
             catch (Exception ex)
             {
@@ -2345,11 +2331,14 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                Toolbox.uDebugAddLog($"Starting add loot for testing [ID]{Context.User.Id}");
                 var isAdmin = Permissions.AdminPermissions(Context);
                 if (!isAdmin)
                 {
                     await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} You don't have permission to run this command");
+                    Toolbox.uDebugAddLog($"User didn't have permission, cancelling [ID]{Context.User.Id}");
                 }
+                Toolbox.uDebugAddLog($"Generating loot for character [ID]{Context.User.Id}");
                 await Context.Channel.SendMessageAsync($"{Context.Message.Author.Mention} Generating loot for your character {RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id).CurrentCharacter.Name}");
                 Match lootMatch = new Match()
                 {
@@ -2371,7 +2360,9 @@ namespace PersonalDiscordBot.Classes
                     Owner = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id),
                     Turns = 10
                 };
+                Toolbox.uDebugAddLog($"Completing loot match [ID]{Context.User.Id}");
                 Events.CompleteMatch(Context, lootMatch.Owner, lootMatch, DateTime.Now - lootMatch.MatchStart, RPG.MatchCompleteResult.Won);
+                Toolbox.uDebugAddLog($"Loot match complete and loot given [ID]{Context.User.Id}");
             }
             catch (Exception ex)
             {
