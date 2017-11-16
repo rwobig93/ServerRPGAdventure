@@ -987,7 +987,7 @@ namespace PersonalDiscordBot.Classes
                         Text = owner.CurrentCharacter.Class.ToString()
                     }
                 };
-                await context.Channel.SendMessageAsync("", false, embed.Build());
+                await context.SendDiscordEmbedMention(embed);
             }
             catch (Exception ex)
             {
@@ -1094,7 +1094,7 @@ namespace PersonalDiscordBot.Classes
                     await Task.Delay(1000);
                     if (timestamp + TimeSpan.FromMinutes(5) <= DateTime.Now)
                     {
-                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} A response hasn't been received in 5 minutes, you can go through your backpack later by using ;test check backpack");
+                        await context.SendDiscordMessageMention($"A response hasn't been received in 5 minutes, you can go through your backpack later by using ;test check backpack");
                         return;
                     }
                 }
@@ -1109,7 +1109,7 @@ namespace PersonalDiscordBot.Classes
                     Description = $"Backpack Storage: {owner.CurrentCharacter.Backpack.Stored.Count}/{owner.CurrentCharacter.Backpack.Capacity}" +
                         $"{itemList}"
                 };
-                await context.Channel.SendMessageAsync("", false, embed.Build());
+                await context.SendDiscordEmbedMention(embed);
                 Toolbox.uDebugAddLog($"Asking [OwnerCharacter]{owner.CurrentCharacter} [OwnerID]{owner.OwnerID} which item to inspect");
                 var pickedItemMsg = await context.Channel.SendMessageAsync($"Please type the item number you wish to inspect or type cancel to exit.");
                 bool itemPicked = false;
@@ -1130,7 +1130,7 @@ namespace PersonalDiscordBot.Classes
                             if (string.IsNullOrWhiteSpace(pickedAnswer))
                             {
                                 Toolbox.uDebugAddLog($"Answer was null or white space. [Resp]{pickedAnswer} [ID]{owner.OwnerID}");
-                                await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Your answer was not a valid number.");
+                                await context.SendDiscordMessageMention($"Your answer was not a valid number.");
                             }
                             else if (pickedAnswer.ToLower() == "cancel")
                             {
@@ -1143,13 +1143,13 @@ namespace PersonalDiscordBot.Classes
                                 if (!boolAnswer)
                                 {
                                     Toolbox.uDebugAddLog($"Answer didn't parse to Int. [Resp]{pickedAnswer} [ID]{owner.OwnerID}");
-                                    await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Your answer was not a valid number.");
+                                    await context.SendDiscordMessageMention($"Your answer was not a valid number.");
                                     return;
                                 }
                                 if (numAnswer > number || numAnswer < 1)
                                 {
                                     Toolbox.uDebugAddLog($"Answer was less than or greater than number of items. [Resp]{pickedAnswer} [ID]{owner.OwnerID}");
-                                    await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Your answer was less than or greater than the number of items listed.");
+                                    await context.SendDiscordMessageMention($"Your answer was less than or greater than the number of items listed.");
                                     return;
                                 }
                                 itemPicked = true;
@@ -1203,7 +1203,7 @@ namespace PersonalDiscordBot.Classes
                                         if (string.IsNullOrWhiteSpace(answer2))
                                         {
                                             Toolbox.uDebugAddLog($"Answer was null or white space. [Resp]{answer2} [ID]{owner.OwnerID}");
-                                            await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Your answer was not valid.");
+                                            await context.SendDiscordMessageMention($"Your answer was not valid.");
                                         }
                                         else if (answer2.ToLower() == "cancel")
                                         {
@@ -1230,7 +1230,7 @@ namespace PersonalDiscordBot.Classes
                                                     }
                                                     else
                                                         Toolbox.uDebugAddLog($"[ITEM]{typeItIs} is not a weapon or armor that can be equipped by [ID]{owner.OwnerID}");
-                                                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Please choose the 'use' command when interacting with an item.");
+                                                        await context.SendDiscordMessageMention($"Please choose the 'use' command when interacting with an item.");
                                                     break;
                                                 case "use":
                                                     if (typeItIs == LootDrop.LootType.Item)
@@ -1242,7 +1242,7 @@ namespace PersonalDiscordBot.Classes
                                                     else
                                                     {
                                                         Toolbox.uDebugAddLog($"[TYPE]{typeItIs} is not an item. [ID]{owner.OwnerID}");
-                                                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Please choose the 'equip' command when interacting with a weapon or armor.");
+                                                        await context.SendDiscordMessageMention($"Please choose the 'equip' command when interacting with a weapon or armor.");
                                                     }
                                                     break;
                                                 case "sell":
@@ -1259,7 +1259,7 @@ namespace PersonalDiscordBot.Classes
                                     if (timestamp3 + TimeSpan.FromMinutes(5) <= DateTime.Now)
                                     {
                                         Toolbox.uDebugAddLog($"timestamp3 reached 5 minutes [ID]{owner.OwnerID}");
-                                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} A response hasn't been received in 5 minutes, you can go through your backpack later by using ;test check backpack");
+                                        await context.SendDiscordMessageMention($"A response hasn't been received in 5 minutes, you can go through your backpack later by using ;test check backpack");
                                         return;
                                     }
                                     await Task.Delay(1000);
@@ -1269,7 +1269,7 @@ namespace PersonalDiscordBot.Classes
                         if (timestamp2 + TimeSpan.FromMinutes(5) <= DateTime.Now)
                         {
                             Toolbox.uDebugAddLog($"timestamp2 reached 5 minutes [ID]{owner.OwnerID}");
-                            await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} A response hasn't been received in 5 minutes, you can go through your backpack later by using ;test check backpack");
+                            await context.SendDiscordMessageMention($"A response hasn't been received in 5 minutes, you can go through your backpack later by using ;test check backpack");
                             return;
                         }
                         await Task.Delay(1000);
@@ -1321,7 +1321,7 @@ namespace PersonalDiscordBot.Classes
                 var chara = RPG.Owners.Find(x => x.OwnerID == context.User.Id).CurrentCharacter;
                 chara.Color = color;
                 EmbedBuilder embed = new EmbedBuilder() { Color = chara.Color, Description = "Your color has been updated!" };
-                await context.Channel.SendMessageAsync("", false, embed.Build());
+                await context.SendDiscordEmbedMention(embed);
             }
             catch (Exception ex)
             {
@@ -1548,7 +1548,7 @@ namespace PersonalDiscordBot.Classes
                 var match = RPG.MatchList.Find(x => x.Owner == owner);
                 if (match.CurrentTurn != Turn.Player)
                 {
-                    await context.Channel.SendMessageAsync($"It isn't {owner.CurrentCharacter.Name}'s turn, it's {enemy.Name}'s turn");
+                    await context.SendDiscordMessageMention($"It isn't {owner.CurrentCharacter.Name}'s turn, it's {enemy.Name}'s turn");
                     return;
                 }
                 Toolbox.uDebugAddLog($"Attacking enemy [C]{owner.CurrentCharacter.Name} [E]{enemy.Name} [ID]{owner.OwnerID}");
@@ -1573,7 +1573,7 @@ namespace PersonalDiscordBot.Classes
                             Color = owner.CurrentCharacter.Color,
                             Description = $"**{owner.CurrentCharacter.Name}** attacked **{enemy.Name}** and dealt **{totalDamage}** damage ({enemy.CurrentHP}/{enemy.MaxHP} left)"
                         };
-                        await context.Channel.SendMessageAsync("", false, embed.Build());
+                        await context.SendDiscordEmbedMention(embed);
                     }
                 }
                 else if (totalDamage == 0)
@@ -1584,7 +1584,7 @@ namespace PersonalDiscordBot.Classes
                         Color = owner.CurrentCharacter.Color,
                         Description = $"**{owner.CurrentCharacter.Name}** attacked **{enemy.Name}** and didn't deal any damage ({enemy.CurrentHP}/{enemy.MaxHP} left)"
                     };
-                    await context.Channel.SendMessageAsync("", false, embed.Build());
+                    await context.SendDiscordEmbedMention(embed);
                 }
                 else
                 {
@@ -1598,7 +1598,7 @@ namespace PersonalDiscordBot.Classes
                         Color = owner.CurrentCharacter.Color,
                         Description = $"**{owner.CurrentCharacter.Name}** attacked, **{enemy.Name}** absorbed **{totalDamage}** damage and was healed ({enemy.CurrentHP}/{enemy.MaxHP} left)"
                     };
-                    await context.Channel.SendMessageAsync("", false, embed.Build());
+                    await context.SendDiscordEmbedMention(embed);
                 }
                 Toolbox.uDebugAddLog($"Finished attacking enemy [ID]{owner.OwnerID}");
                 await TurnSystem.PlayerActionComplete(context, match);
@@ -1746,7 +1746,7 @@ namespace PersonalDiscordBot.Classes
                         Color = owner.CurrentCharacter.Color,
                         Description = $"You have defeated **{enemy.Name}** and earned **{enemy.ExpLoot} EXP!**"
                     };
-                    await context.Channel.SendMessageAsync("", false, embed.Build());
+                    await context.SendDiscordEmbedMention(embed);
                     await MatchOver(context, owner, enemy, MatchCompleteResult.Won);
                     return;
                 }
@@ -1962,7 +1962,7 @@ namespace PersonalDiscordBot.Classes
                 switch (result)
                 {
                     case MatchCompleteResult.Won:
-                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} You have defeated **{match.DefeatedEnemies.Count} enemies** and completed the match!");
+                        await context.SendDiscordMessageMention($"You have defeated **{match.DefeatedEnemies.Count} enemies** and completed the match!");
                         int lootCount = rng.Next(rng.Next(0, 2), 3 + (rng.Next(0, match.DefeatedEnemies.Count)));
                         var character = RPG.Owners.Find(x => x.OwnerID == owner.OwnerID).CurrentCharacter;
                         Toolbox.uDebugAddLog($"Generating lootdrop, lootcount: {lootCount}");
@@ -1992,7 +1992,7 @@ namespace PersonalDiscordBot.Classes
                             await context.Channel.SendMessageAsync(string.Empty, false, embed.Build());
                         }
                         Toolbox.uDebugAddLog($"Lootdrop lootcount after filter: {character.Loot.Count} [ID]{owner.OwnerID}");
-                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} You earned {pebbles} pebbles,{currency} currency, and earned {match.ExperienceEarned} experience!");
+                        await context.SendDiscordMessageMention($"You earned {pebbles} pebbles,{currency} currency, and earned {match.ExperienceEarned} experience!");
                         await EmptyLoot(context);
                         break;
                     case MatchCompleteResult.Lost:
@@ -2042,7 +2042,7 @@ namespace PersonalDiscordBot.Classes
                                         owner.CurrentCharacter.Loot.Remove(loot);
                                         Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} trashed item {loot.Name} [ID]{owner.OwnerID}");
                                         lootResp = true;
-                                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {loot.GetLootType()} was trashed");
+                                        await context.SendDiscordMessageMention($"{loot.GetLootType()} was trashed");
                                         break;
                                     case "keep":
                                         if (LootDrop.GetLootType(loot) == LootDrop.LootType.Item)
@@ -2069,7 +2069,7 @@ namespace PersonalDiscordBot.Classes
                                         owner.CurrentCharacter.Loot.Remove(loot);
                                         Toolbox.uDebugAddLog($"Removed loot from loot list: {loot.Name} [ID]{owner.OwnerID}");
                                         lootResp = true;
-                                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {loot.Name} was placed in your trusty backpack");
+                                        await context.SendDiscordMessageMention($"{loot.Name} was placed in your trusty backpack");
                                         break;
                                     case "sell":
                                         dynamic retLoot = loot.GetItem();
@@ -2086,7 +2086,7 @@ namespace PersonalDiscordBot.Classes
                                         }
                                         owner.CurrentCharacter.Loot.Remove(loot);
                                         lootResp = true;
-                                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {loot.Name} was sold for {retLoot.Worth} currency");
+                                        await context.SendDiscordMessageMention($"{loot.Name} was sold for {retLoot.Worth} currency");
                                         break;
                                     case "cancel":
                                         lootResp = true;
@@ -2105,11 +2105,11 @@ namespace PersonalDiscordBot.Classes
                         emptiedLoot = true;
                     if (timeStamp + TimeSpan.FromMinutes(5) <= DateTime.Now)
                     {
-                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} A response hasn't been received in 5 minutes, you can go through your loot later by using ;test loot");
+                        await context.SendDiscordMessageMention($"A response hasn't been received in 5 minutes, you can go through your loot later by using ;test loot");
                         return;
                     }
                 }
-                await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} You don't have any loot to go through currently");
+                await context.SendDiscordMessageMention($"You don't have any loot to go through currently");
             }
             catch (Exception ex)
             {
@@ -2138,7 +2138,7 @@ namespace PersonalDiscordBot.Classes
                 if (itemList.Count <= 0)
                 {
                     Toolbox.uDebugAddLog($"Found no items in backpack of type {LootDrop.LootType.Item} [ID]{owner.OwnerID}");
-                    await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} You don't currently have any items in **{owner.CurrentCharacter.Name}'s** backpack, nice try!");
+                    await context.SendDiscordMessageMention($"You don't currently have any items in **{owner.CurrentCharacter.Name}'s** backpack, nice try!");
                     return;
                 }
                 itemList.OrderBy(x => x.Name);
@@ -2162,9 +2162,9 @@ namespace PersonalDiscordBot.Classes
                             int itemNum = 0;
                             bool isNum = int.TryParse(msg.Content.ToString(), out itemNum);
                             if (!isNum)
-                                await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {msg.Content.ToString()} isn't a valid response, try again");
+                                await context.SendDiscordMessageMention($"{msg.Content.ToString()} isn't a valid response, try again");
                             else if ((itemNum <= 0 || itemNum > itemList.Count))
-                                await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {msg.Content.ToString()} is above or below the number of items you have in your backpack");
+                                await context.SendDiscordMessageMention($"{msg.Content.ToString()} is above or below the number of items you have in your backpack");
                             else
                             {
                                 itemResp = true;
@@ -2175,7 +2175,7 @@ namespace PersonalDiscordBot.Classes
                     }
                     if (sendMsg.Timestamp.DateTime + TimeSpan.FromMinutes(5) <= DateTime.Now)
                     {
-                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} Response hasn't been received within 5min, canceling Use Item");
+                        await context.SendDiscordMessageMention($"Response hasn't been received within 5min, canceling Use Item");
                         Toolbox.uDebugAddLog($"Response wasn't received within 5min, canceling [ID]{owner.OwnerID}");
                     }
                 }
@@ -2202,7 +2202,7 @@ namespace PersonalDiscordBot.Classes
                 }
                 if (armorList.Count <= 0)
                 {
-                    await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {owner.CurrentCharacter.Name} doesn't currently have any armor in their bag, nice try");
+                    await context.SendDiscordMessageMention($"{owner.CurrentCharacter.Name} doesn't currently have any armor in their bag, nice try");
                     return;
                 }
                 armorList.OrderBy(x => x.Name);
@@ -2227,15 +2227,15 @@ namespace PersonalDiscordBot.Classes
                             respondedList.Add(msg);
                             bool isNum = int.TryParse(msg.Content.ToString(), out chosenNum);
                             if (!isNum)
-                                await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {msg.Content.ToString()} isnt' a valid number, please try again");
+                                await context.SendDiscordMessageMention($"{msg.Content.ToString()} isnt' a valid number, please try again");
                             else if (chosenNum < 1 || chosenNum > armorList.Count)
-                                await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {chosenNum} is above or below the number of armors you have, please try again");
+                                await context.SendDiscordMessageMention($"{chosenNum} is above or below the number of armors you have, please try again");
                             else
                                 responded = true;
                         }
                     if (sentMsg.Timestamp.DateTime + TimeSpan.FromMinutes(5) <= DateTime.Now)
                     {
-                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} A response wasn't received within 5min, canceling Armor Change");
+                        await context.SendDiscordMessageMention($"A response wasn't received within 5min, canceling Armor Change");
                         return;
                     }
                     await Task.Delay(TimeSpan.FromSeconds(1));
@@ -2266,7 +2266,7 @@ namespace PersonalDiscordBot.Classes
                 }
                 if (weapList.Count <= 0)
                 {
-                    await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {owner.CurrentCharacter.Name} doesn't currently have any weapons in their bag, nice try");
+                    await context.SendDiscordMessageMention($"{owner.CurrentCharacter.Name} doesn't currently have any weapons in their bag, nice try");
                     return;
                 }
                 weapList.OrderBy(x => x.Name);
@@ -2291,15 +2291,15 @@ namespace PersonalDiscordBot.Classes
                             respondedList.Add(msg);
                             bool isNum = int.TryParse(msg.Content.ToString(), out chosenNum);
                             if (!isNum)
-                                await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {msg.Content.ToString()} isnt' a valid number, please try again");
+                                await context.SendDiscordMessageMention($"{msg.Content.ToString()} isnt' a valid number, please try again");
                             else if (chosenNum < 1 || chosenNum > weapList.Count)
-                                await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} {chosenNum} is above or below the number of weapons you have, please try again");
+                                await context.SendDiscordMessageMention($"{chosenNum} is above or below the number of weapons you have, please try again");
                             else
                                 responded = true;
                         }
                     if (sentMsg.Timestamp.DateTime + TimeSpan.FromMinutes(5) <= DateTime.Now)
                     {
-                        await context.Channel.SendMessageAsync($"{context.Message.Author.Mention} A response wasn't received within 5min, canceling Weapon Change");
+                        await context.SendDiscordMessageMention($"A response wasn't received within 5min, canceling Weapon Change");
                         return;
                     }
                     await Task.Delay(TimeSpan.FromSeconds(1));
@@ -2519,7 +2519,7 @@ namespace PersonalDiscordBot.Classes
                 };
                 //embed.AddField(x => { x.Name = "Player Img"; x.IsInline = true; x.Value = owner.CurrentCharacter.ImgURL; });
                 //embed.AddField(x => { x.Name = "Enemy Img"; x.IsInline = true; x.Value = enemy.ImgURL; });
-                await context.Channel.SendMessageAsync("", false, embed.Build());
+                await context.SendDiscordEmbedMention(embed);
                 await TurnSystem.CalculateTurn(context, owner);
             }
             catch (Exception ex)
