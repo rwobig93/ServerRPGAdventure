@@ -191,7 +191,7 @@ namespace PersonalDiscordBot.Classes
     {
         public static Classes.LocalSettings _paths = new Classes.LocalSettings();
         public static StatusUpdater statusUpdater = new StatusUpdater();
-        public enum GlobalAction { AdminChanged };
+        public enum GlobalAction { AdminChanged, CurrencyNameChanged };
 
         public static void uDebugAddLog(string _log, [CallerMemberName] string caller = null)
         {

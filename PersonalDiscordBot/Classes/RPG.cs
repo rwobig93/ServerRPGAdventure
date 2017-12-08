@@ -745,6 +745,23 @@ namespace PersonalDiscordBot.Classes
             worker.RunWorkerAsync();
         }
 
+        public static void UpdateCurrency(string newCurrencyName = "")
+        {
+            try
+            {
+                if (newCurrencyName == "") newCurrencyName = Toolbox._paths.CurrencyName;
+                Toolbox.uDebugAddLog($"Updating currency name, [C] {Toolbox._paths.CurrencyName} [N] {newCurrencyName}");
+                Toolbox._paths.CurrencyName = newCurrencyName;
+                Events.UseGlblAction(Toolbox.GlobalAction.CurrencyNameChanged);
+                MainWindow.SaveAllData();
+                Toolbox.uDebugAddLog($"Currency updated to: {Toolbox._paths.CurrencyName}, settings serialized");
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
         public static Match CopyNewMatch(Match matchToCopy)
         {
             Match newMatch = new Match();
@@ -981,7 +998,7 @@ namespace PersonalDiscordBot.Classes
                     Color = owner.CurrentCharacter.Color,
                     Title = owner.CurrentCharacter.Desc,
                     ImageUrl = owner.CurrentCharacter.ImgURL,
-                    Description = $"Backpack Storage: {owner.CurrentCharacter.Backpack.Stored.Count}/{owner.CurrentCharacter.Backpack.Capacity}{line}Level: {owner.CurrentCharacter.Lvl}{line}Experience: {owner.CurrentCharacter.Exp}/{owner.CurrentCharacter.ExpToLvl}{line}HP: {owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP}{line}Mana: {owner.CurrentCharacter.CurrentMana}/{owner.CurrentCharacter.MaxMana}{line}Strength: {owner.CurrentCharacter.Str}{line}Defense: {owner.CurrentCharacter.Def}{line}Dexterity: {owner.CurrentCharacter.Dex}{line}Intelligence: {owner.CurrentCharacter.Int}{line}Speed: {owner.CurrentCharacter.Spd}{line}Luck: {owner.CurrentCharacter.Lck}",
+                    Description = $"{Toolbox._paths.CurrencyName}: {owner.Currency}{line}Backpack Storage: {owner.CurrentCharacter.Backpack.Stored.Count}/{owner.CurrentCharacter.Backpack.Capacity}{line}Level: {owner.CurrentCharacter.Lvl}{line}Experience: {owner.CurrentCharacter.Exp}/{owner.CurrentCharacter.ExpToLvl}{line}HP: {owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP}{line}Mana: {owner.CurrentCharacter.CurrentMana}/{owner.CurrentCharacter.MaxMana}{line}Strength: {owner.CurrentCharacter.Str}{line}Defense: {owner.CurrentCharacter.Def}{line}Dexterity: {owner.CurrentCharacter.Dex}{line}Intelligence: {owner.CurrentCharacter.Int}{line}Speed: {owner.CurrentCharacter.Spd}{line}Luck: {owner.CurrentCharacter.Lck}",
                     Footer = new EmbedFooterBuilder()
                     {
                         Text = owner.CurrentCharacter.Class.ToString()
@@ -2779,9 +2796,15 @@ namespace PersonalDiscordBot.Classes
 
     public static class TurnSystem
     {
+        #region Variables
+
         // Each turn add character speed, once 1000 is hit it is their turn
         private const int turnActivation = 1000;
         private const int turnCost = 1000;
+
+        #endregion
+
+        #region Methods
 
         public static async Task CalculateTurn(ICommandContext context, OwnerProfile owner)
         {
@@ -2908,6 +2931,8 @@ namespace PersonalDiscordBot.Classes
             Toolbox.uDebugAddLog($"Calling CalculateTurn [ID]{match.Owner.OwnerID}");
             await CalculateTurn(context, match.Owner);
         }
+
+        #endregion
     }
 
     public class LootDrop

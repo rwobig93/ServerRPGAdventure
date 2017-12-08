@@ -43,6 +43,32 @@ namespace PersonalDiscordBot.Classes
             }
         }
 
+        [Command("games"), Summary("Returns List of Current Servers of a specific game type")]
+        public async Task GamesSpecific([Remainder]string gameServer)
+        {
+            try
+            {
+                int counter = 0;
+                StringBuilder _sb = new StringBuilder();
+                _sb.AppendLine("");
+                foreach (var game in MainWindow.ServerList)
+                {
+                    if (game.Game.ToLower() == gameServer.ToLower())
+                    {
+                        _sb.AppendLine(string.Format("```Game: {1}{0} Server Name: {2}{0} Password: {3}{0} Modded: {4}{0} Host: {5} Port: {6}```", Environment.NewLine, game.Game, game.ServerName, game.Password, game.Modded, game.ExtHostname, game.PortNum));
+                        counter++;
+                    }
+                }
+                if (counter == 0)
+                    _sb.AppendLine($"{Context.User.Mention} No game servers for **{gameServer}** were found");
+                await Context.SendDiscordMessage(_sb.ToString());
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
+        }
+
         [Command("reboot"), Summary("Reboots the chosen server")]
         public async Task Reboot([Remainder]string gameServer)
         {
@@ -2338,6 +2364,7 @@ namespace PersonalDiscordBot.Classes
                 {
                     await Context.SendDiscordMessageMention($"You don't have permission to run this command");
                     Toolbox.uDebugAddLog($"User didn't have permission, cancelling [ID]{Context.User.Id}");
+                    return;
                 }
                 Toolbox.uDebugAddLog($"Generating loot for character [ID]{Context.User.Id}");
                 await Context.SendDiscordMessageMention($"Generating loot for your character {RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id).CurrentCharacter.Name}");
@@ -2606,6 +2633,23 @@ namespace PersonalDiscordBot.Classes
             {
                 ServerModule.FullExceptionLog(ex);
             }
+        }
+
+        [Command("change currency"), Summary("Testicules Change Currency Name")]
+        public async Task Testacules26(string newCurrencyName)
+        {
+            Toolbox.uDebugAddLog("Starting change currency name command");
+            var cacheCurrencyName = Toolbox._paths.CurrencyName.ToString();
+            var isAdmin = Permissions.AdminPermissions(Context);
+            if (!isAdmin)
+            {
+                await Context.SendDiscordMessageMention($"You don't have permission to run this command");
+                Toolbox.uDebugAddLog($"User didn't have permission, cancelling [ID]{Context.User.Id}");
+                return;
+            }
+            Management.UpdateCurrency(newCurrencyName);
+            await Context.SendDiscordMessageMention($"Currency name updated from **{cacheCurrencyName}** to **{Toolbox._paths.CurrencyName}**");
+            Toolbox.uDebugAddLog("Finished change currency name command");
         }
 
         public async Task<IUser> GetDiscordUser(string user)

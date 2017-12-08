@@ -631,6 +631,18 @@ namespace PersonalDiscordBot
             }
         }
 
+        private void btnChangeCurrencyName_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Management.UpdateCurrency(txtCurrencyName.Text);
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -1237,6 +1249,10 @@ namespace PersonalDiscordBot
                 {
                     case Toolbox.GlobalAction.AdminChanged:
                         tRefreshAdminList();
+                        break;
+                    case Toolbox.GlobalAction.CurrencyNameChanged:
+                        txtCurrencyName.Text = Toolbox._paths.CurrencyName;
+                        lblCurrencyNameValue.Text = Toolbox._paths.CurrencyName;
                         break;
                     default:
                         uStatusUpdate($"Something went wrong and a Global Action wasn't handled, action: {action.ToString()}");
