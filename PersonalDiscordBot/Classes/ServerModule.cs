@@ -30,11 +30,10 @@ namespace PersonalDiscordBot.Classes
             try
             {
                 StringBuilder _sb = new StringBuilder();
-                _sb.AppendLine("");
-                foreach (var game in MainWindow.ServerList)
-                {
-                    _sb.AppendLine(string.Format("```Game: {1}{0} Server Name: {2}{0} Password: {3}{0} Modded: {4}{0} Host: {5} Port: {6}```", Environment.NewLine, game.Game, game.ServerName, game.Password, game.Modded, game.ExtHostname, game.PortNum));
-                }
+                _sb.AppendLine($"```Server Game | # of Servers{Environment.NewLine}");
+                foreach (var game in MainWindow.ServerList.GroupBy(s => s.Game))
+                    _sb.AppendLine($"{game.Key} | {game.Count()}");
+                _sb.AppendLine("```");
                 await Context.SendDiscordMessage(_sb.ToString());
             }
             catch (Exception ex)
@@ -907,7 +906,8 @@ namespace PersonalDiscordBot.Classes
                 (
                  "_{0}" +
                  "{0}```▧ Server Commands ▨```{0}" +
-                 "```;server games{0}Displays current group servers and information```" +
+                 "```;server games{0}Displays game servers and how many servers there```" +
+                 "```;server games %GameName%{0}Displays game server info for specified game```" +
                  "```;server reboot %GameName%{0}Reboot's the the requested server```" +
                  "```;server logs %GameName%{0}Get's the latest 3 server logs on the requested server```" +
                  "```;server logs 8 %GameName%{0}Get's the latest 8 server logs on the requested server, or however many you want, replace the 8 with a different number```" +
