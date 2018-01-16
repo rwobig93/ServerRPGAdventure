@@ -886,7 +886,7 @@ namespace PersonalDiscordBot.Classes
                  "```;help server{0}Shows game server commands, now you have the powah```" +
                  "```;help general{0}General commands regarding the bot or misc functions, remember I'm your buddy friend pal```" +
                  "```;help translate{0}Text/Message translation methods, leetify your snoop game yo```"+
-                 "```;help test{0}Show commands to test RPG stuff```",
+                 "```;help rpg{0}Show RPG game commands```",
                  Environment.NewLine
                 );
                 await Context.Channel.SendMessageAsync(_helpArticle);
@@ -1018,6 +1018,40 @@ namespace PersonalDiscordBot.Classes
                  "   (red, blue, black, green, yellow, brown, orange, gold, pink, purple, silver, slategray, white){0}" +
                  ";test change color 00,00,00 (r,g,b)```{0}" +
                  ";test add exp",
+                 Environment.NewLine
+                );
+                await Context.SendDiscordMessage(_helpArticle);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("rpg"), Summary("RPG Commands")]
+        public async Task DefHelpRPG()
+        {
+            try
+            {
+                string _helpArticle = string.Format
+                (
+                 "_{0}" +
+                 "{0}```▧ RPG Commands ▨```{0}" +
+                 "```;create{0}Starts character creation dialog to create a new character```" +
+                 "```;switch{0}Prompts to change characters```" +
+                 "```;match{0}Starts a new match```" +
+                 "```;m{0}Starts a new match```" +
+                 "```;battle{0}Starts a new match```" +
+                 "```;attack{0}Attacks current match enemy```" +
+                 "```;a{0}Attacks current match enemy```" +
+                 "```;loot{0}Starts loot dialog```" +
+                 "```;item{0}Prompts to use an item```" +
+                 "```;view{0}Shows current character stats and currency```" +
+                 "```;change armor{0}Prompts to change armor```" +
+                 "```;change weapon{0}Prompts to change weapon```" +
+                 "```;change description{0}Change character description```" +
+                 "```;change color %color%{0}Change discord embed color{0}(red, blue, black, green, yellow, brown, orange, gold, pink, purple, silver, slategray, white)```" +
+                 "```;change color 00,00,00 (r,g,b)```",
                  Environment.NewLine
                 );
                 await Context.SendDiscordMessage(_helpArticle);
@@ -2802,5 +2836,996 @@ namespace PersonalDiscordBot.Classes
             //return hasPerm;
         }
     }
+    #endregion
+
+    #region RPG
+    
+    [Group(""), Summary("RPG Commands")]
+    public class RPGModule : ModuleBase
+    {
+        #region Player Commands
+
+        [Command("create"), Summary("Create RPG Character")]
+        public async Task CreateRPGCharacter()
+        {
+            try
+            {
+                var line = Environment.NewLine;
+                if (!ChannelIsRPGChannel())
+                {
+                    await Context.SendDiscordMessageMention("This channel isn't an RPG channel");
+                    return;
+                }
+                var hasCharacters = await VerifyOwnerProfileAndIfHasCharacters();
+                OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+                int cost = Management.DetermineCharacterCost(ownerProfile);
+                if (hasCharacters)
+                {
+                    if (ownerProfile.Currency < cost)
+                    {
+                        await Context.SendDiscordMessage($"A new character for you costs {cost} currency but you only have {ownerProfile.Currency}, please get good");
+                        return;
+                    }
+                    Toolbox.uDebugAddLog($"SENDINGMESSAGE: It will cost you {cost} currency to create a new character, would you still like to create a character? (Yes/No) (You have {ownerProfile.Currency} currently) [ID]{Context.User.Id} [Name]{Context.User.Username}");
+                    var costQuestion = await Context.Channel.SendMessageAsync(
+                        $"It will cost you {cost} currency to create a new character, would you still like to create a character? (Yes/No){line}" +
+                        $"(You have {ownerProfile.Currency} currently)");
+                    DateTime costTimeStamp = DateTime.Now;
+                    bool costResponseRecvd = false;
+                    while (!costResponseRecvd)
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(1));
+                        var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        Toolbox.uDebugAddLog("Generated message list");
+                        string response = string.Empty;
+                        foreach (IMessage msg in newList)
+                        {
+                            if ((Context.Message.Author == msg.Author) && (costQuestion.Timestamp.DateTime < msg.Timestamp.DateTime))
+                            {
+                                response = msg.Content.ToString();
+                                Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
+                                Toolbox.uDebugAddLog($"Response: {response}");
+                                costResponseRecvd = true;
+                                if (response.ToLower() == "no")
+                                {
+                                    await Context.SendDiscordMessage($"{Context.User.Mention} Operation cancelled");
+                                    return;
+                                }
+                            }
+                        }
+                        if (costTimeStamp + TimeSpan.FromSeconds(60) <= DateTime.Now)
+                        {
+                            Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 60s, canceled character creation");
+                            await Context.SendDiscordMessageMention($"A valid response wasn't received within 60 seconds, canceling creation request");
+                            return;
+                        }
+                    }
+                }
+                var sentMsg = await Context.Channel.SendMessageAsync(
+                    $"What class would you like your new adventurer to be?{line}" +
+                    $"```Class: Warrior{line}Focus on Strength/Melee Damage, Higher Loot Chance: Swords, Greatswords, Katanas```" +
+                    $"```Class: Dragoon{line}Focus on Dexterity/Elements, Higher Loot Chance: Spears, DragonSpears, Twinswords```" +
+                    $"```Class: Mage{line}Focus on All Spells, Higher Loot Chance: Staffs, FocusStones```" +
+                    $"```Class: Necromancer{line}Focus on Attack Spells/Summonding, Higher Loot Chance: FocusStones, Staffs```" +
+                    $"```Class: Rogue{line}Focus on Speed/Dexterity, Higher Loot Chance: Dagger, TwinSwords```"
+                    );
+                bool responseRecvd = false;
+                bool nameChosen = false;
+                string charName = string.Empty;
+                List<IMessage> respondedList = new List<IMessage>();
+                DateTime timeStamp = DateTime.Now;
+                RPG.CharacterClass chosenClass = 0;
+                while (!responseRecvd)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                    Toolbox.uDebugAddLog("Generated message list");
+                    string response = string.Empty;
+                    foreach (IMessage msg in newList)
+                    {
+                        if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime) && (!respondedList.Contains(msg)))
+                        {
+                            respondedList.Add(msg);
+                            Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
+                            Toolbox.uDebugAddLog($"Before response: {msg.Content.ToString()}");
+                            response = Regex.Replace(msg.Content.ToString(), @"\s+", "");
+                            Toolbox.uDebugAddLog($"After response: {response}");
+                            response = response.ToLower();
+                            switch (response)
+                            {
+                                case "warrior":
+                                    chosenClass = RPG.CharacterClass.Warrior;
+                                    responseRecvd = true;
+                                    break;
+                                case "dragoon":
+                                    chosenClass = RPG.CharacterClass.Dragoon;
+                                    responseRecvd = true;
+                                    break;
+                                case "mage":
+                                    chosenClass = RPG.CharacterClass.Mage;
+                                    responseRecvd = true;
+                                    break;
+                                case "necromancer":
+                                    chosenClass = RPG.CharacterClass.Necromancer;
+                                    responseRecvd = true;
+                                    break;
+                                case "rogue":
+                                    chosenClass = RPG.CharacterClass.Rogue;
+                                    responseRecvd = true;
+                                    break;
+                                default:
+                                    await Context.SendDiscordMessage($"{response} isn't a valid response, please try again");
+                                    break;
+                            }
+                        }
+                    }
+                    if (timeStamp + TimeSpan.FromSeconds(60) <= DateTime.Now)
+                    {
+                        Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 60s, canceled character creation");
+                        await Context.SendDiscordMessageMention($"A valid response wasn't received within 60 seconds, canceling creation request");
+                        return;
+                    }
+                }
+                while (!nameChosen)
+                {
+                    DateTime nameTimeStamp = DateTime.Now;
+                    var nameQuestion = await Context.Channel.SendMessageAsync($"What can we call your {chosenClass}?");
+                    bool responseRecvd2 = false;
+                    DateTime timeStamp2 = DateTime.Now;
+                    while (!responseRecvd2)
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(1));
+                        var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        Toolbox.uDebugAddLog("Generated message list");
+                        string response = string.Empty;
+                        foreach (IMessage msg in newList)
+                        {
+                            if ((Context.Message.Author == msg.Author) && (nameQuestion.Timestamp.DateTime < msg.Timestamp.DateTime) && (!respondedList.Contains(msg)))
+                            {
+                                respondedList.Add(msg);
+                                response = msg.Content.ToString();
+                                Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
+                                Toolbox.uDebugAddLog($"Response: {response}");
+                                if (response == "Testiculees teh Great")
+                                {
+                                    await Context.SendDiscordMessage($"{Context.User.Mention} Nice try but you are not the great one, that power is beyond your reach!");
+                                    Toolbox.uDebugAddLog($"{Context.User.Username} tried to recreate Testiculees and we told them no [ID]{Context.User.Id}");
+                                }
+                                else
+                                {
+                                    Toolbox.uDebugAddLog($"Valid response recieved, setting Character name [ID]{Context.User.Id}");
+                                    charName = response;
+                                    responseRecvd2 = true;
+                                }
+                            }
+                        }
+                        if (timeStamp2 + TimeSpan.FromSeconds(60) <= DateTime.Now)
+                        {
+                            Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 60s, canceled character creation");
+                            await Context.SendDiscordMessageMention($"A valid response wasn't received within 60 seconds, canceling creation request");
+                            return;
+                        }
+                    }
+                    var verification = await Context.Channel.SendMessageAsync($"Would you like your {chosenClass} to be called \"{charName}\"? (Yes/No)");
+                    bool responseRecvd3 = false;
+                    DateTime timeStamp3 = DateTime.Now;
+                    while (!responseRecvd3)
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(1));
+                        var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        Toolbox.uDebugAddLog("Generated message list");
+                        string response = string.Empty;
+                        foreach (IMessage msg in newList)
+                        {
+                            if ((Context.Message.Author == msg.Author) && (verification.Timestamp.DateTime < msg.Timestamp.DateTime) && (!respondedList.Contains(msg)))
+                            {
+                                respondedList.Add(msg);
+                                response = msg.Content.ToString();
+                                Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
+                                Toolbox.uDebugAddLog($"Response: {response}");
+                                switch (response.ToLower())
+                                {
+                                    case "yes":
+                                        nameChosen = true;
+                                        responseRecvd3 = true;
+                                        break;
+                                    case "no":
+                                        nameChosen = false;
+                                        responseRecvd3 = true;
+                                        break;
+                                    default:
+                                        nameChosen = false;
+                                        responseRecvd3 = false;
+                                        await Context.SendDiscordMessage($"{response} isn't a valid response, please try again");
+                                        break;
+                                }
+                            }
+                        }
+                        if (timeStamp3 + TimeSpan.FromSeconds(60) <= DateTime.Now)
+                        {
+                            Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 60s, canceled character creation");
+                            await Context.SendDiscordMessageMention($"A valid response wasn't received within 60 seconds, canceling creation request");
+                            return;
+                        }
+                    }
+                    if (nameTimeStamp + TimeSpan.FromMinutes(5) <= DateTime.Now)
+                    {
+                        Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 5min, canceled character creation");
+                        await Context.SendDiscordMessageMention($"A valid response wasn't received within 60 seconds, canceling creation request");
+                        return;
+                    }
+                }
+                if (cost <= 0)
+                    await Context.SendDiscordMessageMention($"This first character is on us, enjoy");
+                else
+                {
+                    ownerProfile.Currency -= cost;
+                    await Context.SendDiscordMessageMention($"You have been charged {cost} currency, you now have: {ownerProfile.Currency}");
+                }
+                Character newChar = Management.CreateNewCharacter(Context.Message.Author.Id, chosenClass, charName);
+                ownerProfile.CharacterList.Add(newChar);
+                if (ownerProfile.CharacterList.Count == 1)
+                    ownerProfile.CurrentCharacter = newChar;
+                await Context.SendDiscordMessage($"Congratulations! Your new hero has been born:```{line}" +
+                    $"Name:{newChar.Name}{line}" +
+                    $"Class: {newChar.Class}{line}" +
+                    $"HP: {newChar.MaxHP}{line}" +
+                    $"Mana:{newChar.MaxMana}{line}" +
+                    $"Defense: {newChar.Def}{line}" +
+                    $"Dexterity: {newChar.Dex}{line}" +
+                    $"Intelligence: {newChar.Int}{line}" +
+                    $"Luck: {newChar.Lck}{line}" +
+                    $"Speed: {newChar.Spd}{line}" +
+                    $"Strength: {newChar.Str}{line}" +
+                    $"Level: {newChar.Lvl}{line}" +
+                    $"Experience: {newChar.Exp}```" +
+                    $"```Weapon:{line}" +
+                    $"Name: {newChar.Weapon.Name}{line}" +
+                    $"Description: {newChar.Weapon.Desc}```" +
+                    $"```Armor:{line}" +
+                    $"Name: {newChar.Armor.Name}{line}" +
+                    $"Description: {newChar.Armor.Desc}```");
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("switch"), Summary("Switch Character")]
+        public async Task SwitchCharacter()
+        {
+            try
+            {
+                var line = Environment.NewLine;
+                if (!ChannelIsRPGChannel())
+                {
+                    await Context.SendDiscordMessageMention("This channel isn't an RPG channel");
+                    return;
+                }
+                bool hasCharacters = await VerifyOwnerProfileAndIfHasCharacters();
+                OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+                if (!hasCharacters)
+                {
+                    await Context.SendDiscordMessageMention($"you don't have a character yet, try creating one... pleb");
+                    return;
+                }
+                List<IMessage> recvdMsgs = new List<IMessage>();
+                var match = RPG.MatchList.Find(x => x.Owner == ownerProfile);
+                if (match != null)
+                {
+                    var verifyMatch = await Context.Channel.SendMessageAsync($"You currently have an active match with {match.CurrentEnemy.Name}, your match will end if you switch characters, would you still like to switch? (Yes/No)");
+                    bool verifyRecvd = false;
+                    while (!verifyRecvd)
+                    {
+                        var msgList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        Toolbox.uDebugAddLog("Generated message list");
+                        foreach (var msg in msgList)
+                        {
+                            if (msg.Author == Context.User && msg.Timestamp.DateTime > verifyMatch.Timestamp.DateTime && (!recvdMsgs.Contains(msg)))
+                            {
+                                recvdMsgs.Add(msg);
+                                var answer = msg.Content.ToString();
+                                Toolbox.uDebugAddLog($"Found newer message from the same author, answer: {answer}");
+                                if (answer.ToLower() == "yes")
+                                {
+                                    verifyRecvd = true;
+                                    RPG.MatchList.Remove(match);
+                                    Toolbox.uDebugAddLog($"Removed active match due to switching characters [ID]{ownerProfile.OwnerID}");
+                                }
+                                else if (answer.ToLower() == "no")
+                                {
+                                    verifyRecvd = true;
+                                    await Context.SendDiscordMessage($"{Context.User.Mention} Canceling character switch");
+                                    return;
+                                }
+                                else
+                                    await Context.SendDiscordMessage($"{Context.User.Mention} {answer} isn't a valid response, please try again");
+                            }
+                        }
+                        if (verifyMatch.Timestamp.DateTime + TimeSpan.FromMinutes(5) <= DateTime.Now)
+                        {
+                            await Context.SendDiscordMessage($"{Context.User.Mention} An answer wasn't received within 5 min, canceling character switch...");
+                            return;
+                        }
+                    }
+                }
+                string response = $"Please enter the number for the respective character you want to use:{line}";
+                int counter = 0;
+                foreach (Character chara in ownerProfile.CharacterList)
+                {
+                    counter++;
+                    response = $"{response}[{counter}] {chara.Name}{line}";
+                }
+                var sentMsg = await Context.Channel.SendMessageAsync($"{response}"); DateTime timeStamp2 = DateTime.Now;
+                bool respRecvd = false;
+                int chosenCharacter = 0;
+                while (!respRecvd)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                    Toolbox.uDebugAddLog("Generated message list");
+                    string answer = string.Empty;
+                    foreach (IMessage msg in newList)
+                    {
+                        if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime) && (!recvdMsgs.Contains(msg)))
+                        {
+                            recvdMsgs.Add(msg);
+                            answer = msg.Content.ToString();
+                            Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
+                            Toolbox.uDebugAddLog($"Before Response: {answer}");
+                            answer = Regex.Replace(msg.Content.ToString(), @"\s+", "");
+                            Toolbox.uDebugAddLog($"After response: {answer}");
+                            var isNum = int.TryParse(answer, out chosenCharacter);
+                            if (!isNum)
+                            {
+                                await Context.SendDiscordMessage($"{answer} isnt' a valid response");
+                                respRecvd = false;
+                            }
+                            else
+                                respRecvd = true;
+                        }
+                    }
+                    if (timeStamp2 + TimeSpan.FromSeconds(60) <= DateTime.Now)
+                    {
+                        Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 60s, canceled character creation");
+                        await Context.SendDiscordMessageMention($"A valid response wasn't received within 60 seconds, canceling creation request");
+                        return;
+                    }
+                }
+                Character selChara = ownerProfile.CharacterList[chosenCharacter - 1];
+                Management.ChangeCharacter(ownerProfile.OwnerID, selChara);
+                await Context.SendDiscordMessageMention($"your active character is now {selChara.Name}!");
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("match"), Summary("Start Match")]
+        public async Task StartMatch()
+        {
+            try
+            {
+                if (!ChannelIsRPGChannel())
+                {
+                    await Context.SendDiscordMessageMention("This channel isn't an RPG channel");
+                    return;
+                }
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                {
+                    await Context.SendDiscordMessageMention($"you don't currently have any characters, please create one before trying to start a match");
+                    return;
+                }
+                Toolbox.uDebugAddLog($"Starting match command");
+                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+                try
+                {
+                    var match = RPG.MatchList.Find(x => x.Owner == owner);
+                    if (match == null)
+                    {
+                        if (owner.CurrentCharacter.Loot.Count > 0)
+                        {
+                            await Context.SendDiscordMessage($"You still have {owner.CurrentCharacter.Loot.Count} pieces of loot to go through before you can start another match");
+                            return;
+                        }
+                        Toolbox.uDebugAddLog($"Generating new match for {owner.OwnerID}");
+                        Match newMatch = new Match() { Owner = owner, MatchStart = DateTime.Now };
+                        int enemyCount = RPG.rng.Next(1, 5);
+                        Toolbox.uDebugAddLog($"Enemy Count chosen: {enemyCount}");
+                        for (int i = 0; i < enemyCount; i++)
+                        {
+                            Enemy newEnemy = Enemies.EnemyRanGen(LootDrop.ChooseLevel(owner.CurrentCharacter.Lvl));
+                            if (i == 0) { newMatch.CurrentEnemy = newEnemy; Toolbox.uDebugAddLog($"Set {newEnemy.Name} as the current enemy for {owner.OwnerID}"); }
+                            newMatch.EnemyList.Add(newEnemy);
+                            Toolbox.uDebugAddLog($"Generated enemy {newEnemy.Name} and added to the enemy list for {owner.OwnerID}");
+                            Toolbox.uDebugAddLog($"Generating Enemies Progress: [current]{i} [enemyCount]{enemyCount}");
+                        }
+                        RPG.MatchList.Add(newMatch);
+                        Toolbox.uDebugAddLog($"Successfully generated new match with {newMatch.EnemyList.Count} enemies");
+                        EmbedBuilder embed = new EmbedBuilder()
+                        {
+                            Title = $"A new match was generated with **{newMatch.EnemyList.Count}** enemies",
+                            Color = owner.CurrentCharacter.Color,
+                            Description = $"{owner.CurrentCharacter.Name} vs. {newMatch.CurrentEnemy.Name}"
+                        };
+                        //embed.AddField(x => { x.Name = "Player Img"; x.IsInline = true; x.Value = owner.CurrentCharacter.ImgURL; });
+                        //embed.AddField(x => { x.Name = "Enemy Img"; x.IsInline = true; x.Value = newEnemy.ImgURL; });
+                        await Context.SendDiscordEmbed(embed);
+                        Toolbox.uDebugAddLog($"Successfully sent new match message to {Context.User.Username} | {Context.User.Id}");
+                        await TurnSystem.CalculateTurn(Context, owner);
+                        return;
+                    }
+                    else
+                    {
+                        Toolbox.uDebugAddLog($"Attempt to generate new match, existing match found for {owner.OwnerID}");
+                        TimeSpan time = DateTime.Now - match.MatchStart;
+                        TimeSpan timeLeft = (match.LastPlayerTurn + match.TurnTimeLimit) - match.LastPlayerTurn;
+                        await Context.SendDiscordMessage($"You currently have an active match with **{match.CurrentEnemy.Name}** that was started **{time.Days}D {time.Hours}H {time.Minutes}M {time.Seconds}Secs** ago, please attack your current enemy, you have **{timeLeft.Days}D {timeLeft.Hours}H {timeLeft.Minutes}M {timeLeft.Seconds}Secs** left before you **forfeit**");
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Toolbox.FullExceptionLog(ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("battle"), Summary("Start Battle")]
+        public async Task StartBattle()
+        {
+            try
+            {
+                if (!ChannelIsRPGChannel())
+                {
+                    await Context.SendDiscordMessageMention("This channel isn't an RPG channel");
+                    return;
+                }
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                {
+                    await Context.SendDiscordMessageMention($"you don't currently have any characters, please create one before trying to start a match");
+                    return;
+                }
+                Toolbox.uDebugAddLog($"Starting match command");
+                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+                try
+                {
+                    var match = RPG.MatchList.Find(x => x.Owner == owner);
+                    if (match == null)
+                    {
+                        if (owner.CurrentCharacter.Loot.Count > 0)
+                        {
+                            await Context.SendDiscordMessage($"You still have {owner.CurrentCharacter.Loot.Count} pieces of loot to go through before you can start another match");
+                            return;
+                        }
+                        Toolbox.uDebugAddLog($"Generating new match for {owner.OwnerID}");
+                        Match newMatch = new Match() { Owner = owner, MatchStart = DateTime.Now };
+                        int enemyCount = RPG.rng.Next(1, 5);
+                        Toolbox.uDebugAddLog($"Enemy Count chosen: {enemyCount}");
+                        for (int i = 0; i < enemyCount; i++)
+                        {
+                            Enemy newEnemy = Enemies.EnemyRanGen(LootDrop.ChooseLevel(owner.CurrentCharacter.Lvl));
+                            if (i == 0) { newMatch.CurrentEnemy = newEnemy; Toolbox.uDebugAddLog($"Set {newEnemy.Name} as the current enemy for {owner.OwnerID}"); }
+                            newMatch.EnemyList.Add(newEnemy);
+                            Toolbox.uDebugAddLog($"Generated enemy {newEnemy.Name} and added to the enemy list for {owner.OwnerID}");
+                            Toolbox.uDebugAddLog($"Generating Enemies Progress: [current]{i} [enemyCount]{enemyCount}");
+                        }
+                        RPG.MatchList.Add(newMatch);
+                        Toolbox.uDebugAddLog($"Successfully generated new match with {newMatch.EnemyList.Count} enemies");
+                        EmbedBuilder embed = new EmbedBuilder()
+                        {
+                            Title = $"A new match was generated with **{newMatch.EnemyList.Count}** enemies",
+                            Color = owner.CurrentCharacter.Color,
+                            Description = $"{owner.CurrentCharacter.Name} vs. {newMatch.CurrentEnemy.Name}"
+                        };
+                        //embed.AddField(x => { x.Name = "Player Img"; x.IsInline = true; x.Value = owner.CurrentCharacter.ImgURL; });
+                        //embed.AddField(x => { x.Name = "Enemy Img"; x.IsInline = true; x.Value = newEnemy.ImgURL; });
+                        await Context.SendDiscordEmbed(embed);
+                        Toolbox.uDebugAddLog($"Successfully sent new match message to {Context.User.Username} | {Context.User.Id}");
+                        await TurnSystem.CalculateTurn(Context, owner);
+                        return;
+                    }
+                    else
+                    {
+                        Toolbox.uDebugAddLog($"Attempt to generate new match, existing match found for {owner.OwnerID}");
+                        TimeSpan time = DateTime.Now - match.MatchStart;
+                        TimeSpan timeLeft = (match.LastPlayerTurn + match.TurnTimeLimit) - match.LastPlayerTurn;
+                        await Context.SendDiscordMessage($"You currently have an active match with **{match.CurrentEnemy.Name}** that was started **{time.Days}D {time.Hours}H {time.Minutes}M {time.Seconds}Secs** ago, please attack your current enemy, you have **{timeLeft.Days}D {timeLeft.Hours}H {timeLeft.Minutes}M {timeLeft.Seconds}Secs** left before you **forfeit**");
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Toolbox.FullExceptionLog(ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("attack"), Summary("Attack Enemy")]
+        public async Task AttackEnemy()
+        {
+            try
+            {
+                if (!ChannelIsRPGChannel())
+                {
+                    await Context.SendDiscordMessageMention("This channel isn't an RPG channel");
+                    return;
+                }
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                {
+                    await Context.SendDiscordMessageMention($"you don't currently have any characters, please create one before trying to attack something");
+                    return;
+                }
+                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+                Match match = RPG.MatchList.Find(x => x.Owner == owner);
+                if (match == null)
+                {
+                    await Context.SendDiscordMessageMention($"you don't currently have an active match, please start a match before trying to attack nothing");
+                    return;
+                }
+                await Management.AttackEnemy(Context, owner, match.CurrentEnemy);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("loot"), Summary("Check Loot")]
+        public async Task CheckLoot()
+        {
+            try
+            {
+                if (!ChannelIsRPGChannel())
+                {
+                    await Context.SendDiscordMessageMention("This channel isn't an RPG channel");
+                    return;
+                }
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                {
+                    await Context.SendDiscordMessageMention($"you don't currently have any characters, please create one before trying to get some of that dank loot");
+                    return;
+                }
+                await Management.EmptyLoot(Context);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("item"), Summary("Use Item")]
+        public async Task UseItem()
+        {
+            try
+            {
+                if (!ChannelIsRPGChannel())
+                {
+                    await Context.SendDiscordMessageMention("This channel isn't an RPG channel");
+                    return;
+                }
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                {
+                    await Context.SendDiscordMessageMention($"you don't currently have any characters, please create one before trying to get some of that dank loot");
+                    return;
+                }
+                await Management.CharacterUseItem(Context);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("view"), Summary("View Character")]
+        public async Task ViewCharacter()
+        {
+            try
+            {
+                if (!ChannelIsRPGChannel())
+                {
+                    await Context.SendDiscordMessageMention("This channel isn't an RPG channel");
+                    return;
+                }
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                {
+                    await Context.SendDiscordMessageMention($"you don't currently have any characters, please create one before trying to get some of that dank loot");
+                    return;
+                }
+                await Management.CheckCharacterStats(Context);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("change armor"), Summary("Change Armor")]
+        public async Task ChangeArmor()
+        {
+            try
+            {
+                if (!ChannelIsRPGChannel())
+                {
+                    await Context.SendDiscordMessageMention("This channel isn't an RPG channel");
+                    return;
+                }
+                await Management.CharacterChangeArmor(Context);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("change weapon"), Summary("Change Weapon")]
+        public async Task ChangeWeapon()
+        {
+            try
+            {
+                if (!ChannelIsRPGChannel())
+                {
+                    await Context.SendDiscordMessageMention("This channel isn't an RPG channel");
+                    return;
+                }
+                await Management.CharacterChangeWeapon(Context);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("change description"), Summary("Change Description")]
+        public async Task ChangeDescription()
+        {
+            try
+            {
+                if (!ChannelIsRPGChannel())
+                {
+                    await Context.SendDiscordMessageMention("This channel isn't an RPG channel");
+                    return;
+                }
+                await Management.CharacterChangeDescription(Context);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("change color"), Summary("Change Color")]
+        public async Task ChangeColor(string color)
+        {
+            try
+            {
+                if (!ChannelIsRPGChannel())
+                {
+                    await Context.SendDiscordMessageMention("This channel isn't an RPG channel");
+                    return;
+                }
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                    return;
+                if (color.Contains(","))
+                {
+                    Toolbox.uDebugAddLog($"Changing character color, string contains comma [ID]{Context.User.Id}");
+                    var split = color.Split(',');
+                    if (split.Length <= 2)
+                    {
+                        await Context.SendDiscordMessage($"You didn't enter enough numbers to make an RGB color, please try again [entered]{color}");
+                        Toolbox.uDebugAddLog($"Incorrect arguments (split.Length <= 2) for RGB color entered: {color} [ID]{Context.User.Id}");
+                        return;
+                    }
+                    if (split.Length > 3)
+                    {
+                        await Context.SendDiscordMessage($"You entered too many arguments to create an RGB color, you need 3 arguments, please try again [entered]{color}");
+                        Toolbox.uDebugAddLog($"Incorrect arguments (split.Length > 3) for RGB color entered: {color} [ID]{Context.User.Id}");
+                        return;
+                    }
+                    int num1 = 0;
+                    int num2 = 0;
+                    int num3 = 0;
+                    var isNum1 = int.TryParse(split[0], out num1);
+                    if (!isNum1)
+                    {
+                        await Context.SendDiscordMessage($"The number you entered for argument 1 isn't a valid integer: {split[0]}");
+                        Toolbox.uDebugAddLog($"Argument 1 isn't a valid integer: {split[0]} [ID]{Context.User.Id}");
+                        return;
+                    }
+                    var isNum2 = int.TryParse(split[1], out num2);
+                    if (!isNum2)
+                    {
+                        await Context.SendDiscordMessage($"The number you entered for argument 2 isn't a valid integer: {split[1]}");
+                        Toolbox.uDebugAddLog($"Argument 2 isn't a valid integer: {split[1]} [ID]{Context.User.Id}");
+                        return;
+                    }
+                    var isNum3 = int.TryParse(split[2], out num3);
+                    if (!isNum3)
+                    {
+                        await Context.SendDiscordMessage($"The number you entered for argument 3 isn't a valid integer: {split[2]}");
+                        Toolbox.uDebugAddLog($"Argument 3 isn't a valid integer: {split[2]} [ID]{Context.User.Id}");
+                        return;
+                    }
+                    Discord.Color newColor = new Discord.Color(num1, num2, num3);
+                    await Management.ChangeColor(Context, newColor);
+                }
+                else
+                {
+                    Toolbox.uDebugAddLog($"Changing character color, string doesn't contain comma [ID]{Context.User.Id}");
+                    color = color.ToLower();
+                    Discord.Color newColor = new Color(0, 0, 0);
+                    System.Windows.Media.Color selColor = System.Windows.Media.Colors.Blue;
+                    switch (color)
+                    {
+                        case "red":
+                            selColor = System.Windows.Media.Colors.Red;
+                            break;
+                        case "blue":
+                            selColor = System.Windows.Media.Colors.Blue;
+                            break;
+                        case "black":
+                            selColor = System.Windows.Media.Colors.Black;
+                            break;
+                        case "green":
+                            selColor = System.Windows.Media.Colors.Green;
+                            break;
+                        case "yellow":
+                            selColor = System.Windows.Media.Colors.Yellow;
+                            break;
+                        case "brown":
+                            selColor = System.Windows.Media.Colors.Brown;
+                            break;
+                        case "orange":
+                            selColor = System.Windows.Media.Colors.Orange;
+                            break;
+                        case "gold":
+                            selColor = System.Windows.Media.Colors.Gold;
+                            break;
+                        case "pink":
+                            selColor = System.Windows.Media.Colors.Pink;
+                            break;
+                        case "purple":
+                            selColor = System.Windows.Media.Colors.Purple;
+                            break;
+                        case "silver":
+                            selColor = System.Windows.Media.Colors.Silver;
+                            break;
+                        case "slategray":
+                            selColor = System.Windows.Media.Colors.SlateGray;
+                            break;
+                        case "white":
+                            selColor = System.Windows.Media.Colors.White;
+                            break;
+                        default:
+                            await Context.SendDiscordMessage($"{color} is an incorrect color, please try again");
+                            return;
+                    }
+                    newColor = new Color(selColor.R, selColor.G, selColor.B);
+                    await Management.ChangeColor(Context, newColor);
+                }
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        #endregion
+
+        #region Administration
+
+        [Command("channel"), Summary("Toggle RPG Channel")]
+        public async Task Testacules11()
+        {
+            try
+            {
+                if (!Permissions.AdminPermissions(Context))
+                {
+                    await Context.SendDiscordMessageMention($"You don't have rights to run this command");
+                    return;
+                }
+                if (Permissions.AllowedChannels.Find(x => x.ID == Context.Channel.Id) == null)
+                {
+                    Toolbox.uDebugAddLog($"Channel isn't an RPG channel, attempting to add RPG Channel: {Context.Channel.Name} | {Context.Channel.Id}");
+                    DiscordChannel newChannel = new DiscordChannel() { ID = Context.Channel.Id, Name = Context.Channel.Name };
+                    Permissions.AllowedChannels.Add(newChannel);
+                    Events.uStatusUpdateExt($"RPG Channel Added: {newChannel.Name} | {newChannel.ID}");
+                    await Context.SendDiscordMessageMention($"**Added** RPG Channel **{newChannel.Name}**");
+                }
+                else
+                {
+                    var chnl = Permissions.AllowedChannels.Find(x => x.ID == Context.Channel.Id);
+                    Toolbox.uDebugAddLog($"Channel is already an RPG channel, attempting to remove RPG Channel: {chnl.Name} | {chnl.ID}");
+                    Permissions.AllowedChannels.Remove(chnl);
+                    Events.uStatusUpdateExt($"RPG Channel Removed: {Context.Channel.Name} | {Context.Channel.Id}");
+                    await Context.SendDiscordMessageMention($" **Removed** RPG Channel **{Context.Channel.Name}**");
+                }
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        } 
+
+        #endregion
+
+        public async Task<bool> VerifyOwnerProfileAndIfHasCharacters()
+        {
+            OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+            if (ownerProfile == null)
+            {
+                OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id, OwnerUN = Context.User.Username };
+                RPG.Owners.Add(owner);
+                Events.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
+                await Context.SendDiscordMessageMention($"you didn't have a profile yet so I made you one");
+                ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+            }
+            else
+                Toolbox.uDebugAddLog($"Owner profile was found for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
+            return ownerProfile.CharacterList.Count == 0 ? false : true;
+        }
+
+        public bool ChannelIsRPGChannel()
+        {
+            return Permissions.AllowedChannels.Find(x => x.ID == Context.Channel.Id) != null;
+        }
+    }
+
+    #endregion
+
+    #region RPG Quick
+    
+    [Group(""), Summary("Quick RPG Commands")]
+    public class RPGQuickModule : ModuleBase
+    {
+        [Command("m"), Summary("Quick Match")]
+        public async Task QuickMatch()
+        {
+            try
+            {
+                if (!ChannelIsRPGChannel())
+                {
+                    await Context.SendDiscordMessageMention("This channel isn't an RPG channel");
+                    return;
+                }
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                {
+                    await Context.SendDiscordMessageMention($"you don't currently have any characters, please create one before trying to start a match");
+                    return;
+                }
+                Toolbox.uDebugAddLog($"Starting match command");
+                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+                try
+                {
+                    var match = RPG.MatchList.Find(x => x.Owner == owner);
+                    if (match == null)
+                    {
+                        if (owner.CurrentCharacter.Loot.Count > 0)
+                        {
+                            await Context.SendDiscordMessage($"You still have {owner.CurrentCharacter.Loot.Count} pieces of loot to go through before you can start another match");
+                            return;
+                        }
+                        Toolbox.uDebugAddLog($"Generating new match for {owner.OwnerID}");
+                        Match newMatch = new Match() { Owner = owner, MatchStart = DateTime.Now };
+                        int enemyCount = RPG.rng.Next(1, 5);
+                        Toolbox.uDebugAddLog($"Enemy Count chosen: {enemyCount}");
+                        for (int i = 0; i < enemyCount; i++)
+                        {
+                            Enemy newEnemy = Enemies.EnemyRanGen(LootDrop.ChooseLevel(owner.CurrentCharacter.Lvl));
+                            if (i == 0) { newMatch.CurrentEnemy = newEnemy; Toolbox.uDebugAddLog($"Set {newEnemy.Name} as the current enemy for {owner.OwnerID}"); }
+                            newMatch.EnemyList.Add(newEnemy);
+                            Toolbox.uDebugAddLog($"Generated enemy {newEnemy.Name} and added to the enemy list for {owner.OwnerID}");
+                            Toolbox.uDebugAddLog($"Generating Enemies Progress: [current]{i} [enemyCount]{enemyCount}");
+                        }
+                        RPG.MatchList.Add(newMatch);
+                        Toolbox.uDebugAddLog($"Successfully generated new match with {newMatch.EnemyList.Count} enemies");
+                        EmbedBuilder embed = new EmbedBuilder()
+                        {
+                            Title = $"A new match was generated with **{newMatch.EnemyList.Count}** enemies",
+                            Color = owner.CurrentCharacter.Color,
+                            Description = $"{owner.CurrentCharacter.Name} vs. {newMatch.CurrentEnemy.Name}"
+                        };
+                        //embed.AddField(x => { x.Name = "Player Img"; x.IsInline = true; x.Value = owner.CurrentCharacter.ImgURL; });
+                        //embed.AddField(x => { x.Name = "Enemy Img"; x.IsInline = true; x.Value = newEnemy.ImgURL; });
+                        await Context.SendDiscordEmbed(embed);
+                        Toolbox.uDebugAddLog($"Successfully sent new match message to {Context.User.Username} | {Context.User.Id}");
+                        await TurnSystem.CalculateTurn(Context, owner);
+                        return;
+                    }
+                    else
+                    {
+                        Toolbox.uDebugAddLog($"Attempt to generate new match, existing match found for {owner.OwnerID}");
+                        TimeSpan time = DateTime.Now - match.MatchStart;
+                        TimeSpan timeLeft = (match.LastPlayerTurn + match.TurnTimeLimit) - match.LastPlayerTurn;
+                        await Context.SendDiscordMessage($"You currently have an active match with **{match.CurrentEnemy.Name}** that was started **{time.Days}D {time.Hours}H {time.Minutes}M {time.Seconds}Secs** ago, please attack your current enemy, you have **{timeLeft.Days}D {timeLeft.Hours}H {timeLeft.Minutes}M {timeLeft.Seconds}Secs** left before you **forfeit**");
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Toolbox.FullExceptionLog(ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("a"), Summary("Quick Attack Enemy")]
+        public async Task QuickAttackEnemy()
+        {
+            try
+            {
+                if (!ChannelIsRPGChannel())
+                {
+                    await Context.SendDiscordMessageMention("This channel isn't an RPG channel");
+                    return;
+                }
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                {
+                    await Context.SendDiscordMessageMention($"you don't currently have any characters, please create one before trying to attack something");
+                    return;
+                }
+                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+                Match match = RPG.MatchList.Find(x => x.Owner == owner);
+                if (match == null)
+                {
+                    await Context.SendDiscordMessageMention($"you don't currently have an active match, please start a match before trying to attack nothing");
+                    return;
+                }
+                await Management.AttackEnemy(Context, owner, match.CurrentEnemy);
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        #region Methods
+
+        public async Task<bool> VerifyOwnerProfileAndIfHasCharacters()
+        {
+            OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+            if (ownerProfile == null)
+            {
+                OwnerProfile owner = new OwnerProfile() { OwnerID = Context.Message.Author.Id, OwnerUN = Context.User.Username };
+                RPG.Owners.Add(owner);
+                Events.uStatusUpdateExt($"Owner profile not found, created one for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
+                await Context.SendDiscordMessageMention($"you didn't have a profile yet so I made you one");
+                ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+            }
+            else
+                Toolbox.uDebugAddLog($"Owner profile was found for {Context.Message.Author.Username} | {Context.Message.Author.Id}");
+            return ownerProfile.CharacterList.Count == 0 ? false : true;
+        }
+
+        public bool ChannelIsRPGChannel()
+        {
+            return Permissions.AllowedChannels.Find(x => x.ID == Context.Channel.Id) != null;
+        } 
+
+        #endregion
+    }
+
     #endregion
 }

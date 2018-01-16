@@ -1532,7 +1532,7 @@ namespace PersonalDiscordBot
                     await msg.Channel.SendMessageAsync(string.Format("{0}{1}{2}", msg.Author.Mention, Environment.NewLine, msg.Content.ToSnoopification()));
                     return;
                 }
-                if (!(msg.HasCharPrefix(';', ref argPos) || msg.HasMentionPrefix(client.CurrentUser, ref argPos))) return;
+                if (!(msg.HasCharPrefix(';', ref argPos) || msg.HasMentionPrefix(client.CurrentUser, ref argPos) || (Permissions.AllowedChannels.Find(x => x.ID == msg.Channel.Id) != null))) return;
 
                 CommandContext context = new CommandContext(client, msg);
                 var cmd = $"User: {arg.Author.Username} ◥◤ Command: {arg.ToString()}";
