@@ -64,6 +64,19 @@ namespace PersonalDiscordBot.Classes
         public int CurrentMana { get; set; }
     }
 
+    public class CharacterStatCopy
+    {
+        public int Str { get; set; }
+        public int Def { get; set; }
+        public int Dex { get; set; }
+        public int Int { get; set; }
+        public int Spd { get; set; }
+        public int Lck { get; set; }
+        public int Lvl { get; set; }
+        public int MaxHP { get; set; }
+        public int MaxMana { get; set; }
+    }
+
     public class Match
     {
         public OwnerProfile Owner { get; set; }
@@ -781,7 +794,11 @@ namespace PersonalDiscordBot.Classes
                 Toolbox.uDebugAddLog($"Checking if owner has a match, if not returned [{context.Message.Author.Id}]");
                 if (match == null) return "You aren't currently in a match, please start a match to view it's details";
                 Toolbox.uDebugAddLog($"Starting property enum of found match [{context.Message.Author.Id}]");
-                matchDetails = match.EnumProps();
+                var line = Environment.NewLine;
+                string enemyList = string.Empty;
+                foreach (var enemy in match.EnemyList)
+                    enemyList = $"{enemy.Name}{line}";
+                matchDetails = $"[Owner] {owner.OwnerUN}{line}[MatchStart] {match.MatchStart}{line}[LastPlayerTurn] {match.LastPlayerTurn}{line}[TurnTimeLimit] {match.TurnTimeLimit}{line}[EnemyList] {enemyList}[CurrentEnemy] {match.CurrentEnemy.Name}{line}[CurrentTurn] {match.CurrentTurn}{line}[Turns] {match.Turns}{line}[EnemyTurnTotal] {match.EnemyTurnTotal}{line}[PlayerTurnTotal] {match.PlayerTurnTotal}{line}[ExperienceEarned] {match.ExperienceEarned}";
                 Toolbox.uDebugAddLog($"Finished property enum of found match [{context.Message.Author.Id}]");
             }
             catch (Exception ex)
@@ -1537,10 +1554,7 @@ namespace PersonalDiscordBot.Classes
                 Toolbox.uDebugAddLog($"Checking if {chara.Name} leveled up: [currexp]{chara.Exp} [exptolvl]{chara.ExpToLvl}");
                 if (chara.Exp > chara.ExpToLvl)
                 {
-                    Toolbox.uDebugAddLog($"Before Level Up: [lvl]{chara.Lvl} [exp]{chara.Exp}/{chara.ExpToLvl}");
-                    chara.Lvl++;
-                    chara.ExpToLvl = Management.CalculateExperience(chara.Lvl);
-                    Toolbox.uDebugAddLog($"After Level Up: [lvl]{chara.Lvl} [exp]{chara.Exp}/{chara.ExpToLvl}");
+                    Management.LevelUpCharacter(chara);
                     return true;
                 }
                 else
@@ -1551,6 +1565,21 @@ namespace PersonalDiscordBot.Classes
             {
                 Toolbox.FullExceptionLog(ex);
                 return false;
+            }
+        }
+
+        public static void LevelUpCharacter(Character chara)
+        {
+            try
+            {
+                Toolbox.uDebugAddLog($"Before Level Up: [lvl]{chara.Lvl} [exp]{chara.Exp}/{chara.ExpToLvl}");
+                chara.Lvl++;
+                chara.ExpToLvl = Management.CalculateExperience(chara.Lvl);
+                Toolbox.uDebugAddLog($"After Level Up: [lvl]{chara.Lvl} [exp]{chara.Exp}/{chara.ExpToLvl}");
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
             }
         }
 
@@ -1755,15 +1784,15 @@ namespace PersonalDiscordBot.Classes
                 match.EnemyList.Remove(enemy);
                 match.DefeatedEnemies.Add(enemy);
                 match.ExperienceEarned += enemy.ExpLoot;
-                Toolbox.uDebugAddLog($"Removed {enemy.Name} from the enemy list, added to the defeated enemy list and added ExpLoot");
-                if (RPG.MatchList.Find(x => x.Owner == owner).EnemyList.Count <= 0)
+                EmbedBuilder embed = new EmbedBuilder()
                 {
-                    EmbedBuilder embed = new EmbedBuilder()
-                    {
-                        Color = owner.CurrentCharacter.Color,
-                        Description = $"You have defeated **{enemy.Name}** and earned **{enemy.ExpLoot} EXP!**"
-                    };
-                    await context.SendDiscordEmbedMention(embed);
+                    Color = owner.CurrentCharacter.Color,
+                    Description = $"You have defeated **{enemy.Name}** and earned **{enemy.ExpLoot} EXP!**"
+                };
+                await context.SendDiscordEmbedMention(embed);
+                Toolbox.uDebugAddLog($"Removed {enemy.Name} from the enemy list, added to the defeated enemy list and added ExpLoot");
+                if (RPG.MatchList.Find(x => x.Owner == owner).EnemyList.Count < 1)
+                {
                     await MatchOver(context, owner, enemy, MatchCompleteResult.Won);
                     return;
                 }
@@ -1994,8 +2023,22 @@ namespace PersonalDiscordBot.Classes
                         int pebbles = 0;
                         int currency = 0;
                         LootDrop.FilterLoot(character, out pebbles, out currency);
-                        var copyChara = character;
                         character.Exp += match.ExperienceEarned;
+                        CharacterStatCopy copyChara = new CharacterStatCopy()
+                        {
+                            Def = character.Def,
+                            Dex = character.Dex,
+                            Int = character.Int,
+                            Lck = character.Lck,
+                            Lvl = character.Lvl,
+                            MaxHP = character.MaxHP,
+                            MaxMana = character.MaxMana,
+                            Spd = character.Spd,
+                            Str = character.Str
+                        };
+                        Toolbox.uDebugAddLog($"Lootdrop lootcount after filter: {character.Loot.Count} [ID]{owner.OwnerID}");
+                        await context.SendDiscordMessageMention($"You earned: {Environment.NewLine}**{pebbles}** pebbles,{Environment.NewLine}**{currency}** currency,{Environment.NewLine}**{character.Loot.Count}** pieces of loot, {Environment.NewLine}and **{match.ExperienceEarned}** experience!");
+                        await EmptyLoot(context);
                         if (VerifyLvlUp(character))
                         {
                             var line = Environment.NewLine;
@@ -2006,11 +2049,8 @@ namespace PersonalDiscordBot.Classes
                                 Description = $"Level: {copyChara.Lvl} > {character.Lvl}{line}MaxHP: {copyChara.MaxHP} > {character.MaxHP}{line}MaxMana: {copyChara.MaxMana} > {character.MaxMana}{line}Strength: {copyChara.Str} > {character.Str}{line}Defense: {copyChara.Def} > {character.Def}{line}Dexterity: {copyChara.Dex} > {character.Dex}{line}Intelligence: {copyChara.Int} > {character.Int}{line}Speed: {copyChara.Spd} > {character.Spd}{line}Luck: {copyChara.Lck} > {character.Lck}",
                                 ImageUrl = character.ImgURL
                             };
-                            await context.Channel.SendMessageAsync(string.Empty, false, embed.Build());
+                            await context.SendDiscordEmbedMention(embed);
                         }
-                        Toolbox.uDebugAddLog($"Lootdrop lootcount after filter: {character.Loot.Count} [ID]{owner.OwnerID}");
-                        await context.SendDiscordMessageMention($"You earned {pebbles} pebbles,{currency} currency, and earned {match.ExperienceEarned} experience!");
-                        await EmptyLoot(context);
                         break;
                     case MatchCompleteResult.Lost:
                         await context.Channel.SendMessageAsync($"You were defeated in combat by {match.CurrentEnemy.Name} after defeating **{match.DefeatedEnemies.Count} enemies**");
@@ -2419,7 +2459,6 @@ namespace PersonalDiscordBot.Classes
                             owner.CurrentCharacter.Backpack.Stored.Remove(iItem);
                             Toolbox.uDebugAddLog($"Removed {iItem.Name} from {owner.CurrentCharacter}'s backpack as it had a count of {tmpItem.Count}");
                         }
-                        await TurnSystem.CalculateTurn(context, owner);
                         break;
                     case ItemType.Damaging:
                         Affliction dmg = new Affliction()
@@ -2449,7 +2488,6 @@ namespace PersonalDiscordBot.Classes
                             owner.CurrentCharacter.Backpack.Stored.Remove(iItem);
                             Toolbox.uDebugAddLog($"Removed {iItem.Name} from {owner.CurrentCharacter}'s backpack as it had a count of {tmpItem.Count}");
                         }
-                        await TurnSystem.CalculateTurn(context, owner);
                         break;
                     case ItemType.Repair:
                         Toolbox.uDebugAddLog($"Repairing {owner.CurrentCharacter.Name}'s {owner.CurrentCharacter.Weapon.Name}. [Current]{owner.CurrentCharacter.Weapon.CurrentDurability}/{owner.CurrentCharacter.Weapon.MaxDurability} [ID]{owner.OwnerID}");
@@ -2468,20 +2506,17 @@ namespace PersonalDiscordBot.Classes
                             owner.CurrentCharacter.Backpack.Stored.Remove(iItem);
                             Toolbox.uDebugAddLog($"Removed {iItem.Name} from {owner.CurrentCharacter}'s backpack as it had a count of {tmpItem.Count}");
                         }
-                        await TurnSystem.CalculateTurn(context, owner);
                         break;
                     case ItemType.Restorative:
                         if (item.Name.ToLower().Contains("health"))
                         {
                             owner.CurrentCharacter.CurrentHP += item.CalculateHealthPotion(owner.CurrentCharacter);
                             await context.Channel.SendMessageAsync($"**{owner.CurrentCharacter.Name}** was health was restored by {item.CalculateHealthPotion(owner.CurrentCharacter)}, current health: {owner.CurrentCharacter.CurrentHP}/{owner.CurrentCharacter.MaxHP} ({item.Count - 1} left)");
-                            await TurnSystem.CalculateTurn(context, owner);
                         }
                         else if (item.Name.ToLower().Contains("mana"))
                         {
                             owner.CurrentCharacter.CurrentMana += item.CalculateManaPotion(owner.CurrentCharacter);
                             await context.Channel.SendMessageAsync($"**{owner.CurrentCharacter.Name}'s** mana was restored by {item.CalculateManaPotion(owner.CurrentCharacter)}, current mana: {owner.CurrentCharacter.CurrentMana}/{owner.CurrentCharacter.MaxMana} ({item.Count - 1} left)");
-                            await TurnSystem.CalculateTurn(context, owner);
                         }
                         else
                         {
@@ -2502,13 +2537,13 @@ namespace PersonalDiscordBot.Classes
                             owner.CurrentCharacter.Backpack.Stored.Remove(iItem);
                             Toolbox.uDebugAddLog($"Removed item from backpack: {iItem.Name}, count was {_item.Count} [ID]{owner.OwnerID}");
                         }
-                        await TurnSystem.CalculateTurn(context, owner);
                         break;
                     default:
                         Toolbox.uDebugAddLog($"ERROR: Item was used and wasn't one of the 4 item types. [Char]{owner.CurrentCharacter.Name} [ID]{owner.OwnerID} [Item]{tmpItem.EnumPropsLogging()}");
                         await context.Channel.SendMessageAsync($"Something happend and you couldn't use the item {tmpItem.Name}, please let the devs know. You still have your turn");
                         break;
                 }
+                await TurnSystem.CalculateTurn(context, owner);
             }
             catch (Exception ex)
             {
@@ -2821,8 +2856,6 @@ namespace PersonalDiscordBot.Classes
                     Management.RemoveAfflictions(owner, match.CurrentEnemy);
                     Toolbox.uDebugAddLog($"Added 1 to turn count [CurrentTurnCount]{match.Turns} [ID]{owner.OwnerID}");
                 }
-                if (match.CurrentTurn == Turn.Player)
-                    match.PlayerTurnTotal -= turnCost;
                 while (match.PlayerTurnTotal < turnActivation && match.EnemyTurnTotal < turnActivation)
                     UpdateTurnTotal(match);
                 if ((match.PlayerTurnTotal >= turnActivation && match.EnemyTurnTotal >= turnActivation) && (match.PlayerTurnTotal > match.EnemyTurnTotal))
@@ -2841,14 +2874,16 @@ namespace PersonalDiscordBot.Classes
                     Toolbox.uDebugAddLog($"It is the enemy's turn [ID]{owner.OwnerID}");
                     await Management.CalculateEnemyAction(context, match);
                 }
-                if (match.CurrentTurn == Turn.Player)
+                else if (match.CurrentTurn == Turn.Player)
                 {
                     Toolbox.uDebugAddLog($"It is the player's turn [ID]{owner.OwnerID}");
                     await context.Channel.SendMessageAsync($"{context.User.Mention} It is {owner.CurrentCharacter.Name}'s turn");
                 }
+                else
+                    Toolbox.uDebugAddLog($"ERROR: Final else was hit in enemy vs player turn");
             }
             else
-                Toolbox.uDebugAddLog($"CalculateTurn was called without a match being found for the owner [ID]{owner.OwnerID}");
+                Toolbox.uDebugAddLog($"ERROR: CalculateTurn was called without a match being found for the owner [ID]{owner.OwnerID}");
         }
 
         public static void CalculateTurn(OwnerProfile owner)
@@ -3133,7 +3168,7 @@ namespace PersonalDiscordBot.Classes
                 int filtered = 0;
                 int total = chara.Loot.Count;
                 var lootPack = chara.Loot.ToList();
-                foreach (var bpItem in lootPack)
+                foreach (var bpItem in lootPack.ToList())
                 {
                     var lootType = bpItem.GetLootType();
                     if (lootType == LootType.Nothing)

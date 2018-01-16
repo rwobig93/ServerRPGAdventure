@@ -1016,7 +1016,8 @@ namespace PersonalDiscordBot.Classes
                  ";test check backpack{0}" +
                  ";test change color %color%{0}" +
                  "   (red, blue, black, green, yellow, brown, orange, gold, pink, purple, silver, slategray, white){0}" +
-                 ";test change color 00,00,00 (r,g,b)```",
+                 ";test change color 00,00,00 (r,g,b)```{0}" +
+                 ";test add exp",
                  Environment.NewLine
                 );
                 await Context.SendDiscordMessage(_helpArticle);
@@ -2249,7 +2250,6 @@ namespace PersonalDiscordBot.Classes
                     return; 
                 }
                 await Management.AttackEnemy(Context, owner, match.CurrentEnemy);
-                await TurnSystem.CalculateTurn(Context, owner);
             }
             catch (Exception ex)
             {
@@ -2650,6 +2650,43 @@ namespace PersonalDiscordBot.Classes
             Management.UpdateCurrency(newCurrencyName);
             await Context.SendDiscordMessageMention($"Currency name updated from **{cacheCurrencyName}** to **{Toolbox._paths.CurrencyName}**");
             Toolbox.uDebugAddLog("Finished change currency name command");
+        }
+
+        [Command("add exp"), Summary("Testicules add experience")]
+        public async Task Testacules27(string amount)
+        {
+            try
+            {
+                var isAdmin = Permissions.AdminPermissions(Context);
+                if (!isAdmin)
+                {
+                    await Context.SendDiscordMessageMention($"You don't have permission to run this command");
+                    Toolbox.uDebugAddLog($"User didn't have permission, cancelling [ID]{Context.User.Id}");
+                    return;
+                }
+                var hasChar = await VerifyOwnerProfileAndIfHasCharacters();
+                if (!hasChar)
+                {
+                    await Context.SendDiscordMessageMention($"you don't currently have any characters, please create one before trying to get some of that dank loot");
+                    return;
+                }
+                OwnerProfile ownerProfile = RPG.Owners.Find(x => x.OwnerID == Context.Message.Author.Id);
+                int expAdded;
+                if (string.IsNullOrEmpty(amount))
+                    expAdded = 1000;
+                else
+                {
+                    bool isNum = int.TryParse(amount, out expAdded);
+                    if (!isNum)
+                        expAdded = 1000;
+                }
+                ownerProfile.CurrentCharacter.Exp += expAdded;
+                await Context.SendDiscordMessageMention($"Added {expAdded} experience to {ownerProfile.CurrentCharacter.Name}, now has {ownerProfile.CurrentCharacter.Exp}/{ownerProfile.CurrentCharacter.ExpToLvl}");
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
         }
 
         public async Task<IUser> GetDiscordUser(string user)

@@ -1541,6 +1541,11 @@ namespace PersonalDiscordBot
                 var result = await commands.ExecuteAsync(context, argPos, services);
                 if (!result.IsSuccess)
                 {
+                    if (result.Error == CommandError.BadArgCount)
+                    {
+                        uStatusUpdate($"{cmd} | Bad Arg Count");
+                        return;
+                    }
                     var possEx = result.Error.Value;
                     uStatusUpdate(result.ErrorReason);
                     ResultLog(result);
