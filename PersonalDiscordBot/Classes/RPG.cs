@@ -1246,6 +1246,7 @@ namespace PersonalDiscordBot.Classes
                                         }
                                         else
                                         {
+                                            decidedWhatToDo = true;
                                             var typeItIs = chosenThing.GetLootType();
                                             switch (answer2)
                                             {
