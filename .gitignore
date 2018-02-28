@@ -114,3 +114,4 @@ _ReSharper*/
 # Office Temp Files#
 ####################
 ~$*
+/.vs/PersonalDiscordBot/v15/Server/sqlite3
