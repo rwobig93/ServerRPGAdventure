@@ -21,10 +21,12 @@ namespace PersonalDiscordBot.Classes
         public string ConfigLocation { get; set; }
         public string PathsConfig { get; set; }
         public string ServerConfig { get; set; }
-        // Bot settings
+        // Bot Settings
         public string BotToken { get; set; }
         public string BotPlaying { get; set; }
         public string BotName { get; set; }
         public bool Snooping { get; set; } = false;
+        // RPG Settings
+        public string CurrencyName { get; set; } = "Blooples";
     }
 }

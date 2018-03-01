@@ -2,21 +2,116 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/PersonalDiscordBot/bin
-/PersonalDiscordBot/bin/x64
-/PersonalDiscordBot/bin/x64/Debug
-/PersonalDiscordBot/bin/x64/Debug/Config
-/PersonalDiscordBot/bin/x64/Debug/Logs
-/PersonalDiscordBot/bin/x64/Debug/Permissions
-/PersonalDiscordBot/bin/x64/Release
-/PersonalDiscordBot/bin/x64/Release/Config
-/PersonalDiscordBot/bin/x64/Release/Logs
-/PersonalDiscordBot/bin/x64/Release/Permissions
-/PersonalDiscordBot/obj
-/PersonalDiscordBot/obj/x64
-/PersonalDiscordBot/obj/x64/Debug
-/PersonalDiscordBot/obj/x64/Debug/Windows
-/PersonalDiscordBot/obj/x64/Release
-/PersonalDiscordBot/obj/x64/Release/Windows
-/PDBUpdater/PDBUpdater/bin
-/PDBUpdater/PDBUpdater/obj
+# Debug / Release #
+###################
+/PersonalDiscordBot/bin/
+/PersonalDiscordBot/bin/x64/
+/PersonalDiscordBot/bin/x64/Debug/
+/PersonalDiscordBot/bin/x64/Debug/Config/
+/PersonalDiscordBot/bin/x64/Debug/Logs/
+/PersonalDiscordBot/bin/x64/Debug/Permissions/
+/PersonalDiscordBot/bin/x64/Debug/SaveData/
+/PersonalDiscordBot/bin/x64/Release/
+/PersonalDiscordBot/bin/x64/Release/Config/
+/PersonalDiscordBot/bin/x64/Release/Logs/
+/PersonalDiscordBot/bin/x64/Release/Permissions/
+/PersonalDiscordBot/obj/
+/PersonalDiscordBot/obj/Debug/
+/PersonalDiscordBot/obj/Release/
+/PersonalDiscordBot/obj/x64/
+/PersonalDiscordBot/obj/x64/Debug/
+/PersonalDiscordBot/obj/x64/Debug/Windows/
+/PersonalDiscordBot/obj/x64/Release/
+/PersonalDiscordBot/obj/x64/Release/Windows/
+/PDBUpdater/PDBUpdater/bin/
+/PDBUpdater/PDBUpdater/obj/
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# OS junk files #
+#################
+[Tt]humbs.db
+*.DS_Store
+
+# Visual Studio files #
+#######################
+*.[Oo]bj
+*.user
+*.aps
+*.pch
+*.vspscc
+*.vssscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.[Cc]ache
+*.ilk
+*.log
+*.lib
+*.sbr
+*.sdf
+ipch/
+obj/
+[Bb]in
+[Dd]ebug*/
+[Rr]elease*/
+Ankh.NoLoad
+
+# Tooling #
+###########
+_ReSharper*/
+*.resharper
+[Tt]est[Rr]esult*
+
+# Project files #
+#################
+[Bb]uild/
+
+# Subversion files #
+####################
+.svn
+
+# Office Temp Files#
+####################
+~$*
+/.vs/PersonalDiscordBot/v15/Server/sqlite3

@@ -53,7 +53,7 @@ namespace PersonalDiscordBot
         }
 
         #region Global Variables
-        
+
         public static DiscordSocketClient client;
         private CommandService commands;
         private IServiceProvider services;
@@ -100,7 +100,11 @@ namespace PersonalDiscordBot
             tSaveRPGData();
             tRefreshAdminList();
             CleanupLogDir();
+#if DEBUG
+            uStatusUpdate("DEBUG mode running, skipping version update");
+#else
             btnCheckForUpdates_Click(sender, e);
+#endif
         }
 
         private void winMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -112,7 +116,7 @@ namespace PersonalDiscordBot
                     if (Permissions.GeneralPermissions.logChannel != 0)
                     {
                         var channel = client.GetChannel(Permissions.GeneralPermissions.logChannel);
-                        if (channel != null)
+                        if (channel != null && client.CurrentUser.Username != null && ((IMessageChannel)channel).Name != null)
                         {
 #if DEBUG
                             await ((IMessageChannel)channel).SendMessageAsync($"**{client.CurrentUser.Username}** has **disconnected** in **DEBUG** Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
@@ -123,6 +127,7 @@ namespace PersonalDiscordBot
                         }
                     }
                 }
+                catch (NullReferenceException) { Toolbox.uDebugAddLog($"Disconnect message not sent to logchannel due to being null, [ChannelID]{Permissions.GeneralPermissions.logChannel}"); return; }
                 catch (Exception ex)
                 {
                     Toolbox.FullExceptionLog(ex);
@@ -182,7 +187,7 @@ namespace PersonalDiscordBot
                 if (Permissions.GeneralPermissions.logChannel != 0)
                 {
                     var channel = client.GetChannel(Permissions.GeneralPermissions.logChannel);
-                    if (channel != null)
+                    if (channel != null && client.CurrentUser.Username != null && ((IMessageChannel)channel).Name != null)
                     {
 #if DEBUG
                         await ((IMessageChannel)channel).SendMessageAsync($"**{client.CurrentUser.Username}** has **disconnected** in **DEBUG** Mode biiiiiiiiiiiiiiiiiiiiiiatch!!!");
@@ -626,6 +631,18 @@ namespace PersonalDiscordBot
             }
         }
 
+        private void btnChangeCurrencyName_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Management.UpdateCurrency(txtCurrencyName.Text);
+            }
+            catch (Exception ex)
+            {
+                FullExceptionLog(ex);
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -1016,6 +1033,10 @@ namespace PersonalDiscordBot
         private void CheckVersion()
         {
             Toolbox._paths.CurrentVersion = GetVersionNumber();
+            if (Toolbox._paths.PreviousVersion == new Version("0.0.0.0"))
+                Toolbox._paths.LastUpdated = $"{DateTime.Now.ToLocalTime().ToString("MM-dd-yyyy hh:mm:ss tt")}";
+            if (Toolbox._paths.PreviousVersion < Toolbox._paths.CurrentVersion)
+                Toolbox._paths.Updated = true;
             lblUpdateTime.Text = Toolbox._paths.LastUpdated;
             lblVersionNumber.Text = $"Version {Toolbox._paths.CurrentVersion}";
             uStatusUpdate($"Current Version: {Toolbox._paths.CurrentVersion}");
@@ -1025,6 +1046,7 @@ namespace PersonalDiscordBot
                 Toolbox._paths.Updated = false;
                 uStatusUpdate($"Updated to github v{Toolbox._paths.CurrentVersion} from v{prevVersion}");
                 Toolbox._paths.PreviousVersion = Toolbox._paths.CurrentVersion;
+                Toolbox._paths.LastUpdated = $"{DateTime.Now.ToLocalTime().ToString("MM-dd-yyyy hh:mm:ss tt")}";
 
                 SaveConfig(ConfigType.Paths);
 
@@ -1049,6 +1071,8 @@ namespace PersonalDiscordBot
                 };
                 worker.RunWorkerAsync();
             }
+            else
+                SaveConfig(ConfigType.Paths);
         }
 
         private Version GetVersionNumber()
@@ -1226,6 +1250,10 @@ namespace PersonalDiscordBot
                     case Toolbox.GlobalAction.AdminChanged:
                         tRefreshAdminList();
                         break;
+                    case Toolbox.GlobalAction.CurrencyNameChanged:
+                        txtCurrencyName.Text = Toolbox._paths.CurrencyName;
+                        lblCurrencyNameValue.Text = Toolbox._paths.CurrencyName;
+                        break;
                     default:
                         uStatusUpdate($"Something went wrong and a Global Action wasn't handled, action: {action.ToString()}");
                         break;
@@ -1263,7 +1291,7 @@ namespace PersonalDiscordBot
                 {
                     WorkerReportsProgress = true
                 };
-                worker.ProgressChanged += (sender, e) => 
+                worker.ProgressChanged += (sender, e) =>
                 {
                     try
                     {
@@ -1390,7 +1418,7 @@ namespace PersonalDiscordBot
                 }
                 catch (Exception ex)
                 {
-                   FullExceptionLog(ex);
+                    FullExceptionLog(ex);
                 }
             };
             worker.RunWorkerAsync();
@@ -1504,15 +1532,26 @@ namespace PersonalDiscordBot
                     await msg.Channel.SendMessageAsync(string.Format("{0}{1}{2}", msg.Author.Mention, Environment.NewLine, msg.Content.ToSnoopification()));
                     return;
                 }
-                if (!(msg.HasCharPrefix(';', ref argPos) || msg.HasMentionPrefix(client.CurrentUser, ref argPos))) return;
-                
+                if (!(msg.HasCharPrefix(';', ref argPos) || msg.HasMentionPrefix(client.CurrentUser, ref argPos) || (Permissions.AllowedChannels.Find(x => x.ID == msg.Channel.Id) != null))) return;
+
                 CommandContext context = new CommandContext(client, msg);
                 var cmd = $"User: {arg.Author.Username} ◥◤ Command: {arg.ToString()}";
                 uStatusUpdate(cmd);
                 Toolbox.uDebugAddLog(string.Format("COMMAND: {0}", cmd));
-                var result = await commands.ExecuteAsync(context, argPos, services);
+                IResult result = null;
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += async (sender, e) =>
+                {
+                    result = await commands.ExecuteAsync(context, argPos, services);
+                };
+                worker.RunWorkerAsync();
                 if (!result.IsSuccess)
                 {
+                    if (result.Error == CommandError.BadArgCount)
+                    {
+                        uStatusUpdate($"{cmd} | Bad Arg Count");
+                        return;
+                    }
                     var possEx = result.Error.Value;
                     uStatusUpdate(result.ErrorReason);
                     ResultLog(result);
@@ -1546,7 +1585,7 @@ namespace PersonalDiscordBot
                 }
                 else
                 {
-                    uStatusUpdate($"Release Version is the same version or older than running assembly. [Current]{Toolbox._paths.CurrentVersion} [Release]{releaseVersion}");
+                    uStatusUpdate($"Release Version is the same version or older than running assembly: {Environment.NewLine}[Current]{Toolbox._paths.CurrentVersion}{Environment.NewLine}[Release]{releaseVersion}");
                 }
             }
             catch (Exception ex)
@@ -1577,7 +1616,7 @@ namespace PersonalDiscordBot
             }
         }
 
-#endregion
+        #endregion
 
         #region WIP
 

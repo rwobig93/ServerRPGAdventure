@@ -1,4 +1,5 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using Newtonsoft.Json;
 using PersonalDiscordBot.Classes;
 using System;
@@ -115,6 +116,58 @@ namespace PersonalDiscordBot.Classes
             }
             return itemProperties;
         }
+
+        public static async Task SendDiscordMessage(this ICommandContext context, string message)
+        {
+            try
+            {
+                Toolbox.uDebugAddLog($"SENDINGMESSAGE: {message} [ID]{context.User.Id} [Name]{context.User.Username}");
+                await context.Channel.SendMessageAsync(message);
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
+        public static async Task SendDiscordMessageMention(this ICommandContext context, string message)
+        {
+            try
+            {
+                Toolbox.uDebugAddLog($"SENDINGMESSAGE: {context.User.Mention} {message} [ID]{context.User.Id} [Name]{context.User.Username}");
+                await context.Channel.SendMessageAsync($"{context.User.Mention} {message}");
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
+        public static async Task SendDiscordEmbed(this ICommandContext context, EmbedBuilder embed)
+        {
+            try
+            {
+                Toolbox.uDebugAddLog($"SENDINGMESSAGE: {embed.ToString()} [ID]{context.User.Id} [Name]{context.User.Username}");
+                await context.Channel.SendMessageAsync("", false, embed.Build());
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
+
+        public static async Task SendDiscordEmbedMention(this ICommandContext context, EmbedBuilder embed)
+        {
+            try
+            {
+                Toolbox.uDebugAddLog($"SENDINGMESSAGE: {context.User.Mention} {embed.ToString()} [ID]{context.User.Id} [Name]{context.User.Username}");
+                await context.Channel.SendMessageAsync("", false, embed.Build());
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+            }
+        }
     }
 
     public class StatusUpdater : INotifyPropertyChanged
@@ -138,7 +191,7 @@ namespace PersonalDiscordBot.Classes
     {
         public static Classes.LocalSettings _paths = new Classes.LocalSettings();
         public static StatusUpdater statusUpdater = new StatusUpdater();
-        public enum GlobalAction { AdminChanged };
+        public enum GlobalAction { AdminChanged, CurrencyNameChanged };
 
         public static void uDebugAddLog(string _log, [CallerMemberName] string caller = null)
         {
