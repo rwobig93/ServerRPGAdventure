@@ -1163,7 +1163,7 @@ namespace PersonalDiscordBot.Classes
                     },
                     Color = checkBackPack.owner.CurrentCharacter.Color,
                     Title = checkBackPack.owner.CurrentCharacter.Desc,
-                    Description = $"Backpack Storage: {checkBackPack.owner.CurrentCharacter.Backpack.Stored.Count}/{checkBackPack.owner.CurrentCharacter.Backpack.Capacity}" +
+                    Description = $"Backpack Storage: {checkBackPack.owner.CurrentCharacter.Backpack.Stored.Count}/{checkBackPack.owner.CurrentCharacter.Backpack.Capacity}      Gold: {checkBackPack.owner.Currency}" +
                         $"{checkBackPack.itemList}"
                 };
                 await context.SendDiscordEmbedMention(embed);
@@ -1334,15 +1334,12 @@ namespace PersonalDiscordBot.Classes
                                         return checkBackPack;
                                     case "sell":
                                         Toolbox.uDebugAddLog($"[SELL]{checkBackPack.chosenThing} is trying to be sold by [ID]{checkBackPack.owner.OwnerID}");
-                                        checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
-                                        checkBackPack.step = 2;
+                                        checkBackPack = await Sell(context, checkBackPack);
+                                        Toolbox.uDebugAddLog($"After sell method, [STEP] is {checkBackPack.step}.");
                                         return checkBackPack;
                                     case "trash":
                                         Toolbox.uDebugAddLog($"[TRASH]{checkBackPack.chosenThing.Name} is trying to be trashed by [UN]{checkBackPack.owner.OwnerUN} [ID]{checkBackPack.owner.OwnerID}");
-                                        await Trash(context, checkBackPack.chosenThing);
-                                        checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
-                                        checkBackPack.items.Remove(checkBackPack.chosenThing);
-                                        checkBackPack.step = 2;
+                                        checkBackPack = await Trash(context, checkBackPack);
                                         return checkBackPack;
                                     case "cancel":
                                         checkBackPack.step = 0;
@@ -1385,6 +1382,31 @@ namespace PersonalDiscordBot.Classes
             string line = Environment.NewLine;
             List<IBackPackItem> chosenItems = new List<IBackPackItem>();
             int number = 0;
+            checkBackPack.itemList = "";
+            int count = 1;
+            foreach (IBackPackItem itemIsIn in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
+            {
+                await context.Channel.SendMessageAsync($"Found {count} {itemIsIn.Name} in {checkBackPack.owner.CurrentCharacter.Name}'s backpack. Ah ah ah.");
+                count++;
+            }
+            if (count == 1 && checkBackPack.chosenType == "all")  // No items were found
+            {
+                Toolbox.uDebugAddLog($"No items of the [TYPE] {checkBackPack.chosenType} were found.");
+                await context.Channel.SendMessageAsync($"No more items were found in your backpack. Please get good.");
+                checkBackPack.step = 0;
+                Toolbox.uDebugAddLog($"[STEP] was set to {checkBackPack.step}.");
+                checkBackPack.plzMakeItStop = true;
+                Toolbox.uDebugAddLog($"[PLZMAKEITSTOP] was set to {checkBackPack.plzMakeItStop}.");
+                return checkBackPack;
+            }
+            else if (count == 1 && checkBackPack.chosenType != "all")
+            {
+                Toolbox.uDebugAddLog($"No {checkBackPack.chosenType}s were found.");
+                await context.Channel.SendMessageAsync($"No {checkBackPack.chosenType}s were found in your backpack.");
+                checkBackPack.step = 1; // Send them back to 'CheckBackPackWhatItemsToSee'
+                Toolbox.uDebugAddLog($"[STEP] was set to {checkBackPack.step}.");
+                return checkBackPack;
+            }
             switch (checkBackPack.chosenType)
             {
                 case "armor":
@@ -1540,23 +1562,22 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
-                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
                 List<IMessage> respondeded = new List<IMessage>();
-                if (checkBackPack.chosenThing.GetLootType() == LootDrop.LootType.Item)
+                if (checkBackPack.chosenThing is Item)
                 {
                     Item tmpItem = (Item)checkBackPack.chosenThing;
                     if (tmpItem.Count > 1)
                     {
                         Toolbox.uDebugAddLog($"[THING]{checkBackPack.chosenThing} is an [ITEM]. There are [COUNT]{tmpItem.Count} instances of [THING]{tmpItem.Name}." +
-                            $"Asking [ID]{owner.OwnerID} how many to sell.");
+                            $"Asking [ID]{checkBackPack.owner.OwnerID} how many to sell.");
                         EmbedBuilder embeded = new EmbedBuilder()
                         {
                             Author = new EmbedAuthorBuilder()
                             {
-                                Name = owner.CurrentCharacter.Name
+                                Name = checkBackPack.owner.CurrentCharacter.Name
                             },
-                            Color = owner.CurrentCharacter.Color,
-                            Title = owner.CurrentCharacter.Desc,
+                            Color = checkBackPack.owner.CurrentCharacter.Color,
+                            Title = checkBackPack.owner.CurrentCharacter.Desc,
                             Description = $"{tmpItem.Desc}"
                         };
                         await context.Channel.SendMessageAsync("", false, embeded.Build());
@@ -1578,63 +1599,77 @@ namespace PersonalDiscordBot.Classes
                                     {
                                         if (howManyToSellAnswer > tmpItem.Count)
                                         {
-                                            Toolbox.uDebugAddLog($"[AMOUNT]{howManyToSellAnswer} from [OWNER]{owner.OwnerID} exceeds [COUNT]{tmpItem.Count} [ITEM]{tmpItem.Name}(s).");
+                                            Toolbox.uDebugAddLog($"[AMOUNT]{howManyToSellAnswer} from [OWNER]{checkBackPack.owner.OwnerID} exceeds [COUNT]{tmpItem.Count} [ITEM]{tmpItem.Name}(s).");
                                             await context.Channel.SendMessageAsync($"{howManyToSellAnswer} is more than you actually have.");
+                                            checkBackPack.step = 3;
                                             return checkBackPack;
                                         }
                                         else if (howManyToSellAnswer < 0)
                                         {
-                                            Toolbox.uDebugAddLog($"[AMOUNT]{howManyToSellAnswer} from [OWNER]{owner.OwnerID} is less than zero.");
+                                            Toolbox.uDebugAddLog($"[AMOUNT]{howManyToSellAnswer} from [OWNER]{checkBackPack.owner.OwnerID} is less than zero.");
                                             await context.Channel.SendMessageAsync($"{howManyToSellAnswer} is less than zero.");
+                                            checkBackPack.step = 3;
                                             return checkBackPack;
                                         }
                                         else
                                         {
+                                            // If they want to sell more than 1 of something
                                             if (howManyToSellAnswer > 1)
                                             {
-                                                Item sellItem = (Item)checkBackPack.chosenThing;
-                                                if (sellItem == null)
+                                                // If somehow the item they're trying to sell results in 'null' object found
+                                                if (tmpItem == null)
                                                 {
-                                                    Toolbox.uDebugAddLog($"ERROR: Item wasn't found in backpack when it was pulled from backpack [Name] {sellItem.Name} [Count] {sellItem.Count}");
+                                                    Toolbox.uDebugAddLog($"ERROR: Item wasn't found in backpack when it was pulled from backpack [Name] {tmpItem.Name} [Count] {tmpItem.Count}");
                                                     await context.Channel.SendMessageAsync($"An error occured and the item you want to sell wasn't found in your backpack after finding it... I know confusing but you should let the developer know.");
+                                                    checkBackPack.step = 3;
                                                     return checkBackPack;
                                                 }
-                                                if (sellItem.Count - howManyToSellAnswer <= 0)
+                                                // If they sell exactly how many items they have, remove the item from their list
+                                                if (tmpItem.Count - howManyToSellAnswer <= 0)
                                                 {
-                                                    Toolbox.uDebugAddLog($"Selling [AMOUNT]{howManyToSellAnswer} of [ITEM]{sellItem.Name} from [ID]{owner.OwnerID}. [COUNT]{sellItem.Count} [CURRENCY]{owner.Currency}");
-                                                    owner.Currency = (howManyToSellAnswer * sellItem.Worth) + owner.Currency;
-                                                    Toolbox.uDebugAddLog($"Sold [AMOUNT]{howManyToSellAnswer} of [ITEM]{sellItem.Name} from [ID]{owner.OwnerID}. [COUNT]{sellItem.Count} [CURRENCY]{owner.Currency}");
-                                                    await context.Channel.SendMessageAsync($"{howManyToSellAnswer} {sellItem.Name}s have been sold for {sellItem.Worth * howManyToSellAnswer}. ");
-                                                    Toolbox.uDebugAddLog($"Removing [ITEM]{sellItem.Name} from [ID]{owner.OwnerID}");
-                                                    owner.CurrentCharacter.Backpack.Stored.Remove(sellItem);
+                                                    Toolbox.uDebugAddLog($"Selling [AMOUNT]{howManyToSellAnswer} of [ITEM]{tmpItem.Name} from [ID]{checkBackPack.owner.OwnerID}. [COUNT]{tmpItem.Count} [CURRENCY]{checkBackPack.owner.Currency}");
+                                                    checkBackPack.owner.Currency += (howManyToSellAnswer * tmpItem.Worth);
+                                                    Toolbox.uDebugAddLog($"Sold [AMOUNT]{howManyToSellAnswer} of [ITEM]{tmpItem.Name} from [ID]{checkBackPack.owner.OwnerID}. [COUNT]{tmpItem.Count} [CURRENCY]{checkBackPack.owner.Currency}");
+                                                    await context.Channel.SendMessageAsync($"{howManyToSellAnswer} {tmpItem.Name}s have been sold for {tmpItem.Worth * howManyToSellAnswer}. ");
+                                                    Toolbox.uDebugAddLog($"Removing [ITEM]{tmpItem.Name} from [ID]{checkBackPack.owner.OwnerID}");
+                                                    checkBackPack.owner.CurrentCharacter.Backpack.Stored.Remove(checkBackPack.chosenThing);
+                                                    checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
+                                                    return checkBackPack;
                                                 }
+                                                // They will still have at least 1 item remaining, reduce the count of the item, don't remove it
                                                 else
                                                 {
-                                                    Toolbox.uDebugAddLog($"Removing [AMOUNT]{howManyToSellAnswer} from count on [ITEM]{sellItem.Name}. [COUNT]{sellItem.Count} [ID]{owner.OwnerID}");
-                                                    sellItem.Count -= howManyToSellAnswer;
-                                                    Toolbox.uDebugAddLog($"Removed [AMOUNT]{howManyToSellAnswer} from count on [ITEM]{sellItem.Name}. [COUNT]{sellItem.Count} [ID]{owner.OwnerID}");
-                                                    Toolbox.uDebugAddLog($"Adding [CURRENCY]{sellItem.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
-                                                    owner.Currency = (howManyToSellAnswer * sellItem.Worth) + owner.Currency;
-                                                    Toolbox.uDebugAddLog($"Added [CURRENCY]{sellItem.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current howManyToSellAnswer of Currency: {owner.Currency}");
-                                                    await context.Channel.SendMessageAsync($"{howManyToSellAnswer} {sellItem.Name}s have been sold for {sellItem.Worth * howManyToSellAnswer}. ");
+                                                    Toolbox.uDebugAddLog($"Removing [AMOUNT]{howManyToSellAnswer} from count on [ITEM]{tmpItem.Name}. [COUNT]{tmpItem.Count} [ID]{checkBackPack.owner.OwnerID}");
+                                                    tmpItem.Count -= howManyToSellAnswer;
+                                                    Toolbox.uDebugAddLog($"Removed [AMOUNT]{howManyToSellAnswer} from count on [ITEM]{tmpItem.Name}. [COUNT]{tmpItem.Count} [ID]{checkBackPack.owner.OwnerID}");
+                                                    Toolbox.uDebugAddLog($"Adding [CURRENCY]{tmpItem.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{checkBackPack.owner.OwnerID}. Current amount of Currency: {checkBackPack.owner.Currency}");
+                                                    checkBackPack.owner.Currency += (howManyToSellAnswer * tmpItem.Worth);
+                                                    Toolbox.uDebugAddLog($"Added [CURRENCY]{tmpItem.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{checkBackPack.owner.OwnerID}. Current howManyToSellAnswer of Currency: {checkBackPack.owner.Currency}");
+                                                    await context.Channel.SendMessageAsync($"{howManyToSellAnswer} {tmpItem.Name}s have been sold for {tmpItem.Worth * howManyToSellAnswer}.");
+                                                    checkBackPack.chosenThing = tmpItem; // Set the object to be equal to the temp Item that was manipulated
+                                                    checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
+                                                    return checkBackPack;
                                                 }
                                             }
                                             else
                                             {
-                                                Toolbox.uDebugAddLog($"Adding [CURRENCY]{thing.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
-                                                owner.Currency = (howManyToSellAnswer * thing.Worth) + owner.Currency;
-                                                Toolbox.uDebugAddLog($"Added [CURRENCY]{thing.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
-                                                await context.Channel.SendMessageAsync($"{thing.Name} was sold for {thing.Worth}.");
-                                                Toolbox.uDebugAddLog($"Removing [ITEM]{thing.Name} from [ID]{owner.OwnerID}");
-                                                owner.CurrentCharacter.Backpack.Stored.Remove(thing);
+                                                Toolbox.uDebugAddLog($"Adding [CURRENCY]{tmpItem.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{checkBackPack.owner.OwnerID}. Current amount of Currency: {checkBackPack.owner.Currency}");
+                                                checkBackPack.owner.Currency += (howManyToSellAnswer * tmpItem.Worth);
+                                                Toolbox.uDebugAddLog($"Added [CURRENCY]{tmpItem.Worth} times [AMOUNT]{howManyToSellAnswer} to [ID]{checkBackPack.owner.OwnerID}. Current amount of Currency: {checkBackPack.owner.Currency}");
+                                                await context.Channel.SendMessageAsync($"{tmpItem.Name} was sold for {tmpItem.Worth}.");
+                                                Toolbox.uDebugAddLog($"Removing [ITEM]{tmpItem.Name} from [ID]{checkBackPack.owner.OwnerID}");
+                                                checkBackPack.owner.CurrentCharacter.Backpack.Stored.Remove(checkBackPack.chosenThing);
+                                                checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
+                                                return checkBackPack;
                                             }
                                         }
                                     }
                                     else
                                     {
-                                        Toolbox.uDebugAddLog($"[RESPONSE]{answered} from [OWNER]{owner.OwnerID} is not a valid INT.");
+                                        Toolbox.uDebugAddLog($"[RESPONSE]{answered} from [OWNER]{checkBackPack.owner.OwnerID} is not a valid INT.");
                                         await context.Channel.SendMessageAsync($"{answered} is not a valid number.");
-                                        return;
+                                        checkBackPack.step = 3;
+                                        return checkBackPack;
                                     }
                                 }
 
@@ -1642,62 +1677,66 @@ namespace PersonalDiscordBot.Classes
                             if (timeStamp4 + TimeSpan.FromMinutes(5) <= DateTime.Now)
                             {
                                 await context.Channel.SendMessageAsync($"{context.User.Mention} A response hasn't been received within 5 min, description change canceled");
-                                Toolbox.uDebugAddLog($"5min passed, canceling request [ID]{owner.OwnerID}");
-                                return;
+                                Toolbox.uDebugAddLog($"5min passed, canceling request [ID]{checkBackPack.owner.OwnerID}");
+                                checkBackPack.step = 0;
+                                checkBackPack.plzMakeItStop = true;
+                                return checkBackPack;
                             }
                             await Task.Delay(1000);
                         }
-                        return;
                     }
-                    else
+                    else // There is only 1 quantity of the item
                     {
-                        Toolbox.uDebugAddLog($"Adding [CURRENCY]{thing.Worth} times [AMOUNT]1 to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
-                        owner.Currency = thing.Worth + owner.Currency;
-                        Toolbox.uDebugAddLog($"Added [CURRENCY]{thing.Worth} times [AMOUNT]1 to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
-                        await context.Channel.SendMessageAsync($"{thing.Name} was sold for {thing.Worth}.");
-                        Toolbox.uDebugAddLog($"Removing [ITEM]{thing.Name} from [ID]{owner.OwnerID}");
-                        owner.CurrentCharacter.Backpack.Stored.Remove(thing);
-                        return;
-                    }
+                        Toolbox.uDebugAddLog($"Adding [CURRENCY]{tmpItem.Worth} times [AMOUNT]1 to [ID]{checkBackPack.owner.OwnerID}. Current amount of Currency: {checkBackPack.owner.Currency}");
+                        checkBackPack.owner.Currency += tmpItem.Worth;
+                        Toolbox.uDebugAddLog($"Added [CURRENCY]{tmpItem.Worth} times [AMOUNT]1 to [ID]{checkBackPack.owner.OwnerID}. Current amount of Currency: {checkBackPack.owner.Currency}");
+                        await context.Channel.SendMessageAsync($"{tmpItem.Name} was sold for {tmpItem.Worth}.");
+                        Toolbox.uDebugAddLog($"Removing [ITEM]{tmpItem.Name} from [ID]{checkBackPack.owner.OwnerID}");
+                        checkBackPack.owner.CurrentCharacter.Backpack.Stored.Remove(checkBackPack.chosenThing);
+                        checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
+                        return checkBackPack;
+                    }                    
                 }
-                else
+                else // Object was not an Item, therefore cannot have a quantity greater than 1
                 {
-                    Toolbox.uDebugAddLog($"Adding [CURRENCY]{thing.Worth} times [AMOUNT]1 to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
-                    owner.Currency = thing.Worth + owner.Currency;
-                    Toolbox.uDebugAddLog($"Added [CURRENCY]{thing.Worth} times [AMOUNT]1 to [ID]{owner.OwnerID}. Current amount of Currency: {owner.Currency}");
-                    await context.Channel.SendMessageAsync($"{thing.Name} was sold for {thing.Worth}.");
-                    Toolbox.uDebugAddLog($"Removing [ITEM]{thing.Name} from [ID]{owner.OwnerID}");
-                    owner.CurrentCharacter.Backpack.Stored.Remove(thing);
+                    Toolbox.uDebugAddLog($"Adding [CURRENCY]{checkBackPack.chosenThing.Worth} times [AMOUNT]1 to [ID]{checkBackPack.owner.OwnerID}. Current amount of Currency: {checkBackPack.owner.Currency}");
+                    checkBackPack.owner.Currency += checkBackPack.chosenThing.Worth;
+                    Toolbox.uDebugAddLog($"Added [CURRENCY]{checkBackPack.chosenThing.Worth} times [AMOUNT]1 to [ID]{checkBackPack.owner.OwnerID}. Current amount of Currency: {checkBackPack.owner.Currency}");
+                    await context.Channel.SendMessageAsync($"{checkBackPack.chosenThing.Name} was sold for {checkBackPack.chosenThing.Worth}.");
+                    Toolbox.uDebugAddLog($"Removing [ITEM]{checkBackPack.chosenThing.Name} from [ID]{checkBackPack.owner.OwnerID}");
+                    checkBackPack.owner.CurrentCharacter.Backpack.Stored.Remove(checkBackPack.chosenThing);
+                    checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
+                    return checkBackPack;
                 }
-                return;
+                return checkBackPack;
             }
 		    catch (Exception ex)
 		    {
 			    Toolbox.FullExceptionLog(ex);
+                return checkBackPack;
 		    }
         }
 
-        public static async Task Trash(ICommandContext context, IBackPackItem thing)
+        public static async Task<CheckBackPack> Trash(ICommandContext context, CheckBackPack checkBackPack)
         {
             try
             {
-                OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
                 List<IMessage> respondeded = new List<IMessage>();
-                if (thing.GetLootType() == LootDrop.LootType.Item)
+                if (checkBackPack.chosenThing is Item)
                 {
-                    Item tmpItem = (Item)thing;
+                    Item tmpItem = (Item)checkBackPack.chosenThing;
                     if (tmpItem.Count > 1)
                     {
-                        Toolbox.uDebugAddLog($"[THING]{thing} is an [ITEM]. There are [COUNT]{tmpItem.Count} instances of [THING]{tmpItem.Name}." +
-                            $"Asking [ID]{owner.OwnerID} how many to trash.");
+                        Toolbox.uDebugAddLog($"[THING]{checkBackPack.chosenThing} is an [ITEM]. There are [COUNT]{tmpItem.Count} instances of [THING]{tmpItem.Name}." +
+                            $"Asking [ID]{checkBackPack.owner.OwnerID} how many to trash.");
                         EmbedBuilder embeded = new EmbedBuilder()
                         {
                             Author = new EmbedAuthorBuilder()
                             {
-                                Name = owner.CurrentCharacter.Name
+                                Name = checkBackPack.owner.CurrentCharacter.Name
                             },
-                            Color = owner.CurrentCharacter.Color,
-                            Title = owner.CurrentCharacter.Desc,
+                            Color = checkBackPack.owner.CurrentCharacter.Color,
+                            Title = checkBackPack.owner.CurrentCharacter.Desc,
                             Description = $"{tmpItem.Desc}"
                         };
                         await context.Channel.SendMessageAsync("", false, embeded.Build());
@@ -1717,68 +1756,81 @@ namespace PersonalDiscordBot.Classes
                                     pickedHowManyToTrash = true;
                                     if (Int32.TryParse(answered, out howManyToTrashAnswer))
                                     {
-                                        if (howManyToTrashAnswer > tmpItem.Count)
+                                        if (howManyToTrashAnswer > tmpItem.Count) // They tried to trash more than they had
                                         {
-                                            Toolbox.uDebugAddLog($"[AMOUNT]{howManyToTrashAnswer} from [OWNER]{owner.OwnerID} exceeds [COUNT]{tmpItem.Count} [ITEM]{tmpItem.Name}(s).");
+                                            Toolbox.uDebugAddLog($"[AMOUNT]{howManyToTrashAnswer} from [OWNER]{checkBackPack.owner.OwnerID} exceeds [COUNT]{tmpItem.Count} [ITEM]{tmpItem.Name}(s).");
                                             await context.Channel.SendMessageAsync($"{howManyToTrashAnswer} is more than you actually have.");
-                                            return;
+                                            checkBackPack.step = 3;
+                                            return checkBackPack;
                                         }
-                                        else if (howManyToTrashAnswer < 0)
+                                        else if (howManyToTrashAnswer < 0) // They tried to trash a negative number
                                         {
-                                            Toolbox.uDebugAddLog($"[AMOUNT]{howManyToTrashAnswer} from [OWNER]{owner.OwnerID} is less than zero.");
+                                            Toolbox.uDebugAddLog($"[AMOUNT]{howManyToTrashAnswer} from [OWNER]{checkBackPack.owner.OwnerID} is less than zero.");
                                             await context.Channel.SendMessageAsync($"{howManyToTrashAnswer} is less than zero.");
-                                            return;
+                                            checkBackPack.step = 3;
+                                            return checkBackPack;
                                         }
                                         else
                                         {
-                                            Item trashItem = (Item)thing;
-                                            if (howManyToTrashAnswer > 1)
+                                            if (howManyToTrashAnswer > 1) // They want to trash more than 1 item
                                             {
-                                                if (trashItem == null)
+                                                if (tmpItem == null) // Somehow the item they're trying to trash returned 'null'
                                                 {
-                                                    Toolbox.uDebugAddLog($"ERROR: Item wasn't found in backpack when it was pulled from backpack [Name] {trashItem.Name} [Count] {trashItem.Count}");
+                                                    Toolbox.uDebugAddLog($"ERROR: Item wasn't found in backpack when it was pulled from backpack [Name] {tmpItem.Name} [Count] {tmpItem.Count}");
                                                     await context.Channel.SendMessageAsync($"An error occured and the item you want to trash wasn't found in your backpack after finding it... I know it's confusing but you should let the developer know.");
-                                                    return;
+                                                    checkBackPack.step = 3;
+                                                    return checkBackPack;
                                                 }
-                                                if (trashItem.Count - howManyToTrashAnswer <= 0) // if the amount trashed reduces the count of the item to Zero or Less, remove the item from the owner's backpack
+                                                if (tmpItem.Count - howManyToTrashAnswer <= 0) // if the amount trashed reduces the count of the item to Zero or Less, remove the item from the owner's backpack
                                                 {
-                                                    Toolbox.uDebugAddLog($"Trashing [AMOUNT]{howManyToTrashAnswer} of [ITEM]{trashItem.Name} from [ID]{owner.OwnerID}.");
-                                                    await context.Channel.SendMessageAsync($"Threw {howManyToTrashAnswer} {trashItem.Name}s on the ground.");
-                                                    Toolbox.uDebugAddLog($"Removing [ITEM]{trashItem.Name} from [ID]{owner.OwnerID}");
-                                                    owner.CurrentCharacter.Backpack.Stored.Remove(trashItem);
+                                                    Toolbox.uDebugAddLog($"Trashing [AMOUNT]{howManyToTrashAnswer} of [ITEM]{tmpItem.Name} from [ID]{checkBackPack.owner.OwnerID}.");
+                                                    await context.Channel.SendMessageAsync($"Threw {howManyToTrashAnswer} {tmpItem.Name}s on the ground.");
+                                                    Toolbox.uDebugAddLog($"Removing [ITEM]{tmpItem.Name} from [ID]{checkBackPack.owner.OwnerID}");
+                                                    checkBackPack.owner.CurrentCharacter.Backpack.Stored.Remove(checkBackPack.chosenThing);
+                                                    checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
+                                                    return checkBackPack;
                                                 }
                                                 else // remove only the amount requested from the total count of the item in the owner's backpack
                                                 {
-                                                    Toolbox.uDebugAddLog($"Removing [AMOUNT]{howManyToTrashAnswer} from count on [ITEM]{trashItem.Name}. [COUNT]{trashItem.Count} [ID]{owner.OwnerID}");
-                                                    trashItem.Count -= howManyToTrashAnswer;
-                                                    Toolbox.uDebugAddLog($"Removed [AMOUNT]{howManyToTrashAnswer} from count on [ITEM]{trashItem.Name}. [COUNT]{trashItem.Count} [ID]{owner.OwnerID}");
-                                                    await context.Channel.SendMessageAsync($"Threw {howManyToTrashAnswer} {trashItem.Name}s on the ground.");
+                                                    Toolbox.uDebugAddLog($"Removing [AMOUNT]{howManyToTrashAnswer} from count on [ITEM]{tmpItem.Name}. [COUNT]{tmpItem.Count} [ID]{checkBackPack.owner.OwnerID}");
+                                                    tmpItem.Count -= howManyToTrashAnswer;
+                                                    Toolbox.uDebugAddLog($"Removed [AMOUNT]{howManyToTrashAnswer} from count on [ITEM]{tmpItem.Name}. [COUNT]{tmpItem.Count} [ID]{checkBackPack.owner.OwnerID}");
+                                                    await context.Channel.SendMessageAsync($"Threw {howManyToTrashAnswer} {tmpItem.Name}s on the ground.");
+                                                    checkBackPack.chosenThing = tmpItem; // Set the object to be equal to the temp Item that was manipulated
+                                                    checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
+                                                    return checkBackPack;
                                                 }
                                             }
                                             else
                                             {
-                                                if (trashItem.Count - howManyToTrashAnswer <= 0) // if the amount trashed reduces the count of the item to Zero or Less, remove the item from the owner's backpack
+                                                if (tmpItem.Count - howManyToTrashAnswer <= 0) // if the amount trashed reduces the count of the item to Zero or Less, remove the item from the owner's backpack
                                                 {
-                                                    Toolbox.uDebugAddLog($"Trashing [AMOUNT]{howManyToTrashAnswer} of [ITEM]{trashItem.Name} from [ID]{owner.OwnerID}.");
-                                                    await context.Channel.SendMessageAsync($"Threw {howManyToTrashAnswer} {trashItem.Name} on the ground.");
-                                                    Toolbox.uDebugAddLog($"Removing [ITEM]{trashItem.Name} from [ID]{owner.OwnerID}");
-                                                    owner.CurrentCharacter.Backpack.Stored.Remove(trashItem);
+                                                    Toolbox.uDebugAddLog($"Trashing [AMOUNT]{howManyToTrashAnswer} of [ITEM]{tmpItem.Name} from [ID]{checkBackPack.owner.OwnerID}.");
+                                                    await context.Channel.SendMessageAsync($"Threw {howManyToTrashAnswer} {tmpItem.Name} on the ground.");
+                                                    Toolbox.uDebugAddLog($"Removing [ITEM]{tmpItem.Name} from [ID]{checkBackPack.owner.OwnerID}");
+                                                    checkBackPack.owner.CurrentCharacter.Backpack.Stored.Remove(checkBackPack.chosenThing);
+                                                    checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
+                                                    return checkBackPack;
                                                 }
                                                 else // remove only the amount requested from the total count of the item in the owner's backpack
                                                 {
-                                                    Toolbox.uDebugAddLog($"Removing [AMOUNT]{howManyToTrashAnswer} from count on [ITEM]{trashItem.Name}. [COUNT]{trashItem.Count} [ID]{owner.OwnerID}");
-                                                    trashItem.Count -= howManyToTrashAnswer;
-                                                    Toolbox.uDebugAddLog($"Removed [AMOUNT]{howManyToTrashAnswer} from count on [ITEM]{trashItem.Name}. [COUNT]{trashItem.Count} [ID]{owner.OwnerID}");
-                                                    await context.Channel.SendMessageAsync($"Threw {howManyToTrashAnswer} {trashItem.Name} on the ground.");
+                                                    Toolbox.uDebugAddLog($"Removing [AMOUNT]{howManyToTrashAnswer} from count on [ITEM]{tmpItem.Name}. [COUNT]{tmpItem.Count} [ID]{checkBackPack.owner.OwnerID}");
+                                                    tmpItem.Count -= howManyToTrashAnswer;
+                                                    Toolbox.uDebugAddLog($"Removed [AMOUNT]{howManyToTrashAnswer} from count on [ITEM]{tmpItem.Name}. [COUNT]{tmpItem.Count} [ID]{checkBackPack.owner.OwnerID}");
+                                                    await context.Channel.SendMessageAsync($"Threw {howManyToTrashAnswer} {tmpItem.Name} on the ground.");
+                                                    checkBackPack.chosenThing = tmpItem; // Set the object to be equal to the temp Item that was manipulated
+                                                    checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
+                                                    return checkBackPack;
                                                 }
                                             }
                                         }
                                     }
                                     else
                                     {
-                                        Toolbox.uDebugAddLog($"[RESPONSE]{answered} from [OWNER]{owner.OwnerID} is not a valid INT.");
+                                        Toolbox.uDebugAddLog($"[RESPONSE]{answered} from [OWNER]{checkBackPack.owner.OwnerID} is not a valid INT.");
                                         await context.Channel.SendMessageAsync($"{answered} is not a valid number.");
-                                        return;
+                                        checkBackPack.step = 3;
+                                        return checkBackPack;
                                     }
                                 }
 
@@ -1786,27 +1838,37 @@ namespace PersonalDiscordBot.Classes
                             if (timeStamp4 + TimeSpan.FromMinutes(5) <= DateTime.Now)
                             {
                                 await context.Channel.SendMessageAsync($"{context.User.Mention} A response hasn't been received within 5 min, description change canceled");
-                                Toolbox.uDebugAddLog($"5min passed, canceling request [ID]{owner.OwnerID}");
-                                return;
+                                Toolbox.uDebugAddLog($"5min passed, canceling request [ID]{checkBackPack.owner.OwnerID}");
+                                checkBackPack.step = 0;
+                                checkBackPack.plzMakeItStop = true;
+                                return checkBackPack;
                             }
                             await Task.Delay(1000);
                         }
                     }
-                    else
+                    else // There was only 1 quantity of the item
                     {
-                        Toolbox.uDebugAddLog($"Removing [ITEM]{thing.Name} from [ID]{owner.OwnerID}");
-                        owner.CurrentCharacter.Backpack.Stored.Remove(thing);
+                        Toolbox.uDebugAddLog($"Removing [ITEM]{checkBackPack.chosenThing.Name} from [ID]{checkBackPack.owner.OwnerID}");
+                        checkBackPack.owner.CurrentCharacter.Backpack.Stored.Remove(checkBackPack.chosenThing);
+                        await context.Channel.SendMessageAsync($"Threw {checkBackPack.chosenThing.Name} on the ground.");
+                        checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
+                        return checkBackPack;
                     }
                 }
-                else
+                else // Object was not an Item
                 {
-                    Toolbox.uDebugAddLog($"Removing [ITEM]{thing.Name} from [ID]{owner.OwnerID}");
-                    owner.CurrentCharacter.Backpack.Stored.Remove(thing);
+                    Toolbox.uDebugAddLog($"Removing [{checkBackPack.chosenThing.GetLootType()}]{checkBackPack.chosenThing.Name} from [ID]{checkBackPack.owner.OwnerID}");
+                    checkBackPack.owner.CurrentCharacter.Backpack.Stored.Remove(checkBackPack.chosenThing);
+                    await context.Channel.SendMessageAsync($"Threw {checkBackPack.chosenThing.Name} on the ground.");
+                    checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
+                    return checkBackPack;
                 }
+                return checkBackPack;
             }
             catch (Exception ex)
             {
                 Toolbox.FullExceptionLog(ex);
+                return checkBackPack;
             }
         }
 

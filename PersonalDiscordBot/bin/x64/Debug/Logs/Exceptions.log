@@ -13665,3 +13665,394 @@ StackTrace:
    at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
 
 
+TimeStamp: 03-01-18_5:09:01 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:27:59 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:28:16 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:28:20 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:28:28 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:28:33 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:28:34 PM
+Exception Type: ArgumentException
+Caller: EndOfMatchLootAsync at 2366
+Message: Property StarterWeapon is not writable in PersonalDiscordBot.Classes.Character
+HR: -2147024809
+StackTrace:
+   at PersonalDiscordBot.Classes.PropertyCopier`2.Copy(TSource source, TTarget target) in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\Classes\Toolbox.cs:line 444
+   at PersonalDiscordBot.Classes.PropertyCopy.Copy[TSource,TTarget](TSource source, TTarget target) in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\Classes\Toolbox.cs:line 376
+   at PersonalDiscordBot.Classes.Management.<EndOfMatchLootAsync>d__34.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\Classes\RPG.cs:line 2332
+
+
+TimeStamp: 03-01-18_5:28:40 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:29:37 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:29:57 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:30:02 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:30:13 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:30:19 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:30:19 PM
+Exception Type: ArgumentException
+Caller: EndOfMatchLootAsync at 2366
+Message: Property StarterWeapon is not writable in PersonalDiscordBot.Classes.Character
+HR: -2147024809
+StackTrace:
+   at PersonalDiscordBot.Classes.PropertyCopier`2.Copy(TSource source, TTarget target) in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\Classes\Toolbox.cs:line 444
+   at PersonalDiscordBot.Classes.PropertyCopy.Copy[TSource,TTarget](TSource source, TTarget target) in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\Classes\Toolbox.cs:line 376
+   at PersonalDiscordBot.Classes.Management.<EndOfMatchLootAsync>d__34.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\Classes\RPG.cs:line 2332
+
+
+TimeStamp: 03-01-18_5:30:21 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:30:30 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:31:18 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:31:21 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:31:29 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:31:40 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:32:40 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:32:46 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:33:04 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:33:48 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:35:16 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:36:30 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:36:32 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:36:36 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:36:43 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:36:47 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:36:51 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:36:55 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:37:05 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:37:08 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:37:21 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:37:24 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:37:30 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:37:31 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:37:32 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:37:33 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:37:47 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:37:48 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
+TimeStamp: 03-01-18_5:38:05 PM
+Exception Type: NullReferenceException
+Caller: MessageHandler at 1562
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<MessageHandler>d__86.MoveNext() in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1548
+
+
