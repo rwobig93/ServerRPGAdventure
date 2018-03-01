@@ -144,6 +144,17 @@ namespace PersonalDiscordBot.Classes
         public List<IBackPackItem> Stored = new List<IBackPackItem>();
     }
 
+    public class CheckBackPack
+    {
+        public List<IBackPackItem> items = new List<IBackPackItem>();
+        public OwnerProfile owner = new OwnerProfile();
+        public string itemList = "";
+        public string chosenType = "";
+        public int step = 1;
+        public bool plzMakeItStop = false;
+        public IBackPackItem chosenThing = null;
+    }
+
     public class Weapon : IBackPackItem
     {
         public string Name { get; set; }
@@ -1031,53 +1042,52 @@ namespace PersonalDiscordBot.Classes
 
         public static async Task CheckCharacterBackpack(ICommandContext context)
         {
+            CheckBackPack checkBackPack = new CheckBackPack();
             string line = Environment.NewLine;
-            List<IBackPackItem> items = new List<IBackPackItem>();
-            IBackPackItem chosenThing = null;
-            OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
-            string itemList = "";
-            string chosenType = "";
-            int step = 1;
-            bool plzMakeItStop = false;
+            checkBackPack.owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
 
-            while (!plzMakeItStop) // When stopping loop, set 'int step' to 0
+            while (!checkBackPack.plzMakeItStop) // When stopping loop, set 'int step' to 0
             {
-                if (step == 1)
+                if (checkBackPack.step == 1)
                 {
                     // This method needs to create a new list of objects and overwrite 'List<IBackPackItem> items' with the new list when looping
-                    Toolbox.uDebugAddLog($"Calling CheckBackPackWhatItemsToSee for [UN]{owner.OwnerUN} [ID]{owner.OwnerID}{line}");
-                    await CheckBackPackWhatItemsToSee(context, items, owner, itemList, step, plzMakeItStop, chosenType, chosenThing);
+                    Toolbox.uDebugAddLog($"Calling CheckBackPackWhatItemsToSee for [UN]{checkBackPack.owner.OwnerUN} [ID]{checkBackPack.owner.OwnerID}{line}");
+                    Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                    checkBackPack = await CheckBackPackWhatItemsToSee(context, checkBackPack);
                 }
-                else if (step == 2)
+                else if (checkBackPack.step == 2)
                 {
-                    Toolbox.uDebugAddLog($"Calling CheckBackPackAskWhichItem for [UN]{owner.OwnerUN} [ID]{owner.OwnerID}{line}");
-                    await CheckBackPackAskWhichItem(context, items, owner, itemList, chosenThing, step, plzMakeItStop);
+                    Toolbox.uDebugAddLog($"Calling CheckBackPackAskWhichItem for [UN]{checkBackPack.owner.OwnerUN} [ID]{checkBackPack.owner.OwnerID}{line}");
+                    Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                    checkBackPack = await CheckBackPackAskWhichItem(context, checkBackPack);
                 }
-                else if (step == 3)
+                else if (checkBackPack.step == 3)
                 {
-                    Toolbox.uDebugAddLog($"Calling CheckBackPackWhatToDo for [UN]{owner.OwnerUN} [ID]{owner.OwnerID}{line}");
-                    await CheckBackPackWhatToDo(context, chosenThing, owner, step, plzMakeItStop, items, chosenType, itemList);
+                    Toolbox.uDebugAddLog($"Calling CheckBackPackWhatToDo for [UN]{checkBackPack.owner.OwnerUN} [ID]{checkBackPack.owner.OwnerID}{line}");
+                    Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                    checkBackPack = await CheckBackPackWhatToDo(context, checkBackPack);
                 }
                 else
                 {
-                    step = 0;
-                    plzMakeItStop = true;
+                    checkBackPack.step = 0;
+                    checkBackPack.plzMakeItStop = true;
                 }
             }
             return;
             
         }
 
-        public static async Task CheckBackPackWhatItemsToSee(ICommandContext context, List<IBackPackItem> items, OwnerProfile owner, string itemList, int step, bool plzMakeItStop, string chosenType, IBackPackItem chosenThing)
+        public static async Task<CheckBackPack> CheckBackPackWhatItemsToSee(ICommandContext context, CheckBackPack checkBackPack)
         {
             try
             {
+                Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
                 var line = Environment.NewLine;
                 string answer = "";
                 var timestamp = DateTime.Now;
                 List<IMessage> respondeded = new List<IMessage>();
                 List<IBackPackItem> chosenItems = new List<IBackPackItem>();
-                Toolbox.uDebugAddLog($"Asking [OwnerCharacter]{owner.CurrentCharacter} [OwnerID]{owner.OwnerID} what to see");
+                Toolbox.uDebugAddLog($"Asking [OwnerCharacter]{checkBackPack.owner.CurrentCharacter} [OwnerID]{checkBackPack.owner.OwnerID} what to see");
                 var backpackMsg = await context.Channel.SendMessageAsync($"What would you like to see? (armor, items, weapons, all, cancel)");
                 bool msgResp = false;
                 while (!msgResp)
@@ -1089,139 +1099,159 @@ namespace PersonalDiscordBot.Classes
                         {
                             respondeded.Add(msg7);
                             answer = msg7.Content.ToString().ToLower();
-                            Toolbox.uDebugAddLog($"Response recieved from same author and a newer message. [Resp]{answer} [ID]{owner.OwnerID}");
+                            Toolbox.uDebugAddLog($"Response recieved from same author and a newer message. [Resp]{answer} [ID]{checkBackPack.owner.OwnerID}");
                             msgResp = true;
-                            chosenType = answer;
-                            await CheckBackPackUpdateList(context, chosenThing, owner, step, plzMakeItStop, items, chosenType, itemList);
+                            checkBackPack.chosenType = answer;
+                            Toolbox.uDebugAddLog($"Before running 'CheckBackPackUpdateList' from 'CheckBackPackWhatItemsToSee' using [ANSWER]{checkBackPack.chosenType} [STEP] is set to {checkBackPack.step}");
+                            checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
+                            Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                            return checkBackPack;
                         }
                     }
                     if (timestamp + TimeSpan.FromMinutes(5) <= DateTime.Now)
                     {
-                        Toolbox.uDebugAddLog($"timestamp2 reached 5 minutes [ID]{owner.OwnerID}");
+                        Toolbox.uDebugAddLog($"timestamp2 reached 5 minutes [ID]{checkBackPack.owner.OwnerID}");
                         await context.SendDiscordMessageMention($"A response hasn't been received in 5 minutes, you can go through your backpack later by using ;test check backpack");
-                        step = 0;
-                        plzMakeItStop = true;
-                        return;
+                        checkBackPack.step = 0;
+                        checkBackPack.plzMakeItStop = true;
+                        return checkBackPack;
                     }
                     await Task.Delay(1000);
                 }
+                Toolbox.uDebugAddLog($"Somehow checkBackPack returned outside of the While Loop in the 'CheckBackPackWhatItemsToSee' method. ");
+                checkBackPack.step = 0;
+                checkBackPack.plzMakeItStop = true;
+                return checkBackPack;
             }
             catch (Exception ex)
             {
                 Toolbox.FullExceptionLog(ex);
+                return checkBackPack;
             }
         }
 
-        public static async Task CheckBackPackAskWhichItem(ICommandContext context, List<IBackPackItem> backPackItems, OwnerProfile owner, string itemList, IBackPackItem chosenThing, int step, bool plzMakeItStop)
-        {
-                try
-                {
-                    Toolbox.uDebugAddLog($"Starting CheckBackPackAskWhichItem method.");
-                    bool itemPicked = false;
-                    var timestamp = DateTime.Now;
-                    string pickedAnswer = "";
-                    List<IMessage> respondeded = new List<IMessage>();
-                    EmbedBuilder embed = new EmbedBuilder()
-                    {
-                        Author = new EmbedAuthorBuilder()
-                        {
-                            Name = owner.CurrentCharacter.Name
-                        },
-                        Color = owner.CurrentCharacter.Color,
-                        Title = owner.CurrentCharacter.Desc,
-                        Description = $"Backpack Storage: {owner.CurrentCharacter.Backpack.Stored.Count}/{owner.CurrentCharacter.Backpack.Capacity}" +
-                            $"{itemList}"
-                    };
-                    await context.SendDiscordEmbedMention(embed);
-                    Toolbox.uDebugAddLog($"Asking [OwnerCharacter]{owner.CurrentCharacter} [OwnerID]{owner.OwnerID} which item to inspect");
-                    var pickedItemMsg = await context.Channel.SendMessageAsync($"Please type the item number you wish to inspect or type cancel to exit.");
-                    while (!itemPicked)
-                    {
-                        var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
-                        foreach (var msg in msgList)
-                        {
-                            if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > pickedItemMsg.Timestamp.DateTime) && (respondeded.Any(x => x.Content != msg.Content)))
-                            {
-                                respondeded.Add(msg);
-                                pickedAnswer = msg.Content.ToString().ToLower();
-                                Toolbox.uDebugAddLog($"Response recieved from same author and a newer message. [Resp]{pickedAnswer} [ID]{owner.OwnerID}");
-                                itemPicked = true;
-                                if (string.IsNullOrWhiteSpace(pickedAnswer))
-                                {
-                                    Toolbox.uDebugAddLog($"Answer was null or white space. [Resp]{pickedAnswer} [ID]{owner.OwnerID}");
-                                    await context.SendDiscordMessageMention($"Your answer was not a valid number.");
-                                }
-                                else if (pickedAnswer.ToLower() == "cancel")
-                                {
-                                    Toolbox.uDebugAddLog($"They cancelled the request.");
-                                    step = 0;
-                                    plzMakeItStop = true;
-                                    return;
-                                }
-                                else
-                                {
-                                    var boolAnswer = int.TryParse(pickedAnswer, out int numAnswer);
-                                    if (!boolAnswer)
-                                    {
-                                        Toolbox.uDebugAddLog($"Answer didn't parse to Int. [Resp]{pickedAnswer} [ID]{owner.OwnerID}");
-                                        await context.SendDiscordMessageMention($"Your answer was not a valid number.");
-                                        step = 2;
-                                        return;
-                                    }
-                                    if (numAnswer > backPackItems.Count || numAnswer < 1)
-                                    {
-                                        Toolbox.uDebugAddLog($"Answer was less than or greater than number of items. [Resp]{pickedAnswer} [ID]{owner.OwnerID}");
-                                        await context.SendDiscordMessageMention($"Your answer was less than or greater than the number of items listed.");
-                                        step = 2;
-                                        return;
-                                    }
-                                    itemPicked = true;
-                                    int itemNum = (numAnswer - 1);
-                                    Toolbox.uDebugAddLog($"Looking for index {numAnswer}");
-                                    chosenThing = backPackItems[itemNum];
-                                    Toolbox.uDebugAddLog($"[chosenThing] was set to {chosenThing.Name}");
-                                    step = 3;
-                                }
-                            }
-                        }
-                        if (timestamp + TimeSpan.FromMinutes(5) <= DateTime.Now)
-                        {
-                            Toolbox.uDebugAddLog($"timestamp2 reached 5 minutes [ID]{owner.OwnerID}");
-                            await context.SendDiscordMessageMention($"A response hasn't been received in 5 minutes, you can go through your backpack later by using ;test check backpack");
-                            step = 0;
-                            plzMakeItStop = true;
-                            return;
-                        }
-                        await Task.Delay(1000);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Toolbox.FullExceptionLog(ex);
-                }
-        }
-
-        public static async Task CheckBackPackWhatToDo(ICommandContext context, IBackPackItem chosenThing, OwnerProfile owner, int step, bool plzMakeItStop, List<IBackPackItem> items, string chosenType, string itemList)
+        public static async Task<CheckBackPack> CheckBackPackAskWhichItem(ICommandContext context, CheckBackPack checkBackPack)
         {
             try
             {
-                Toolbox.uDebugAddLog($"Building list of {chosenThing.Name}'s properties.");
-                string itemProp = chosenThing.EnumItemProperties();
+                Toolbox.uDebugAddLog($"Starting CheckBackPackAskWhichItem method.");
+                bool itemPicked = false;
+                var timestamp = DateTime.Now;
+                string pickedAnswer = "";
+                List<IMessage> respondeded = new List<IMessage>();
+                EmbedBuilder embed = new EmbedBuilder()
+                {
+                    Author = new EmbedAuthorBuilder()
+                    {
+                        Name = checkBackPack.owner.CurrentCharacter.Name
+                    },
+                    Color = checkBackPack.owner.CurrentCharacter.Color,
+                    Title = checkBackPack.owner.CurrentCharacter.Desc,
+                    Description = $"Backpack Storage: {checkBackPack.owner.CurrentCharacter.Backpack.Stored.Count}/{checkBackPack.owner.CurrentCharacter.Backpack.Capacity}" +
+                        $"{checkBackPack.itemList}"
+                };
+                await context.SendDiscordEmbedMention(embed);
+                Toolbox.uDebugAddLog($"Asking [OwnerCharacter]{checkBackPack.owner.CurrentCharacter} [OwnerID]{checkBackPack.owner.OwnerID} which item to inspect");
+                var pickedItemMsg = await context.Channel.SendMessageAsync($"Please type the item number you wish to inspect or type cancel to exit.");
+                while (!itemPicked)
+                {
+                    var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
+                    foreach (var msg in msgList)
+                    {
+                        if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > pickedItemMsg.Timestamp.DateTime) && (respondeded.Any(x => x.Content != msg.Content)))
+                        {
+                            respondeded.Add(msg);
+                            pickedAnswer = msg.Content.ToString().ToLower();
+                            Toolbox.uDebugAddLog($"Response recieved from same author and a newer message. [Resp]{pickedAnswer} [ID]{checkBackPack.owner.OwnerID}");
+                            itemPicked = true;
+                            if (string.IsNullOrWhiteSpace(pickedAnswer))
+                            {
+                                Toolbox.uDebugAddLog($"Answer was null or white space. [Resp]{pickedAnswer} [ID]{checkBackPack.owner.OwnerID}");
+                                await context.SendDiscordMessageMention($"Your answer was not a valid number.");
+                                return checkBackPack;
+                            }
+                            else if (pickedAnswer.ToLower() == "cancel")
+                            {
+                                checkBackPack.step = 0;
+                                Toolbox.uDebugAddLog($"[STEP] is {checkBackPack.step}");
+                                checkBackPack.plzMakeItStop = true;
+                                Toolbox.uDebugAddLog($"They cancelled the request. [STEP] is {checkBackPack.step}. [PLZMAKEITSTOP] is {checkBackPack.plzMakeItStop}.");
+                                return checkBackPack;
+                            }
+                            else
+                            {
+                                var boolAnswer = int.TryParse(pickedAnswer, out int numAnswer);
+                                if (!boolAnswer)
+                                {
+                                    Toolbox.uDebugAddLog($"Answer didn't parse to Int. [Resp]{pickedAnswer} [ID]{checkBackPack.owner.OwnerID}");
+                                    await context.SendDiscordMessageMention($"Your answer was not a valid number.");
+                                    checkBackPack.step = 2;
+                                    Toolbox.uDebugAddLog($"[STEP] is {checkBackPack.step}");
+                                    return checkBackPack;
+                                }
+                                if (numAnswer > checkBackPack.items.Count || numAnswer < 1)
+                                {
+                                    Toolbox.uDebugAddLog($"Answer was less than or greater than number of items. [Resp]{pickedAnswer} [ID]{checkBackPack.owner.OwnerID}");
+                                    await context.SendDiscordMessageMention($"Your answer was less than or greater than the number of items listed.");
+                                    checkBackPack.step = 2;
+                                    return checkBackPack;
+                                }
+                                itemPicked = true;
+                                int itemNum = (numAnswer - 1);
+                                Toolbox.uDebugAddLog($"Looking for index {numAnswer}");
+                                checkBackPack.chosenThing = checkBackPack.items[itemNum];
+                                Toolbox.uDebugAddLog($"[chosenThing] was set to {checkBackPack.chosenThing.Name}");
+                                checkBackPack.step = 3;
+                                Toolbox.uDebugAddLog($"[STEP] is {checkBackPack.step}");
+                                return checkBackPack;
+                            }
+                        }
+                        return checkBackPack;
+                    }
+                    if (timestamp + TimeSpan.FromMinutes(5) <= DateTime.Now)
+                    {
+                        Toolbox.uDebugAddLog($"timestamp2 reached 5 minutes [ID]{checkBackPack.owner.OwnerID}");
+                        await context.SendDiscordMessageMention($"A response hasn't been received in 5 minutes, you can go through your backpack later by using ;test check backpack");
+                        checkBackPack.step = 0;
+                        Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                        checkBackPack.plzMakeItStop = true;
+                        return checkBackPack;
+                    }
+                    await Task.Delay(1000);
+                    return checkBackPack;
+                }
+                return checkBackPack;
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+                Toolbox.uDebugAddLog($"You returned the 'checkBackPack' in the Catch of the TryCatch of 'CheckBackPackAskWhichItem'.");
+                return checkBackPack;
+            }
+            
+        }
+
+        public static async Task<CheckBackPack> CheckBackPackWhatToDo(ICommandContext context, CheckBackPack checkBackPack)
+        {
+            try
+            {
+                Toolbox.uDebugAddLog($"Building list of {checkBackPack.chosenThing.Name}'s properties.");
+                string itemProp = checkBackPack.chosenThing.EnumItemProperties();
                 var timeStamp = DateTime.Now;
                 EmbedBuilder embed2 = new EmbedBuilder()
                 {
                     Author = new EmbedAuthorBuilder()
                     {
-                        Name = owner.CurrentCharacter.Name
+                        Name = checkBackPack.owner.CurrentCharacter.Name
                     },
-                    Color = owner.CurrentCharacter.Color,
-                    Title = owner.CurrentCharacter.Desc,
+                    Color = checkBackPack.owner.CurrentCharacter.Color,
+                    Title = checkBackPack.owner.CurrentCharacter.Desc,
                     Description = $"{itemProp}"
                 };
                 await context.Channel.SendMessageAsync("", false, embed2.Build());
-                Toolbox.uDebugAddLog($"Asking [Owner]{owner.CurrentCharacter.Loot.Count} [ID]{owner.OwnerID} what to do with the item.");
+                Toolbox.uDebugAddLog($"Asking [Owner]{checkBackPack.owner.CurrentCharacter.Loot.Count} [ID]{checkBackPack.owner.OwnerID} what to do with the item.");
                 List<IMessage> respondeded = new List<IMessage>();
-                var whatToDo = await context.Channel.SendMessageAsync($"What would you like to do with {chosenThing.Name}? Equip, Use, Sell, Trash, Cancel");
+                var whatToDo = await context.Channel.SendMessageAsync($"What would you like to do with {checkBackPack.chosenThing.Name}? Equip, Use, Sell, Trash, Cancel");
                 bool decidedWhatToDo = false; //asking what to do with the selected item
                 var timestamp3 = DateTime.Now;
                 string answer2 = ""; //answer for question 'What would you like to do?'
@@ -1235,10 +1265,10 @@ namespace PersonalDiscordBot.Classes
                         {
                             respondeded.Add(msg2);
                             answer2 = msg2.Content.ToString().ToLower();
-                            Toolbox.uDebugAddLog($"Response recieved from same author and a newer message. [Resp]{answer2} [ID]{owner.OwnerID}");
+                            Toolbox.uDebugAddLog($"Response recieved from same author and a newer message. [Resp]{answer2} [ID]{checkBackPack.owner.OwnerID}");
                             if (string.IsNullOrWhiteSpace(answer2))
                             {
-                                Toolbox.uDebugAddLog($"Answer was null or white space. [Resp]{answer2} [ID]{owner.OwnerID}");
+                                Toolbox.uDebugAddLog($"Answer was null or white space. [Resp]{answer2} [ID]{checkBackPack.owner.OwnerID}");
                                 await context.SendDiscordMessageMention($"Your answer was not valid.");
                             }
                             else
@@ -1247,176 +1277,190 @@ namespace PersonalDiscordBot.Classes
                                 switch (answer2)
                                 {
                                     case "equip":
-                                        if (chosenThing is Armor)
+                                        if (checkBackPack.chosenThing is Armor)
                                         {
-                                            Armor tmpArmor = (Armor)chosenThing;
-                                            Toolbox.uDebugAddLog($"[ARMOR]{tmpArmor} is trying to be equipped by [ID]{owner.OwnerID}");
+                                            Armor tmpArmor = (Armor)checkBackPack.chosenThing;
+                                            Toolbox.uDebugAddLog($"[ARMOR]{tmpArmor} is trying to be equipped by [ID]{checkBackPack.owner.OwnerID}");
                                             await ChangeArmor(context, tmpArmor);
-                                            await CheckBackPackUpdateList(context, chosenThing, owner, step, plzMakeItStop, items, chosenType, itemList);
+                                            checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
                                         }
-                                        else if (chosenThing is Weapon)
+                                        else if (checkBackPack.chosenThing is Weapon)
                                         {
-                                            Weapon tmpWeapon = (Weapon)chosenThing;
-                                            Toolbox.uDebugAddLog($"[Weapon]{tmpWeapon} is trying to be equipped by [ID]{owner.OwnerID}");
+                                            Weapon tmpWeapon = (Weapon)checkBackPack.chosenThing;
+                                            Toolbox.uDebugAddLog($"[Weapon]{tmpWeapon} is trying to be equipped by [ID]{checkBackPack.owner.OwnerID}");
                                             await ChangeWeapon(context, tmpWeapon);
-                                            await CheckBackPackUpdateList(context, chosenThing, owner, step, plzMakeItStop, items, chosenType, itemList);
+                                            checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
                                         }
                                         else
-                                            Toolbox.uDebugAddLog($"[ITEM]{chosenThing.Name} is not a weapon or armor that can be equipped by [ID]{owner.OwnerID}");
+                                            Toolbox.uDebugAddLog($"[ITEM]{checkBackPack.chosenThing.Name} is not a weapon or armor that can be equipped by [ID]{checkBackPack.owner.OwnerID}");
                                         await context.SendDiscordMessageMention($"Please choose the 'use' command when interacting with an item.");
-                                        step = 3;
-                                        break;
+                                        checkBackPack.step = 3;
+                                        Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                                        return checkBackPack;
                                     case "use":
-                                        if (chosenThing is Item)
+                                        if (checkBackPack.chosenThing is Item)
                                         {
-                                            Item tmpItem = (Item)chosenThing;
-                                            Toolbox.uDebugAddLog($"[ITEM]{tmpItem} is trying to be used by [ID]{owner.OwnerID}");
-                                            await UseItem(context, owner, tmpItem);
-                                            await CheckBackPackUpdateList(context, chosenThing, owner, step, plzMakeItStop, items, chosenType, itemList);
+                                            Item tmpItem = (Item)checkBackPack.chosenThing;
+                                            Toolbox.uDebugAddLog($"[ITEM]{tmpItem} is trying to be used by [ID]{checkBackPack.owner.OwnerID}");
+                                            await UseItem(context, checkBackPack.owner, tmpItem);
+                                            checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
                                         }
                                         else
                                         {
-                                            Toolbox.uDebugAddLog($"[TYPE]{chosenThing.Name} is a(n) {chosenThing.GetType()}, not an item. [ID]{owner.OwnerID}");
+                                            Toolbox.uDebugAddLog($"[TYPE]{checkBackPack.chosenThing.Name} is a(n) {checkBackPack.chosenThing.GetType()}, not an item. [ID]{checkBackPack.owner.OwnerID}");
                                             await context.SendDiscordMessageMention($"Please choose the 'equip' command when interacting with weapons or armor.");
                                         }
-                                        step = 3;
-                                        break;
+                                        checkBackPack.step = 3;
+                                        Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                                        return checkBackPack;
                                     case "sell":
-                                        Toolbox.uDebugAddLog($"[SELL]{chosenThing} is trying to be sold by [ID]{owner.OwnerID}");
-                                        await Sell(context, chosenThing);
-                                        await CheckBackPackUpdateList(context, chosenThing, owner, step, plzMakeItStop, items, chosenType, itemList);
-                                        break;
+                                        Toolbox.uDebugAddLog($"[SELL]{checkBackPack.chosenThing} is trying to be sold by [ID]{checkBackPack.owner.OwnerID}");
+                                        await Sell(context, checkBackPack.chosenThing);
+                                        await CheckBackPackUpdateList(context, checkBackPack);
+                                        return checkBackPack;
                                     case "trash":
-                                        Toolbox.uDebugAddLog($"[TRASH]{chosenThing.Name} is trying to be trashed by [UN]{owner.OwnerUN} [ID]{owner.OwnerID}");
-                                        await Trash(context, chosenThing);
-                                        await CheckBackPackUpdateList(context, chosenThing, owner, step, plzMakeItStop, items, chosenType, itemList);
-                                        break;
+                                        Toolbox.uDebugAddLog($"[TRASH]{checkBackPack.chosenThing.Name} is trying to be trashed by [UN]{checkBackPack.owner.OwnerUN} [ID]{checkBackPack.owner.OwnerID}");
+                                        await Trash(context, checkBackPack.chosenThing);
+                                        await CheckBackPackUpdateList(context, checkBackPack);
+                                        return checkBackPack;
                                     case "cancel":
-                                        step = 0;
-                                        plzMakeItStop = true;
-                                        break;
+                                        checkBackPack.step = 0;
+                                        Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                                        checkBackPack.plzMakeItStop = true;
+                                        return checkBackPack;
                                     default:
                                         Toolbox.uDebugAddLog($"The Default case was selected when trying to switch through '{answer2}' in the CheckBackPackWhatToDo method.");
                                         await context.SendDiscordMessageMention($"The response didn't match one of the options. Please try again.");
-                                        step = 3;
-                                        break;
+                                        checkBackPack.step = 3;
+                                        Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                                        return checkBackPack;
                                 }
                             }
                         }
                     }
-                    
+
                 }
                 if (timeStamp + TimeSpan.FromMinutes(5) <= DateTime.Now)
                 {
-                    Toolbox.uDebugAddLog($"timestamp2 reached 5 minutes [ID]{owner.OwnerID}");
+                    Toolbox.uDebugAddLog($"timestamp2 reached 5 minutes [ID]{checkBackPack.owner.OwnerID}");
                     await context.SendDiscordMessageMention($"A response hasn't been received in 5 minutes, you can go through your backpack later by using ;test check backpack");
-                    step = 0;
-                    plzMakeItStop = true;
-                    return;
+                    checkBackPack.step = 0;
+                    Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                    checkBackPack.plzMakeItStop = true;
+                    return checkBackPack;
                 }
                 await Task.Delay(1000);
+                return checkBackPack;
             }
             catch (Exception ex)
             {
                 Toolbox.FullExceptionLog(ex);
+                Toolbox.uDebugAddLog($"You returned the 'checkBackPack' in the Catch of the TryCatch of 'CheckBackPackWhatToDo'.");
+                return checkBackPack;
             }
         }
 
-        public static async Task CheckBackPackUpdateList(ICommandContext context, IBackPackItem chosenThing, OwnerProfile owner, int step, bool plzMakeItStop, List<IBackPackItem> items, string chosenType, string itemList)
+        public static async Task<CheckBackPack> CheckBackPackUpdateList(ICommandContext context, CheckBackPack checkBackPack)
         {
-            string line = Environment.NewLine;            
+            string line = Environment.NewLine;
             List<IBackPackItem> chosenItems = new List<IBackPackItem>();
             int number = 0;
-            switch (chosenType)
+            switch (checkBackPack.chosenType)
             {
                 case "armor":
                     Toolbox.uDebugAddLog($"Building list of Armor.");
-                    foreach (IBackPackItem backPackItem in owner.CurrentCharacter.Backpack.Stored)
+                    foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
                     {
                         if (backPackItem is Armor)
                         {
                             chosenItems.Add((Armor)backPackItem);
                             number++;
-                            itemList = itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
                         }
                     }
-                    items = chosenItems;
-                    step = 2;
-                    break;
+                    checkBackPack.items = chosenItems;
+                    checkBackPack.step = 2;
+                    Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                    return checkBackPack;
 
                 case "items":
                     Toolbox.uDebugAddLog($"Building list of Items.");
-                    foreach (IBackPackItem backPackItem in owner.CurrentCharacter.Backpack.Stored)
+                    foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
                     {
                         if (backPackItem is Item)
                         {
                             chosenItems.Add((Item)backPackItem);
                             number++;
-                            itemList = itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
                         }
                     }
-                    items = chosenItems;
-                    step = 2;
-                    break;
+                    checkBackPack.items = chosenItems;
+                    checkBackPack.step = 2;
+                    Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                    return checkBackPack;
 
                 case "weapons":
                     Toolbox.uDebugAddLog($"Building list of Weapons.");
-                    foreach (IBackPackItem backPackItem in owner.CurrentCharacter.Backpack.Stored)
+                    foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
                     {
                         if (backPackItem is Weapon)
                         {
                             chosenItems.Add((Weapon)backPackItem);
                             number++;
-                            itemList = itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
                         }
                     }
-                    items = chosenItems;
-                    step = 2;
-                    break;
+                    checkBackPack.items = chosenItems;
+                    checkBackPack.step = 2;
+                    Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                    return checkBackPack;
 
                 case "all":
                     Toolbox.uDebugAddLog($"Building list of Everything.");
-                    foreach (IBackPackItem backPackItem in owner.CurrentCharacter.Backpack.Stored)
+                    foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
                     {
                         if (backPackItem is Armor)
                         {
                             chosenItems.Add((Armor)backPackItem);
                             number++;
-                            itemList = itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
                         }
                     }
-                    foreach (IBackPackItem backPackItem in owner.CurrentCharacter.Backpack.Stored)
+                    foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
                     {
                         if (backPackItem is Weapon)
                         {
                             chosenItems.Add((Weapon)backPackItem);
                             number++;
-                            itemList = itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
                         }
                     }
-                    foreach (IBackPackItem backPackItem in owner.CurrentCharacter.Backpack.Stored)
+                    foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
                     {
                         if (backPackItem is Item)
                         {
                             chosenItems.Add((Item)backPackItem);
                             number++;
-                            itemList = itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
                         }
                     }
-                    items = chosenItems;
-                    step = 2;
-                    break;
+                    checkBackPack.items = chosenItems;
+                    checkBackPack.step = 2;
+                    Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                    return checkBackPack;
 
                 case "cancel":
-                    step = 0;
-                    plzMakeItStop = true;
-                    break;
+                    checkBackPack.step = 0;
+                    Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                    checkBackPack.plzMakeItStop = true;
+                    return checkBackPack;
 
                 default:
-                    Toolbox.uDebugAddLog($"{chosenType} doesn't match one of the choices.");
+                    Toolbox.uDebugAddLog($"{checkBackPack.chosenType} doesn't match one of the choices.");
                     await context.SendDiscordMessageMention($"The response didn't match one of the options. Please try again.");
-                    step = 1;
-                    break;
+                    checkBackPack.step = 1;
+                    Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                    return checkBackPack;
             }
         }
 

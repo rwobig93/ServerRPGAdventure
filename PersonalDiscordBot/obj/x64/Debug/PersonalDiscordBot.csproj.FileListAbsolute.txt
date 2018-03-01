@@ -44,6 +44,7 @@ C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debu
 C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\System.Collections.Immutable.xml
 C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\System.Diagnostics.DiagnosticSource.xml
 C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\bin\x64\Debug\System.Interactive.Async.xml
+C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\obj\x64\Debug\PersonalDiscordBot.csprojResolveAssemblyReference.cache
 C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\obj\x64\Debug\MainWindow.g.cs
 C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\obj\x64\Debug\Windows\Server Editor.g.cs
 C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\obj\x64\Debug\App.g.cs
@@ -55,6 +56,6 @@ C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\obj\x64\Debu
 C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\obj\x64\Debug\PersonalDiscordBot.g.resources
 C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\obj\x64\Debug\PersonalDiscordBot.Properties.Resources.resources
 C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\obj\x64\Debug\PersonalDiscordBot.csproj.GenerateResource.Cache
+C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\obj\x64\Debug\PersonalDiscordBot.csproj.CoreCompileInputs.cache
 C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\obj\x64\Debug\PersonalDiscordBot.exe
 C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\obj\x64\Debug\PersonalDiscordBot.pdb
-C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\obj\x64\Debug\PersonalDiscordBot.csprojResolveAssemblyReference.cache

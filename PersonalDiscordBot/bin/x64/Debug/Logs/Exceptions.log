@@ -314,3 +314,142 @@ StackTrace:
    at PersonalDiscordBot.Classes.Management.<>c.<SerializeData>b__0_1(Object sender, DoWorkEventArgs e) in C:\Users\mathe\Source\Repos\ServerRPGAdventure\ServerRPGAdventure\PersonalDiscordBot\Classes\RPG.cs:line 698
 
 
+TimeStamp: 03-01-18_12:55:44 PM
+Exception Type: FileLoadException
+Caller: Start at 1466
+Message: Could not load file or assembly 'System.Net.Http, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' or one of its dependencies. The located assembly's manifest definition does not match the assembly reference. (Exception from HRESULT: 0x80131040)
+HR: -2146234304
+StackTrace:
+   at Discord.Net.Rest.DefaultRestClient..ctor(String baseUrl)
+   at Discord.Net.Rest.DefaultRestClientProvider.<>c.<.cctor>b__1_0(String url)
+   at Discord.API.DiscordRestApiClient.SetBaseUrl(String baseUrl)
+   at Discord.API.DiscordSocketApiClient..ctor(RestClientProvider restClientProvider, WebSocketProvider webSocketProvider, String userAgent, String url, RetryMode defaultRetryMode, JsonSerializer serializer)
+   at Discord.WebSocket.DiscordSocketClient.CreateApiClient(DiscordSocketConfig config)
+   at Discord.WebSocket.DiscordSocketClient..ctor()
+   at PersonalDiscordBot.MainWindow.<Start>d__81.MoveNext() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1436
+
+
+TimeStamp: 03-01-18_1:01:15 PM
+Exception Type: NullReferenceException
+Caller: btnDisconnect_Click at 210
+Message: Object reference not set to an instance of an object.
+HR: -2147467261
+StackTrace:
+   at PersonalDiscordBot.MainWindow.<btnDisconnect_Click>d__18.MoveNext() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 185
+
+
+TimeStamp: 03-01-18_1:01:46 PM
+Exception Type: FileLoadException
+Caller: Start at 1466
+Message: Could not load file or assembly 'System.Net.Http, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' or one of its dependencies. The located assembly's manifest definition does not match the assembly reference. (Exception from HRESULT: 0x80131040)
+HR: -2146234304
+StackTrace:
+   at Discord.Net.Rest.DefaultRestClient..ctor(String baseUrl)
+   at Discord.Net.Rest.DefaultRestClientProvider.<>c.<.cctor>b__1_0(String url)
+   at Discord.API.DiscordRestApiClient.SetBaseUrl(String baseUrl)
+   at Discord.API.DiscordSocketApiClient..ctor(RestClientProvider restClientProvider, WebSocketProvider webSocketProvider, String userAgent, String url, RetryMode defaultRetryMode, JsonSerializer serializer)
+   at Discord.WebSocket.DiscordSocketClient.CreateApiClient(DiscordSocketConfig config)
+   at Discord.WebSocket.DiscordSocketClient..ctor()
+   at PersonalDiscordBot.MainWindow.<Start>d__81.MoveNext() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1436
+
+
+TimeStamp: 03-01-18_1:01:48 PM
+Exception Type: FileLoadException
+Caller: Start at 1466
+Message: Could not load file or assembly 'System.Net.Http, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' or one of its dependencies. The located assembly's manifest definition does not match the assembly reference. (Exception from HRESULT: 0x80131040)
+HR: -2146234304
+StackTrace:
+   at Discord.Net.Rest.DefaultRestClient..ctor(String baseUrl)
+   at Discord.Net.Rest.DefaultRestClientProvider.<>c.<.cctor>b__1_0(String url)
+   at Discord.API.DiscordRestApiClient.SetBaseUrl(String baseUrl)
+   at Discord.API.DiscordSocketApiClient..ctor(RestClientProvider restClientProvider, WebSocketProvider webSocketProvider, String userAgent, String url, RetryMode defaultRetryMode, JsonSerializer serializer)
+   at Discord.WebSocket.DiscordSocketClient.CreateApiClient(DiscordSocketConfig config)
+   at Discord.WebSocket.DiscordSocketClient..ctor()
+   at PersonalDiscordBot.MainWindow.<Start>d__81.MoveNext() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1436
+
+
+TimeStamp: 03-01-18_1:02:03 PM
+Exception Type: FileLoadException
+Caller: Start at 1466
+Message: Could not load file or assembly 'System.Net.Http, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' or one of its dependencies. The located assembly's manifest definition does not match the assembly reference. (Exception from HRESULT: 0x80131040)
+HR: -2146234304
+StackTrace:
+   at Discord.Net.Rest.DefaultRestClient..ctor(String baseUrl)
+   at Discord.Net.Rest.DefaultRestClientProvider.<>c.<.cctor>b__1_0(String url)
+   at Discord.API.DiscordRestApiClient.SetBaseUrl(String baseUrl)
+   at Discord.API.DiscordSocketApiClient..ctor(RestClientProvider restClientProvider, WebSocketProvider webSocketProvider, String userAgent, String url, RetryMode defaultRetryMode, JsonSerializer serializer)
+   at Discord.WebSocket.DiscordSocketClient.CreateApiClient(DiscordSocketConfig config)
+   at Discord.WebSocket.DiscordSocketClient..ctor()
+   at PersonalDiscordBot.MainWindow.<Start>d__81.MoveNext() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1436
+
+
+TimeStamp: 03-01-18_1:41:47 PM
+Exception Type: FileLoadException
+Caller: Start at 1466
+Message: Could not load file or assembly 'System.Net.Http, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' or one of its dependencies. The located assembly's manifest definition does not match the assembly reference. (Exception from HRESULT: 0x80131040)
+HR: -2146234304
+StackTrace:
+   at Discord.Net.Rest.DefaultRestClient..ctor(String baseUrl)
+   at Discord.Net.Rest.DefaultRestClientProvider.<>c.<.cctor>b__1_0(String url)
+   at Discord.API.DiscordRestApiClient.SetBaseUrl(String baseUrl)
+   at Discord.API.DiscordSocketApiClient..ctor(RestClientProvider restClientProvider, WebSocketProvider webSocketProvider, String userAgent, String url, RetryMode defaultRetryMode, JsonSerializer serializer)
+   at Discord.WebSocket.DiscordSocketClient.CreateApiClient(DiscordSocketConfig config)
+   at Discord.WebSocket.DiscordSocketClient..ctor()
+   at PersonalDiscordBot.MainWindow.<Start>d__81.MoveNext() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1436
+
+
+TimeStamp: 03-01-18_1:41:55 PM
+Exception Type: FileLoadException
+Caller: Start at 1466
+Message: Could not load file or assembly 'System.Net.Http, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' or one of its dependencies. The located assembly's manifest definition does not match the assembly reference. (Exception from HRESULT: 0x80131040)
+HR: -2146234304
+StackTrace:
+   at Discord.Net.Rest.DefaultRestClient..ctor(String baseUrl)
+   at Discord.Net.Rest.DefaultRestClientProvider.<>c.<.cctor>b__1_0(String url)
+   at Discord.API.DiscordRestApiClient.SetBaseUrl(String baseUrl)
+   at Discord.API.DiscordSocketApiClient..ctor(RestClientProvider restClientProvider, WebSocketProvider webSocketProvider, String userAgent, String url, RetryMode defaultRetryMode, JsonSerializer serializer)
+   at Discord.WebSocket.DiscordSocketClient.CreateApiClient(DiscordSocketConfig config)
+   at Discord.WebSocket.DiscordSocketClient..ctor()
+   at PersonalDiscordBot.MainWindow.<Start>d__81.MoveNext() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1436
+
+
+TimeStamp: 03-01-18_1:42:16 PM
+Exception Type: FileLoadException
+Caller: Start at 1466
+Message: Could not load file or assembly 'System.Net.Http, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' or one of its dependencies. The located assembly's manifest definition does not match the assembly reference. (Exception from HRESULT: 0x80131040)
+HR: -2146234304
+StackTrace:
+   at Discord.Net.Rest.DefaultRestClient..ctor(String baseUrl)
+   at Discord.Net.Rest.DefaultRestClientProvider.<>c.<.cctor>b__1_0(String url)
+   at Discord.API.DiscordRestApiClient.SetBaseUrl(String baseUrl)
+   at Discord.API.DiscordSocketApiClient..ctor(RestClientProvider restClientProvider, WebSocketProvider webSocketProvider, String userAgent, String url, RetryMode defaultRetryMode, JsonSerializer serializer)
+   at Discord.WebSocket.DiscordSocketClient.CreateApiClient(DiscordSocketConfig config)
+   at Discord.WebSocket.DiscordSocketClient..ctor()
+   at PersonalDiscordBot.MainWindow.<Start>d__81.MoveNext() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1436
+
+
+TimeStamp: 03-01-18_1:42:58 PM
+Exception Type: FileLoadException
+Caller: UpdateApplication at 1593
+Message: Could not load file or assembly 'System.Net.Http, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' or one of its dependencies. The located assembly's manifest definition does not match the assembly reference. (Exception from HRESULT: 0x80131040)
+HR: -2146234304
+StackTrace:
+   at Octokit.ProductHeaderValue..ctor(String name)
+   at PersonalDiscordBot.MainWindow.<UpdateApplication>d__87.MoveNext() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1571
+
+
+TimeStamp: 03-01-18_1:43:33 PM
+Exception Type: FileLoadException
+Caller: Start at 1466
+Message: Could not load file or assembly 'System.Net.Http, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' or one of its dependencies. The located assembly's manifest definition does not match the assembly reference. (Exception from HRESULT: 0x80131040)
+HR: -2146234304
+StackTrace:
+   at Discord.Net.Rest.DefaultRestClient..ctor(String baseUrl)
+   at Discord.Net.Rest.DefaultRestClientProvider.<>c.<.cctor>b__1_0(String url)
+   at Discord.API.DiscordRestApiClient.SetBaseUrl(String baseUrl)
+   at Discord.API.DiscordSocketApiClient..ctor(RestClientProvider restClientProvider, WebSocketProvider webSocketProvider, String userAgent, String url, RetryMode defaultRetryMode, JsonSerializer serializer)
+   at Discord.WebSocket.DiscordSocketClient.CreateApiClient(DiscordSocketConfig config)
+   at Discord.WebSocket.DiscordSocketClient..ctor()
+   at PersonalDiscordBot.MainWindow.<Start>d__81.MoveNext() in C:\Users\mpegler\Source\Repos\ServerRPGAdventure\PersonalDiscordBot\MainWindow.xaml.cs:line 1436
+
+

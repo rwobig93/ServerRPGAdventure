@@ -68,9 +68,6 @@
         <member name="P:Discord.IChannel.Name">
             <summary> Gets the name of this channel. </summary>
         </member>
-        <member name="P:Discord.IChannel.IsNsfw">
-            <summary> Checks if the channel is NSFW. </summary>
-        </member>
         <member name="M:Discord.IChannel.GetUsersAsync(Discord.CacheMode,Discord.RequestOptions)">
             <summary> Gets a collection of all users in this channel. </summary>
         </member>
@@ -158,20 +155,23 @@
         <member name="M:Discord.IMessageChannel.GetPinnedMessagesAsync(Discord.RequestOptions)">
             <summary> Gets a collection of pinned messages in this channel. </summary>
         </member>
-        <member name="M:Discord.IMessageChannel.DeleteMessagesAsync(System.Collections.Generic.IEnumerable{Discord.IMessage},Discord.RequestOptions)">
-            <summary> Bulk deletes multiple messages. </summary>
-        </member>
-        <member name="M:Discord.IMessageChannel.DeleteMessagesAsync(System.Collections.Generic.IEnumerable{System.UInt64},Discord.RequestOptions)">
-            <summary> Bulk deletes multiple messages. </summary>
-        </member>
         <member name="M:Discord.IMessageChannel.TriggerTypingAsync(Discord.RequestOptions)">
             <summary> Broadcasts the "user is typing" message to all users in this channel, lasting 10 seconds. </summary>
         </member>
         <member name="M:Discord.IMessageChannel.EnterTypingState(Discord.RequestOptions)">
             <summary> Continuously broadcasts the "user is typing" message to all users in this channel until the returned object is disposed. </summary>
         </member>
+        <member name="P:Discord.ITextChannel.IsNsfw">
+            <summary> Checks if the channel is NSFW. </summary>
+        </member>
         <member name="P:Discord.ITextChannel.Topic">
             <summary> Gets the current topic for this text channel. </summary>
+        </member>
+        <member name="M:Discord.ITextChannel.DeleteMessagesAsync(System.Collections.Generic.IEnumerable{Discord.IMessage},Discord.RequestOptions)">
+            <summary> Bulk deletes multiple messages. </summary>
+        </member>
+        <member name="M:Discord.ITextChannel.DeleteMessagesAsync(System.Collections.Generic.IEnumerable{System.UInt64},Discord.RequestOptions)">
+            <summary> Bulk deletes multiple messages. </summary>
         </member>
         <member name="M:Discord.ITextChannel.ModifyAsync(System.Action{Discord.TextChannelProperties},Discord.RequestOptions)">
             <summary> Modifies this text channel. </summary>
@@ -197,6 +197,11 @@
         <member name="P:Discord.TextChannelProperties.Topic">
             <summary>
             What the topic of the channel should be set to.
+            </summary>
+        </member>
+        <member name="P:Discord.TextChannelProperties.IsNsfw">
+            <summary>
+            Should this channel be flagged as NSFW?
             </summary>
         </member>
         <member name="T:Discord.VoiceChannelProperties">
@@ -359,6 +364,16 @@
             The ID of the IVoiceChannel where AFK users should be sent.
             </summary>
         </member>
+        <member name="P:Discord.GuildProperties.SystemChannel">
+            <summary>
+            The ITextChannel where System messages should be sent.
+            </summary>
+        </member>
+        <member name="P:Discord.GuildProperties.SystemChannelId">
+            <summary>
+            The ID of the ITextChannel where System messages should be sent.
+            </summary>
+        </member>
         <member name="P:Discord.GuildProperties.Owner">
             <summary>
             The owner of this guild.
@@ -410,6 +425,9 @@
         </member>
         <member name="P:Discord.IGuild.EmbedChannelId">
             <summary> Gets the id of the embed channel for this guild if set, or null if not. </summary>
+        </member>
+        <member name="P:Discord.IGuild.SystemChannelId">
+            <summary> Gets the id of the channel where randomized welcome messages are sent, or null if not. </summary>
         </member>
         <member name="P:Discord.IGuild.OwnerId">
             <summary> Gets the id of the user that created this guild. </summary>
@@ -700,6 +718,9 @@
         <member name="M:Discord.IUserMessage.RemoveAllReactionsAsync(Discord.RequestOptions)">
             <summary> Removes all reactions from this message. </summary>
         </member>
+        <member name="M:Discord.IUserMessage.GetReactionUsersAsync(Discord.IEmote,System.Int32,System.Nullable{System.UInt64},Discord.RequestOptions)">
+            <summary>  Gets all users that reacted to a message with a given emote </summary>
+        </member>
         <member name="M:Discord.IUserMessage.Resolve(Discord.TagHandling,Discord.TagHandling,Discord.TagHandling,Discord.TagHandling,Discord.TagHandling)">
             <summary> Transforms this message's text into a human readable form by resolving its tags. </summary>
         </member>
@@ -819,8 +840,8 @@
         <member name="P:Discord.ChannelPermissions.UseVAD">
             <summary> If True, a user may use voice-activity-detection rather than push-to-talk. </summary>
         </member>
-        <member name="P:Discord.ChannelPermissions.ManagePermissions">
-            <summary> If True, a user may adjust permissions. This also implictly grants all other permissions. </summary>
+        <member name="P:Discord.ChannelPermissions.ManageRoles">
+            <summary> If True, a user may adjust role permissions. This also implictly grants all other permissions. </summary>
         </member>
         <member name="P:Discord.ChannelPermissions.ManageWebhooks">
             <summary> If True, a user may edit the webhooks for this channel. </summary>
@@ -866,6 +887,9 @@
         </member>
         <member name="P:Discord.GuildPermissions.AddReactions">
             <summary> If true, a user may add reactions. </summary>
+        </member>
+        <member name="P:Discord.GuildPermissions.ViewAuditLog">
+            <summary> If true, a user may view the audit log. </summary>
         </member>
         <member name="P:Discord.GuildPermissions.ReadMessages">
             <summary> If True, a user may join channels. </summary>
@@ -930,10 +954,10 @@
         <member name="M:Discord.GuildPermissions.#ctor(System.UInt64)">
             <summary> Creates a new GuildPermissions with the provided packed value. </summary>
         </member>
-        <member name="M:Discord.GuildPermissions.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Boolean,System.Boolean,System.Boolean)">
+        <member name="M:Discord.GuildPermissions.#ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Boolean,System.Boolean,System.Boolean)">
             <summary> Creates a new GuildPermissions with the provided permissions. </summary>
         </member>
-        <member name="M:Discord.GuildPermissions.Modify(System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean})">
+        <member name="M:Discord.GuildPermissions.Modify(System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean})">
             <summary> Creates a new GuildPermissions from this one, changing the provided non-null permissions. </summary>
         </member>
         <member name="P:Discord.Overwrite.TargetId">
@@ -1017,8 +1041,8 @@
         <member name="P:Discord.OverwritePermissions.UseVAD">
             <summary> If Allowed, a user may use voice-activity-detection rather than push-to-talk. </summary>
         </member>
-        <member name="P:Discord.OverwritePermissions.ManagePermissions">
-            <summary> If Allowed, a user may adjust permissions. This also implictly grants all other permissions. </summary>
+        <member name="P:Discord.OverwritePermissions.ManageRoles">
+            <summary> If Allowed, a user may adjust role permissions. This also implictly grants all other permissions. </summary>
         </member>
         <member name="P:Discord.OverwritePermissions.ManageWebhooks">
             <summary> If True, a user may edit the webhooks for this channel. </summary>
@@ -1395,6 +1419,21 @@
             Your avatar
             </summary>
         </member>
+        <member name="M:Discord.UserExtensions.SendMessageAsync(Discord.IUser,System.String,System.Boolean,Discord.Embed,Discord.RequestOptions)">
+            <summary>
+            Sends a message to the user via DM.
+            </summary>
+        </member>
+        <member name="M:Discord.UserExtensions.SendFileAsync(Discord.IUser,System.IO.Stream,System.String,System.String,System.Boolean,Discord.RequestOptions)">
+            <summary>
+            Sends a file to the user via DM.
+            </summary>
+        </member>
+        <member name="M:Discord.UserExtensions.SendFileAsync(Discord.IUser,System.String,System.String,System.Boolean,Discord.RequestOptions)">
+            <summary>
+            Sends a file to the user via DM.
+            </summary>
+        </member>
         <member name="M:Discord.Format.Bold(System.String)">
             <summary> Returns a markdown-formatted string with bold formatting. </summary>
         </member>
@@ -1502,7 +1541,7 @@
             <summary>Tries to parse a provided role mention string. </summary>
         </member>
         <member name="P:Discord.Optional`1.Value">
-            <summary> Gets the value for this paramter. </summary>
+            <summary> Gets the value for this parameter. </summary>
         </member>
         <member name="P:Discord.Optional`1.IsSpecified">
             <summary> Returns true if this value has been specified. </summary>
