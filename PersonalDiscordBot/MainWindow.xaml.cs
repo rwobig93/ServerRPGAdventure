@@ -1538,7 +1538,13 @@ namespace PersonalDiscordBot
                 var cmd = $"User: {arg.Author.Username} ◥◤ Command: {arg.ToString()}";
                 uStatusUpdate(cmd);
                 Toolbox.uDebugAddLog(string.Format("COMMAND: {0}", cmd));
-                var result = await commands.ExecuteAsync(context, argPos, services);
+                IResult result = null;
+                BackgroundWorker worker = new BackgroundWorker();
+                worker.DoWork += async (sender, e) =>
+                {
+                    result = await commands.ExecuteAsync(context, argPos, services);
+                };
+                worker.RunWorkerAsync();
                 if (!result.IsSuccess)
                 {
                     if (result.Error == CommandError.BadArgCount)
