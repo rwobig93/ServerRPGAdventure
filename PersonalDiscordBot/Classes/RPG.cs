@@ -1045,27 +1045,43 @@ namespace PersonalDiscordBot.Classes
             CheckBackPack checkBackPack = new CheckBackPack();
             string line = Environment.NewLine;
             checkBackPack.owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
-
+            int count = 1;
+            int ret = 1;
+            await context.SendDiscordMessageMention($"[COUNT]{count} Starting the while loop.");
+            count++;
             while (!checkBackPack.plzMakeItStop) // When stopping loop, set 'int step' to 0
             {
+                
                 if (checkBackPack.step == 1)
                 {
+                    await context.SendDiscordMessageMention($"[COUNT]{count} Starting the CheckBackPackWhatItemsToSee function.");
+                    count++;
                     // This method needs to create a new list of objects and overwrite 'List<IBackPackItem> items' with the new list when looping
                     Toolbox.uDebugAddLog($"Calling CheckBackPackWhatItemsToSee for [UN]{checkBackPack.owner.OwnerUN} [ID]{checkBackPack.owner.OwnerID}{line}");
                     Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
                     checkBackPack = await CheckBackPackWhatItemsToSee(context, checkBackPack);
+                    await context.SendDiscordMessageMention($"Returned checkBackPack [RET]{ret} times.");
+                    ret++;
                 }
                 else if (checkBackPack.step == 2)
                 {
+                    await context.SendDiscordMessageMention($"[COUNT]{count} Starting the CheckBackPackAskWhichItem function.");
+                    count++;
                     Toolbox.uDebugAddLog($"Calling CheckBackPackAskWhichItem for [UN]{checkBackPack.owner.OwnerUN} [ID]{checkBackPack.owner.OwnerID}{line}");
                     Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
                     checkBackPack = await CheckBackPackAskWhichItem(context, checkBackPack);
+                    await context.SendDiscordMessageMention($"Returned checkBackPack [RET]{ret} times.");
+                    ret++;
                 }
                 else if (checkBackPack.step == 3)
                 {
+                    await context.SendDiscordMessageMention($"[COUNT]{count} Starting the CheckBackPackWhatToDo function.");
+                    count++;
                     Toolbox.uDebugAddLog($"Calling CheckBackPackWhatToDo for [UN]{checkBackPack.owner.OwnerUN} [ID]{checkBackPack.owner.OwnerID}{line}");
                     Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
                     checkBackPack = await CheckBackPackWhatToDo(context, checkBackPack);
+                    await context.SendDiscordMessageMention($"Returned checkBackPack [RET]{ret} times.");
+                    ret++;
                 }
                 else
                 {
@@ -1158,7 +1174,7 @@ namespace PersonalDiscordBot.Classes
                     var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
                     foreach (var msg in msgList)
                     {
-                        if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > pickedItemMsg.Timestamp.DateTime) && (respondeded.Any(x => x.Content != msg.Content)))
+                        if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > pickedItemMsg.Timestamp.DateTime) && (!respondeded.Contains(msg)))
                         {
                             respondeded.Add(msg);
                             pickedAnswer = msg.Content.ToString().ToLower();
@@ -1206,7 +1222,6 @@ namespace PersonalDiscordBot.Classes
                                 return checkBackPack;
                             }
                         }
-                        return checkBackPack;
                     }
                     if (timestamp + TimeSpan.FromMinutes(5) <= DateTime.Now)
                     {
@@ -1218,7 +1233,6 @@ namespace PersonalDiscordBot.Classes
                         return checkBackPack;
                     }
                     await Task.Delay(1000);
-                    return checkBackPack;
                 }
                 return checkBackPack;
             }
@@ -1228,7 +1242,7 @@ namespace PersonalDiscordBot.Classes
                 Toolbox.uDebugAddLog($"You returned the 'checkBackPack' in the Catch of the TryCatch of 'CheckBackPackAskWhichItem'.");
                 return checkBackPack;
             }
-            
+
         }
 
         public static async Task<CheckBackPack> CheckBackPackWhatToDo(ICommandContext context, CheckBackPack checkBackPack)
@@ -1261,7 +1275,7 @@ namespace PersonalDiscordBot.Classes
                     var msgList2 = await context.Channel.GetMessagesAsync(5).Flatten();
                     foreach (var msg2 in msgList2)
                     {
-                        if ((msg2.Author == context.Message.Author) && (msg2.Timestamp.DateTime > whatToDo.Timestamp.DateTime) && (respondeded.Any(x => x.Content != msg2.Content)))
+                        if ((msg2.Author == context.Message.Author) && (msg2.Timestamp.DateTime > whatToDo.Timestamp.DateTime) && (!respondeded.Contains(msg2)))
                         {
                             respondeded.Add(msg2);
                             answer2 = msg2.Content.ToString().ToLower();
@@ -1283,6 +1297,7 @@ namespace PersonalDiscordBot.Classes
                                             Toolbox.uDebugAddLog($"[ARMOR]{tmpArmor} is trying to be equipped by [ID]{checkBackPack.owner.OwnerID}");
                                             await ChangeArmor(context, tmpArmor);
                                             checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
+                                            checkBackPack.step = 2;
                                         }
                                         else if (checkBackPack.chosenThing is Weapon)
                                         {
@@ -1290,12 +1305,15 @@ namespace PersonalDiscordBot.Classes
                                             Toolbox.uDebugAddLog($"[Weapon]{tmpWeapon} is trying to be equipped by [ID]{checkBackPack.owner.OwnerID}");
                                             await ChangeWeapon(context, tmpWeapon);
                                             checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
+                                            checkBackPack.step = 2;
                                         }
                                         else
+                                        {
                                             Toolbox.uDebugAddLog($"[ITEM]{checkBackPack.chosenThing.Name} is not a weapon or armor that can be equipped by [ID]{checkBackPack.owner.OwnerID}");
-                                        await context.SendDiscordMessageMention($"Please choose the 'use' command when interacting with an item.");
-                                        checkBackPack.step = 3;
-                                        Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                                            await context.SendDiscordMessageMention($"Please choose the 'use' command when interacting with an item.");
+                                            checkBackPack.step = 3;
+                                            Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                                        }
                                         return checkBackPack;
                                     case "use":
                                         if (checkBackPack.chosenThing is Item)
@@ -1304,24 +1322,27 @@ namespace PersonalDiscordBot.Classes
                                             Toolbox.uDebugAddLog($"[ITEM]{tmpItem} is trying to be used by [ID]{checkBackPack.owner.OwnerID}");
                                             await UseItem(context, checkBackPack.owner, tmpItem);
                                             checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
+                                            checkBackPack.step = 2;
                                         }
                                         else
                                         {
                                             Toolbox.uDebugAddLog($"[TYPE]{checkBackPack.chosenThing.Name} is a(n) {checkBackPack.chosenThing.GetType()}, not an item. [ID]{checkBackPack.owner.OwnerID}");
                                             await context.SendDiscordMessageMention($"Please choose the 'equip' command when interacting with weapons or armor.");
+                                            checkBackPack.step = 3;
+                                            Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
                                         }
-                                        checkBackPack.step = 3;
-                                        Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
                                         return checkBackPack;
                                     case "sell":
                                         Toolbox.uDebugAddLog($"[SELL]{checkBackPack.chosenThing} is trying to be sold by [ID]{checkBackPack.owner.OwnerID}");
-                                        await Sell(context, checkBackPack.chosenThing);
-                                        await CheckBackPackUpdateList(context, checkBackPack);
+                                        checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
+                                        checkBackPack.step = 2;
                                         return checkBackPack;
                                     case "trash":
                                         Toolbox.uDebugAddLog($"[TRASH]{checkBackPack.chosenThing.Name} is trying to be trashed by [UN]{checkBackPack.owner.OwnerUN} [ID]{checkBackPack.owner.OwnerID}");
                                         await Trash(context, checkBackPack.chosenThing);
-                                        await CheckBackPackUpdateList(context, checkBackPack);
+                                        checkBackPack = await CheckBackPackUpdateList(context, checkBackPack);
+                                        checkBackPack.items.Remove(checkBackPack.chosenThing);
+                                        checkBackPack.step = 2;
                                         return checkBackPack;
                                     case "cancel":
                                         checkBackPack.step = 0;
@@ -1338,18 +1359,17 @@ namespace PersonalDiscordBot.Classes
                             }
                         }
                     }
-
+                    if (timeStamp + TimeSpan.FromMinutes(5) <= DateTime.Now)
+                    {
+                        Toolbox.uDebugAddLog($"timestamp2 reached 5 minutes [ID]{checkBackPack.owner.OwnerID}");
+                        await context.SendDiscordMessageMention($"A response hasn't been received in 5 minutes, you can go through your backpack later by using ;test check backpack");
+                        checkBackPack.step = 0;
+                        Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                        checkBackPack.plzMakeItStop = true;
+                        return checkBackPack;
+                    }
+                    await Task.Delay(1000);
                 }
-                if (timeStamp + TimeSpan.FromMinutes(5) <= DateTime.Now)
-                {
-                    Toolbox.uDebugAddLog($"timestamp2 reached 5 minutes [ID]{checkBackPack.owner.OwnerID}");
-                    await context.SendDiscordMessageMention($"A response hasn't been received in 5 minutes, you can go through your backpack later by using ;test check backpack");
-                    checkBackPack.step = 0;
-                    Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
-                    checkBackPack.plzMakeItStop = true;
-                    return checkBackPack;
-                }
-                await Task.Delay(1000);
                 return checkBackPack;
             }
             catch (Exception ex)
@@ -1515,19 +1535,19 @@ namespace PersonalDiscordBot.Classes
         /// Selling an amount of items
         /// </summary>
         /// <param name="context">I think the owner?</param>
-        /// <param name="thing">Item you want to sell</param>
-        public static async Task Sell(ICommandContext context, IBackPackItem thing)
+        /// <param name="checkBackPack">Object with the item you want to sell</param>
+        public static async Task<CheckBackPack> Sell(ICommandContext context, CheckBackPack checkBackPack)
         {
             try
             {
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
                 List<IMessage> respondeded = new List<IMessage>();
-                if (thing.GetLootType() == LootDrop.LootType.Item)
+                if (checkBackPack.chosenThing.GetLootType() == LootDrop.LootType.Item)
                 {
-                    Item tmpItem = (Item)thing;
+                    Item tmpItem = (Item)checkBackPack.chosenThing;
                     if (tmpItem.Count > 1)
                     {
-                        Toolbox.uDebugAddLog($"[THING]{thing} is an [ITEM]. There are [COUNT]{tmpItem.Count} instances of [THING]{tmpItem.Name}." +
+                        Toolbox.uDebugAddLog($"[THING]{checkBackPack.chosenThing} is an [ITEM]. There are [COUNT]{tmpItem.Count} instances of [THING]{tmpItem.Name}." +
                             $"Asking [ID]{owner.OwnerID} how many to sell.");
                         EmbedBuilder embeded = new EmbedBuilder()
                         {
@@ -1560,24 +1580,24 @@ namespace PersonalDiscordBot.Classes
                                         {
                                             Toolbox.uDebugAddLog($"[AMOUNT]{howManyToSellAnswer} from [OWNER]{owner.OwnerID} exceeds [COUNT]{tmpItem.Count} [ITEM]{tmpItem.Name}(s).");
                                             await context.Channel.SendMessageAsync($"{howManyToSellAnswer} is more than you actually have.");
-                                            return;
+                                            return checkBackPack;
                                         }
                                         else if (howManyToSellAnswer < 0)
                                         {
                                             Toolbox.uDebugAddLog($"[AMOUNT]{howManyToSellAnswer} from [OWNER]{owner.OwnerID} is less than zero.");
                                             await context.Channel.SendMessageAsync($"{howManyToSellAnswer} is less than zero.");
-                                            return;
+                                            return checkBackPack;
                                         }
                                         else
                                         {
                                             if (howManyToSellAnswer > 1)
                                             {
-                                                Item sellItem = (Item)thing;
+                                                Item sellItem = (Item)checkBackPack.chosenThing;
                                                 if (sellItem == null)
                                                 {
                                                     Toolbox.uDebugAddLog($"ERROR: Item wasn't found in backpack when it was pulled from backpack [Name] {sellItem.Name} [Count] {sellItem.Count}");
                                                     await context.Channel.SendMessageAsync($"An error occured and the item you want to sell wasn't found in your backpack after finding it... I know confusing but you should let the developer know.");
-                                                    return;
+                                                    return checkBackPack;
                                                 }
                                                 if (sellItem.Count - howManyToSellAnswer <= 0)
                                                 {
@@ -1627,6 +1647,7 @@ namespace PersonalDiscordBot.Classes
                             }
                             await Task.Delay(1000);
                         }
+                        return;
                     }
                     else
                     {
@@ -1636,6 +1657,7 @@ namespace PersonalDiscordBot.Classes
                         await context.Channel.SendMessageAsync($"{thing.Name} was sold for {thing.Worth}.");
                         Toolbox.uDebugAddLog($"Removing [ITEM]{thing.Name} from [ID]{owner.OwnerID}");
                         owner.CurrentCharacter.Backpack.Stored.Remove(thing);
+                        return;
                     }
                 }
                 else
@@ -1647,6 +1669,7 @@ namespace PersonalDiscordBot.Classes
                     Toolbox.uDebugAddLog($"Removing [ITEM]{thing.Name} from [ID]{owner.OwnerID}");
                     owner.CurrentCharacter.Backpack.Stored.Remove(thing);
                 }
+                return;
             }
 		    catch (Exception ex)
 		    {
