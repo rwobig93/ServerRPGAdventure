@@ -1034,7 +1034,10 @@ namespace PersonalDiscordBot
         {
             Toolbox._paths.CurrentVersion = GetVersionNumber();
             if (Toolbox._paths.PreviousVersion == new Version("0.0.0.0"))
+            {
                 Toolbox._paths.LastUpdated = $"{DateTime.Now.ToLocalTime().ToString("MM-dd-yyyy hh:mm:ss tt")}";
+                Toolbox._paths.PreviousVersion = Toolbox._paths.CurrentVersion;
+            }
             if (Toolbox._paths.PreviousVersion < Toolbox._paths.CurrentVersion)
                 Toolbox._paths.Updated = true;
             lblUpdateTime.Text = Toolbox._paths.LastUpdated;
@@ -1042,9 +1045,8 @@ namespace PersonalDiscordBot
             uStatusUpdate($"Current Version: {Toolbox._paths.CurrentVersion}");
             if (Toolbox._paths.Updated)
             {
-                Version prevVersion = Toolbox._paths.PreviousVersion;
                 Toolbox._paths.Updated = false;
-                uStatusUpdate($"Updated to github v{Toolbox._paths.CurrentVersion} from v{prevVersion}");
+                uStatusUpdate($"Updated to github v{Toolbox._paths.CurrentVersion} from v{Toolbox._paths.PreviousVersion}");
                 Toolbox._paths.PreviousVersion = Toolbox._paths.CurrentVersion;
                 Toolbox._paths.LastUpdated = $"{DateTime.Now.ToLocalTime().ToString("MM-dd-yyyy hh:mm:ss tt")}";
 
@@ -1066,7 +1068,7 @@ namespace PersonalDiscordBot
                     if (Permissions.GeneralPermissions.logChannel != 0)
                     {
                         var channel = (IMessageChannel)client.GetChannel(Permissions.GeneralPermissions.logChannel);
-                        channel.SendMessageAsync($"Bot upgraded to github v{Toolbox._paths.CurrentVersion} from v{prevVersion}");
+                        channel.SendMessageAsync($"Bot upgraded to github v{Toolbox._paths.CurrentVersion} from v{Toolbox._paths.PreviousVersion}");
                     }
                 };
                 worker.RunWorkerAsync();
@@ -1158,6 +1160,7 @@ namespace PersonalDiscordBot
         {
             try
             {
+                Toolbox._paths.Updated = true;
                 Permissions.SerializePermissions();
                 Management.SerializeData();
                 SaveConfig(ConfigType.Paths);
@@ -1165,7 +1168,6 @@ namespace PersonalDiscordBot
                 string updaterLocation = $@"{Directory.GetCurrentDirectory()}\PDBUpdater.exe";
                 Process updater = new Process() { StartInfo = new ProcessStartInfo { FileName = updaterLocation } };
                 updater.Start();
-                Toolbox._paths.Updated = true;
             }
             catch (Exception ex)
             {
@@ -1445,7 +1447,7 @@ namespace PersonalDiscordBot
                     if (!string.IsNullOrWhiteSpace(userName)) { await ChangeName(userName); Toolbox.uDebugAddLog($"Previous bot name used from config: {userName}"); }
                     if (!string.IsNullOrEmpty(playingValue)) { await SetPlaying(playingValue); Toolbox.uDebugAddLog($"Previous bot playing status used from config: {playingValue}"); }
                     Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { txtNameValue.Text = client.CurrentUser.Username; });
-                    Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { txtPlayingValue.Text = client.CurrentUser.Game.HasValue ? client.CurrentUser.Game.Value.Name : string.Empty; });
+                    // Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)delegate { txtPlayingValue.Text = string.IsNullOrWhiteSpace(client.CurrentUser.Activity.Name) ? client.CurrentUser.Activity.Name : string.Empty; });
                     uStatusUpdate("Updated Name and Playing Value");
                 });
                 loginUpdate.Start();
@@ -1453,7 +1455,7 @@ namespace PersonalDiscordBot
                 var token = Toolbox._paths.BotToken;
                 commands = new CommandService();
                 services = new ServiceCollection().BuildServiceProvider();
-                await InstallCommands();
+                await InstallCommands(services);
 
                 // Login and connect to Discord.
                 await client.LoginAsync(TokenType.Bot, token);
@@ -1506,12 +1508,12 @@ namespace PersonalDiscordBot
             }
         }
 
-        private async Task InstallCommands()
+        private async Task InstallCommands(IServiceProvider services)
         {
             try
             {
                 client.MessageReceived += MessageHandler;
-                await commands.AddModulesAsync(Assembly.GetEntryAssembly());
+                await commands.AddModulesAsync(Assembly.GetEntryAssembly(), services);
             }
             catch (Exception ex)
             {

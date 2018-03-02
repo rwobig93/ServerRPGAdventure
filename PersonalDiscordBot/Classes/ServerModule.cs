@@ -110,7 +110,7 @@ namespace PersonalDiscordBot.Classes
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1));
                         Toolbox.uDebugAddLog("Gathering message list");
-                        var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
                         Toolbox.uDebugAddLog("Gathered message list");
                         foreach (IMessage msg in newList)
                         {
@@ -301,7 +301,7 @@ namespace PersonalDiscordBot.Classes
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1));
                         Toolbox.uDebugAddLog("Gathering message list");
-                        var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
                         Toolbox.uDebugAddLog("Gathered message list");
                         foreach (IMessage msg in newList)
                         {
@@ -426,7 +426,7 @@ namespace PersonalDiscordBot.Classes
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1));
                         Toolbox.uDebugAddLog("Gathering message list");
-                        var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
                         Toolbox.uDebugAddLog("Gathered message list");
                         foreach (IMessage msg in newList)
                         {
@@ -545,7 +545,7 @@ namespace PersonalDiscordBot.Classes
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1));
                         Toolbox.uDebugAddLog("Generating message list");
-                        var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
                         Toolbox.uDebugAddLog("Generated message list");
                         foreach (IMessage msg in newList)
                         {
@@ -678,7 +678,7 @@ namespace PersonalDiscordBot.Classes
                     while (!respReceived)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1));
-                        var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
                         foreach (IMessage msg in newList)
                         {
                             if (Context.Message.Author == msg.Author && sentMsg.Timestamp < msg.Timestamp)
@@ -1051,7 +1051,8 @@ namespace PersonalDiscordBot.Classes
                  "```;change weapon{0}Prompts to change weapon```" +
                  "```;change description{0}Change character description```" +
                  "```;change color %color%{0}Change discord embed color{0}(red, blue, black, green, yellow, brown, orange, gold, pink, purple, silver, slategray, white)```" +
-                 "```;change color 00,00,00 (r,g,b)```",
+                 "```;change color 00,00,00 (r,g,b)```" +
+                 "```;leaderboard```",
                  Environment.NewLine
                 );
                 await Context.SendDiscordMessage(_helpArticle);
@@ -1649,7 +1650,7 @@ namespace PersonalDiscordBot.Classes
                     while (!costResponseRecvd)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1));
-                        var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
                         Toolbox.uDebugAddLog("Generated message list");
                         string response = string.Empty;
                         foreach (IMessage msg in newList)
@@ -1692,7 +1693,7 @@ namespace PersonalDiscordBot.Classes
                 while (!responseRecvd)
                 {
                     await Task.Delay(TimeSpan.FromSeconds(1));
-                    var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                    var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
                     Toolbox.uDebugAddLog("Generated message list");
                     string response = string.Empty;
                     foreach (IMessage msg in newList)
@@ -1749,7 +1750,7 @@ namespace PersonalDiscordBot.Classes
                     while (!responseRecvd2)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1));
-                        var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
                         Toolbox.uDebugAddLog("Generated message list");
                         string response = string.Empty;
                         foreach (IMessage msg in newList)
@@ -1786,7 +1787,7 @@ namespace PersonalDiscordBot.Classes
                     while (!responseRecvd3)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1));
-                        var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
                         Toolbox.uDebugAddLog("Generated message list");
                         string response = string.Empty;
                         foreach (IMessage msg in newList)
@@ -1947,7 +1948,7 @@ namespace PersonalDiscordBot.Classes
                     bool verifyRecvd = false;
                     while (!verifyRecvd)
                     {
-                        var msgList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        var msgList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
                         Toolbox.uDebugAddLog("Generated message list");
                         foreach (var msg in msgList)
                         {
@@ -1992,7 +1993,7 @@ namespace PersonalDiscordBot.Classes
                 while (!respRecvd)
                 {
                     await Task.Delay(TimeSpan.FromSeconds(1));
-                    var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                    var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
                     Toolbox.uDebugAddLog("Generated message list");
                     string answer = string.Empty;
                     foreach (IMessage msg in newList)
@@ -2875,7 +2876,7 @@ namespace PersonalDiscordBot.Classes
                     while (!costResponseRecvd)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1));
-                        var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
                         Toolbox.uDebugAddLog("Generated message list");
                         string response = string.Empty;
                         foreach (IMessage msg in newList)
@@ -2918,7 +2919,7 @@ namespace PersonalDiscordBot.Classes
                 while (!responseRecvd)
                 {
                     await Task.Delay(TimeSpan.FromSeconds(1));
-                    var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                    var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
                     Toolbox.uDebugAddLog("Generated message list");
                     string response = string.Empty;
                     foreach (IMessage msg in newList)
@@ -2975,7 +2976,7 @@ namespace PersonalDiscordBot.Classes
                     while (!responseRecvd2)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1));
-                        var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
                         Toolbox.uDebugAddLog("Generated message list");
                         string response = string.Empty;
                         foreach (IMessage msg in newList)
@@ -3012,7 +3013,7 @@ namespace PersonalDiscordBot.Classes
                     while (!responseRecvd3)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(1));
-                        var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
                         Toolbox.uDebugAddLog("Generated message list");
                         string response = string.Empty;
                         foreach (IMessage msg in newList)
@@ -3118,7 +3119,7 @@ namespace PersonalDiscordBot.Classes
                     bool verifyRecvd = false;
                     while (!verifyRecvd)
                     {
-                        var msgList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                        var msgList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
                         Toolbox.uDebugAddLog("Generated message list");
                         foreach (var msg in msgList)
                         {
@@ -3163,7 +3164,7 @@ namespace PersonalDiscordBot.Classes
                 while (!respRecvd)
                 {
                     await Task.Delay(TimeSpan.FromSeconds(1));
-                    var newList = await Context.Channel.GetMessagesAsync(5).Flatten();
+                    var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
                     Toolbox.uDebugAddLog("Generated message list");
                     string answer = string.Empty;
                     foreach (IMessage msg in newList)
@@ -3624,6 +3625,24 @@ namespace PersonalDiscordBot.Classes
             catch (Exception ex)
             {
                 ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        [Command("leaderboard"), Summary("View Leaderboard")]
+        public async Task LeaderBoard()
+        {
+            try
+            {
+                if (!ChannelIsRPGChannel())
+                {
+                    await Context.SendDiscordMessageMention("This channel isn't an RPG channel");
+                    return;
+                }
+                await Context.SendDiscordMessage(Management.GetLeaderboard());
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
             }
         }
 
