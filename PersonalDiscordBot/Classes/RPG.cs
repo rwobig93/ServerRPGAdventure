@@ -1151,12 +1151,12 @@ namespace PersonalDiscordBot.Classes
                     },
                     Color = checkBackPack.owner.CurrentCharacter.Color,
                     Title = checkBackPack.owner.CurrentCharacter.Desc,
-                    Description = $"Backpack Storage: {checkBackPack.owner.CurrentCharacter.Backpack.Stored.Count}/{checkBackPack.owner.CurrentCharacter.Backpack.Capacity}      {Toolbox._paths.CurrencyName}: {checkBackPack.owner.Currency}" +
-                        $"{checkBackPack.itemList}"
+                    Description = $"Backpack Storage:   {checkBackPack.owner.CurrentCharacter.Backpack.Stored.Count} / {checkBackPack.owner.CurrentCharacter.Backpack.Capacity}         {Toolbox._paths.CurrencyName}: {checkBackPack.owner.Currency}" +
+                        $"{checkBackPack.itemList}{Environment.NewLine}"
                 };
                 await context.SendDiscordEmbedMention(embed);
                 Toolbox.uDebugAddLog($"Asking [OwnerCharacter]{checkBackPack.owner.CurrentCharacter} [OwnerID]{checkBackPack.owner.OwnerID} which item to inspect");
-                var pickedItemMsg = await context.Channel.SendMessageAsync($"Please type the item number you wish to inspect or type cancel to exit.");
+                var pickedItemMsg = await context.Channel.SendMessageAsync($"Please type the item number you wish to inspect | type cancel to pick a different type | type exit to exit.");
                 while (!itemPicked)
                 {
                     var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
@@ -1176,10 +1176,18 @@ namespace PersonalDiscordBot.Classes
                             }
                             else if (pickedAnswer.ToLower() == "cancel")
                             {
+                                checkBackPack.step = 1;
+                                Toolbox.uDebugAddLog($"[STEP] is {checkBackPack.step}");
+                                Toolbox.uDebugAddLog($"They typed {pickedAnswer}. [STEP] is {checkBackPack.step}.");
+                                return checkBackPack;
+                            }
+                            else if (pickedAnswer.ToLower() == "exit")
+                            {
                                 checkBackPack.step = 0;
                                 Toolbox.uDebugAddLog($"[STEP] is {checkBackPack.step}");
                                 checkBackPack.plzMakeItStop = true;
-                                Toolbox.uDebugAddLog($"They cancelled the request. [STEP] is {checkBackPack.step}. [PLZMAKEITSTOP] is {checkBackPack.plzMakeItStop}.");
+                                Toolbox.uDebugAddLog($"They exited the request. [STEP] is {checkBackPack.step}. [PLZMAKEITSTOP] is {checkBackPack.plzMakeItStop}.");
+                                await context.SendDiscordMessageMention($"You close your backpack.");
                                 return checkBackPack;
                             }
                             else
@@ -1368,13 +1376,12 @@ namespace PersonalDiscordBot.Classes
         public static async Task<CheckBackPack> CheckBackPackUpdateList(ICommandContext context, CheckBackPack checkBackPack)
         {
             string line = Environment.NewLine;
-            List<IBackPackItem> chosenItems = new List<IBackPackItem>();
             int number = 0;
             checkBackPack.itemList = "";
             if (checkBackPack.owner.CurrentCharacter.Backpack.Stored.Count == 0)  // No items were found
             {
-                Toolbox.uDebugAddLog($"No items of the [TYPE] {checkBackPack.chosenType} were found.");
-                await context.Channel.SendMessageAsync($"No more items were found in your backpack. Please get good.");
+                Toolbox.uDebugAddLog($"No items were found.");
+                await context.Channel.SendMessageAsync($"You have nothing in your backpack. Please get good.");
                 checkBackPack.step = 0;
                 Toolbox.uDebugAddLog($"[STEP] was set to {checkBackPack.step}.");
                 checkBackPack.plzMakeItStop = true;
@@ -1397,15 +1404,14 @@ namespace PersonalDiscordBot.Classes
                         }
                         if (number == 0) // No items of the type were found, but there might be others
                         {
-                            Toolbox.uDebugAddLog($"No {checkBackPack.chosenType}s were found.");
-                            await context.Channel.SendMessageAsync($"No {checkBackPack.chosenType}s were found in your backpack.");
+                            Toolbox.uDebugAddLog($"No {checkBackPack.chosenType} was found.");
+                            await context.Channel.SendMessageAsync($"No {checkBackPack.chosenType} was found in your backpack.");
                             checkBackPack.step = 1; // Send them back to 'CheckBackPackWhatItemsToSee'
                             Toolbox.uDebugAddLog($"[STEP] was set to {checkBackPack.step}.");
                             return checkBackPack;
                         }
                         else
                         {
-                            checkBackPack.items = chosenItems;
                             checkBackPack.step = 2;
                             Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
                             return checkBackPack;
@@ -1423,15 +1429,14 @@ namespace PersonalDiscordBot.Classes
                         }
                         if (number == 0) // No items of the type were found, but there might be others
                         {
-                            Toolbox.uDebugAddLog($"No {checkBackPack.chosenType}s were found.");
-                            await context.Channel.SendMessageAsync($"No {checkBackPack.chosenType}s were found in your backpack.");
+                            Toolbox.uDebugAddLog($"No {checkBackPack.chosenType} were found.");
+                            await context.Channel.SendMessageAsync($"No {checkBackPack.chosenType} were found in your backpack.");
                             checkBackPack.step = 1; // Send them back to 'CheckBackPackWhatItemsToSee'
                             Toolbox.uDebugAddLog($"[STEP] was set to {checkBackPack.step}.");
                             return checkBackPack;
                         }
                         else
                         {
-                            checkBackPack.items = chosenItems;
                             checkBackPack.step = 2;
                             Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
                             return checkBackPack;
@@ -1450,14 +1455,13 @@ namespace PersonalDiscordBot.Classes
                         if (number == 0) // No items of the type were found, but there might be others
                         {
                             Toolbox.uDebugAddLog($"No {checkBackPack.chosenType} were found.");
-                            await context.Channel.SendMessageAsync($"No {checkBackPack.chosenType}s were found in your backpack.");
+                            await context.Channel.SendMessageAsync($"No {checkBackPack.chosenType} were found in your backpack.");
                             checkBackPack.step = 1; // Send them back to 'CheckBackPackWhatItemsToSee'
                             Toolbox.uDebugAddLog($"[STEP] was set to {checkBackPack.step}.");
                             return checkBackPack;
                         }
                         else
                         {
-                            checkBackPack.items = chosenItems;
                             checkBackPack.step = 2;
                             Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
                             return checkBackPack;
@@ -1489,7 +1493,6 @@ namespace PersonalDiscordBot.Classes
                                 checkBackPack = CheckBackPackGenerateListBox(checkBackPack, backPackItem, number);
                             }
                         }
-                        checkBackPack.items = chosenItems;
                         checkBackPack.step = 2;
                         Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
                         return checkBackPack;
@@ -1532,8 +1535,13 @@ namespace PersonalDiscordBot.Classes
             {
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
                 Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} is changing armors, [Current]{owner.CurrentCharacter.Armor.Name} [ChangeTo]{armor.Name} [ID]{owner.OwnerID}");
+                Toolbox.uDebugAddLog($"Adding {owner.CurrentCharacter.Armor.Name} to {owner.CurrentCharacter.Name}'s backpack.");
+                owner.CurrentCharacter.Backpack.Stored.Add(owner.CurrentCharacter.Armor);
+                Toolbox.uDebugAddLog($"Equipping {armor.Name}.");
                 owner.CurrentCharacter.Armor = armor;
-                Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} equipped {armor.Name} [ID]{owner.OwnerID}");
+                Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} has equipped {armor.Name} [ID]{owner.OwnerID}");
+                owner.CurrentCharacter.Backpack.Stored.Remove(owner.CurrentCharacter.Armor);
+                Toolbox.uDebugAddLog($"Removed {owner.CurrentCharacter.Armor.Name} from {owner.CurrentCharacter.Name}'s backpack.");
                 await context.Channel.SendMessageAsync($"{owner.CurrentCharacter.Name} is now wearing a(n) {armor.Name}");
             }
             catch (Exception ex)
@@ -1548,8 +1556,13 @@ namespace PersonalDiscordBot.Classes
             {
                 OwnerProfile owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
                 Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} is changing weapons [Current]{owner.CurrentCharacter.Weapon.Name} [ChangeTo]{weapon.Name} [ID]{owner.OwnerID}");
+                Toolbox.uDebugAddLog($"Adding {owner.CurrentCharacter.Weapon.Name} to {owner.CurrentCharacter.Name}'s backpack.");
+                owner.CurrentCharacter.Backpack.Stored.Add(owner.CurrentCharacter.Weapon);
+                Toolbox.uDebugAddLog($"Equipping {weapon.Name}.");
                 owner.CurrentCharacter.Weapon = weapon;
                 Toolbox.uDebugAddLog($"{owner.CurrentCharacter.Name} has equipped {weapon.Name} [ID]{owner.OwnerID}");
+                owner.CurrentCharacter.Backpack.Stored.Remove(owner.CurrentCharacter.Weapon);
+                Toolbox.uDebugAddLog($"Removed {owner.CurrentCharacter.Weapon.Name} from {owner.CurrentCharacter.Name}'s backpack.");
                 await context.Channel.SendMessageAsync($"{owner.CurrentCharacter.Name} has equipped a(n) {weapon.Name}");
             }
             catch (Exception ex)
