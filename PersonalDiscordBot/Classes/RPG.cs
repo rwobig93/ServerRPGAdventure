@@ -197,6 +197,7 @@ namespace PersonalDiscordBot.Classes
         {
             return LootDrop.LootType.Weapon;
         }
+        public int Count { get; set; } = 1;
     }
 
     public class Spell : IBackPackItem
@@ -239,6 +240,7 @@ namespace PersonalDiscordBot.Classes
         {
             return LootDrop.LootType.Spell;
         }
+        public int Count { get; set; } = 1;
     }
 
     public class Item : IBackPackItem
@@ -321,6 +323,7 @@ namespace PersonalDiscordBot.Classes
         {
             return LootDrop.LootType.Armor;
         }
+        public int Count { get; set; } = 1;
     }
 
     public class Pebble : IBackPackItem
@@ -471,6 +474,7 @@ namespace PersonalDiscordBot.Classes
             bool IsUnique { get; set; }
             int Lvl { get; set; }
             int Worth { get; set; }
+            int Count { get; set; }
         };
         public static Random rng = new Random((int)(DateTime.Now.Ticks & 0x7FFFFFFF));
         public static int maxLevel = 20;
@@ -1147,7 +1151,7 @@ namespace PersonalDiscordBot.Classes
                     },
                     Color = checkBackPack.owner.CurrentCharacter.Color,
                     Title = checkBackPack.owner.CurrentCharacter.Desc,
-                    Description = $"Backpack Storage: {checkBackPack.owner.CurrentCharacter.Backpack.Stored.Count}/{checkBackPack.owner.CurrentCharacter.Backpack.Capacity}      Gold: {checkBackPack.owner.Currency}" +
+                    Description = $"Backpack Storage: {checkBackPack.owner.CurrentCharacter.Backpack.Stored.Count}/{checkBackPack.owner.CurrentCharacter.Backpack.Capacity}      {Toolbox._paths.CurrencyName}: {checkBackPack.owner.Currency}" +
                         $"{checkBackPack.itemList}"
                 };
                 await context.SendDiscordEmbedMention(embed);
@@ -1387,9 +1391,8 @@ namespace PersonalDiscordBot.Classes
                         {
                             if (backPackItem is Armor)
                             {
-                                chosenItems.Add((Armor)backPackItem);
                                 number++;
-                                checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                                checkBackPack = CheckBackPackGenerateListBox(checkBackPack, backPackItem, number);
                             }
                         }
                         if (number == 0) // No items of the type were found, but there might be others
@@ -1414,9 +1417,8 @@ namespace PersonalDiscordBot.Classes
                         {
                             if (backPackItem is Item)
                             {
-                                chosenItems.Add((Item)backPackItem);
                                 number++;
-                                checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                                checkBackPack = CheckBackPackGenerateListBox(checkBackPack, backPackItem, number);
                             }
                         }
                         if (number == 0) // No items of the type were found, but there might be others
@@ -1441,9 +1443,8 @@ namespace PersonalDiscordBot.Classes
                         {
                             if (backPackItem is Weapon)
                             {
-                                chosenItems.Add((Weapon)backPackItem);
                                 number++;
-                                checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                                checkBackPack = CheckBackPackGenerateListBox(checkBackPack, backPackItem, number);
                             }
                         }
                         if (number == 0) // No items of the type were found, but there might be others
@@ -1468,27 +1469,24 @@ namespace PersonalDiscordBot.Classes
                         {
                             if (backPackItem is Armor)
                             {
-                                chosenItems.Add((Armor)backPackItem);
                                 number++;
-                                checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                                checkBackPack = CheckBackPackGenerateListBox(checkBackPack, backPackItem, number);
                             }
                         }
                         foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
                         {
                             if (backPackItem is Weapon)
                             {
-                                chosenItems.Add((Weapon)backPackItem);
                                 number++;
-                                checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                                checkBackPack = CheckBackPackGenerateListBox(checkBackPack, backPackItem, number);
                             }
                         }
                         foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
                         {
                             if (backPackItem is Item)
                             {
-                                chosenItems.Add((Item)backPackItem);
                                 number++;
-                                checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                                checkBackPack = CheckBackPackGenerateListBox(checkBackPack, backPackItem, number);
                             }
                         }
                         checkBackPack.items = chosenItems;
@@ -1509,6 +1507,22 @@ namespace PersonalDiscordBot.Classes
                         Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
                         return checkBackPack;
                 }
+            }
+        }
+
+        public static CheckBackPack CheckBackPackGenerateListBox(CheckBackPack checkBackPack, IBackPackItem backPackItem, int number)
+        {
+            try
+            {
+                checkBackPack.items.Add(backPackItem);
+                checkBackPack.itemList += $"{Environment.NewLine}[{number}]:  {backPackItem.Name}     Quantity: {backPackItem.Count}     Worth: {backPackItem.Worth}" +
+                    $"{Environment.NewLine}Description: {backPackItem.Desc}     {Environment.NewLine}";
+                return checkBackPack;
+            }
+            catch (Exception ex)
+            {
+                Toolbox.FullExceptionLog(ex);
+                return checkBackPack;
             }
         }
 
