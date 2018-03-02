@@ -851,6 +851,20 @@ namespace PersonalDiscordBot.Classes
             return hasBoth;
         }
 
+        public static string GetLeaderboard()
+        {
+            string leaderBoard = $"```{Environment.NewLine}Top 5 Characters By Level:{Environment.NewLine}";
+            List<Character> charList = new List<Character>();
+            foreach (var owner in RPG.Owners)
+                foreach (var character in owner.CharacterList)
+                    charList.Add(character);
+            charList = charList.OrderBy(x => x.Lvl).Take(5).ToList();
+            foreach (var chara in charList)
+                leaderBoard = $"{leaderBoard}Level {chara.Lvl} {chara.Name} ({RPG.Owners.Find(x => x.OwnerID == chara.OwnerID).OwnerUN}){Environment.NewLine}";
+            leaderBoard += "```";
+            return leaderBoard;
+        }
+
         #endregion
 
         #region Character Methods
@@ -1092,7 +1106,7 @@ namespace PersonalDiscordBot.Classes
                 bool msgResp = false;
                 while (!msgResp)
                 {
-                    var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
+                    var msgList = await context.Channel.GetMessagesAsync(5).FlattenAsync();
                     foreach (var msg7 in msgList)
                     {
                         if ((msg7.Author == context.Message.Author) && (msg7.Timestamp.DateTime > backpackMsg.Timestamp.DateTime) && (!respondeded.Contains(msg7)))
@@ -1155,7 +1169,7 @@ namespace PersonalDiscordBot.Classes
                 var pickedItemMsg = await context.Channel.SendMessageAsync($"Please type the item number you wish to inspect or type cancel to exit.");
                 while (!itemPicked)
                 {
-                    var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
+                    var msgList = await context.Channel.GetMessagesAsync(5).FlattenAsync();
                     foreach (var msg in msgList)
                     {
                         if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > pickedItemMsg.Timestamp.DateTime) && (!respondeded.Contains(msg)))
@@ -1256,7 +1270,7 @@ namespace PersonalDiscordBot.Classes
 
                 while (!decidedWhatToDo)
                 {
-                    var msgList2 = await context.Channel.GetMessagesAsync(5).Flatten();
+                    var msgList2 = await context.Channel.GetMessagesAsync(5).FlattenAsync();
                     foreach (var msg2 in msgList2)
                     {
                         if ((msg2.Author == context.Message.Author) && (msg2.Timestamp.DateTime > whatToDo.Timestamp.DateTime) && (!respondeded.Contains(msg2)))
@@ -1593,7 +1607,7 @@ namespace PersonalDiscordBot.Classes
                         var timeStamp4 = DateTime.Now;
                         while (!pickedHowManyToSell)
                         {
-                            var msgList3 = await context.Channel.GetMessagesAsync(5).Flatten();
+                            var msgList3 = await context.Channel.GetMessagesAsync(5).FlattenAsync();
                             foreach (var msg3 in msgList3)
                             {
                                 if ((msg3.Author == context.Message.Author) && (msg3.Timestamp.DateTime > howManyToSell.Timestamp.DateTime) && (!respondeded.Contains(msg3)))
@@ -1752,7 +1766,7 @@ namespace PersonalDiscordBot.Classes
                         var timeStamp4 = DateTime.Now;
                         while (!pickedHowManyToTrash)
                         {
-                            var msgList3 = await context.Channel.GetMessagesAsync(5).Flatten();
+                            var msgList3 = await context.Channel.GetMessagesAsync(5).FlattenAsync();
                             foreach (var msg3 in msgList3)
                             {
                                 if ((msg3.Author == context.Message.Author) && (msg3.Timestamp.DateTime > howManyToTrash.Timestamp.DateTime) && (!respondeded.Contains(msg3)))
@@ -2457,7 +2471,7 @@ namespace PersonalDiscordBot.Classes
                     bool lootResp = false;
                     while (!lootResp)
                     {
-                        var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
+                        var msgList = await context.Channel.GetMessagesAsync(5).FlattenAsync();
                         foreach (var msg in msgList)
                         {
                             if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > lootMsg.Timestamp.DateTime) && (!responded.Contains(msg)))
@@ -2583,7 +2597,7 @@ namespace PersonalDiscordBot.Classes
                 var sendMsg = await context.Channel.SendMessageAsync(itemsString);
                 while (!itemResp)
                 {
-                    var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
+                    var msgList = await context.Channel.GetMessagesAsync(5).FlattenAsync();
                     foreach (var msg in msgList)
                     {
                         if ((msg.Author == context.Message.Author) && (msg.Timestamp.DateTime > sendMsg.Timestamp.DateTime))
@@ -2649,7 +2663,7 @@ namespace PersonalDiscordBot.Classes
                 bool responded = false;
                 while (!responded)
                 {
-                    var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
+                    var msgList = await context.Channel.GetMessagesAsync(5).FlattenAsync();
                     foreach (var msg in msgList)
                         if (msg.Author == context.Message.Author && msg.Timestamp.DateTime > sentMsg.Timestamp.DateTime && !respondedList.Contains(msg))
                         {
@@ -2713,7 +2727,7 @@ namespace PersonalDiscordBot.Classes
                 bool responded = false;
                 while (!responded)
                 {
-                    var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
+                    var msgList = await context.Channel.GetMessagesAsync(5).FlattenAsync();
                     foreach (var msg in msgList)
                         if (msg.Author == context.Message.Author && msg.Timestamp.DateTime > sentMsg.Timestamp.DateTime && !respondedList.Contains(msg))
                         {
@@ -2755,7 +2769,7 @@ namespace PersonalDiscordBot.Classes
             bool setupDone = false;
             while (!setupDone)
             {
-                var msgList = await context.Channel.GetMessagesAsync(5).Flatten();
+                var msgList = await context.Channel.GetMessagesAsync(5).FlattenAsync();
                 foreach (var msg in msgList)
                     if (msg.Author == context.User && msg.Timestamp.DateTime > sentMsg.Timestamp.DateTime && !respondedList.Contains(sentMsg))
                     {
