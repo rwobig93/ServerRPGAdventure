@@ -1045,43 +1045,27 @@ namespace PersonalDiscordBot.Classes
             CheckBackPack checkBackPack = new CheckBackPack();
             string line = Environment.NewLine;
             checkBackPack.owner = RPG.Owners.Find(x => x.OwnerID == context.Message.Author.Id);
-            int count = 1;
-            int ret = 1;
-            await context.SendDiscordMessageMention($"[COUNT]{count} Starting the while loop.");
-            count++;
             while (!checkBackPack.plzMakeItStop) // When stopping loop, set 'int step' to 0
             {
                 
                 if (checkBackPack.step == 1)
                 {
-                    await context.SendDiscordMessageMention($"[COUNT]{count} Starting the CheckBackPackWhatItemsToSee function.");
-                    count++;
                     // This method needs to create a new list of objects and overwrite 'List<IBackPackItem> items' with the new list when looping
                     Toolbox.uDebugAddLog($"Calling CheckBackPackWhatItemsToSee for [UN]{checkBackPack.owner.OwnerUN} [ID]{checkBackPack.owner.OwnerID}{line}");
                     Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
                     checkBackPack = await CheckBackPackWhatItemsToSee(context, checkBackPack);
-                    await context.SendDiscordMessageMention($"Returned checkBackPack [RET]{ret} times.");
-                    ret++;
                 }
                 else if (checkBackPack.step == 2)
                 {
-                    await context.SendDiscordMessageMention($"[COUNT]{count} Starting the CheckBackPackAskWhichItem function.");
-                    count++;
                     Toolbox.uDebugAddLog($"Calling CheckBackPackAskWhichItem for [UN]{checkBackPack.owner.OwnerUN} [ID]{checkBackPack.owner.OwnerID}{line}");
                     Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
                     checkBackPack = await CheckBackPackAskWhichItem(context, checkBackPack);
-                    await context.SendDiscordMessageMention($"Returned checkBackPack [RET]{ret} times.");
-                    ret++;
                 }
                 else if (checkBackPack.step == 3)
                 {
-                    await context.SendDiscordMessageMention($"[COUNT]{count} Starting the CheckBackPackWhatToDo function.");
-                    count++;
                     Toolbox.uDebugAddLog($"Calling CheckBackPackWhatToDo for [UN]{checkBackPack.owner.OwnerUN} [ID]{checkBackPack.owner.OwnerID}{line}");
                     Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
                     checkBackPack = await CheckBackPackWhatToDo(context, checkBackPack);
-                    await context.SendDiscordMessageMention($"Returned checkBackPack [RET]{ret} times.");
-                    ret++;
                 }
                 else
                 {
@@ -1383,13 +1367,7 @@ namespace PersonalDiscordBot.Classes
             List<IBackPackItem> chosenItems = new List<IBackPackItem>();
             int number = 0;
             checkBackPack.itemList = "";
-            int count = 1;
-            foreach (IBackPackItem itemIsIn in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
-            {
-                await context.Channel.SendMessageAsync($"Found {count} {itemIsIn.Name} in {checkBackPack.owner.CurrentCharacter.Name}'s backpack. Ah ah ah.");
-                count++;
-            }
-            if (count == 1 && checkBackPack.chosenType == "all")  // No items were found
+            if (checkBackPack.owner.CurrentCharacter.Backpack.Stored.Count == 0)  // No items were found
             {
                 Toolbox.uDebugAddLog($"No items of the [TYPE] {checkBackPack.chosenType} were found.");
                 await context.Channel.SendMessageAsync($"No more items were found in your backpack. Please get good.");
@@ -1399,110 +1377,138 @@ namespace PersonalDiscordBot.Classes
                 Toolbox.uDebugAddLog($"[PLZMAKEITSTOP] was set to {checkBackPack.plzMakeItStop}.");
                 return checkBackPack;
             }
-            else if (count == 1 && checkBackPack.chosenType != "all")
+            else
             {
-                Toolbox.uDebugAddLog($"No {checkBackPack.chosenType}s were found.");
-                await context.Channel.SendMessageAsync($"No {checkBackPack.chosenType}s were found in your backpack.");
-                checkBackPack.step = 1; // Send them back to 'CheckBackPackWhatItemsToSee'
-                Toolbox.uDebugAddLog($"[STEP] was set to {checkBackPack.step}.");
-                return checkBackPack;
-            }
-            switch (checkBackPack.chosenType)
-            {
-                case "armor":
-                    Toolbox.uDebugAddLog($"Building list of Armor.");
-                    foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
-                    {
-                        if (backPackItem is Armor)
+                switch (checkBackPack.chosenType)
+                {
+                    case "armor":
+                        Toolbox.uDebugAddLog($"Building list of Armor.");
+                        foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
                         {
-                            chosenItems.Add((Armor)backPackItem);
-                            number++;
-                            checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            if (backPackItem is Armor)
+                            {
+                                chosenItems.Add((Armor)backPackItem);
+                                number++;
+                                checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            }
                         }
-                    }
-                    checkBackPack.items = chosenItems;
-                    checkBackPack.step = 2;
-                    Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
-                    return checkBackPack;
+                        if (number == 0) // No items of the type were found, but there might be others
+                        {
+                            Toolbox.uDebugAddLog($"No {checkBackPack.chosenType}s were found.");
+                            await context.Channel.SendMessageAsync($"No {checkBackPack.chosenType}s were found in your backpack.");
+                            checkBackPack.step = 1; // Send them back to 'CheckBackPackWhatItemsToSee'
+                            Toolbox.uDebugAddLog($"[STEP] was set to {checkBackPack.step}.");
+                            return checkBackPack;
+                        }
+                        else
+                        {
+                            checkBackPack.items = chosenItems;
+                            checkBackPack.step = 2;
+                            Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                            return checkBackPack;
+                        }
 
-                case "items":
-                    Toolbox.uDebugAddLog($"Building list of Items.");
-                    foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
-                    {
-                        if (backPackItem is Item)
+                    case "items":
+                        Toolbox.uDebugAddLog($"Building list of Items.");
+                        foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
                         {
-                            chosenItems.Add((Item)backPackItem);
-                            number++;
-                            checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            if (backPackItem is Item)
+                            {
+                                chosenItems.Add((Item)backPackItem);
+                                number++;
+                                checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            }
                         }
-                    }
-                    checkBackPack.items = chosenItems;
-                    checkBackPack.step = 2;
-                    Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
-                    return checkBackPack;
+                        if (number == 0) // No items of the type were found, but there might be others
+                        {
+                            Toolbox.uDebugAddLog($"No {checkBackPack.chosenType}s were found.");
+                            await context.Channel.SendMessageAsync($"No {checkBackPack.chosenType}s were found in your backpack.");
+                            checkBackPack.step = 1; // Send them back to 'CheckBackPackWhatItemsToSee'
+                            Toolbox.uDebugAddLog($"[STEP] was set to {checkBackPack.step}.");
+                            return checkBackPack;
+                        }
+                        else
+                        {
+                            checkBackPack.items = chosenItems;
+                            checkBackPack.step = 2;
+                            Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                            return checkBackPack;
+                        }                        
 
-                case "weapons":
-                    Toolbox.uDebugAddLog($"Building list of Weapons.");
-                    foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
-                    {
-                        if (backPackItem is Weapon)
+                    case "weapons":
+                        Toolbox.uDebugAddLog($"Building list of Weapons.");
+                        foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
                         {
-                            chosenItems.Add((Weapon)backPackItem);
-                            number++;
-                            checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            if (backPackItem is Weapon)
+                            {
+                                chosenItems.Add((Weapon)backPackItem);
+                                number++;
+                                checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            }
                         }
-                    }
-                    checkBackPack.items = chosenItems;
-                    checkBackPack.step = 2;
-                    Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
-                    return checkBackPack;
+                        if (number == 0) // No items of the type were found, but there might be others
+                        {
+                            Toolbox.uDebugAddLog($"No {checkBackPack.chosenType} were found.");
+                            await context.Channel.SendMessageAsync($"No {checkBackPack.chosenType}s were found in your backpack.");
+                            checkBackPack.step = 1; // Send them back to 'CheckBackPackWhatItemsToSee'
+                            Toolbox.uDebugAddLog($"[STEP] was set to {checkBackPack.step}.");
+                            return checkBackPack;
+                        }
+                        else
+                        {
+                            checkBackPack.items = chosenItems;
+                            checkBackPack.step = 2;
+                            Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                            return checkBackPack;
+                        }
 
-                case "all":
-                    Toolbox.uDebugAddLog($"Building list of Everything.");
-                    foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
-                    {
-                        if (backPackItem is Armor)
+                    case "all":
+                        Toolbox.uDebugAddLog($"Building list of Everything.");
+                        foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
                         {
-                            chosenItems.Add((Armor)backPackItem);
-                            number++;
-                            checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            if (backPackItem is Armor)
+                            {
+                                chosenItems.Add((Armor)backPackItem);
+                                number++;
+                                checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            }
                         }
-                    }
-                    foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
-                    {
-                        if (backPackItem is Weapon)
+                        foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
                         {
-                            chosenItems.Add((Weapon)backPackItem);
-                            number++;
-                            checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            if (backPackItem is Weapon)
+                            {
+                                chosenItems.Add((Weapon)backPackItem);
+                                number++;
+                                checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            }
                         }
-                    }
-                    foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
-                    {
-                        if (backPackItem is Item)
+                        foreach (IBackPackItem backPackItem in checkBackPack.owner.CurrentCharacter.Backpack.Stored)
                         {
-                            chosenItems.Add((Item)backPackItem);
-                            number++;
-                            checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            if (backPackItem is Item)
+                            {
+                                chosenItems.Add((Item)backPackItem);
+                                number++;
+                                checkBackPack.itemList = checkBackPack.itemList + $"{line}[{number}]:     Name: {backPackItem.Name}     Description: {backPackItem.Desc}     Worth: {backPackItem.Worth}{line}";
+                            }
                         }
-                    }
-                    checkBackPack.items = chosenItems;
-                    checkBackPack.step = 2;
-                    Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
-                    return checkBackPack;
+                        checkBackPack.items = chosenItems;
+                        checkBackPack.step = 2;
+                        Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                        return checkBackPack;
 
-                case "cancel":
-                    checkBackPack.step = 0;
-                    Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
-                    checkBackPack.plzMakeItStop = true;
-                    return checkBackPack;
+                    case "cancel":
+                        checkBackPack.step = 0;
+                        Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                        checkBackPack.plzMakeItStop = true;
+                        return checkBackPack;
 
-                default:
-                    Toolbox.uDebugAddLog($"{checkBackPack.chosenType} doesn't match one of the choices.");
-                    await context.SendDiscordMessageMention($"The response didn't match one of the options. Please try again.");
-                    checkBackPack.step = 1;
-                    Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
-                    return checkBackPack;
+                    default:
+                        Toolbox.uDebugAddLog($"{checkBackPack.chosenType} doesn't match one of the choices.");
+                        await context.SendDiscordMessageMention($"The response didn't match one of the options. Please try again.");
+                        checkBackPack.step = 1;
+                        Toolbox.uDebugAddLog($"[STEP] is set to {checkBackPack.step}");
+                        return checkBackPack;
+                }
             }
         }
 
