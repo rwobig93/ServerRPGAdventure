@@ -168,6 +168,43 @@ namespace PersonalDiscordBot.Classes
                 Toolbox.FullExceptionLog(ex);
             }
         }
+
+        public static async Task<string> AskDiscordQuestion(this ICommandContext context, string question, Int32 minutesToWait = 1)
+        {
+            Toolbox.uDebugAddLog($"Asking Discord Question | [User]{context.User.Username}({context.User.Id}) | Question: {question} | WaitMins: {minutesToWait}");
+            var sentQuestion = await context.Channel.SendMessageAsync($"{context.User.Mention} {question}");
+            DateTime timeStamp = DateTime.Now;
+            bool responseReceived = false;
+            string response = string.Empty;
+            while (!responseReceived)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(1));
+                var newList = await context.Channel.GetMessagesAsync(5).FlattenAsync();
+                Toolbox.uDebugAddLog("Generated message list");
+                foreach (IMessage msg in newList)
+                {
+                    if ((context.Message.Author == msg.Author) && (sentQuestion.Timestamp.DateTime < msg.Timestamp.DateTime))
+                    {
+                        response = msg.Content.ToString();
+                        Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
+                        Toolbox.uDebugAddLog($"Response: {response}");
+                        responseReceived = true;
+                        if (response.ToLower() == "no" || response.ToLower() == "cancel" || response.ToLower() == "stop")
+                        {
+                            await context.SendDiscordMessage($"{context.User.Mention} Operation cancelled");
+                            return null;
+                        }
+                    }
+                }
+                if (timeStamp + TimeSpan.FromMinutes(minutesToWait) <= DateTime.Now)
+                {
+                    Toolbox.uDebugAddLog($"Response wasn't received from {context.Message.Author.Username} ({context.Message.Author.Id}) within {minutesToWait}min, cancelled question");
+                    await context.SendDiscordMessageMention($"A valid response wasn't received within {minutesToWait}min, cancelling...");
+                    return null;
+                }
+            }
+            return response;
+        }
     }
 
     public class StatusUpdater : INotifyPropertyChanged

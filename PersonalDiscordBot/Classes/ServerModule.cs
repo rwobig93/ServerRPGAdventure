@@ -137,7 +137,7 @@ namespace PersonalDiscordBot.Classes
                             return;
                         }
                     }
-                    GameServer chosenServ = servsFound[servNumber -1];
+                    GameServer chosenServ = servsFound[servNumber - 1];
                     if (string.IsNullOrWhiteSpace(chosenServ.ServerBatchPath) || string.IsNullOrWhiteSpace(chosenServ.ServerProcName) || string.IsNullOrWhiteSpace(chosenServ.ServerExe))
                     {
                         await Context.Channel.SendMessageAsync(string.Format("The game server {0} isn't setup for reboot functionality, please ask the server admin to add the exectuable/batch paths and process name to allow this functionality.", chosenServ.ServerName));
@@ -231,7 +231,7 @@ namespace PersonalDiscordBot.Classes
                     Toolbox.RemoveRebootedServer(rebServ);
                     await Context.Channel.SendMessageAsync(string.Format("Successfully started the game server {0}, please wait for the server to boot up. I will check on the status automatically and let you know what I find, otherwise you can manually check the status by using the command ;server status {1}", chosenServ.ServerName, chosenServ.Game));
                     CheckOnServer(Context, chosenServ);
-                } 
+                }
                 #endregion
             }
             catch (Exception ex)
@@ -360,7 +360,7 @@ namespace PersonalDiscordBot.Classes
             }
 
         }
-        
+
         [Command("logs"), Summary("Get's the game logs from the chosen game server")]
         public async Task GetLogs(string count, [Remainder]string gameServer)
         {
@@ -844,7 +844,7 @@ namespace PersonalDiscordBot.Classes
                 if (_fI.Extension.ToLower() == ".txt" || _fI.Extension.ToLower() == ".log")
                     _returnList.Add(_fI);
             }
-            
+
             return _returnList.OrderByDescending(x => x.CreationTime).ToList().Take(logCount).ToList();
         }
 
@@ -885,7 +885,7 @@ namespace PersonalDiscordBot.Classes
                  "{0}```╬▧۩ Help Articles ۩▨╬```{0}" +
                  "```;help server{0}Shows game server commands, now you have the powah```" +
                  "```;help general{0}General commands regarding the bot or misc functions, remember I'm your buddy friend pal```" +
-                 "```;help translate{0}Text/Message translation methods, leetify your snoop game yo```"+
+                 "```;help translate{0}Text/Message translation methods, leetify your snoop game yo```" +
                  "```;help rpg{0}Show RPG game commands```",
                  Environment.NewLine
                 );
@@ -950,7 +950,7 @@ namespace PersonalDiscordBot.Classes
                 ServerModule.FullExceptionLog(ex);
             }
         }
-        
+
         [Command("translate"), Summary("Translate Commands")]
         public async Task DefHelpTranslate()
         {
@@ -1325,6 +1325,82 @@ namespace PersonalDiscordBot.Classes
             }
         }
     }
+
+    [Group("picklerick"), Summary("He who is glorious show's himself")]
+    public class PickleRickModule : ModuleBase
+    {
+        [Command(""), Summary("Default Entry")]
+        public async Task Speak()
+        {
+            try
+            {
+                await JoinVoiceChannel("picklerick");
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+        }
+
+        private Process CreateAudioStream(string audioPath)
+        {
+            return Process.Start(new ProcessStartInfo
+            {
+                FileName = $@"{Directory.GetCurrentDirectory()}\Dependencies\ffmpeg.exe",
+                Arguments = $@"-hide_banner -loglevel panic -i {Directory.GetCurrentDirectory()}\Dependencies\{audioPath}.wav -ac 2 -f s16le -ar 48000 pipe:1",
+                UseShellExecute = false,
+                RedirectStandardOutput = true
+            });
+        }
+
+        private async Task JoinVoiceChannel(string audioFile, IVoiceChannel voiceChannel = null)
+        {
+            Discord.Audio.IAudioClient audioClient = null;
+            try
+            {
+                voiceChannel = voiceChannel ?? (Context.Message.Author as IGuildUser)?.VoiceChannel;
+                if (voiceChannel == null) { await Context.SendDiscordMessageMention("You must be in a voice channel to use this command!"); }
+                audioClient = await voiceChannel.ConnectAsync();
+                if (!File.Exists($@"{Directory.GetCurrentDirectory()}\Dependencies\{audioFile}.wav"))
+                { await Context.SendDiscordMessageMention("audio file not found"); await audioClient.StopAsync(); return; }
+                //await Context.SendDiscordMessageMention("Connected to audio channel");
+                //await Task.Delay(5000);
+                //await Context.SendDiscordMessageMention("Disconnecting from audio channel");
+                //await audioClient.StopAsync();
+                using (var ffmpeg = CreateAudioStream(audioFile))
+                using (var output = ffmpeg.StandardOutput.BaseStream)
+                using (var discord = audioClient.CreatePCMStream(Discord.Audio.AudioApplication.Mixed))
+                {
+                    try
+                    {
+                        await Context.SendDiscordMessageMention("Connected and playing audio");
+                        await output.CopyToAsync(discord);
+                        await Task.Delay(3000);
+                        await Context.SendDiscordMessageMention("Finished playing audio, disconnecting");
+                    }
+                    finally
+                    {
+                        await Context.SendDiscordMessageMention("Flushing audio queue");
+                        await discord.FlushAsync();
+                        await Context.SendDiscordMessageMention("Disconnecting from audio channel");
+                        await audioClient.StopAsync();
+                        await Context.SendDiscordMessageMention("Disconnected from audio channel");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ServerModule.FullExceptionLog(ex);
+            }
+            finally
+            {
+                if (audioClient != null)
+                    await audioClient.StopAsync();
+            }
+        }
+
+
+    }
     #endregion
 
     #region RPG Testing
@@ -1374,7 +1450,7 @@ namespace PersonalDiscordBot.Classes
                         Toolbox.uDebugAddLog($"Invalid User: {userFound.Username} | {userID}");
                         await Context.SendDiscordMessage($"{userID} doesn't match a discord user on your server");
                         return;
-                    } 
+                    }
                     Toolbox.uDebugAddLog($"MentionedUser: {mentionedUser}");
                     int foundUsers = 0;
                     foreach (var admin in Permissions.Administrators)
@@ -1641,193 +1717,87 @@ namespace PersonalDiscordBot.Classes
                         await Context.SendDiscordMessage($"A new character for you costs {cost} currency but you only have {ownerProfile.Currency}, please get good");
                         return;
                     }
-                    Toolbox.uDebugAddLog($"SENDINGMESSAGE: It will cost you {cost} currency to create a new character, would you still like to create a character? (Yes/No) (You have {ownerProfile.Currency} currently) [ID]{Context.User.Id} [Name]{Context.User.Username}");
-                    var costQuestion = await Context.Channel.SendMessageAsync(
-                        $"It will cost you {cost} currency to create a new character, would you still like to create a character? (Yes/No){line}" +
-                        $"(You have {ownerProfile.Currency} currently)");
-                    DateTime costTimeStamp = DateTime.Now;
-                    bool costResponseRecvd = false;
-                    while (!costResponseRecvd)
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(1));
-                        var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
-                        Toolbox.uDebugAddLog("Generated message list");
-                        string response = string.Empty;
-                        foreach (IMessage msg in newList)
-                        {
-                            if ((Context.Message.Author == msg.Author) && (costQuestion.Timestamp.DateTime < msg.Timestamp.DateTime))
-                            {
-                                response = msg.Content.ToString();
-                                Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
-                                Toolbox.uDebugAddLog($"Response: {response}");
-                                costResponseRecvd = true;
-                                if (response.ToLower() == "no")
-                                {
-                                    await Context.SendDiscordMessage($"{Context.User.Mention} Operation cancelled");
-                                    return;
-                                }
-                            }
-                        }
-                        if (costTimeStamp + TimeSpan.FromSeconds(60) <= DateTime.Now)
-                        {
-                            Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 60s, canceled character creation");
-                            await Context.SendDiscordMessageMention($"A valid response wasn't received within 60 seconds, canceling creation request");
-                            return;
-                        }
-                    }
+                    var costQuestion = $"It will cost you {cost} currency to create a new character, would you still like to create a character? (Yes/No){line}" +
+                        $"(You have {ownerProfile.Currency} currently)";
+                    var costAnswer = await Context.AskDiscordQuestion(costQuestion);
+                    if (costAnswer == null)
+                        return;
                 }
-                var sentMsg = await Context.Channel.SendMessageAsync(
-                    $"What class would you like your new adventurer to be?{line}" +
+                var classQuestion = $"What class would you like your new adventurer to be?{line}" +
                     $"```Class: Warrior{line}Focus on Strength/Melee Damage, Higher Loot Chance: Swords, Greatswords, Katanas```" +
                     $"```Class: Dragoon{line}Focus on Dexterity/Elements, Higher Loot Chance: Spears, DragonSpears, Twinswords```" +
                     $"```Class: Mage{line}Focus on All Spells, Higher Loot Chance: Staffs, FocusStones```" +
                     $"```Class: Necromancer{line}Focus on Attack Spells/Summonding, Higher Loot Chance: FocusStones, Staffs```" +
-                    $"```Class: Rogue{line}Focus on Speed/Dexterity, Higher Loot Chance: Dagger, TwinSwords```"
-                    );
-                bool responseRecvd = false;
-                bool nameChosen = false;
-                string charName = string.Empty;
-                List<IMessage> respondedList = new List<IMessage>();
-                DateTime timeStamp = DateTime.Now;
+                    $"```Class: Rogue{line}Focus on Speed/Dexterity, Higher Loot Chance: Dagger, TwinSwords```";
                 RPG.CharacterClass chosenClass = 0;
-                while (!responseRecvd)
+                var classChosen = false;
+                while (!classChosen)
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(1));
-                    var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
-                    Toolbox.uDebugAddLog("Generated message list");
-                    string response = string.Empty;
-                    foreach (IMessage msg in newList)
-                    {
-                        if ((Context.Message.Author == msg.Author) && (sentMsg.Timestamp.DateTime < msg.Timestamp.DateTime) && (!respondedList.Contains(msg)))
-                        {
-                            respondedList.Add(msg);
-                            Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
-                            Toolbox.uDebugAddLog($"Before response: {msg.Content.ToString()}");
-                            response = Regex.Replace(msg.Content.ToString(), @"\s+", "");
-                            Toolbox.uDebugAddLog($"After response: {response}");
-                            response = response.ToLower();
-                            switch (response)
-                            {
-                                case "warrior":
-                                    chosenClass = RPG.CharacterClass.Warrior;
-                                    responseRecvd = true;
-                                    break;
-                                case "dragoon":
-                                    chosenClass = RPG.CharacterClass.Dragoon;
-                                    responseRecvd = true;
-                                    break;
-                                case "mage":
-                                    chosenClass = RPG.CharacterClass.Mage;
-                                    responseRecvd = true;
-                                    break;
-                                case "necromancer":
-                                    chosenClass = RPG.CharacterClass.Necromancer;
-                                    responseRecvd = true;
-                                    break;
-                                case "rogue":
-                                    chosenClass = RPG.CharacterClass.Rogue;
-                                    responseRecvd = true;
-                                    break;
-                                default:
-                                    await Context.SendDiscordMessage($"{response} isn't a valid response, please try again");
-                                    break;
-                            }
-                        }
-                    }
-                    if (timeStamp + TimeSpan.FromSeconds(60) <= DateTime.Now)
-                    {
-                        Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 60s, canceled character creation");
-                        await Context.SendDiscordMessageMention($"A valid response wasn't received within 60 seconds, canceling creation request");
+                    var classAnswer = await Context.AskDiscordQuestion(classQuestion);
+                    if (classAnswer == null)
                         return;
+                    switch (classAnswer.ToLower())
+                    {
+                        case "warrior":
+                            chosenClass = RPG.CharacterClass.Warrior;
+                            classChosen = true;
+                            break;
+                        case "dragoon":
+                            chosenClass = RPG.CharacterClass.Dragoon;
+                            classChosen = true;
+                            break;
+                        case "mage":
+                            chosenClass = RPG.CharacterClass.Mage;
+                            classChosen = true;
+                            break;
+                        case "necromancer":
+                            chosenClass = RPG.CharacterClass.Necromancer;
+                            classChosen = true;
+                            break;
+                        case "rogue":
+                            chosenClass = RPG.CharacterClass.Rogue;
+                            classChosen = true;
+                            break;
+                        default:
+                            await Context.SendDiscordMessage($"{classAnswer} isn't a valid response, please try again");
+                            break;
                     }
                 }
+                bool nameChosen = false;
+                string charName = string.Empty;
                 while (!nameChosen)
                 {
-                    DateTime nameTimeStamp = DateTime.Now;
-                    var nameQuestion = await Context.Channel.SendMessageAsync($"What can we call your {chosenClass}?");
-                    bool responseRecvd2 = false;
-                    DateTime timeStamp2 = DateTime.Now;
-                    while (!responseRecvd2)
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(1));
-                        var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
-                        Toolbox.uDebugAddLog("Generated message list");
-                        string response = string.Empty;
-                        foreach (IMessage msg in newList)
-                        {
-                            if ((Context.Message.Author == msg.Author) && (nameQuestion.Timestamp.DateTime < msg.Timestamp.DateTime) && (!respondedList.Contains(msg)))
-                            {
-                                respondedList.Add(msg);
-                                response = msg.Content.ToString();
-                                Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
-                                Toolbox.uDebugAddLog($"Response: {response}");
-                                if (response == "Testiculees teh Great")
-                                {
-                                    await Context.SendDiscordMessage($"{Context.User.Mention} Nice try but you are not the great one, that power is beyond your reach!");
-                                    Toolbox.uDebugAddLog($"{Context.User.Username} tried to recreate Testiculees and we told them no [ID]{Context.User.Id}");
-                                }
-                                else
-                                {
-                                    Toolbox.uDebugAddLog($"Valid response recieved, setting Character name [ID]{Context.User.Id}");
-                                    charName = response;
-                                    responseRecvd2 = true;
-                                }
-                            }
-                        }
-                        if (timeStamp2 + TimeSpan.FromSeconds(60) <= DateTime.Now)
-                        {
-                            Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 60s, canceled character creation");
-                            await Context.SendDiscordMessageMention($"A valid response wasn't received within 60 seconds, canceling creation request");
-                            return;
-                        }
-                    }
-                    var verification = await Context.Channel.SendMessageAsync($"Would you like your {chosenClass} to be called \"{charName}\"? (Yes/No)");
-                    bool responseRecvd3 = false;
-                    DateTime timeStamp3 = DateTime.Now;
-                    while (!responseRecvd3)
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(1));
-                        var newList = await Context.Channel.GetMessagesAsync(5).FlattenAsync();
-                        Toolbox.uDebugAddLog("Generated message list");
-                        string response = string.Empty;
-                        foreach (IMessage msg in newList)
-                        {
-                            if ((Context.Message.Author == msg.Author) && (verification.Timestamp.DateTime < msg.Timestamp.DateTime) && (!respondedList.Contains(msg)))
-                            {
-                                respondedList.Add(msg);
-                                response = msg.Content.ToString();
-                                Toolbox.uDebugAddLog("Found message from OP with a newer DateTime than the original message");
-                                Toolbox.uDebugAddLog($"Response: {response}");
-                                switch (response.ToLower())
-                                {
-                                    case "yes":
-                                        nameChosen = true;
-                                        responseRecvd3 = true;
-                                        break;
-                                    case "no":
-                                        nameChosen = false;
-                                        responseRecvd3 = true;
-                                        break;
-                                    default:
-                                        nameChosen = false;
-                                        responseRecvd3 = false;
-                                        await Context.SendDiscordMessage($"{response} isn't a valid response, please try again");
-                                        break;
-                                }
-                            }
-                        }
-                        if (timeStamp3 + TimeSpan.FromSeconds(60) <= DateTime.Now)
-                        {
-                            Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 60s, canceled character creation");
-                            await Context.SendDiscordMessageMention($"A valid response wasn't received within 60 seconds, canceling creation request");
-                            return;
-                        }
-                    }
-                    if (nameTimeStamp + TimeSpan.FromMinutes(5) <= DateTime.Now)
-                    {
-                        Toolbox.uDebugAddLog($"Response wasn't received from {Context.Message.Author.Username} ({Context.Message.Author.Id}) within 5min, canceled character creation");
-                        await Context.SendDiscordMessageMention($"A valid response wasn't received within 60 seconds, canceling creation request");
+                    var nameQuestion = $"What can we call your {chosenClass}?";
+                    var nameAnswer = await Context.AskDiscordQuestion(nameQuestion);
+                    if (nameAnswer == null)
                         return;
+                    if (nameAnswer == "Testiculees teh Great")
+                    {
+                        await Context.SendDiscordMessage($"{Context.User.Mention} Nice try but you are not the great one, that power is beyond your reach!");
+                        Toolbox.uDebugAddLog($"{Context.User.Username} tried to recreate Testiculees and we told them no [ID]{Context.User.Id}");
+                        return;
+                    }
+                    else
+                    {
+                        Toolbox.uDebugAddLog($"Valid response recieved, setting Character name [ID]{Context.User.Id}");
+                        charName = nameAnswer;
+                    }
+                    var verifyNameQuestion = $"Would you like your {chosenClass} to be called \"{charName}\"? (Yes/No)";
+                    var verifyAnswer = await Context.AskDiscordQuestion(verifyNameQuestion);
+                    if (verifyAnswer == null)
+                        return;
+                    switch (verifyAnswer.ToLower())
+                    {
+                        case "yes":
+                            nameChosen = true;
+                            break;
+                        case "no":
+                            nameChosen = false;
+                            break;
+                        default:
+                            nameChosen = false;
+                            await Context.SendDiscordMessageMention($"{verifyAnswer} isn't a valid response, please try again");
+                            break;
                     }
                 }
                 if (cost <= 0)
@@ -1841,7 +1811,7 @@ namespace PersonalDiscordBot.Classes
                 ownerProfile.CharacterList.Add(newChar);
                 if (ownerProfile.CharacterList.Count == 1)
                     ownerProfile.CurrentCharacter = newChar;
-                await Context.SendDiscordMessage($"Congratulations! Your new hero has been born:```{line}" +
+                await Context.SendDiscordMessageMention($"Congratulations! Your new hero has been born:```{line}" +
                     $"Name:{newChar.Name}{line}" +
                     $"Class: {newChar.Class}{line}" +
                     $"HP: {newChar.MaxHP}{line}" +
@@ -2165,7 +2135,7 @@ namespace PersonalDiscordBot.Classes
                 ServerModule.FullExceptionLog(ex);
             }
         }
-        
+
         [Command("permission"), Summary("Testicules Permission Test")]
         public async Task Testacules12()
         {
@@ -2282,7 +2252,7 @@ namespace PersonalDiscordBot.Classes
                 if (match == null)
                 {
                     await Context.SendDiscordMessageMention($"you don't currently have an active match, please start a match before trying to attack nothing");
-                    return; 
+                    return;
                 }
                 await Management.AttackEnemy(Context, owner, match.CurrentEnemy);
             }
@@ -2613,7 +2583,7 @@ namespace PersonalDiscordBot.Classes
                 {
                     Toolbox.uDebugAddLog($"Changing character color, string doesn't contain comma [ID]{Context.User.Id}");
                     color = color.ToLower();
-                    Discord.Color newColor = new Color(0,0,0);
+                    Discord.Color newColor = new Color(0, 0, 0);
                     System.Windows.Media.Color selColor = System.Windows.Media.Colors.Blue;
                     switch (color)
                     {
@@ -2840,7 +2810,7 @@ namespace PersonalDiscordBot.Classes
     #endregion
 
     #region RPG
-    
+
     [Group(""), Summary("RPG Commands")]
     public class RPGModule : ModuleBase
     {
@@ -3681,7 +3651,7 @@ namespace PersonalDiscordBot.Classes
             {
                 ServerModule.FullExceptionLog(ex);
             }
-        } 
+        }
 
         #endregion
 
@@ -3710,7 +3680,7 @@ namespace PersonalDiscordBot.Classes
     #endregion
 
     #region RPG Quick
-    
+
     [Group(""), Summary("Quick RPG Commands")]
     public class RPGQuickModule : ModuleBase
     {
@@ -3841,7 +3811,7 @@ namespace PersonalDiscordBot.Classes
         public bool ChannelIsRPGChannel()
         {
             return Permissions.AllowedChannels.Find(x => x.ID == Context.Channel.Id) != null;
-        } 
+        }
 
         #endregion
     }
