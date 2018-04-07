@@ -1544,20 +1544,27 @@ namespace PersonalDiscordBot
                 BackgroundWorker worker = new BackgroundWorker();
                 worker.DoWork += async (sender, e) =>
                 {
-                    result = await commands.ExecuteAsync(context, argPos, services);
+                    try
+                    {
+                        result = await commands.ExecuteAsync(context, argPos, services);
+                        if (!result.IsSuccess)
+                        {
+                            if (result.Error == CommandError.BadArgCount)
+                            {
+                                uStatusUpdate($"{cmd} | Bad Arg Count");
+                                return;
+                            }
+                            var possEx = result.Error.Value;
+                            uStatusUpdate(result.ErrorReason);
+                            ResultLog(result);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        FullExceptionLog(ex);
+                    }
                 };
                 worker.RunWorkerAsync();
-                if (!result.IsSuccess)
-                {
-                    if (result.Error == CommandError.BadArgCount)
-                    {
-                        uStatusUpdate($"{cmd} | Bad Arg Count");
-                        return;
-                    }
-                    var possEx = result.Error.Value;
-                    uStatusUpdate(result.ErrorReason);
-                    ResultLog(result);
-                }
             }
             catch (Exception ex)
             {
