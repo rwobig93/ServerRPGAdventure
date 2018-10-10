@@ -115,3 +115,6 @@ _ReSharper*/
 ####################
 ~$*
 /.vs/PersonalDiscordBot/v15/Server/sqlite3
+/.vs/PersonalDiscordBot/DesignTimeBuild
+/PDBUpdater/.vs/PDBUpdater/DesignTimeBuild
+/PDBUpdater/.vs/PDBUpdater/v15/Server/sqlite3

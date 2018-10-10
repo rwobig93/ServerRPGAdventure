@@ -73,22 +73,29 @@ namespace PersonalDiscordBot.Classes
         {
             try
             {
+                Toolbox.uDebugAddLog($"Starting server reboot command: {gameServer}");
                 List<GameServer> servsFound = new List<GameServer>();
-                foreach (var game in MainWindow.ServerList)
+                foreach (var gameServ in MainWindow.ServerList)
                 {
-                    if (game.Game.ToLower() == gameServer.ToLower())
+                    Toolbox.uDebugAddLog($"Enumerating games in server list: {gameServ.ServerName} | {gameServ.IPAddress}");
+                    if (gameServ.Game.ToLower() == gameServer.ToLower())
                     {
-                        servsFound.Add(game);
+                        Toolbox.uDebugAddLog($"Matched game server [{gameServer.ToLower()}] to ({gameServ.Game.ToLower()})[{gameServ.ServerName} | {gameServ.IPAddress}]");
+                        servsFound.Add(gameServ);
+                        Toolbox.uDebugAddLog($"Added game server to servers found: {gameServ.ServerName} | {gameServ.IPAddress}");
                     }
                 }
+
+                #region If None Found
                 if (servsFound.Count == 0)
                 {
                     Toolbox.uDebugAddLog($"No servers were found, servCount: {servsFound.Count}");
                     await Context.SendDiscordMessage(string.Format("There currently aren't any game servers in the server list running the game {0}", gameServer));
                     return;
-                }
+                } 
+                #endregion
 
-                #region If More Than 1 Result
+                #region If Multiple Found
                 else if (servsFound.Count > 1)
                 {
                     Toolbox.uDebugAddLog($"Multiple servers found, servCount: {servsFound.Count}");
@@ -140,56 +147,85 @@ namespace PersonalDiscordBot.Classes
                     GameServer chosenServ = servsFound[servNumber - 1];
                     if (string.IsNullOrWhiteSpace(chosenServ.ServerBatchPath) || string.IsNullOrWhiteSpace(chosenServ.ServerProcName) || string.IsNullOrWhiteSpace(chosenServ.ServerExe))
                     {
+                        Toolbox.uDebugAddLog($"Chosen server doesn't have reboot functionality: {chosenServ.ServerName} | {chosenServ.IPAddress} | {chosenServ.Game}");
                         await Context.Channel.SendMessageAsync(string.Format("The game server {0} isn't setup for reboot functionality, please ask the server admin to add the exectuable/batch paths and process name to allow this functionality.", chosenServ.ServerName));
                         return;
                     }
                     if (Toolbox.serversRebooted.Count > 0)
                     {
+                        Toolbox.uDebugAddLog($"Servers rebooted list count is more than 0 [{Toolbox.serversRebooted.Count}], verifying chosen server wasn't recently rebooted");
                         foreach (var rebSrv in Toolbox.serversRebooted)
                         {
+                            Toolbox.uDebugAddLog($"Checking if {rebSrv.Server.ServerName} | {rebSrv.Server.IPAddress} is the chosen server");
                             if (rebSrv.Server.ServerName == chosenServ.ServerName)
                             {
                                 TimeSpan timeRebooted = DateTime.Now.ToLocalTime() - rebSrv.Rebooted;
+                                Toolbox.uDebugAddLog($"{rebSrv.Server.ServerName} is the chosen server [{chosenServ.ServerName}], rebooted {timeRebooted.Minutes}min ago");
                                 var timeLeft = 15 - timeRebooted.Minutes;
+                                Toolbox.uDebugAddLog($"{rebSrv.Server.ServerName} has {timeLeft}min left before being removed from the reboot list");
                                 await Context.Channel.SendMessageAsync(string.Format("The game server {0} was rebooted {1}min ago, please wait another {2}min before attempting to reboot again", rebSrv.Server.ServerName, timeRebooted.Minutes, timeLeft));
                                 return;
                             }
                         }
                     }
+                    Toolbox.uDebugAddLog("Starting process finding and killing...");
                     string procName = chosenServ.ServerProcName;
                     if (procName.ToLower().EndsWith(".exe"))
                         procName = procName.ToLower().Replace(".exe", "");
+                    Toolbox.uDebugAddLog($"Server proc name: {procName}");
                     int procsKilled = 0;
                     Process[] foundProcs = Process.GetProcessesByName(procName);
+                    Toolbox.uDebugAddLog($"Processes found using the procName: {foundProcs.Length}");
                     string sendResp = string.Empty;
                     foreach (var proc in foundProcs)
                     {
+                        Toolbox.uDebugAddLog($"Verifying if {proc.ProcessName} is our process...");
                         if (chosenServ.ServerExe == proc.MainModule.FileName)
                         {
+                            Toolbox.uDebugAddLog($"Server exe [{chosenServ.ServerExe}] equals [{proc.MainModule.FileName}], killing process...");
                             procsKilled++;
+                            Toolbox.uDebugAddLog($"Procs killed: {procsKilled}");
                             proc.Kill();
+                            Toolbox.uDebugAddLog("Process successfully killed");
                             await Context.Channel.SendMessageAsync(string.Format("Successfully killed the game server {0}, now attempting to start the server...", chosenServ.ServerName));
                         }
                     }
                     if (procsKilled == 0)
+                    {
+                        Toolbox.uDebugAddLog($"No procs were killed as no procs were found: {procsKilled}");
                         await Context.Channel.SendMessageAsync("I wasn't able to find a running process with the same start path as the game server, skipping process kill");
+                    }
+                    Toolbox.uDebugAddLog("Starting new process...");
                     Process newProc = new Process();
+                    if (!File.Exists(chosenServ.ServerBatchPath))
+                    {
+                        Toolbox.uDebugAddLog($"Server batch path doesn't exist: {chosenServ.ServerBatchPath}");
+                        await Context.Channel.SendMessageAsync("The game server start path doesn't exist, please let the server admin know so they can fix the path in the bot console");
+                        Toolbox.uDebugAddLog("Sent message about error to the chat channel, now leaving method...");
+                        return;
+                    }
                     newProc.StartInfo.FileName = chosenServ.ServerBatchPath;
+                    Toolbox.uDebugAddLog("Created new process...");
                     newProc.Start();
+                    Toolbox.uDebugAddLog("Started new process");
                     RebootedServer rebServ = new RebootedServer { Rebooted = DateTime.Now.ToLocalTime(), Server = chosenServ };
                     Toolbox.serversRebooted.Add(rebServ);
                     Toolbox.RemoveRebootedServer(rebServ);
+                    Toolbox.uDebugAddLog("Added server to servers rebooted list");
                     await Context.Channel.SendMessageAsync(string.Format("Successfully started the game server {0}, please wait for the server to boot up. I will check on the status automatically and let you know what I find, otherwise you can manually check the status by using the command ;server status {1}", chosenServ.ServerName, chosenServ.Game));
                     CheckOnServer(Context, chosenServ);
+                    Toolbox.uDebugAddLog("Started CheckOnServer method");
                 }
                 #endregion
 
                 #region If 1 Result
                 else
                 {
+                    Toolbox.uDebugAddLog("Only one server was found");
                     GameServer chosenServ = servsFound[0];
                     if (string.IsNullOrWhiteSpace(chosenServ.ServerBatchPath) || string.IsNullOrWhiteSpace(chosenServ.ServerProcName) || string.IsNullOrWhiteSpace(chosenServ.ServerExe))
                     {
+                        Toolbox.uDebugAddLog($"Chosen server doesn't have reboot functionality: {chosenServ.ServerName} | {chosenServ.IPAddress} | {chosenServ.Game}");
                         await Context.Channel.SendMessageAsync(string.Format("The game server {0} isn't setup for reboot functionality, please ask the server admin to add the exectuable/batch paths and process name to allow this functionality.", chosenServ.ServerName));
                         return;
                     }
@@ -197,42 +233,62 @@ namespace PersonalDiscordBot.Classes
                     {
                         foreach (var rebSrv in Toolbox.serversRebooted)
                         {
+                            Toolbox.uDebugAddLog($"Checking if {rebSrv.Server.ServerName} | {rebSrv.Server.IPAddress} is the chosen server");
                             if (rebSrv.Server.ServerName == chosenServ.ServerName)
                             {
                                 TimeSpan timeRebooted = DateTime.Now.ToLocalTime() - rebSrv.Rebooted;
+                                Toolbox.uDebugAddLog($"{rebSrv.Server.ServerName} is the chosen server [{chosenServ.ServerName}], rebooted {timeRebooted.Minutes}min ago");
                                 var timeLeft = 15 - timeRebooted.Minutes;
+                                Toolbox.uDebugAddLog($"{rebSrv.Server.ServerName} has {timeLeft}min left before being removed from the reboot list");
                                 await Context.Channel.SendMessageAsync(string.Format("The game server {0} was rebooted {1}min ago, please wait another {2}min before attempting to reboot again", rebSrv.Server.ServerName, timeRebooted.Minutes, timeLeft));
                                 return;
                             }
                         }
                     }
+                    Toolbox.uDebugAddLog("Starting process finding and killing...");
                     string procName = chosenServ.ServerProcName;
                     if (procName.ToLower().EndsWith(".exe"))
                         procName = procName.ToLower().Replace(".exe", "");
+                    Toolbox.uDebugAddLog($"Server proc name: {procName}");
                     int procsKilled = 0;
                     Process[] foundProcs = Process.GetProcessesByName(procName);
+                    Toolbox.uDebugAddLog($"Processes found using the procName: {foundProcs.Length}");
                     string sendResp = string.Empty;
                     foreach (var proc in foundProcs)
                     {
+                        Toolbox.uDebugAddLog($"Verifying if {proc.ProcessName} is our process...");
                         if (chosenServ.ServerExe == proc.MainModule.FileName)
                         {
+                            Toolbox.uDebugAddLog($"Server exe [{chosenServ.ServerExe}] equals [{proc.MainModule.FileName}], killing process...");
                             procsKilled++;
+                            Toolbox.uDebugAddLog($"Procs killed: {procsKilled}");
                             proc.Kill();
+                            Toolbox.uDebugAddLog("Process successfully killed");
                             await Context.Channel.SendMessageAsync(string.Format("Successfully killed the game server {0}, now attempting to start the server...", chosenServ.ServerName));
                         }
                     }
                     if (procsKilled == 0)
+                    {
+                        Toolbox.uDebugAddLog($"No procs were killed as no procs were found: {procsKilled}");
                         await Context.Channel.SendMessageAsync("I wasn't able to find a running process with the same start path as the game server, skipping process kill");
+                    }
+                    Toolbox.uDebugAddLog("Starting new process...");
                     Process newProc = new Process();
                     newProc.StartInfo.FileName = chosenServ.ServerBatchPath;
+                    Toolbox.uDebugAddLog("Created new process...");
                     newProc.Start();
+                    Toolbox.uDebugAddLog("Started new process");
                     RebootedServer rebServ = new RebootedServer { Rebooted = DateTime.Now.ToLocalTime(), Server = chosenServ };
                     Toolbox.serversRebooted.Add(rebServ);
                     Toolbox.RemoveRebootedServer(rebServ);
+                    Toolbox.uDebugAddLog("Added server to servers rebooted list");
                     await Context.Channel.SendMessageAsync(string.Format("Successfully started the game server {0}, please wait for the server to boot up. I will check on the status automatically and let you know what I find, otherwise you can manually check the status by using the command ;server status {1}", chosenServ.ServerName, chosenServ.Game));
                     CheckOnServer(Context, chosenServ);
+                    Toolbox.uDebugAddLog("Started CheckOnServer method");
                 }
                 #endregion
+
+                Toolbox.uDebugAddLog("Finished server reboot command!");
             }
             catch (Exception ex)
             {
@@ -572,10 +628,10 @@ namespace PersonalDiscordBot.Classes
                             return;
                         }
                     }
-                    Toolbox.uDebugAddLog($"Answer recieved, rebooting server {servNumber} for {gameServer}");
+                    Toolbox.uDebugAddLog($"Answer recieved, getting status of server {servNumber} for {gameServer}");
                     GameServer game = serversFound[servNumber - 1];
                     cacheGame = game;
-                    string responseStatus = string.Format("_{0}{1} Server Status:{0}", Environment.NewLine, game.Game);
+                    string responseStatus = string.Format("_```{0}{1} Server Status:{0}", Environment.NewLine, game.Game);
                     IPEndPoint endpoint = CreateIPEndPoint(string.Format("{0}:{1}", game.IPAddress, game.QueryPort));
                     QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out ReadOnlyCollection<Player> playerList);
                     responseStatus = string.Format("{0}Server Name: {1}{4}Map: {5}{4}Requires Password: {2}{4}Ping: {3}{4}", responseStatus, servInfo.Name, servInfo.IsPrivate, servInfo.Ping, Environment.NewLine, servInfo.Map);
@@ -585,7 +641,7 @@ namespace PersonalDiscordBot.Classes
                     responseStatus = string.Format("{0}Is Online: {1}{2}", responseStatus, isOnline, Environment.NewLine);
                     bool isConnectable = servInfo == null ? false : true;
                     responseStatus = string.Format("{0}Is Connectable: {1}{2}", responseStatus, isConnectable, Environment.NewLine);
-                    responseStatus = string.Format("{0}Players: {1}/{2}{3}", responseStatus, playerList.Count, servInfo.MaxPlayers, Environment.NewLine);
+                    responseStatus = string.Format("{0}Players: {1}/{2}{3}```", responseStatus, playerList.Count, servInfo.MaxPlayers, Environment.NewLine);
                     await Context.Channel.SendMessageAsync(responseStatus);
                 }
             }
@@ -756,12 +812,16 @@ namespace PersonalDiscordBot.Classes
                         Toolbox.uDebugAddLog($"Connection endpoint: {endpoint.ToString()}");
                         QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out playerList);
                         Toolbox.uDebugAddLog("Created servInfo variable");
+                        int servCheckCount = 0;
                         while (servInfo == null)
                         {
-                            Toolbox.uDebugAddLog($"servInfo for {game.Game} server {game.ServerName} is null");
+                            if (servCheckCount == 0)
+                                Toolbox.uDebugAddLog($"Starting server check w/ null server info, counter: {servCheckCount}");
+                            else
+                                Toolbox.uDebugAddLog($"servInfo for {game.Game} server {game.ServerName} is null, counter: {servCheckCount}");
                             servInfo = GetServerInfo(endpoint, out playerList);
                             Thread.Sleep(TimeSpan.FromSeconds(15));
-                            Toolbox.uDebugAddLog(string.Format("Waited 15 seconds after rebooting the {0} game server", game.ServerName));
+                            Toolbox.uDebugAddLog(string.Format("Waited 15 seconds for the {0} game server...", game.ServerName));
                             if (timeStart + TimeSpan.FromMinutes(10) <= DateTime.Now && oneFollowup == false) { await Context.Channel.SendMessageAsync($"It has been **{(DateTime.Now - timeStart).Minutes} min** since rebooting the **{game.Game}** server \"**{game.ServerName}**\", I will keep checking for the next **{(waitTime - (DateTime.Now - timeStart)).Minutes} min**"); oneFollowup = true; }
                             if (timeStart + TimeSpan.FromMinutes(20) <= DateTime.Now && twoFollowup == false) { await Context.Channel.SendMessageAsync($"It has been **{(DateTime.Now - timeStart).Minutes} min** since rebooting the **{game.Game}** server \"**{game.ServerName}**\", I will keep checking for the next **{(waitTime - (DateTime.Now - timeStart)).Minutes} min**"); twoFollowup = true; }
                             if (timeStart + waitTime <= DateTime.Now)
