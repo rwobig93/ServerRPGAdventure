@@ -570,13 +570,27 @@ namespace PersonalDiscordBot.Classes
                     string response = string.Format("_{0}{1} Server Status:{0}", Environment.NewLine, game.Game);
                     IPEndPoint endpoint = CreateIPEndPoint(string.Format("{0}:{1}", game.IPAddress, game.QueryPort));
                     QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out ReadOnlyCollection<Player> playerList);
+                    if (servInfo == null)
+                    {
+                        Toolbox.uDebugAddLog("Server info is null as the server didn't respond...");
+                        await Context.Channel.SendMessageAsync($"_{Environment.NewLine}{game.Game} Server Status:{Environment.NewLine}Server Name: {game.ServerName}{Environment.NewLine}Map: Unknown{Environment.NewLine}Requires Password: {(string.IsNullOrWhiteSpace(game.Password) ? false : true)}{Environment.NewLine}Ping: No Response{Environment.NewLine}Status: :heart: Down{Environment.NewLine}Players: N/A{Environment.NewLine}");
+                        return;
+                    }
                     response = string.Format("{0}Server Name: {1}{4}Map: {5}{4}Requires Password: {2}{4}Ping: {3}{4}", response, servInfo.Name, servInfo.IsPrivate, servInfo.Ping, Environment.NewLine, servInfo.Map);
                     Ping png = new Ping();
                     PingReply rep = png.Send(game.IPAddress);
                     bool isOnline = rep.Status == IPStatus.Success ? true : false;
-                    response = string.Format("{0}Is Online: {1}{2}", response, isOnline, Environment.NewLine);
+                    //response = string.Format("{0}Is Online: {1}{2}", response, isOnline, Environment.NewLine);
                     bool isConnectable = servInfo == null ? false : true;
-                    response = string.Format("{0}Is Connectable: {1}{2}", response, isConnectable, Environment.NewLine);
+                    //response = string.Format("{0}Is Connectable: {1}{2}", response, isConnectable, Environment.NewLine);
+                    string servStatus = string.Empty;
+                    if (isOnline && isConnectable)
+                        servStatus = ":green_heart: Up";
+                    else if (!isConnectable)
+                        servStatus = ":yellow_heart: Initializing";
+                    else
+                        servStatus = ":heart: Down";
+                    response = $"{response}Status: {servStatus}{Environment.NewLine}";
                     response = string.Format("{0}Players: {1}/{2}{3}", response, playerList.Count, servInfo.MaxPlayers, Environment.NewLine);
                     await Context.Channel.SendMessageAsync(response);
                 }
@@ -631,17 +645,31 @@ namespace PersonalDiscordBot.Classes
                     Toolbox.uDebugAddLog($"Answer recieved, getting status of server {servNumber} for {gameServer}");
                     GameServer game = serversFound[servNumber - 1];
                     cacheGame = game;
-                    string responseStatus = string.Format("_```{0}{1} Server Status:{0}", Environment.NewLine, game.Game);
+                    string responseStatus = string.Format("_{0}{1} Server Status:{0}", Environment.NewLine, game.Game);
                     IPEndPoint endpoint = CreateIPEndPoint(string.Format("{0}:{1}", game.IPAddress, game.QueryPort));
                     QueryMaster.ServerInfo servInfo = GetServerInfo(endpoint, out ReadOnlyCollection<Player> playerList);
+                    if (servInfo == null)
+                    {
+                        Toolbox.uDebugAddLog("Server info is null as the server didn't respond...");
+                        await Context.Channel.SendMessageAsync($"_{Environment.NewLine}{game.Game} Server Status:{Environment.NewLine}Server Name: {game.ServerName}{Environment.NewLine}Map: Unknown{Environment.NewLine}Requires Password: {(string.IsNullOrWhiteSpace(game.Password) ? false : true)}{Environment.NewLine}Ping: No Response{Environment.NewLine}Status: :heart: Down{Environment.NewLine}Players: N/A{Environment.NewLine}");
+                        return;
+                    }
                     responseStatus = string.Format("{0}Server Name: {1}{4}Map: {5}{4}Requires Password: {2}{4}Ping: {3}{4}", responseStatus, servInfo.Name, servInfo.IsPrivate, servInfo.Ping, Environment.NewLine, servInfo.Map);
                     Ping png = new Ping();
                     PingReply rep = png.Send(game.IPAddress);
                     bool isOnline = rep.Status == IPStatus.Success ? true : false;
-                    responseStatus = string.Format("{0}Is Online: {1}{2}", responseStatus, isOnline, Environment.NewLine);
+                    //responseStatus = string.Format("{0}Is Online: {1}{2}", responseStatus, isOnline, Environment.NewLine);
                     bool isConnectable = servInfo == null ? false : true;
-                    responseStatus = string.Format("{0}Is Connectable: {1}{2}", responseStatus, isConnectable, Environment.NewLine);
-                    responseStatus = string.Format("{0}Players: {1}/{2}{3}```", responseStatus, playerList.Count, servInfo.MaxPlayers, Environment.NewLine);
+                    //responseStatus = string.Format("{0}Is Connectable: {1}{2}", responseStatus, isConnectable, Environment.NewLine);
+                    string servStatus = string.Empty;
+                    if (isOnline && isConnectable)
+                        servStatus = ":green_heart: Up";
+                    else if (!isConnectable)
+                        servStatus = ":yellow_heart: Initializing";
+                    else
+                        servStatus = ":heart: Down";
+                    responseStatus = $"{responseStatus}Status: {servStatus}{Environment.NewLine}";
+                    responseStatus = string.Format("{0}Players: {1}/{2}{3}", responseStatus, playerList.Count, servInfo.MaxPlayers, Environment.NewLine);
                     await Context.Channel.SendMessageAsync(responseStatus);
                 }
             }
